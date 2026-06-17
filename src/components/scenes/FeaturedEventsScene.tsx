@@ -51,7 +51,7 @@ const FEATURED_EVENTS: EventCardProps[] = [
 
 function FeaturedCard({ event }: { event: EventCardProps }) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const registerForEvent = useStore((state) => state.registerForEvent);
+  const initiateRegistration = useStore((state) => state.initiateRegistration);
   
   // Custom 3D tilt coordinates
   const [rotateX, setRotateX] = useState(0);
@@ -137,7 +137,13 @@ function FeaturedCard({ event }: { event: EventCardProps }) {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            registerForEvent(event.title);
+            initiateRegistration({
+              id: event.title.toLowerCase().replace(/\s+/g, '-'),
+              title: event.title,
+              category: event.category,
+              fee: event.fee,
+              desc: event.desc
+            });
           }}
           className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-bold text-xs hover:opacity-90 transition-all flex items-center justify-center gap-1 shadow-lg shadow-purple-500/20"
         >

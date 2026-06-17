@@ -78,7 +78,7 @@ const CATEGORY_EVENTS: Record<string, any[]> = {
 
 export default function EventGalaxyScene() {
   const [selectedCat, setSelectedCat] = useState<CategoryNode | null>(null);
-  const registerForEvent = useStore((state) => state.registerForEvent);
+  const initiateRegistration = useStore((state) => state.initiateRegistration);
   const addPoints = useStore((state) => state.addPoints);
 
   const handleSelect = (category: CategoryNode) => {
@@ -216,7 +216,13 @@ export default function EventGalaxyScene() {
                         </div>
 
                         <button 
-                          onClick={() => registerForEvent(event.title)}
+                          onClick={() => initiateRegistration({
+                            id: event.id,
+                            title: event.title,
+                            category: selectedCat.name,
+                            fee: event.fee,
+                            desc: event.desc
+                          })}
                           className="w-full py-2 bg-white/10 hover:bg-white text-white hover:text-black font-semibold text-xs rounded-lg transition-all duration-200"
                         >
                           Register

@@ -9,15 +9,16 @@ import AuthModal from './AuthModal';
 
 export default function Navbar() {
   const user = useStore((state) => state.user);
+  const isAuthOpen = useStore((state) => state.isAuthOpen);
+  const setAuthOpen = useStore((state) => state.setAuthOpen);
   const router = useRouter();
-  const [isAuthOpen, setIsAuthOpen] = React.useState(false);
 
   const handleUserClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (user) {
       router.push('/dashboard');
     } else {
-      setIsAuthOpen(true);
+      setAuthOpen(true);
     }
   };
 
@@ -65,7 +66,7 @@ export default function Navbar() {
         </div>
 
       </div>
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
     </nav>
   );
 }

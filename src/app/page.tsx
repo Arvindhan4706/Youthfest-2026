@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import LoadingScene from '../components/scenes/LoadingScene';
 import Navbar from '../components/Navbar';
-
 import ToastContainer from '../components/ToastContainer';
+import PaymentModal from '../components/PaymentModal';
 
 // Dynamic imports of scenes for performance optimization and SSR safety
 const HeroScene = dynamic(() => import('../components/scenes/HeroScene'), { ssr: false });
@@ -69,6 +69,9 @@ export default function Home() {
 
       {/* Dynamic Toast notifications overlay */}
       <ToastContainer />
+
+      {/* Payment Checkout Modal overlay */}
+      <PaymentModal />
 
       {/* Visual sections */}
       <HeroScene />
