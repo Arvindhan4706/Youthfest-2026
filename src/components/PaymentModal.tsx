@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore, EmailMessage } from '../lib/useStore';
-import { X, CreditCard, QrCode, ShieldCheck, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
+import { X, QrCode, ShieldCheck, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function PaymentModal() {
@@ -15,33 +15,22 @@ export default function PaymentModal() {
   const addToast = useStore((state) => state.addToast);
   const addPoints = useStore((state) => state.addPoints);
 
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'qr'>('card');
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-  
-  // Card input states
-  const [cardName, setCardName] = useState(user?.name || '');
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardExpiry, setCardExpiry] = useState('');
-  const [cardCvv, setCardCvv] = useState('');
 
   // Reset states when event changes
   useEffect(() => {
     if (checkoutEvent) {
-      setPaymentMethod('card');
       setLoading(false);
       setPaymentSuccess(false);
-      setCardNumber('');
-      setCardExpiry('');
-      setCardCvv('');
     }
   }, [checkoutEvent]);
 
   if (!checkoutEvent || !user) return null;
 
-  const isFree = 
-    checkoutEvent.fee.toLowerCase().includes('free') || 
-    checkoutEvent.fee.toLowerCase().includes('included') || 
+  const isFree =
+    checkoutEvent.fee.toLowerCase().includes('free') ||
+    checkoutEvent.fee.toLowerCase().includes('included') ||
     checkoutEvent.fee === '₹0';
 
   const handlePaymentSubmit = async (e: React.FormEvent) => {
@@ -57,7 +46,7 @@ export default function PaymentModal() {
         // 2. Generate and store simulated confirmation email receipt
         const amount = isFree ? '₹0 (Free Registration)' : checkoutEvent.fee;
         const txId = 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-        
+
         const emailBody = `
 Dear ${user.name},
 
@@ -68,7 +57,7 @@ Event Name: ${checkoutEvent.title}
 Category: ${checkoutEvent.category}
 Amount Paid: ${amount}
 Transaction Status: SUCCESSFUL
-Payment Method: ${isFree ? 'Direct Free Checkout' : paymentMethod === 'card' ? 'Visa/Mastercard Ending in ' + cardNumber.slice(-4) : 'UPI Scanner'}
+Payment Method: ${isFree ? 'Direct Free Checkout' : 'UPI QR Scanner'}
 Transaction Reference: ${txId}
 Date/Time: ${new Date().toLocaleString()}
 
@@ -92,20 +81,20 @@ YUVENZA '26 Organizing Committee
           timestamp: new Date().toISOString(),
           recipientEmail: user.email,
           subject: `Confirmed: Registration receipt for ${checkoutEvent.title}`,
-          body: emailBody
+          body: emailBody,
         };
 
         addMessage(newEmail);
         addPoints(50, `Registered for ${checkoutEvent.title}`);
-        
+
         setLoading(false);
         setPaymentSuccess(true);
 
-        // Fire standard confetti explosion
+        // Fire confetti celebration
         confetti({
           particleCount: 100,
           spread: 70,
-          origin: { y: 0.6 }
+          origin: { y: 0.6 },
         });
       } catch (err: any) {
         setLoading(false);
@@ -118,27 +107,27 @@ YUVENZA '26 Organizing Committee
     <AnimatePresence>
       <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
         {/* Backdrop overlay */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="absolute inset-0 bg-black/70 backdrop-blur-md"
           onClick={() => !loading && setCheckoutEvent(null)}
         />
-        
+
         {/* Modal Container */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-lg bg-gradient-to-b from-[#0e1726]/90 to-[#030712]/95 border border-purple-500/20 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(168,85,247,0.15)] overflow-hidden text-white"
+          className="relative w-full max-w-md bg-gradient-to-b from-[#0e1726]/90 to-[#030712]/95 border border-purple-500/20 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(168,85,247,0.15)] overflow-hidden text-white"
         >
           {/* Top aesthetic border */}
           <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500" />
-          
+
           {/* Close button */}
           {!loading && (
-            <button 
+            <button
               onClick={() => setCheckoutEvent(null)}
               className="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors"
             >
@@ -148,7 +137,7 @@ YUVENZA '26 Organizing Committee
 
           {!paymentSuccess ? (
             <>
-              {/* Header Info */}
+              {/* Header */}
               <div className="mb-6">
                 <span className="text-[10px] font-extrabold font-mono tracking-widest text-purple-400 uppercase bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 rounded-full">
                   Checkout Portal
@@ -198,155 +187,59 @@ YUVENZA '26 Organizing Committee
                   </button>
                 </form>
               ) : (
-                /* Paid checkout UI with tabs */
+                /* Paid checkout — UPI QR Scanner only */
                 <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-4">
-                  
-                  {/* Method Selector Tabs */}
-                  <div className="grid grid-cols-2 gap-2 p-1 bg-black/30 border border-white/5 rounded-xl">
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod('card')}
-                      className={`py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                        paymentMethod === 'card' 
-                          ? 'bg-purple-600 text-white shadow-md' 
-                          : 'text-gray-400 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      <CreditCard className="w-3.5 h-3.5" />
-                      <span>Credit Card</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod('qr')}
-                      className={`py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                        paymentMethod === 'qr' 
-                          ? 'bg-purple-600 text-white shadow-md' 
-                          : 'text-gray-400 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      <QrCode className="w-3.5 h-3.5" />
-                      <span>UPI QR Scanner</span>
-                    </button>
-                  </div>
 
-                  {/* Payment Details Form Fields */}
-                  {paymentMethod === 'card' ? (
-                    <div className="flex flex-col gap-3 mt-1">
-                      <div>
-                        <label className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block mb-1">Cardholder Name</label>
-                        <input
-                          type="text"
-                          required
-                          value={cardName}
-                          onChange={(e) => setCardName(e.target.value)}
-                          placeholder="John Doe"
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block mb-1">Card Number</label>
-                        <input
-                          type="text"
-                          required
-                          maxLength={19}
-                          value={cardNumber}
-                          onChange={(e) => {
-                            // Format with spaces
-                            const val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-                            const matches = val.match(/\d{4,16}/g);
-                            const match = (matches && matches[0]) || '';
-                            const parts = [];
-                            for (let i = 0, len = match.length; i < len; i += 4) {
-                              parts.push(match.substring(i, i + 4));
-                            }
-                            if (parts.length > 0) {
-                              setCardNumber(parts.join(' '));
-                            } else {
-                              setCardNumber(val);
-                            }
-                          }}
-                          placeholder="4111 2222 3333 4444"
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors"
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block mb-1">Expiry Date</label>
-                          <input
-                            type="text"
-                            required
-                            maxLength={5}
-                            value={cardExpiry}
-                            onChange={(e) => {
-                              let val = e.target.value.replace(/[^0-9]/g, '');
-                              if (val.length >= 2) {
-                                val = val.substring(0, 2) + '/' + val.substring(2, 4);
-                              }
-                              setCardExpiry(val);
-                            }}
-                            placeholder="MM/YY"
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-600 text-center focus:outline-none focus:border-purple-500 transition-colors"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block mb-1">CVV Code</label>
-                          <input
-                            type="password"
-                            required
-                            maxLength={3}
-                            value={cardCvv}
-                            onChange={(e) => setCardCvv(e.target.value.replace(/[^0-9]/g, ''))}
-                            placeholder="123"
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-600 text-center focus:outline-none focus:border-purple-500 transition-colors"
-                          />
-                        </div>
-                      </div>
+                  {/* UPI QR Code */}
+                  <div className="flex flex-col items-center justify-center p-5 border border-dashed border-purple-500/20 rounded-2xl bg-black/20">
+                    <div className="p-3 bg-white rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.2)] relative overflow-hidden">
+                      {/* Scanning laser line */}
+                      <div className="absolute top-0 left-0 w-full h-[2px] bg-purple-500 animate-bounce" />
+                      <img
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=yuvenza@bank%26pn=YuvenzaClub%26am=${checkoutEvent.fee.replace(/[^0-9]/g, '')}%26cu=INR`}
+                        alt="UPI QR Code"
+                        className="w-40 h-40 object-contain"
+                      />
                     </div>
-                  ) : (
-                    /* UPI QR Code Scanner Simulation */
-                    <div className="flex flex-col items-center justify-center p-4 border border-dashed border-white/10 rounded-2xl bg-black/20 my-1">
-                      <div className="p-3 bg-white rounded-xl shadow-lg relative overflow-hidden group">
-                        {/* Dynamic scanning laser line */}
-                        <div className="absolute top-0 left-0 w-full h-[2px] bg-purple-500 animate-bounce" />
-                        <img
-                          src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=yuvenza@bank%26pn=YuvenzaClub%26am=${checkoutEvent.fee.replace(/[^0-9]/g, '')}%26cu=INR`}
-                          alt="UPI QR Code"
-                          className="w-36 h-36 object-contain"
-                        />
+
+                    <div className="mt-4 text-center">
+                      <div className="flex items-center justify-center gap-1.5 mb-1">
+                        <QrCode className="w-3.5 h-3.5 text-purple-400" />
+                        <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest">UPI QR Payment</span>
                       </div>
-                      <p className="text-[10px] text-gray-400 mt-4 text-center leading-relaxed max-w-xs">
-                        Scan this QR code with any UPI app (GPay, PhonePe, Paytm) or click pay to simulate a transaction.
+                      <p className="text-[10px] text-gray-400 leading-relaxed max-w-[220px]">
+                        Scan with <strong className="text-white">GPay, PhonePe, Paytm</strong> or any UPI app, then click Confirm below.
                       </p>
                     </div>
-                  )}
+                  </div>
 
                   {/* Trust indicator */}
-                  <div className="flex items-center gap-1.5 text-[10px] text-gray-500 mt-1">
+                  <div className="flex items-center gap-1.5 text-[10px] text-gray-500">
                     <ShieldCheck className="w-4 h-4 text-teal-400 shrink-0" />
-                    <span>Secure end-to-end 256-bit encrypted gateway.</span>
+                    <span>Secure end-to-end 256-bit encrypted UPI gateway.</span>
                   </div>
 
                   {/* Pay button */}
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 hover:opacity-95 text-white font-black text-xs rounded-xl transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
+                    className="w-full py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 hover:opacity-95 text-white font-black text-xs rounded-xl transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Processing Safe Payment...</span>
+                        <span>Processing UPI Payment...</span>
                       </>
                     ) : (
-                      <span>Authorize Payment of {checkoutEvent.fee}</span>
+                      <span>I've Paid — Confirm Registration of {checkoutEvent.fee}</span>
                     )}
                   </button>
                 </form>
               )}
             </>
           ) : (
-            /* Success confirmation screen */
-            <motion.div 
+            /* Success screen */
+            <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               className="text-center py-6 flex flex-col items-center justify-center"
@@ -354,13 +247,13 @@ YUVENZA '26 Organizing Committee
               <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-6">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
-              
+
               <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider mb-2 text-white">
-                Payment Authorized!
+                Registration Confirmed!
               </h3>
-              
+
               <p className="text-xs text-gray-400 max-w-xs mx-auto mb-6 leading-relaxed">
-                You are registered for <span className="text-white font-bold">{checkoutEvent.title}</span>. A receipt & confirmation email has been dispatched to <span className="text-purple-400">{user.email}</span>.
+                You are registered for <span className="text-white font-bold">{checkoutEvent.title}</span>. A receipt &amp; confirmation email has been dispatched to <span className="text-purple-400">{user.email}</span>.
               </p>
 
               <div className="p-4 rounded-xl border border-white/5 bg-white/5 text-[10px] text-left text-gray-400 w-full mb-6 font-mono leading-relaxed">
