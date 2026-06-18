@@ -1,12 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Play, Pause, Volume2, VolumeX, Film } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface Caption {
   time: number;
@@ -16,7 +12,7 @@ interface Caption {
 const TRAILER_CAPTIONS: Caption[] = [
   { time: 0, text: '5000 students. One legendary night.' },
   { time: 3, text: 'Technology. Creativity. Gaming. Culture.' },
-  { time: 6, text: '₹2 Lakh+ in prizes. Infinite glory.' },
+  { time: 6, text: 'The ultimate showcase of talent.' },
   { time: 10, text: '25+ colleges. The biggest stage awaits.' },
   { time: 14, text: 'YUVENZA 2026. Are you in?' },
 ];
@@ -39,36 +35,24 @@ export default function TrailerScene() {
 
     if (!container || !wrapper || !video) return;
 
-    // Pin section and scale video from card size to full width
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        start: 'top top',
-        end: '+=150%',
-        pin: true,
-        scrub: true,
-        onEnter: () => {
-          video.play().then(() => setIsPlaying(true)).catch(() => {});
-        },
-        onLeave: () => {
-          video.pause();
-          setIsPlaying(false);
-        },
-        onEnterBack: () => {
-          video.play().then(() => setIsPlaying(true)).catch(() => {});
-        },
-        onLeaveBack: () => {
-          video.pause();
-          setIsPlaying(false);
-        },
+    // Intersection observer for play/pause
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            video.play().then(() => setIsPlaying(true)).catch(() => {});
+          } else {
+            video.pause();
+            setIsPlaying(false);
+          }
+        });
       },
-    });
-
-    tl.fromTo(
-      wrapper,
-      { width: '60%', borderRadius: '24px', scale: 0.9 },
-      { width: '100%', borderRadius: '0px', scale: 1, ease: 'none' }
+      { threshold: 0.5 }
     );
+    
+    if (wrapper) {
+      observer.observe(wrapper);
+    }
 
     // Track captions
     const handleTimeUpdate = () => {
@@ -88,6 +72,7 @@ export default function TrailerScene() {
 
     return () => {
       video.removeEventListener('timeupdate', handleTimeUpdate);
+      if (wrapper) observer.unobserve(wrapper);
     };
   }, [addPoints]);
 
@@ -131,7 +116,7 @@ export default function TrailerScene() {
       {/* Video Container */}
       <div
         ref={videoWrapperRef}
-        className="relative aspect-video max-h-[85vh] overflow-hidden z-10 flex items-center justify-center bg-zinc-950"
+        className="relative aspect-video w-full max-w-6xl rounded-2xl overflow-hidden z-10 flex items-center justify-center bg-zinc-950"
         style={{ boxShadow: '0 0 80px rgba(139, 92, 246, 0.2), 0 0 120px rgba(0, 240, 255, 0.1)' }}
       >
         <video

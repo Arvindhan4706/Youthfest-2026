@@ -12,7 +12,6 @@ interface EventItem {
   id: string;
   title: string;
   desc: string;
-  prize: string;
   team: string;
   fee: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
@@ -36,10 +35,10 @@ const TRACKS: Track[] = [
     color: '#00f0ff',
     tagline: 'Code. Build. Disrupt.',
     events: [
-      { id: 'tech-1', title: 'Genesis Hackathon', desc: 'Build a decentralized Web3 solution in 24 hours. The ultimate test of code and creativity.', prize: '₹50,000', team: '2-4 members', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80' },
-      { id: 'tech-2', title: 'AI Arena', desc: 'Code an autonomous game agent using machine learning algorithms.', prize: '₹30,000', team: 'Solo/Duo', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=600&q=80' },
-      { id: 'tech-3', title: 'Cyber Security CTF', desc: 'Jeopardy-style capture the flag — exploit, decode, and hack your way to victory.', prize: '₹20,000', team: 'Solo', fee: 'Free', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80' },
-      { id: 'tech-4', title: 'Robo Wars', desc: 'Design and battle your combat robots in the ultimate arena showdown.', prize: '₹25,000', team: '2-3 members', fee: '₹400', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=600&q=80' },
+      { id: 'tech-1', title: 'Genesis Hackathon', desc: 'Build a decentralized Web3 solution in 24 hours. The ultimate test of code and creativity.', team: '2-4 members', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80' },
+      { id: 'tech-2', title: 'AI Arena', desc: 'Code an autonomous game agent using machine learning algorithms.', team: 'Solo/Duo', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=600&q=80' },
+      { id: 'tech-3', title: 'Cyber Security CTF', desc: 'Jeopardy-style capture the flag — exploit, decode, and hack your way to victory.', team: 'Solo', fee: 'Free', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80' },
+      { id: 'tech-4', title: 'Robo Wars', desc: 'Design and battle your combat robots in the ultimate arena showdown.', team: '2-3 members', fee: '₹400', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=600&q=80' },
     ],
   },
   {
@@ -49,9 +48,9 @@ const TRACKS: Track[] = [
     color: '#ff006e',
     tagline: 'Express. Perform. Inspire.',
     events: [
-      { id: 'cre-1', title: 'Beat Drop Dance', desc: 'High energy crew street dance battle under dynamic lighting and bass drops.', prize: '₹40,000', team: '4-8 members', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=600&q=80' },
-      { id: 'cre-2', title: 'Acoustic Soul', desc: 'Showcase your acoustic vocal & instrumental covers on the main stage.', prize: '₹15,000', team: 'Solo/Duo', fee: '₹100', difficulty: 'Easy', image: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=600&q=80' },
-      { id: 'cre-3', title: 'Runway Redefined', desc: 'Eco-futuristic fashion design runway contest. Sustainability meets style.', prize: '₹35,000', team: 'Up to 10', fee: '₹600', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&w=600&q=80' },
+      { id: 'cre-1', title: 'Beat Drop Dance', desc: 'High energy crew street dance battle under dynamic lighting and bass drops.', team: '4-8 members', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=600&q=80' },
+      { id: 'cre-2', title: 'Acoustic Soul', desc: 'Showcase your acoustic vocal & instrumental covers on the main stage.', team: 'Solo/Duo', fee: '₹100', difficulty: 'Easy', image: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=600&q=80' },
+      { id: 'cre-3', title: 'Runway Redefined', desc: 'Eco-futuristic fashion design runway contest. Sustainability meets style.', team: 'Up to 10', fee: '₹600', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&w=600&q=80' },
     ],
   },
   {
@@ -61,9 +60,9 @@ const TRACKS: Track[] = [
     color: '#fbbf24',
     tagline: 'Play. Compete. Dominate.',
     events: [
-      { id: 'game-1', title: 'Valorant Showdown', desc: '5v5 custom lobby tactical shooter tournament on the main stage screen.', prize: '₹25,000', team: '5 members', fee: '₹250', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80' },
-      { id: 'game-2', title: 'BGMI Clash', desc: 'Squad battle royale tournament — last team standing claims the crown.', prize: '₹20,000', team: '4 members', fee: '₹200', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=600&q=80' },
-      { id: 'game-3', title: 'FIFA Championship', desc: 'Console 1v1 football tournament — prove you are the ultimate virtual footballer.', prize: '₹10,000', team: 'Solo', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=600&q=80' },
+      { id: 'game-1', title: 'Valorant Showdown', desc: '5v5 custom lobby tactical shooter tournament on the main stage screen.', team: '5 members', fee: '₹250', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80' },
+      { id: 'game-2', title: 'BGMI Clash', desc: 'Squad battle royale tournament — last team standing claims the crown.', team: '4 members', fee: '₹200', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=600&q=80' },
+      { id: 'game-3', title: 'FIFA Championship', desc: 'Console 1v1 football tournament — prove you are the ultimate virtual footballer.', team: 'Solo', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=600&q=80' },
     ],
   },
   {
@@ -73,9 +72,9 @@ const TRACKS: Track[] = [
     color: '#8b5cf6',
     tagline: 'Debate. Create. Lead.',
     events: [
-      { id: 'cult-1', title: 'Model United Nations', desc: 'Diplomatic simulation — represent nations and draft resolutions under pressure.', prize: '₹15,000', team: 'Solo', fee: '₹200', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80' },
-      { id: 'cult-2', title: 'Slam Poetry Night', desc: 'Spoken word performances that move hearts and minds. 3 minutes to leave a mark.', prize: '₹10,000', team: 'Solo', fee: 'Free', difficulty: 'Easy', image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80' },
-      { id: 'cult-3', title: 'The Great Debate', desc: 'Oxford-style debate championship — sharp arguments, sharper rebuttals.', prize: '₹12,000', team: 'Duo', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1431540015159-0f9673883ae8?auto=format&fit=crop&w=600&q=80' },
+      { id: 'cult-1', title: 'Model United Nations', desc: 'Diplomatic simulation — represent nations and draft resolutions under pressure.', team: 'Solo', fee: '₹200', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80' },
+      { id: 'cult-2', title: 'Slam Poetry Night', desc: 'Spoken word performances that move hearts and minds. 3 minutes to leave a mark.', team: 'Solo', fee: 'Free', difficulty: 'Easy', image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80' },
+      { id: 'cult-3', title: 'The Great Debate', desc: 'Oxford-style debate championship — sharp arguments, sharper rebuttals.', team: 'Duo', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1431540015159-0f9673883ae8?auto=format&fit=crop&w=600&q=80' },
     ],
   },
 ];
@@ -142,9 +141,6 @@ function EventCard({ event, trackColor }: { event: EventItem; trackColor: string
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-2 border-t border-white/5 pt-4 mb-5">
-          <div className="flex items-center gap-1.5 text-xs text-gray-300">
-            <Trophy className="w-3.5 h-3.5 text-[var(--neon-gold)]" /> {event.prize}
-          </div>
           <div className="flex items-center gap-1.5 text-xs text-gray-300">
             <Users className="w-3.5 h-3.5 text-[var(--neon-cyan)]" /> {event.team}
           </div>

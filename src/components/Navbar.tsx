@@ -43,9 +43,7 @@ export default function Navbar() {
   const navLinks = [
     { href: '#hero', label: 'Home' },
     { href: '#events', label: 'Events' },
-    { href: '#prizes', label: 'Prizes' },
-    { href: '#trailer', label: 'Trailer' },
-    { href: '#speakers', label: 'Speakers' },
+    { href: '#speakers', label: 'Chief Guests' },
     { href: '#faq', label: 'FAQ' },
   ];
 
