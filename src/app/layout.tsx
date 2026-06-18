@@ -1,20 +1,39 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Orbitron } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const orbitron = Orbitron({
+  variable: "--font-orbitron",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "YUVENZA '26 | Youth & Wellness Festival",
-  description: "Discover the path to holistic well-being, logical growth, and vital energy at Yuvenza '26, the premier college flagship festival centered on youth health and wellness.",
+  title: "YUVENZA 2026 | The Biggest Youth Festival of the Year",
+  description:
+    "5000+ students, 50+ events, ₹2,00,000+ prize pool across Technology, Creativity, Gaming & Culture. August 12, 2026. Register now before spots run out!",
+  keywords: [
+    "youth festival 2026",
+    "yuvenza",
+    "college fest",
+    "hackathon",
+    "gaming tournament",
+    "cultural fest",
+    "student festival",
+  ],
+  openGraph: {
+    title: "YUVENZA 2026 | The Biggest Youth Festival",
+    description:
+      "5000+ students. 50+ events. ₹2L+ prizes. 25+ colleges. One legendary festival. August 12, 2026.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -25,8 +44,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${orbitron.variable} h-full antialiased`}
     >
+      <head>
+        <meta name="theme-color" content="#011213" />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useStore } from '../../lib/useStore';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Zap } from 'lucide-react';
 
 function GithubIcon() {
   return (
@@ -41,7 +41,6 @@ export default function FooterScene() {
       setFormStatus('Please fill in all fields.');
       return;
     }
-    // Success mock
     setFormStatus('Thank you! Your message has been sent successfully.');
     setFormData({ name: '', email: '', message: '' });
     addToast('Message sent to organizing committee!', { points: 30 });
@@ -59,15 +58,18 @@ export default function FooterScene() {
   };
 
   return (
-    <footer id="contact" className="relative bg-black pt-20 pb-10 px-4 border-t border-white/10 overflow-hidden">
-      
-      {/* Outer Grid */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
-        
+    <footer id="contact" className="relative pt-20 pb-10 px-4 border-t border-white/[0.06] overflow-hidden" style={{ background: '#010008' }}>
+      {/* Background */}
+      <div className="absolute inset-0 bg-grid opacity-5 pointer-events-none" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-[var(--neon-violet)]/[0.03] blur-[120px] pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16 relative z-10">
         {/* Contact Form */}
-        <div className="lg:col-span-5 bg-white/5 border border-white/10 p-6 sm:p-8 rounded-3xl backdrop-blur-xl shadow-2xl">
-          <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-wider">Contact Committee</h3>
-          
+        <div className="lg:col-span-5 glass-strong p-6 sm:p-8 rounded-2xl">
+          <h3 className="text-lg font-[var(--font-orbitron)] font-bold text-white mb-6 uppercase tracking-wider">
+            Contact <span className="text-[var(--neon-cyan)]">Committee</span>
+          </h3>
+
           <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
             <div>
               <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Name</label>
@@ -75,7 +77,7 @@ export default function FooterScene() {
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)]/40 transition-colors"
                 placeholder="Enter name"
               />
             </div>
@@ -85,7 +87,7 @@ export default function FooterScene() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)]/40 transition-colors"
                 placeholder="Enter email"
               />
             </div>
@@ -94,7 +96,7 @@ export default function FooterScene() {
               <textarea
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors h-24 resize-none"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)]/40 transition-colors h-24 resize-none"
                 placeholder="How can we help?"
               />
             </div>
@@ -107,7 +109,7 @@ export default function FooterScene() {
 
             <button
               type="submit"
-              className="py-3 px-6 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold text-xs hover:opacity-95 transition-opacity flex items-center justify-center gap-1.5"
+              className="py-3 px-6 rounded-xl bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-white font-bold text-xs hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5"
             >
               <span>Send Message</span>
               <Send className="w-3.5 h-3.5" />
@@ -115,59 +117,56 @@ export default function FooterScene() {
           </form>
         </div>
 
-        {/* Map Embed and Info */}
+        {/* Venue & Info */}
         <div className="lg:col-span-4 flex flex-col gap-6">
-          
-          {/* Location details */}
-          <div className="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-xl">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Venue Coordinates</h4>
+          <div className="glass-strong p-6 rounded-2xl">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Venue Details</h4>
             <div className="flex flex-col gap-3.5 text-xs text-gray-300">
               <span className="flex items-center gap-2.5">
-                <MapPin className="w-4 h-4 text-pink-500" /> Campus Arena Center, Gate 2
+                <MapPin className="w-4 h-4 text-[var(--neon-magenta)]" /> Campus Arena Center, Gate 2
               </span>
               <span className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-purple-400" /> support@yuvenzaclubs.com
+                <Mail className="w-4 h-4 text-[var(--neon-cyan)]" /> support@yuvenza2026.com
               </span>
               <span className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-emerald-400" /> +91 98765 43210
+                <Phone className="w-4 h-4 text-[var(--neon-lime)]" /> +91 98765 43210
               </span>
             </div>
           </div>
 
-          {/* Map Image Mock */}
-          <div className="h-44 w-full rounded-3xl overflow-hidden border border-white/10 relative">
-            <div className="absolute inset-0 bg-zinc-950 flex flex-col items-center justify-center p-4 text-center z-10">
-              <MapPin className="w-8 h-8 text-rose-500 animate-bounce mb-1" />
-              <h5 className="font-bold text-white text-xs">interactive map</h5>
+          {/* Map Mock */}
+          <div className="h-44 w-full rounded-2xl overflow-hidden border border-white/[0.08] relative">
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-10" style={{ background: '#0a0020' }}>
+              <MapPin className="w-8 h-8 text-[var(--neon-magenta)] animate-bounce mb-1" />
+              <h5 className="font-bold text-white text-xs">Interactive Map</h5>
               <p className="text-[10px] text-gray-500 mt-1 max-w-[200px]">Main Campus Center Arena, 23.0225° N, 72.5714° E</p>
             </div>
-            {/* Ambient grid lines */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+            <div className="absolute inset-0 bg-grid-dense opacity-20" />
           </div>
-
         </div>
 
-        {/* Committee / Newsletter */}
+        {/* Newsletter */}
         <div className="lg:col-span-3 flex flex-col gap-6">
-          
-          {/* Newsletter Signup */}
-          <div className="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-xl">
+          <div className="glass-strong p-6 rounded-2xl">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-2">Newsletter</h4>
-            <p className="text-xs text-gray-500 leading-relaxed mb-4">Subscribe for event alerts, schedule shifts, and special guest reveals.</p>
-            
+            <p className="text-xs text-gray-500 leading-relaxed mb-4">
+              Get event alerts, schedule updates, and surprise artist reveals straight to your inbox.
+            </p>
+
             <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-3">
               <input
                 type="email"
                 value={newsletterEmail}
                 onChange={(e) => setNewsletterEmail(e.target.value)}
                 placeholder="Enter email"
-                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)]/40"
               />
               {newsletterStatus && <p className="text-[10px] text-emerald-400">{newsletterStatus}</p>}
               <button
                 type="submit"
-                className="w-full py-2 bg-white text-black hover:bg-purple-500 hover:text-white font-bold text-xs rounded-xl transition-colors"
+                className="w-full py-2.5 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-white font-bold text-xs rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5"
               >
+                <Zap className="w-3 h-3" />
                 Subscribe
               </button>
             </form>
@@ -175,30 +174,30 @@ export default function FooterScene() {
 
           {/* Social Links */}
           <div className="flex gap-3 justify-center lg:justify-start">
-            <a href="#" className="p-3 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+            <a href="#" className="p-3 rounded-xl glass text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all">
               <GithubIcon />
             </a>
-            <a href="#" className="p-3 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+            <a href="#" className="p-3 rounded-xl glass text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all">
               <TwitterIcon />
             </a>
-            <a href="#" className="p-3 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+            <a href="#" className="p-3 rounded-xl glass text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all">
               <InstagramIcon />
             </a>
           </div>
-
         </div>
-
       </div>
 
-      {/* Copywright Info */}
-      <div className="max-w-6xl mx-auto border-t border-white/5 pt-8 text-center flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 select-none">
-        <p>© 2026 Yuvenza Club Organizing Committee. All rights reserved.</p>
+      {/* Copyright */}
+      <div className="max-w-6xl mx-auto border-t border-white/5 pt-8 text-center flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 select-none relative z-10">
+        <p className="flex items-center gap-2">
+          <Zap className="w-3 h-3 text-[var(--neon-cyan)]" />
+          © 2026 YUVENZA 2026 Organizing Committee. All rights reserved.
+        </p>
         <div className="flex gap-4">
           <a href="#" className="hover:text-gray-400 transition-colors">Terms of Use</a>
           <a href="#" className="hover:text-gray-400 transition-colors">Privacy Policy</a>
         </div>
       </div>
-
     </footer>
   );
 }

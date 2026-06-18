@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
-import { User } from 'lucide-react';
+import { User, Menu, X, Zap } from 'lucide-react';
 import AuthModal from './AuthModal';
 
 export default function Navbar() {
@@ -12,6 +12,14 @@ export default function Navbar() {
   const isAuthOpen = useStore((state) => state.isAuthOpen);
   const setAuthOpen = useStore((state) => state.setAuthOpen);
   const router = useRouter();
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleUserClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -22,51 +30,115 @@ export default function Navbar() {
     }
   };
 
+  const handleRegisterCTA = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (user) {
+      router.push('/dashboard');
+    } else {
+      setAuthOpen(true);
+    }
+    setMobileOpen(false);
+  };
+
+  const navLinks = [
+    { href: '#hero', label: 'Home' },
+    { href: '#events', label: 'Events' },
+    { href: '#prizes', label: 'Prizes' },
+    { href: '#trailer', label: 'Trailer' },
+    { href: '#speakers', label: 'Speakers' },
+    { href: '#faq', label: 'FAQ' },
+  ];
+
   return (
-    <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 rounded-full border border-white/10 bg-black/40 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] transition-all duration-300">
-      <div className="px-6 py-3 flex items-center justify-between">
-        
-        {/* Brand Logo */}
-        <Link href="/" className="group flex items-center gap-2">
-          <span className="font-extrabold text-xl bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent group-hover:opacity-80 transition-opacity">
-            YUVENZA '26
-          </span>
-          <span className="hidden sm:inline-block text-[10px] uppercase font-bold tracking-widest bg-white/10 text-white px-2 py-0.5 rounded-full">
-            Yuvenza Club
-          </span>
-        </Link>
+    <>
+      <nav
+        className={`fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 rounded-2xl transition-all duration-500 ${
+          scrolled
+            ? 'bg-black/70 backdrop-blur-2xl border border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.5)]'
+            : 'bg-white/[0.03] backdrop-blur-xl border border-white/[0.06]'
+        }`}
+      >
+        <div className="px-5 py-3 flex items-center justify-between">
+          {/* Brand Logo */}
+          <Link href="/" className="group flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--neon-cyan)] to-[var(--neon-violet)] flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.3)] group-hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition-shadow">
+              <Zap className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-[var(--font-orbitron)] font-extrabold text-lg tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
+              YUVENZA
+            </span>
+            <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-widest bg-white/10 text-white/70 px-2 py-0.5 rounded-full border border-white/10">
+              2026
+            </span>
+          </Link>
 
-        {/* Navigation Links */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link href="#hero" className="text-sm text-gray-300 hover:text-white transition-colors">Home</Link>
-          <Link href="#galaxy" className="text-sm text-gray-300 hover:text-white transition-colors">Wellness Zones</Link>
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-[13px] text-gray-400 hover:text-white px-3 py-1.5 rounded-lg hover:bg-white/5 transition-all duration-200"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
 
-          <Link href="#featured" className="text-sm text-gray-300 hover:text-white transition-colors">Events</Link>
-          <Link href="#explorer" className="text-sm text-gray-300 hover:text-white transition-colors">AI Search</Link>
-          <Link href="#memories" className="text-sm text-gray-300 hover:text-white transition-colors">Memories</Link>
-          <Link href="#sponsors" className="text-sm text-gray-300 hover:text-white transition-colors">Partners</Link>
-        </div>
+          {/* Right Side: CTA + User */}
+          <div className="flex items-center gap-2.5">
+            {/* Register CTA */}
+            <button
+              onClick={handleRegisterCTA}
+              className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-white hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all duration-300 hover:scale-[1.02]"
+            >
+              <Zap className="w-3 h-3" />
+              Register Now
+            </button>
 
-        {/* Interactive Stats & Tools */}
-        <div className="flex items-center gap-3">
-          
-
-          {/* User Dashboard / Admin Portal */}
-          <div className="flex items-center gap-1">
-            <button 
+            {/* User Icon */}
+            <button
               onClick={handleUserClick}
-              className="p-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-white transition-all duration-200"
-              title={user ? "User Dashboard" : "Login / Register"}
+              className="p-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white transition-all duration-200"
+              title={user ? 'User Dashboard' : 'Login / Register'}
             >
               <User className="w-4 h-4" />
             </button>
 
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden p-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white transition-all"
+            >
+              {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            </button>
           </div>
-
         </div>
 
-      </div>
+        {/* Mobile Menu */}
+        {mobileOpen && (
+          <div className="md:hidden border-t border-white/5 px-5 pb-4 pt-2 flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="text-sm text-gray-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5 transition-all"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <button
+              onClick={handleRegisterCTA}
+              className="mt-2 w-full flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-white"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              Register Now
+            </button>
+          </div>
+        )}
+      </nav>
       <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
-    </nav>
+    </>
   );
 }

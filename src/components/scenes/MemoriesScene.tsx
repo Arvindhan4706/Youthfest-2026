@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useStore } from '../../lib/useStore';
-import { Maximize2, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Maximize2, X, ChevronLeft, ChevronRight, ImageIcon, Sparkles } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface GalleryItem {
   id: number;
@@ -14,21 +14,27 @@ interface GalleryItem {
 }
 
 const GALLERY_IMAGES: GalleryItem[] = [
-  { id: 1, url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80', title: 'Cosmic Concert Night', year: 'Yuvenza 25', desc: 'DJ lasers cutting through an audience of 5,000 students.' },
-  { id: 2, url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80', title: 'Genesis Hackathon Team', year: 'Yuvenza 25', desc: 'Developers configuring smart contract pipelines in the midnight coding lab.' },
-  { id: 3, url: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80', title: 'Beat Drop Dance Battle', year: 'Yuvenza 24', desc: 'Breakdancing crew executing gravity-defying freeze poses.' },
-  { id: 4, url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80', title: 'Robotics Arena teleoperation', year: 'Yuvenza 24', desc: 'Autonomous rover navigating through obstacle runs.' },
-  { id: 5, url: 'https://images.unsplash.com/photo-1478416452197-66ef05e17349?auto=format&fit=crop&w=800&q=80', title: 'Virtual Reality Sandbox', year: 'Yuvenza 25', desc: 'Students exploring 3D virtual painting environments.' },
-  { id: 6, url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80', title: 'Main Concert Stage', year: 'Yuvenza 24', desc: 'Rock vocal headliner lighting up the night sky.' }
+  { id: 1, url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80', title: 'Cosmic Concert Night', year: 'Yuvenza 25', desc: 'DJ lasers cutting through an audience of 5,000 students. Absolute chaos.' },
+  { id: 2, url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80', title: 'Genesis Hackathon', year: 'Yuvenza 25', desc: 'Teams pushing code at 3AM. 200+ developers competing for glory.' },
+  { id: 3, url: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80', title: 'Beat Drop Dance Battle', year: 'Yuvenza 24', desc: 'Crews from 15 colleges battled it out under strobes and bass.' },
+  { id: 4, url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80', title: 'Robo Wars Arena', year: 'Yuvenza 24', desc: 'Sparks flying, metal clashing — the arena went absolutely wild.' },
+  { id: 5, url: 'https://images.unsplash.com/photo-1478416452197-66ef05e17349?auto=format&fit=crop&w=800&q=80', title: 'VR Experience Zone', year: 'Yuvenza 25', desc: 'Queues wrapped the building. Everyone wanted to try the VR sandbox.' },
+  { id: 6, url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80', title: 'Main Stage Headliner', year: 'Yuvenza 24', desc: 'The crowd when the headliner dropped the first beat. Legendary.' },
+];
+
+const HIGHLIGHTS = [
+  '10,000+ Social Media Impressions',
+  'Trending #1 on Campus',
+  '3 News Channel Features',
+  '15+ College Delegations',
+  '98% Would Return Next Year',
+  '4,500+ Registrations Last Year',
 ];
 
 export default function MemoriesScene() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const openLightbox = (index: number) => {
-    setLightboxIndex(index);
-  };
-
+  const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
 
   const prevImage = () => {
@@ -48,58 +54,84 @@ export default function MemoriesScene() {
       if (e.key === 'ArrowRight') nextImage();
       if (e.key === 'Escape') closeLightbox();
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxIndex]);
 
   return (
-    <section id="memories" className="relative py-24 bg-[#011213] px-4 border-t border-white/5">
-      <div className="max-w-6xl mx-auto">
-        
-        {/* Header Title */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-wider mb-4">
-            MEMORIES OF <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">PAST EDITIONS</span>
-          </h2>
+    <section id="memories" className="relative py-24 overflow-hidden" style={{ background: '#011213' }}>
+      {/* Background */}
+      <div className="absolute inset-0 bg-dots opacity-30 pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-xs text-gray-400 font-semibold uppercase tracking-widest mb-5"
+          >
+            <ImageIcon className="w-3 h-3 text-[var(--neon-violet)]" />
+            Past Editions Gallery
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl sm:text-5xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-wider mb-4"
+          >
+            PREVIOUS{' '}
+            <span className="bg-gradient-to-r from-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
+              EDITIONS
+            </span>
+          </motion.h2>
           <p className="text-gray-400 text-sm max-w-lg mx-auto">
-            A retrospective look at the glowing history, legendary code sprints, and energetic crowds of Yuvenza.
+            Moments that broke the internet. See why thousands keep coming back.
           </p>
         </div>
 
-        {/* Masonry Grid */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+        {/* Auto-scrolling highlights marquee */}
+        <div className="relative mb-14 overflow-hidden py-3">
+          <div className="flex animate-marquee whitespace-nowrap">
+            {[...HIGHLIGHTS, ...HIGHLIGHTS].map((h, i) => (
+              <span key={i} className="mx-6 text-xs font-bold uppercase tracking-widest text-gray-500 flex items-center gap-2">
+                <Sparkles className="w-3 h-3 text-[var(--neon-cyan)]" />
+                {h}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Masonry grid */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5">
           {GALLERY_IMAGES.map((img, idx) => (
             <motion.div
               key={img.id}
               onClick={() => openLightbox(idx)}
-              className="break-inside-avoid relative rounded-2xl border border-white/10 overflow-hidden bg-black/40 group cursor-pointer shadow-xl hover:border-purple-500/40 transition-colors"
-              whileHover={{ scale: 1.015 }}
+              className="break-inside-avoid relative rounded-2xl border border-white/[0.08] overflow-hidden bg-black/40 group cursor-pointer shadow-xl hover:border-[var(--neon-violet)]/30 transition-all duration-300"
+              whileHover={{ scale: 1.01 }}
             >
-              <img
-                src={img.url}
-                alt={img.title}
-                className="w-full object-cover max-h-[450px]"
-              />
+              <img src={img.url} alt={img.title} className="w-full object-cover max-h-[450px]" />
 
-              {/* Hover Details Panel */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6 flex flex-col justify-end">
-                <span className="text-[10px] font-bold tracking-widest text-purple-400 uppercase mb-1 font-mono">
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-5 flex flex-col justify-end">
+                <span className="text-[10px] font-bold tracking-widest text-[var(--neon-cyan)] uppercase mb-1 font-mono">
                   {img.year}
                 </span>
                 <h4 className="text-white text-base font-bold mb-1">{img.title}</h4>
-                <p className="text-xs text-gray-300 leading-relaxed mb-4">{img.desc}</p>
+                <p className="text-xs text-gray-300 leading-relaxed mb-3">{img.desc}</p>
                 <div className="flex items-center gap-1 text-[10px] text-gray-400 uppercase font-mono font-bold">
-                  <Maximize2 className="w-3.5 h-3.5 text-purple-400" /> Click to Expand
+                  <Maximize2 className="w-3.5 h-3.5 text-[var(--neon-violet)]" /> Click to Expand
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
-
       </div>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox */}
       <AnimatePresence>
         {lightboxIndex !== null && (
           <motion.div
@@ -108,26 +140,20 @@ export default function MemoriesScene() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center p-4"
           >
-            {/* Close trigger overlay */}
             <div className="absolute inset-0" onClick={closeLightbox} />
-
-            <button 
+            <button
               onClick={closeLightbox}
               className="absolute top-6 right-6 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all z-10"
             >
               <X className="w-5 h-5" />
             </button>
-
-            {/* Left Button */}
-            <button 
+            <button
               onClick={prevImage}
               className="absolute left-6 p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all z-10"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-
-            {/* Lightbox content card */}
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
@@ -139,20 +165,19 @@ export default function MemoriesScene() {
                 className="w-full max-h-[75vh] object-contain rounded-xl border border-white/10"
               />
               <div className="text-left px-2">
-                <span className="text-xs font-bold text-purple-400 font-mono uppercase">{GALLERY_IMAGES[lightboxIndex].year}</span>
+                <span className="text-xs font-bold text-[var(--neon-cyan)] font-mono uppercase">
+                  {GALLERY_IMAGES[lightboxIndex].year}
+                </span>
                 <h3 className="text-xl font-bold text-white mt-1">{GALLERY_IMAGES[lightboxIndex].title}</h3>
                 <p className="text-sm text-gray-400 mt-1.5">{GALLERY_IMAGES[lightboxIndex].desc}</p>
               </div>
             </motion.div>
-
-            {/* Right Button */}
-            <button 
+            <button
               onClick={nextImage}
               className="absolute right-6 p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all z-10"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
-
           </motion.div>
         )}
       </AnimatePresence>

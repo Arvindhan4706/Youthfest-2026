@@ -9,14 +9,12 @@ import PaymentModal from '../components/PaymentModal';
 
 // Dynamic imports of scenes for performance optimization and SSR safety
 const HeroScene = dynamic(() => import('../components/scenes/HeroScene'), { ssr: false });
-const EventGalaxyScene = dynamic(() => import('../components/scenes/EventGalaxyScene'), { ssr: false });
-
-const FeaturedEventsScene = dynamic(() => import('../components/scenes/FeaturedEventsScene'), { ssr: false });
-const AIExplorerScene = dynamic(() => import('../components/scenes/AIExplorerScene'), { ssr: false });
+const StatsBarScene = dynamic(() => import('../components/scenes/StatsBarScene'), { ssr: false });
+const EventShowcaseScene = dynamic(() => import('../components/scenes/EventShowcaseScene'), { ssr: false });
 const TrailerScene = dynamic(() => import('../components/scenes/TrailerScene'), { ssr: false });
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
-const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
-
+const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
+const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
 const FAQScene = dynamic(() => import('../components/scenes/FAQScene'), { ssr: false });
 const FooterScene = dynamic(() => import('../components/scenes/FooterScene'), { ssr: false });
 
@@ -36,7 +34,7 @@ export default function Home() {
     if (showFlashIntro) return;
     
     // Welcome toast after intro completes
-    addToast('Welcome to Yuvenza 2026!', { points: 50 });
+    addToast('Welcome to YUVENZA 2026!', { points: 50 });
 
     // Initialize Lenis smooth scroll
     const lenis = new Lenis({
@@ -64,11 +62,9 @@ export default function Home() {
 
   return (
     <main className={`relative w-full min-h-screen overflow-x-hidden transition-colors duration-1000 ${
-      isSecretMode ? 'bg-[#000000] text-teal-400 font-mono shadow-[inset_0_0_100px_rgba(20,185,129,0.3)]' : 'bg-[#011213] text-white'
+      isSecretMode ? 'bg-[#011213] text-[var(--neon-cyan)] font-[var(--font-orbitron)] shadow-[inset_0_0_100px_rgba(0,240,255,0.3)]' : 'bg-[#011213] text-white'
     }`}>
       
-
-
       {/* Global Navigation Header */}
       <Navbar />
 
@@ -80,14 +76,12 @@ export default function Home() {
 
       {/* Visual sections */}
       <HeroScene />
-      <EventGalaxyScene />
-
-      <FeaturedEventsScene />
-      <AIExplorerScene />
+      <StatsBarScene />
+      <EventShowcaseScene />
       <TrailerScene />
       <MemoriesScene />
-      <SponsorsScene />
-
+      <SpeakersScene />
+      <CountdownCTAScene />
       <FAQScene />
       <FooterScene />
       

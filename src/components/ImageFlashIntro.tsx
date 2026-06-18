@@ -307,7 +307,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
               transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
               className="mt-4 sm:mt-6 text-xs sm:text-sm md:text-base text-gray-300 uppercase tracking-[0.4em] font-light"
             >
-              Youth & Wellness Festival &apos;26
+              THE BIGGEST YOUTH FESTIVAL • 2026
             </motion.div>
           )}
         </AnimatePresence>
