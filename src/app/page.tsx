@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import LoadingScene from '../components/scenes/LoadingScene';
+import ImageFlashIntro from '../components/ImageFlashIntro';
 import Navbar from '../components/Navbar';
 import ToastContainer from '../components/ToastContainer';
 import PaymentModal from '../components/PaymentModal';
@@ -25,15 +25,19 @@ import { useStore } from '../lib/useStore';
 import Lenis from 'lenis';
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [showFlashIntro, setShowFlashIntro] = useState(true);
   const isSecretMode = useStore((state) => state.isSecretMode);
+  const addToast = useStore((state) => state.addToast);
   
   // Register Konami Easter Egg Code listener
   useKonamiCode();
 
   useEffect(() => {
-    if (isLoading) return;
+    if (showFlashIntro) return;
     
+    // Welcome toast after intro completes
+    addToast('Welcome to Yuvenza 2026!', { points: 50 });
+
     // Initialize Lenis smooth scroll
     const lenis = new Lenis({
       duration: 1.2,
@@ -51,10 +55,11 @@ export default function Home() {
     return () => {
       lenis.destroy();
     };
-  }, [isLoading]);
+  }, [showFlashIntro, addToast]);
 
-  if (isLoading) {
-    return <LoadingScene onComplete={() => setIsLoading(false)} />;
+  // Image Flash Intro with cinematic YUVENZA reveal
+  if (showFlashIntro) {
+    return <ImageFlashIntro onComplete={() => setShowFlashIntro(false)} />;
   }
 
   return (
