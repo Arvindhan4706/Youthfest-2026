@@ -143,13 +143,13 @@ export default function MemoriesScene() {
             <div className="absolute inset-0" onClick={closeLightbox} />
             <button
               onClick={closeLightbox}
-              className="absolute top-6 right-6 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all z-10"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all z-10"
             >
               <X className="w-5 h-5" />
             </button>
             <button
               onClick={prevImage}
-              className="absolute left-6 p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all z-10"
+              className="absolute left-2 sm:left-6 p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all z-10"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -164,7 +164,7 @@ export default function MemoriesScene() {
                 alt={GALLERY_IMAGES[lightboxIndex].title}
                 className="w-full max-h-[75vh] object-contain rounded-xl border border-white/10"
               />
-              <div className="text-left px-2">
+              <div className="text-left px-4 sm:px-2">
                 <span className="text-xs font-bold text-[var(--neon-cyan)] font-mono uppercase">
                   {GALLERY_IMAGES[lightboxIndex].year}
                 </span>
@@ -174,7 +174,7 @@ export default function MemoriesScene() {
             </motion.div>
             <button
               onClick={nextImage}
-              className="absolute right-6 p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all z-10"
+              className="absolute right-2 sm:right-6 p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all z-10"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

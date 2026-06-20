@@ -92,14 +92,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md bg-gradient-to-b from-teal-900/40 to-[#070024] border border-teal-500/30 rounded-3xl p-8 shadow-2xl overflow-hidden"
+            className="relative w-full max-w-md bg-gradient-to-b from-teal-900/40 to-[#070024] border border-teal-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden"
           >
             {/* Top accent line */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 via-emerald-500 to-teal-500" />
             
             <button 
               onClick={onClose}
-              className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 text-white/50 hover:text-white transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
