@@ -11,7 +11,7 @@ const FLASH_IMAGES = [
   '/flash-energy.png',
 ];
 
-const YUVENZA_LETTERS = ['Y', 'U', 'V', 'E', 'N', 'Z', 'A'];
+const YOUTHFEST_LETTERS = ['Y', 'O', 'U', 'T', 'H', 'F', 'E', 'S', 'T'];
 
 // Timeline phases
 // Phase 1: Rapid image flashes (dark, chaotic)
@@ -32,7 +32,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
   const CHAOS_FLASHES = 14;
   // Phase 2: Reveal — one letter per flash burst (7 letters, ~2-3 flashes each)
   const FLASHES_PER_LETTER = 3;
-  const REVEAL_FLASHES = YUVENZA_LETTERS.length * FLASHES_PER_LETTER;
+  const REVEAL_FLASHES = YOUTHFEST_LETTERS.length * FLASHES_PER_LETTER;
 
   const getInterval = useCallback((count: number, currentPhase: string) => {
     if (currentPhase === 'chaos') {
@@ -230,7 +230,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
         )}
       </AnimatePresence>
 
-      {/* === YUVENZA CINEMATIC NAME REVEAL === */}
+      {/* === YOUTHFEST CINEMATIC NAME REVEAL === */}
       <div
         className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
         style={{
@@ -239,7 +239,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
       >
         {/* Letter row */}
         <div className="flex items-center justify-center gap-1 sm:gap-2 md:gap-4">
-          {YUVENZA_LETTERS.map((letter, i) => {
+          {YOUTHFEST_LETTERS.map((letter, i) => {
             const isRevealed = i < revealedLetters;
             const isLatest = i === revealedLetters - 1;
             

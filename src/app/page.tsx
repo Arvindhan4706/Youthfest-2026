@@ -34,7 +34,7 @@ export default function Home() {
     if (showFlashIntro) return;
     
     // Welcome toast after intro completes
-    addToast('Welcome to YUVENZA 2026!', { points: 50 });
+    addToast('Welcome to YOUTHFEST 2026!', { points: 50 });
 
     // Initialize Lenis smooth scroll
     const lenis = new Lenis({
@@ -55,7 +55,7 @@ export default function Home() {
     };
   }, [showFlashIntro, addToast]);
 
-  // Image Flash Intro with cinematic YUVENZA reveal
+  // Image Flash Intro with cinematic YOUTHFEST reveal
   if (showFlashIntro) {
     return <ImageFlashIntro onComplete={() => setShowFlashIntro(false)} />;
   }

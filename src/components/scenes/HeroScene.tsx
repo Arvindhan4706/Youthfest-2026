@@ -193,7 +193,7 @@ export default function HeroScene() {
           className="relative mb-4"
         >
           <h1 className="text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-white leading-none">
-            YUVENZA
+            YOUTHFEST
           </h1>
           {/* Glitch layers */}
           <h1
@@ -201,14 +201,14 @@ export default function HeroScene() {
             style={{ animation: 'glitch-1 4s ease-in-out infinite' }}
             aria-hidden="true"
           >
-            YUVENZA
+            YOUTHFEST
           </h1>
           <h1
             className="absolute inset-0 text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-magenta)] leading-none opacity-70 pointer-events-none"
             style={{ animation: 'glitch-2 4s ease-in-out infinite' }}
             aria-hidden="true"
           >
-            YUVENZA
+            YOUTHFEST
           </h1>
         </motion.div>
 
@@ -233,7 +233,7 @@ export default function HeroScene() {
         >
           THE BIGGEST YOUTH FESTIVAL IS HERE — Technology. Creativity. Gaming. Culture.
           <br className="hidden sm:block" />
-          <span className="text-white font-medium">One legendary stage. Infinite glory.</span>
+          <span className="text-white font-medium">Presented by Yuvenza Club. One legendary stage. Infinite glory.</span>
         </motion.p>
 
         {/* Countdown timer */}

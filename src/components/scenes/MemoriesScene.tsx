@@ -14,12 +14,12 @@ interface GalleryItem {
 }
 
 const GALLERY_IMAGES: GalleryItem[] = [
-  { id: 1, url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80', title: 'Cosmic Concert Night', year: 'Yuvenza 25', desc: 'DJ lasers cutting through an audience of 5,000 students. Absolute chaos.' },
-  { id: 2, url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80', title: 'Genesis Hackathon', year: 'Yuvenza 25', desc: 'Teams pushing code at 3AM. 200+ developers competing for glory.' },
-  { id: 3, url: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80', title: 'Beat Drop Dance Battle', year: 'Yuvenza 24', desc: 'Crews from 15 colleges battled it out under strobes and bass.' },
-  { id: 4, url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80', title: 'Robo Wars Arena', year: 'Yuvenza 24', desc: 'Sparks flying, metal clashing — the arena went absolutely wild.' },
-  { id: 5, url: 'https://images.unsplash.com/photo-1478416452197-66ef05e17349?auto=format&fit=crop&w=800&q=80', title: 'VR Experience Zone', year: 'Yuvenza 25', desc: 'Queues wrapped the building. Everyone wanted to try the VR sandbox.' },
-  { id: 6, url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80', title: 'Main Stage Headliner', year: 'Yuvenza 24', desc: 'The crowd when the headliner dropped the first beat. Legendary.' },
+  { id: 1, url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80', title: 'Cosmic Concert Night', year: 'Youthfest 25', desc: 'DJ lasers cutting through an audience of 5,000 students. Absolute chaos.' },
+  { id: 2, url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80', title: 'Genesis Hackathon', year: 'Youthfest 25', desc: 'Teams pushing code at 3AM. 200+ developers competing for glory.' },
+  { id: 3, url: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80', title: 'Beat Drop Dance Battle', year: 'Youthfest 24', desc: 'Crews from 15 colleges battled it out under strobes and bass.' },
+  { id: 4, url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80', title: 'Robo Wars Arena', year: 'Youthfest 24', desc: 'Sparks flying, metal clashing — the arena went absolutely wild.' },
+  { id: 5, url: 'https://images.unsplash.com/photo-1478416452197-66ef05e17349?auto=format&fit=crop&w=800&q=80', title: 'VR Experience Zone', year: 'Youthfest 25', desc: 'Queues wrapped the building. Everyone wanted to try the VR sandbox.' },
+  { id: 6, url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80', title: 'Main Stage Headliner', year: 'Youthfest 24', desc: 'The crowd when the headliner dropped the first beat. Legendary.' },
 ];
 
 const HIGHLIGHTS = [

@@ -20,7 +20,7 @@ const CHIEF_GUESTS: Guest[] = [
     name: 'Thalapathy Vijay',
     title: 'Superstar & Philanthropist',
     industry: 'Tamil Cinema',
-    bio: 'One of the highest-paid actors in India, known for his massive fan following and blockbuster hits. Making a very special appearance at Yuvenza 2026.',
+    bio: 'One of the highest-paid actors in India, known for his massive fan following and blockbuster hits. Making a very special appearance at Youthfest 2026.',
     color: '#00f0ff',
     image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', // Using generic placeholder
   },
@@ -141,7 +141,7 @@ export default function SpeakersScene() {
             </span>
           </motion.h2>
           <p className="text-gray-400 text-sm max-w-lg mx-auto">
-            Experience the electrifying presence of Tamil Cinema's biggest superstars lighting up the main stage at Yuvenza 2026.
+            Experience the electrifying presence of Tamil Cinema's biggest superstars lighting up the main stage at Youthfest 2026.
           </p>
         </div>
 

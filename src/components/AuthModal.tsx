@@ -64,7 +64,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           registeredEvents: visitor.registered_events || [],
         });
         
-        addToast('Registration successful! Welcome to Yuvenza.');
+        addToast('Registration successful! Welcome to Youthfest.');
         resetForm();
         onClose();
         router.push('/dashboard');
@@ -109,7 +109,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 {isLogin ? 'Visitor Access' : 'Festival Registration'}
               </h2>
               <p className="text-gray-400 text-xs">
-                {isLogin ? 'Enter your details to access your dashboard' : 'Join 10,000+ others at Yuvenza \'26'}
+                {isLogin ? 'Enter your details to access your dashboard' : 'Join 10,000+ others at Youthfest \'26'}
               </p>
             </div>
 

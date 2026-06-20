@@ -54,7 +54,7 @@ export default function FooterScene() {
     }
     setNewsletterStatus('Subscribed successfully!');
     setNewsletterEmail('');
-    addToast('Subscribed to Yuvenza Newsletter!', { points: 20 });
+    addToast('Subscribed to Youthfest Newsletter!', { points: 20 });
   };
 
   return (
@@ -126,7 +126,7 @@ export default function FooterScene() {
                 <MapPin className="w-4 h-4 text-[var(--neon-magenta)]" /> Campus Arena Center, Gate 2
               </span>
               <span className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-[var(--neon-cyan)]" /> support@yuvenza2026.com
+                <Mail className="w-4 h-4 text-[var(--neon-cyan)]" /> support@youthfest2026.com
               </span>
               <span className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-[var(--neon-lime)]" /> +91 98765 43210
@@ -191,7 +191,7 @@ export default function FooterScene() {
       <div className="max-w-6xl mx-auto border-t border-white/5 pt-8 text-center flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 select-none relative z-10">
         <p className="flex items-center gap-2">
           <Zap className="w-3 h-3 text-[var(--neon-cyan)]" />
-          © 2026 YUVENZA 2026 Organizing Committee. All rights reserved.
+          © 2026 Yuvenza Club. All rights reserved.
         </p>
         <div className="flex gap-4">
           <a href="#" className="hover:text-gray-400 transition-colors">Terms of Use</a>

@@ -12,8 +12,8 @@ interface FAQItem {
 }
 
 const FAQ_DATA: FAQItem[] = [
-  { question: 'Who can participate in Yuvenza 2026?', answer: 'Students currently enrolled in any recognized school, college, or university can participate. Please bring a valid student ID for verification on-site.', category: 'General' },
-  { question: 'When and where is Yuvenza 2026?', answer: 'August 12, 2026 at the Main Campus Arena Center. Gates open at 8:00 AM. Events run through the day with the main stage concert at night.', category: 'General' },
+  { question: 'Who can participate in Youthfest 2026?', answer: 'Students currently enrolled in any recognized school, college, or university can participate. Please bring a valid student ID for verification on-site.', category: 'General' },
+  { question: 'When and where is Youthfest 2026?', answer: 'August 12, 2026 at the Main Campus Arena Center. Gates open at 8:00 AM. Events run through the day with the main stage concert at night.', category: 'General' },
   { question: 'Is there an entry fee?', answer: 'General entry to the festival arena and pro shows requires a Festival Pass. Individual events and competitions have separate registration fees listed on their cards.', category: 'Registration' },
   { question: 'How do I register for events?', answer: 'Click "Register Now" on any event card. Create an account, select your events, and complete payment. You\'ll receive a QR code ticket on your dashboard instantly.', category: 'Registration' },
   { question: 'Can I register for multiple events?', answer: 'Yes! Register for as many events as you want. Just check the schedule to avoid timing conflicts between events.', category: 'Registration' },

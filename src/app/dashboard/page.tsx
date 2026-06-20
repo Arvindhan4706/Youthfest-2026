@@ -232,7 +232,7 @@ export default function Dashboard() {
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500" />
 
                       <span className="text-[9px] uppercase font-mono tracking-widest text-teal-400 font-bold mb-4">
-                        YUVENZA '26 VITALITY PASS
+                        YOUTHFEST '26 VITALITY PASS
                       </span>
 
                       {/* QR Image mock */}
@@ -333,8 +333,8 @@ export default function Dashboard() {
                                 <MailOpen className="w-4 h-4" />
                               </div>
                               <div>
-                                <h4 className="text-xs font-extrabold text-white">Yuvenza '26 Registrations</h4>
-                                <span className="text-[9px] text-gray-500">From: registrations@yuvenza.org</span>
+                                <h4 className="text-xs font-extrabold text-white">Youthfest '26 Registrations</h4>
+                                <span className="text-[9px] text-gray-500">From: registrations@youthfest.org</span>
                               </div>
                             </div>
                             <h3 className="text-sm font-black text-white uppercase mt-3">{mail.subject}</h3>

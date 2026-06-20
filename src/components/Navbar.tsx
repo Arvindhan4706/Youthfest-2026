@@ -63,7 +63,7 @@ export default function Navbar() {
               <Zap className="w-4 h-4 text-white" />
             </div>
             <span className="font-[var(--font-orbitron)] font-extrabold text-lg tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
-              YUVENZA
+              YOUTHFEST
             </span>
             <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-widest bg-white/10 text-white/70 px-2 py-0.5 rounded-full border border-white/10">
               2026

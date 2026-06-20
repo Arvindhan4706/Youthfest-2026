@@ -14,7 +14,7 @@ const TRAILER_CAPTIONS: Caption[] = [
   { time: 3, text: 'Technology. Creativity. Gaming. Culture.' },
   { time: 6, text: 'The ultimate showcase of talent.' },
   { time: 10, text: 'The biggest stage awaits.' },
-  { time: 14, text: 'YUVENZA 2026. Are you in?' },
+  { time: 14, text: 'YOUTHFEST 2026. Are you in?' },
 ];
 
 export default function TrailerScene() {

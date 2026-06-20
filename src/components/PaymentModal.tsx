@@ -50,7 +50,7 @@ export default function PaymentModal() {
         const emailBody = `
 Dear ${user.name},
 
-Congratulations! Your registration for "${checkoutEvent.title}" at YUVENZA '26 has been successfully confirmed.
+Congratulations! Your registration for "${checkoutEvent.title}" at YOUTHFEST '26 has been successfully confirmed.
 
 --- REGISTRATION & PAYMENT RECEIPT ---
 Event Name: ${checkoutEvent.title}
@@ -70,7 +70,7 @@ See you at the Wellness Sphere!
 
 Best regards,
 Registrations Desk,
-YUVENZA '26 Organizing Committee
+Yuvenza Club
         `.trim();
 
         const newEmail: EmailMessage = {
@@ -196,7 +196,7 @@ YUVENZA '26 Organizing Committee
                       {/* Scanning laser line */}
                       <div className="absolute top-0 left-0 w-full h-[2px] bg-purple-500 animate-bounce" />
                       <img
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=yuvenza@bank%26pn=YuvenzaClub%26am=${checkoutEvent.fee.replace(/[^0-9]/g, '')}%26cu=INR`}
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=youthfest@bank%26pn=YuvenzaClub%26am=${checkoutEvent.fee.replace(/[^0-9]/g, '')}%26cu=INR`}
                         alt="UPI QR Code"
                         className="w-40 h-40 object-contain"
                       />
