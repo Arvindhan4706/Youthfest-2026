@@ -19,6 +19,11 @@ export default function Dashboard() {
   
   const [profileName, setProfileName] = useState(user?.name || '');
   const [profileEmail, setProfileEmail] = useState(user?.email || '');
+  const [profileCollege, setProfileCollege] = useState(user?.college || '');
+  const [profileDepartment, setProfileDepartment] = useState(user?.department || '');
+  const [profileYear, setProfileYear] = useState(user?.year || '1');
+  const [profileGender, setProfileGender] = useState(user?.gender || 'Male');
+  const [profileCity, setProfileCity] = useState(user?.city || '');
   const [selectedEventTicket, setSelectedEventTicket] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'tickets' | 'inbox'>('tickets');
   const [selectedMailId, setSelectedMailId] = useState<string | null>(null);
@@ -41,11 +46,21 @@ export default function Dashboard() {
       const updated = await db.updateProfile(user.email, {
         name: profileName,
         email: profileEmail,
+        college: profileCollege,
+        department: profileDepartment,
+        year: profileYear,
+        gender: profileGender,
+        city: profileCity,
       });
       setUser({
         email: updated.email,
         name: updated.name,
         phone: updated.phone,
+        college: updated.college,
+        department: updated.department,
+        year: updated.year,
+        gender: updated.gender,
+        city: updated.city,
         registeredEvents: updated.registered_events,
       });
       addToast('Profile information updated!', { points: 15 });
@@ -136,6 +151,38 @@ export default function Dashboard() {
                   disabled
                   className="w-full bg-white/5 border border-white/5 opacity-50 rounded-xl px-4 py-3 text-xs text-gray-400 cursor-not-allowed"
                 />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">College</label>
+                  <input type="text" value={profileCollege} onChange={(e) => setProfileCollege(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors" />
+                </div>
+                <div>
+                  <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Department</label>
+                  <input type="text" value={profileDepartment} onChange={(e) => setProfileDepartment(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors" />
+                </div>
+                <div>
+                  <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Year</label>
+                  <select value={profileYear} onChange={(e) => setProfileYear(e.target.value)} className="w-full bg-[#011213] border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors cursor-pointer">
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                    <option value="PG">Post Graduate</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Gender</label>
+                  <select value={profileGender} onChange={(e) => setProfileGender(e.target.value)} className="w-full bg-[#011213] border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors cursor-pointer">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div className="col-span-2">
+                  <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">City</label>
+                  <input type="text" value={profileCity} onChange={(e) => setProfileCity(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors" />
+                </div>
               </div>
 
               <button
@@ -235,21 +282,18 @@ export default function Dashboard() {
                         YOUTHFEST '26 VITALITY PASS
                       </span>
 
-                      {/* QR Image mock */}
-                      <div className="bg-white p-3 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)]">
-                        <div className="w-28 h-28 border-[4px] border-black flex items-center justify-center relative bg-white">
-                          {/* Stylized QR boxes */}
-                          <div className="absolute top-0 left-0 w-8 h-8 bg-black" />
-                          <div className="absolute top-0 right-0 w-8 h-8 bg-black" />
-                          <div className="absolute bottom-0 left-0 w-8 h-8 bg-black" />
-                          <div className="absolute inset-4 border-2 border-black border-dashed flex items-center justify-center">
-                            <span className="text-[8px] font-bold text-black uppercase font-mono">SCAN ME</span>
-                          </div>
-                        </div>
+                      {/* Real QR Image generated via API */}
+                      <div className="bg-white p-2 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)] pointer-events-none">
+                        <img 
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(user.email + '|' + selectedEventTicket)}`} 
+                          alt="Ticket QR Code"
+                          className="w-28 h-28 object-contain"
+                        />
                       </div>
 
                       <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
                       <span className="text-[10px] text-gray-400 block mb-6 font-mono">Visitor: {user.name}</span>
+                      <span className="text-[8px] text-purple-400/80 block -mt-5 mb-6 font-mono uppercase tracking-widest break-all">ID: {btoa(user.email + '|' + selectedEventTicket).substring(0, 15)}...</span>
 
                       <button
                         onClick={handleDownloadTicket}

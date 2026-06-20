@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Play, Zap, Calendar, ChevronDown } from 'lucide-react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { ArrowRight, Play, Zap, Calendar, ChevronDown, Sparkles } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
 import { useRouter } from 'next/navigation';
 import AuthModal from '../AuthModal';
+import MagneticButton from '../ui/MagneticButton';
 
 // Target date: August 12, 2026
 const TARGET_DATE = new Date('2026-08-12T10:00:00+05:30').getTime();
@@ -114,34 +115,28 @@ function StatBadge({
   );
 }
 
-// Particle field for background
-function ParticleField() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: 40 }).map((_, i) => (
-        <div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            width: `${Math.random() * 3 + 1}px`,
-            height: `${Math.random() * 3 + 1}px`,
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            background: i % 3 === 0 ? 'var(--neon-cyan)' : i % 3 === 1 ? 'var(--neon-violet)' : 'var(--neon-magenta)',
-            opacity: Math.random() * 0.5 + 0.1,
-            animation: `float ${4 + Math.random() * 6}s ease-in-out ${Math.random() * 4}s infinite`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+import ParticleUniverse from '../ui/ParticleUniverse';
 
 export default function HeroScene() {
   const user = useStore((state) => state.user);
   const router = useRouter();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const countdown = useCountdown();
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    mouseX.set((clientX / innerWidth) * 2 - 1);
+    mouseY.set((clientY / innerHeight) * 2 - 1);
+  };
+
+  const parallaxX1 = useTransform(mouseX, [-1, 1], [-20, 20]);
+  const parallaxY1 = useTransform(mouseY, [-1, 1], [-20, 20]);
+  const parallaxX2 = useTransform(mouseX, [-1, 1], [30, -30]);
+  const parallaxY2 = useTransform(mouseY, [-1, 1], [30, -30]);
 
   const handleRegisterClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -152,30 +147,96 @@ export default function HeroScene() {
     }
   };
 
+  const titleText = "YOUTHFEST";
+  const titleVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1, 
+      transition: { staggerChildren: 0.08, delayChildren: 0.2 }
+    }
+  };
+  
+  const letterVariants = {
+    hidden: { opacity: 0, y: 40, rotateX: -90 },
+    visible: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.8, ease: "backOut" } }
+  };
+
   return (
     <section
       id="hero"
+      onMouseMove={handleMouseMove}
       className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden px-4 py-20"
       style={{ background: 'radial-gradient(ellipse at 50% 0%, #0a0030 0%, #011213 50%, #010008 100%)' }}
     >
+      {/* WebGL Particle Universe */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 3, delay: 1.0 }}
+      >
+        <ParticleUniverse />
+      </motion.div>
+      
       {/* Ambient background elements */}
-      <ParticleField />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2, delay: 1.5 }}
+        className="absolute inset-0 pointer-events-none"
+      >
+        
+        {/* Grid overlay */}
+        <motion.div 
+          style={{ x: parallaxX1, y: parallaxY1 }} 
+          className="absolute inset-0 bg-grid opacity-30 pointer-events-none" 
+        />
 
-      {/* Grid overlay */}
-      <div className="absolute inset-0 bg-grid opacity-40 pointer-events-none" />
-
-      {/* Radial glow spots */}
-      <div className="absolute top-[10%] left-[20%] w-[500px] h-[500px] rounded-full bg-[var(--neon-cyan)]/[0.04] blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[15%] w-[400px] h-[400px] rounded-full bg-[var(--neon-violet)]/[0.05] blur-[100px] pointer-events-none" />
-      <div className="absolute top-[50%] left-[60%] w-[300px] h-[300px] rounded-full bg-[var(--neon-magenta)]/[0.03] blur-[80px] pointer-events-none" />
+        {/* Radial glow spots */}
+        <motion.div 
+          style={{ x: parallaxX1, y: parallaxY1 }}
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-[10%] left-[20%] w-[500px] h-[500px] rounded-full bg-[var(--neon-cyan)]/[0.04] blur-[120px] pointer-events-none" 
+        />
+        <motion.div 
+          style={{ x: parallaxX2, y: parallaxY2 }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+          className="absolute bottom-[10%] right-[15%] w-[400px] h-[400px] rounded-full bg-[var(--neon-violet)]/[0.05] blur-[100px] pointer-events-none" 
+        />
+        <motion.div 
+          style={{ x: parallaxX1, y: parallaxY2 }}
+          animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          className="absolute top-[50%] left-[60%] w-[300px] h-[300px] rounded-full bg-[var(--neon-magenta)]/[0.03] blur-[80px] pointer-events-none" 
+        />
+      </motion.div>
 
       {/* Main content */}
       <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center mt-16">
+        {/* Event Logo with Cinematic Glitch Reveal */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, filter: 'brightness(0) contrast(100%)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'brightness(1) contrast(100%)' }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="mb-6 relative"
+        >
+          <div className="relative z-10" style={{ animation: 'glitch-1 0.4s ease-in-out 0.8s 2' }}>
+            <img src="/eventlogo.png" alt="Youthfest Event Logo" className="w-32 h-auto object-contain drop-shadow-[0_0_30px_rgba(0,240,255,0.6)]" />
+          </div>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5 }}
+            transition={{ delay: 1.2, duration: 2 }}
+            className="absolute inset-0 bg-[var(--neon-magenta)] blur-3xl animate-pulse pointer-events-none" 
+          />
+        </motion.div>
+
         {/* Date badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.8, delay: 3.5 }}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full neon-border bg-white/[0.03] mb-8 animate-breathe"
         >
           <Calendar className="w-3.5 h-3.5 text-[var(--neon-cyan)]" />
@@ -185,38 +246,54 @@ export default function HeroScene() {
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-cyan)] animate-pulse" />
         </motion.div>
 
-        {/* Main title with glitch effect */}
+        {/* Main title with letter-by-letter reveal and glitch effect */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="relative mb-4"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { 
+              opacity: 1, 
+              transition: { staggerChildren: 0.1, delayChildren: 2.0 }
+            }
+          }}
+          initial="hidden"
+          animate="visible"
+          className="relative mb-4 perspective-1000"
         >
-          <h1 className="text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-white leading-none">
-            YOUTHFEST
+          <h1 className="flex justify-center text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-white leading-none z-10 relative">
+            {titleText.split('').map((char, index) => (
+              <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>
+                {char}
+              </motion.span>
+            ))}
           </h1>
           {/* Glitch layers */}
-          <h1
-            className="absolute inset-0 text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-cyan)] leading-none opacity-70 pointer-events-none"
+          <motion.h1
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.7 }}
+            transition={{ delay: 3.0, duration: 1 }}
+            className="absolute inset-0 text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-cyan)] leading-none pointer-events-none mix-blend-screen"
             style={{ animation: 'glitch-1 4s ease-in-out infinite' }}
             aria-hidden="true"
           >
             YOUTHFEST
-          </h1>
-          <h1
-            className="absolute inset-0 text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-magenta)] leading-none opacity-70 pointer-events-none"
+          </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.7 }}
+            transition={{ delay: 3.0, duration: 1 }}
+            className="absolute inset-0 text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-magenta)] leading-none pointer-events-none mix-blend-screen"
             style={{ animation: 'glitch-2 4s ease-in-out infinite' }}
             aria-hidden="true"
           >
             YOUTHFEST
-          </h1>
+          </motion.h1>
         </motion.div>
 
         {/* Year with neon glow */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 3.2 }}
           className="mb-6"
         >
           <span className="text-4xl sm:text-5xl md:text-6xl font-[var(--font-orbitron)] font-black bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent animate-gradient">
@@ -226,9 +303,9 @@ export default function HeroScene() {
 
         {/* Tagline */}
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 3.8 }}
           className="text-base sm:text-xl text-gray-400 font-light tracking-wide mb-10 max-w-2xl leading-relaxed"
         >
           THE BIGGEST YOUTH FESTIVAL IS HERE — Technology. Creativity. Gaming. Culture.
@@ -238,9 +315,9 @@ export default function HeroScene() {
 
         {/* Countdown timer */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.0 }}
+          initial={{ opacity: 0, scale: 0.5, y: 40 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1, delay: 4.2, type: "spring", bounce: 0.4 }}
           className="flex items-center gap-3 sm:gap-5 mb-12"
         >
           <CountdownUnit value={countdown.days} label="Days" />
@@ -254,45 +331,54 @@ export default function HeroScene() {
 
         {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
+          transition={{ duration: 0.8, delay: 5.0 }}
           className="flex flex-col sm:flex-row items-center gap-4 mb-16"
         >
-          <button
-            onClick={handleRegisterClick}
-            className="group relative flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-white text-base overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(0,240,255,0.3)]"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
-            <div className="absolute inset-[1px] rounded-[15px] bg-[#011213]/80 group-hover:bg-transparent transition-all duration-300" />
-            <span className="relative z-10 flex items-center gap-2">
-              Register Now — Spots Filling Fast 🔥 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </button>
+          <MagneticButton strength={40}>
+            <button
+              onClick={handleRegisterClick}
+              className="group relative flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-white text-base overflow-hidden transition-all duration-300 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_50px_rgba(0,240,255,0.6)] animate-breathe"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
+              <div className="absolute inset-[1px] rounded-[15px] bg-[#011213]/50 group-hover:bg-transparent transition-all duration-300" />
+              <span className="relative z-10 flex items-center gap-2 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+                Register Now — Spots Filling Fast 🔥 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </button>
+          </MagneticButton>
 
-          <a
-            href="#trailer"
-            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-semibold border border-white/10 text-gray-300 hover:text-white hover:bg-white/5 hover:border-white/20 transition-all backdrop-blur-md"
-          >
-            <Play className="w-4 h-4 text-[var(--neon-magenta)]" />
-            Watch Trailer
-          </a>
+          <MagneticButton strength={25}>
+            <a
+              href="#trailer"
+              className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-semibold border border-white/10 text-gray-300 hover:text-white hover:bg-white/5 hover:border-white/20 transition-all backdrop-blur-md"
+            >
+              <Play className="w-4 h-4 text-[var(--neon-magenta)]" />
+              Watch Trailer
+            </a>
+          </MagneticButton>
         </motion.div>
 
         {/* Stats row */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.4 }}
+          transition={{ duration: 0.8, delay: 5.5 }}
           className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full max-w-2xl"
         >
-          <StatBadge value={5000} suffix="+" label="Students" icon={<Zap className="w-5 h-5" />} delay={1.5} />
-          <StatBadge value={50} suffix="+" label="Events" icon={<Zap className="w-5 h-5" />} delay={1.6} />
+          <StatBadge value={5000} suffix="+" label="Students" icon={<Sparkles className="w-5 h-5" />} delay={5.6} />
+          <StatBadge value={50} suffix="+" label="Events" icon={<Zap className="w-5 h-5" />} delay={5.7} />
         </motion.div>
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-10">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 6.0, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-10"
+      >
         <span className="text-[10px] tracking-widest text-gray-500 uppercase font-mono">Scroll to explore</span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
@@ -300,7 +386,7 @@ export default function HeroScene() {
         >
           <ChevronDown className="w-5 h-5 text-[var(--neon-cyan)]" />
         </motion.div>
-      </div>
+      </motion.div>
 
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </section>

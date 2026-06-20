@@ -5,15 +5,20 @@ import dynamic from 'next/dynamic';
 import ImageFlashIntro from '../components/ImageFlashIntro';
 import Navbar from '../components/Navbar';
 import ToastContainer from '../components/ToastContainer';
-import PaymentModal from '../components/PaymentModal';
 
 // Dynamic imports of scenes for performance optimization and SSR safety
+const AuthModal = dynamic(() => import('../components/AuthModal'), { ssr: false });
+const PaymentModal = dynamic(() => import('../components/PaymentModal'), { ssr: false });
 const HeroScene = dynamic(() => import('../components/scenes/HeroScene'), { ssr: false });
 const StatsBarScene = dynamic(() => import('../components/scenes/StatsBarScene'), { ssr: false });
 const EventShowcaseScene = dynamic(() => import('../components/scenes/EventShowcaseScene'), { ssr: false });
+const TimelineScene = dynamic(() => import('../components/scenes/TimelineScene'), { ssr: false });
+const PrizePoolScene = dynamic(() => import('../components/scenes/PrizePoolScene'), { ssr: false });
 const TrailerScene = dynamic(() => import('../components/scenes/TrailerScene'), { ssr: false });
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
+const TestimonialsScene = dynamic(() => import('../components/scenes/TestimonialsScene'), { ssr: false });
 const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
+const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
 const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
 const FAQScene = dynamic(() => import('../components/scenes/FAQScene'), { ssr: false });
 const FooterScene = dynamic(() => import('../components/scenes/FooterScene'), { ssr: false });
@@ -26,6 +31,8 @@ export default function Home() {
   const [showFlashIntro, setShowFlashIntro] = useState(true);
   const isSecretMode = useStore((state) => state.isSecretMode);
   const addToast = useStore((state) => state.addToast);
+  const isAuthOpen = useStore((state) => state.isAuthOpen);
+  const setAuthOpen = useStore((state) => state.setAuthOpen);
   
   // Register Konami Easter Egg Code listener
   useKonamiCode();
@@ -71,16 +78,21 @@ export default function Home() {
       {/* Dynamic Toast notifications overlay */}
       <ToastContainer />
 
-      {/* Payment Checkout Modal overlay */}
+      {/* Modals */}
+      <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
       <PaymentModal />
 
       {/* Visual sections */}
       <HeroScene />
       <StatsBarScene />
       <EventShowcaseScene />
+      <TimelineScene />
+      <PrizePoolScene />
       <TrailerScene />
       <MemoriesScene />
+      <TestimonialsScene />
       <SpeakersScene />
+      <SponsorsScene />
       <CountdownCTAScene />
       <FAQScene />
       <FooterScene />

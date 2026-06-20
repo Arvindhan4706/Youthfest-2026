@@ -5,6 +5,11 @@ export interface Visitor {
   email: string;
   phone: string;
   name: string;
+  college?: string;
+  department?: string;
+  year?: string;
+  gender?: string;
+  city?: string;
   registered_events: string[];
   created_at: string;
 }
@@ -15,7 +20,7 @@ export const db = {
   /**
    * Register a new visitor. Returns the new visitor or throws if email/phone already exists.
    */
-  async register(data: { email: string; phone: string; name: string }): Promise<Visitor> {
+  async register(data: { email: string; phone: string; name: string; college?: string; department?: string; year?: string; gender?: string; city?: string }): Promise<Visitor> {
     const emailLower = data.email.toLowerCase().trim();
     const phoneTrim = data.phone.trim();
     const nameTrim = data.name.trim();
@@ -44,6 +49,11 @@ export const db = {
         email: emailLower,
         phone: phoneTrim,
         name: nameTrim,
+        college: data.college,
+        department: data.department,
+        year: data.year,
+        gender: data.gender,
+        city: data.city,
         registered_events: [],
       })
       .select()
@@ -81,10 +91,15 @@ export const db = {
   /**
    * Update a visitor's profile by email.
    */
-  async updateProfile(email: string, updates: { name?: string; email?: string }): Promise<Visitor> {
+  async updateProfile(email: string, updates: { name?: string; email?: string; college?: string; department?: string; year?: string; gender?: string; city?: string }): Promise<Visitor> {
     const emailLower = email.toLowerCase().trim();
     const payload: any = {};
     if (updates.name) payload.name = updates.name.trim();
+    if (updates.college) payload.college = updates.college.trim();
+    if (updates.department) payload.department = updates.department.trim();
+    if (updates.year) payload.year = updates.year.trim();
+    if (updates.gender) payload.gender = updates.gender.trim();
+    if (updates.city) payload.city = updates.city.trim();
     if (updates.email) {
       const newEmail = updates.email.toLowerCase().trim();
       // Check if new email conflicts with another visitor

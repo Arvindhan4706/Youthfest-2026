@@ -5,7 +5,46 @@ import Link from 'next/link';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
 import { User, Menu, X, Zap } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import AuthModal from './AuthModal';
+
+const navLinks = [
+  { href: '#hero', label: 'Home' },
+  { href: '#events', label: 'Events' },
+  { href: '#schedule', label: 'Schedule' },
+  { href: '#sponsors', label: 'Sponsors' },
+  { href: '#team', label: 'Team' },
+  { href: '#faq', label: 'FAQ' },
+  { href: '#contact', label: 'Contact' },
+];
+
+function useActiveSection(sectionIds: string[]) {
+  const [activeId, setActiveId] = useState('#hero');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(`#${entry.target.id}`);
+          }
+        });
+      },
+      { rootMargin: '-20% 0px -80% 0px' }
+    );
+
+    sectionIds.forEach((id) => {
+      const element = document.getElementById(id.replace('#', ''));
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, [sectionIds]);
+
+  return activeId;
+}
 
 export default function Navbar() {
   const user = useStore((state) => state.user);
@@ -14,6 +53,8 @@ export default function Navbar() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  
+  const activeSection = useActiveSection(navLinks.map(l => l.href));
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -40,27 +81,25 @@ export default function Navbar() {
     setMobileOpen(false);
   };
 
-  const navLinks = [
-    { href: '#hero', label: 'Home' },
-    { href: '#events', label: 'Events' },
-    { href: '#speakers', label: 'Chief Guests' },
-    { href: '#faq', label: 'FAQ' },
-  ];
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // Only close mobile menu. Let Next.js and Lenis handle the actual #id scroll natively.
+    setMobileOpen(false);
+  };
 
   return (
     <>
       <nav
         className={`fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 rounded-2xl transition-all duration-500 ${
           scrolled
-            ? 'bg-black/70 backdrop-blur-2xl border border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.5)]'
-            : 'bg-white/[0.03] backdrop-blur-xl border border-white/[0.06]'
+            ? 'bg-black/60 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]'
+            : 'bg-white/[0.02] backdrop-blur-md border border-white/[0.05]'
         }`}
       >
         <div className="px-5 py-3 flex items-center justify-between">
           {/* Brand Logo */}
-          <Link href="/" className="group flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--neon-cyan)] to-[var(--neon-violet)] flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.3)] group-hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition-shadow">
-              <Zap className="w-4 h-4 text-white" />
+          <Link href="/" className="group flex items-center gap-2.5" onClick={(e) => handleSmoothScroll(e, '#hero')}>
+            <div className="relative flex items-center justify-center">
+              <img src="/eventlogo.png" alt="Youthfest Logo" className="w-8 h-8 object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.4)] group-hover:scale-105 transition-transform duration-300" />
             </div>
             <span className="font-[var(--font-orbitron)] font-extrabold text-lg tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
               YOUTHFEST
@@ -71,14 +110,24 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-1.5">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[13px] text-gray-400 hover:text-white px-3 py-1.5 rounded-lg hover:bg-white/5 transition-all duration-200"
+                onClick={(e) => handleSmoothScroll(e, link.href)}
+                className={`relative px-3 py-1.5 rounded-lg transition-colors duration-200 text-sm font-medium ${
+                  activeSection === link.href ? 'text-white' : 'text-gray-400 hover:text-white'
+                }`}
               >
                 {link.label}
+                {activeSection === link.href && (
+                  <motion.div
+                    layoutId="navbar-indicator"
+                    className="absolute left-0 bottom-0 w-full h-[2px] bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] shadow-[0_0_10px_rgba(0,240,255,0.5)]"
+                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
               </Link>
             ))}
           </div>
@@ -91,7 +140,7 @@ export default function Navbar() {
               className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-white hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all duration-300 hover:scale-[1.02]"
             >
               <Zap className="w-3 h-3" />
-              Register Now
+              Register
             </button>
 
             {/* User Icon */}
@@ -114,27 +163,38 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-        {mobileOpen && (
-          <div className="md:hidden border-t border-white/5 px-5 pb-4 pt-2 flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-sm text-gray-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5 transition-all"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <button
-              onClick={handleRegisterCTA}
-              className="mt-2 w-full flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-white"
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden border-t border-white/5 px-5 pb-4 pt-2 flex flex-col gap-1 overflow-hidden bg-black/40 backdrop-blur-2xl rounded-b-2xl"
             >
-              <Zap className="w-3.5 h-3.5" />
-              Register Now
-            </button>
-          </div>
-        )}
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => handleSmoothScroll(e, link.href)}
+                  className={`text-sm py-3 px-4 rounded-xl transition-all flex items-center ${
+                    activeSection === link.href 
+                      ? 'bg-white/10 text-white font-semibold shadow-[inset_2px_0_0_var(--neon-cyan)]' 
+                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <button
+                onClick={handleRegisterCTA}
+                className="mt-3 w-full flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-white shadow-[0_0_20px_rgba(0,240,255,0.3)]"
+              >
+                <Zap className="w-3.5 h-3.5" />
+                Register Now
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
       <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
     </>

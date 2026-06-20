@@ -1,279 +1,138 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useStore, EmailMessage } from '../lib/useStore';
-import { X, QrCode, ShieldCheck, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import React, { useEffect, useRef, useState } from 'react';
+import { X, CreditCard, ShieldCheck, Loader2 } from 'lucide-react';
+import gsap from 'gsap';
+import { useStore } from '../lib/useStore';
+import { useRouter } from 'next/navigation';
 
 export default function PaymentModal() {
-  const user = useStore((state) => state.user);
-  const checkoutEvent = useStore((state) => state.checkoutEvent);
-  const setCheckoutEvent = useStore((state) => state.setCheckoutEvent);
-  const registerForEvent = useStore((state) => state.registerForEvent);
-  const addMessage = useStore((state) => state.addMessage);
-  const addToast = useStore((state) => state.addToast);
-  const addPoints = useStore((state) => state.addPoints);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  
+  const checkoutEvent = useStore(state => state.checkoutEvent);
+  const setCheckoutEvent = useStore(state => state.setCheckoutEvent);
+  const registerForEvent = useStore(state => state.registerForEvent);
+  const addMessage = useStore(state => state.addMessage);
+  const addToast = useStore(state => state.addToast);
+  const user = useStore(state => state.user);
+  const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [shouldRender, setShouldRender] = useState(!!checkoutEvent);
 
-  // Reset states when event changes
   useEffect(() => {
-    if (checkoutEvent) {
-      setLoading(false);
-      setPaymentSuccess(false);
-    }
+    if (checkoutEvent) setShouldRender(true);
   }, [checkoutEvent]);
 
-  if (!checkoutEvent || !user) return null;
-
-  const isFree =
-    checkoutEvent.fee.toLowerCase().includes('free') ||
-    checkoutEvent.fee.toLowerCase().includes('included') ||
-    checkoutEvent.fee === '₹0';
-
-  const handlePaymentSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    // Simulate payment gateway delay
-    setTimeout(async () => {
-      try {
-        // 1. Register in the database
-        await registerForEvent(checkoutEvent.title);
-
-        // 2. Generate and store simulated confirmation email receipt
-        const amount = isFree ? '₹0 (Free Registration)' : checkoutEvent.fee;
-        const txId = 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-
-        const emailBody = `
-Dear ${user.name},
-
-Congratulations! Your registration for "${checkoutEvent.title}" at YOUTHFEST '26 has been successfully confirmed.
-
---- REGISTRATION & PAYMENT RECEIPT ---
-Event Name: ${checkoutEvent.title}
-Category: ${checkoutEvent.category}
-Amount Paid: ${amount}
-Transaction Status: SUCCESSFUL
-Payment Method: ${isFree ? 'Direct Free Checkout' : 'UPI QR Scanner'}
-Transaction Reference: ${txId}
-Date/Time: ${new Date().toLocaleString()}
-
---- EVENT INFORMATION ---
-- Please log in to your Visitor Portal (Dashboard) to download your entry Boarding Pass containing your entry QR code.
-- Ensure you arrive at least 30 minutes prior to the scheduled session.
-- Feel free to reach out to the organizing team for any specific queries.
-
-See you at the Wellness Sphere!
-
-Best regards,
-Registrations Desk,
-Yuvenza Club
-        `.trim();
-
-        const newEmail: EmailMessage = {
-          id: txId,
-          eventId: checkoutEvent.id,
-          eventTitle: checkoutEvent.title,
-          amountPaid: amount,
-          timestamp: new Date().toISOString(),
-          recipientEmail: user.email,
-          subject: `Confirmed: Registration receipt for ${checkoutEvent.title}`,
-          body: emailBody,
-        };
-
-        addMessage(newEmail);
-        addPoints(50, `Registered for ${checkoutEvent.title}`);
-
-        setLoading(false);
-        setPaymentSuccess(true);
-
-        // Fire confetti celebration
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-        });
-      } catch (err: any) {
-        setLoading(false);
-        addToast(err.message || 'Payment processing failed. Please try again.');
+  useEffect(() => {
+    if (shouldRender) {
+      if (checkoutEvent) {
+        gsap.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+        gsap.fromTo(modalRef.current, { opacity: 0, scale: 0.9, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.5)', delay: 0.1 });
+      } else {
+        gsap.to(modalRef.current, { opacity: 0, scale: 0.9, y: 20, duration: 0.3, ease: 'power2.in' });
+        gsap.to(overlayRef.current, { opacity: 0, duration: 0.3, ease: 'power2.in', delay: 0.1, onComplete: () => setShouldRender(false) });
       }
-    }, 1800);
+    }
+  }, [checkoutEvent, shouldRender]);
+
+  if (!shouldRender || !checkoutEvent) return null;
+
+  const handlePayment = async () => {
+    setIsLoading(true);
+    
+    // Simulate 2 second payment processing
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Perform registration (saves to supabase + zustand state)
+    await registerForEvent(checkoutEvent.title);
+    
+    // Generate simulated email receipt in the inbox
+    if (user) {
+      addMessage({
+        id: `RCPT-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
+        eventId: checkoutEvent.id,
+        eventTitle: checkoutEvent.title,
+        amountPaid: checkoutEvent.fee,
+        timestamp: new Date().toISOString(),
+        recipientEmail: user.email,
+        subject: `Registration Confirmed: ${checkoutEvent.title}`,
+        body: `Hello ${user.name},\n\nYour registration for ${checkoutEvent.title} is confirmed!\n\nAmount Paid: ${checkoutEvent.fee}\nEvent Category: ${checkoutEvent.category}\n\n🎟️ YOUR QR ENTRY PASS 🎟️\nYour personalized QR Code has been generated.\nTicket ID: ${btoa(user.email + '|' + checkoutEvent.title).substring(0, 15)}...\n\nYour QR Boarding Pass is available in your Wellness Visitor Portal dashboard. You can also view it securely at the venue by logging in.\n\nPlease show your QR pass at the entrance on the day of the event to check in instantly.\n\nSee you at Youthfest '26!\n- The Yuvenza Team`
+      });
+    }
+
+    addToast('Payment Successful! Registration complete.', { points: 100 });
+    setIsLoading(false);
+    setCheckoutEvent(null); // Close modal
+    
+    // Route to dashboard to show QR Code / Email Confirmation
+    router.push('/dashboard');
+  };
+
+  const handleClose = () => {
+    if (!isLoading) setCheckoutEvent(null);
   };
 
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
-        {/* Backdrop overlay */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-black/70 backdrop-blur-md"
-          onClick={() => !loading && setCheckoutEvent(null)}
-        />
+    <div ref={overlayRef} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md opacity-0 p-4">
+      <div ref={modalRef} className="relative w-full max-w-md p-8 bg-[#011213] border border-[var(--neon-cyan)]/30 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.1)] opacity-0">
+        <button onClick={handleClose} disabled={isLoading} className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/10 disabled:opacity-50">
+          <X className="w-5 h-5" />
+        </button>
+        
+        <div className="flex justify-center mb-6">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--neon-cyan)] to-[var(--neon-violet)] flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.3)]">
+            <CreditCard className="w-8 h-8 text-white" />
+          </div>
+        </div>
 
-        {/* Modal Container */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-md bg-gradient-to-b from-[#0e1726]/90 to-[#030712]/95 border border-purple-500/20 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(168,85,247,0.15)] overflow-hidden text-white"
+        <h2 className="text-2xl font-[var(--font-orbitron)] font-black text-white text-center mb-1">Secure Checkout</h2>
+        <p className="text-gray-400 text-xs text-center mb-6">Complete your payment to secure your spot.</p>
+
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Event</span>
+            <span className="text-sm font-bold text-white text-right ml-4">{checkoutEvent.title}</span>
+          </div>
+          <div className="flex justify-between items-center pt-3 border-t border-white/10">
+            <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Total Fee</span>
+            <span className="text-xl font-[var(--font-orbitron)] font-black text-[var(--neon-cyan)]">
+              {checkoutEvent.fee}
+            </span>
+          </div>
+        </div>
+
+        {/* Mock Payment Options */}
+        <div className="space-y-3 mb-6">
+          <label className="flex items-center gap-3 p-4 rounded-xl border border-[var(--neon-violet)] bg-[var(--neon-violet)]/10 cursor-pointer">
+            <input type="radio" name="payment" defaultChecked className="text-[var(--neon-violet)] focus:ring-[var(--neon-violet)]" />
+            <span className="text-sm font-bold text-white">Credit / Debit Card</span>
+          </label>
+          <label className="flex items-center gap-3 p-4 rounded-xl border border-white/10 bg-white/5 cursor-not-allowed opacity-50">
+            <input type="radio" name="payment" disabled />
+            <span className="text-sm font-bold text-white">UPI / Net Banking (Unavailable)</span>
+          </label>
+        </div>
+
+        <button 
+          onClick={handlePayment}
+          disabled={isLoading}
+          className="w-full py-4 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(108,99,255,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {/* Top aesthetic border */}
-          <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500" />
-
-          {/* Close button */}
-          {!loading && (
-            <button
-              onClick={() => setCheckoutEvent(null)}
-              className="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
-
-          {!paymentSuccess ? (
+          {isLoading ? (
             <>
-              {/* Header */}
-              <div className="mb-6">
-                <span className="text-[10px] font-extrabold font-mono tracking-widest text-purple-400 uppercase bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 rounded-full">
-                  Checkout Portal
-                </span>
-                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider mt-3 text-white">
-                  Confirm Registration
-                </h3>
-                <p className="text-xs text-gray-400 mt-1">
-                  Complete registration for <strong className="text-white">{checkoutEvent.title}</strong> ({checkoutEvent.category})
-                </p>
-              </div>
-
-              {/* Amount Display */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] uppercase font-mono font-bold text-gray-400">Total Due Amount</span>
-                  <p className="text-xs text-gray-400 mt-0.5">Visitor: {user.name} ({user.email})</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">
-                    {checkoutEvent.fee}
-                  </span>
-                </div>
-              </div>
-
-              {isFree ? (
-                /* Free checkout UI */
-                <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-4">
-                  <div className="p-4 rounded-xl border border-teal-500/20 bg-teal-500/5 text-teal-400 text-xs flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-teal-400 shrink-0" />
-                    <span>This is a free event module. Click confirm to complete your registration!</span>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full py-4 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-black font-black text-sm rounded-xl transition-all shadow-[0_0_20px_rgba(20,185,129,0.2)] disabled:opacity-50 flex items-center justify-center gap-2"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Confirming Registration...</span>
-                      </>
-                    ) : (
-                      <span>Confirm Free Spot</span>
-                    )}
-                  </button>
-                </form>
-              ) : (
-                /* Paid checkout — UPI QR Scanner only */
-                <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-4">
-
-                  {/* UPI QR Code */}
-                  <div className="flex flex-col items-center justify-center p-5 border border-dashed border-purple-500/20 rounded-2xl bg-black/20">
-                    <div className="p-3 bg-white rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.2)] relative overflow-hidden">
-                      {/* Scanning laser line */}
-                      <div className="absolute top-0 left-0 w-full h-[2px] bg-purple-500 animate-bounce" />
-                      <img
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=youthfest@bank%26pn=YuvenzaClub%26am=${checkoutEvent.fee.replace(/[^0-9]/g, '')}%26cu=INR`}
-                        alt="UPI QR Code"
-                        className="w-40 h-40 object-contain"
-                      />
-                    </div>
-
-                    <div className="mt-4 text-center">
-                      <div className="flex items-center justify-center gap-1.5 mb-1">
-                        <QrCode className="w-3.5 h-3.5 text-purple-400" />
-                        <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest">UPI QR Payment</span>
-                      </div>
-                      <p className="text-[10px] text-gray-400 leading-relaxed max-w-[220px]">
-                        Scan with <strong className="text-white">GPay, PhonePe, Paytm</strong> or any UPI app, then click Confirm below.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Trust indicator */}
-                  <div className="flex items-center gap-1.5 text-[10px] text-gray-500">
-                    <ShieldCheck className="w-4 h-4 text-teal-400 shrink-0" />
-                    <span>Secure end-to-end 256-bit encrypted UPI gateway.</span>
-                  </div>
-
-                  {/* Pay button */}
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 hover:opacity-95 text-white font-black text-xs rounded-xl transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Processing UPI Payment...</span>
-                      </>
-                    ) : (
-                      <span>I've Paid — Confirm Registration of {checkoutEvent.fee}</span>
-                    )}
-                  </button>
-                </form>
-              )}
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Processing Payment...
             </>
           ) : (
-            /* Success screen */
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="text-center py-6 flex flex-col items-center justify-center"
-            >
-              <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-6">
-                <CheckCircle2 className="w-10 h-10" />
-              </div>
-
-              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider mb-2 text-white">
-                Registration Confirmed!
-              </h3>
-
-              <p className="text-xs text-gray-400 max-w-xs mx-auto mb-6 leading-relaxed">
-                You are registered for <span className="text-white font-bold">{checkoutEvent.title}</span>. A receipt &amp; confirmation email has been dispatched to <span className="text-purple-400">{user.email}</span>.
-              </p>
-
-              <div className="p-4 rounded-xl border border-white/5 bg-white/5 text-[10px] text-left text-gray-400 w-full mb-6 font-mono leading-relaxed">
-                <div className="flex justify-between border-b border-white/5 pb-2 mb-2">
-                  <span>Txn Ref:</span>
-                  <span className="text-white">SUCCESS-{Math.random().toString(36).substr(2, 6).toUpperCase()}</span>
-                </div>
-                <div>A copy of this ticket pass has been added to your dashboard inbox.</div>
-              </div>
-
-              <button
-                onClick={() => setCheckoutEvent(null)}
-                className="px-8 py-3 bg-white text-black font-black text-xs rounded-xl hover:bg-gray-200 transition-colors shadow-lg"
-              >
-                Return to Site
-              </button>
-            </motion.div>
+            <>
+              <ShieldCheck className="w-5 h-5" />
+              Pay {checkoutEvent.fee} Now
+            </>
           )}
-        </motion.div>
+        </button>
       </div>
-    </AnimatePresence>
+    </div>
   );
 }

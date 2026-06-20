@@ -14,6 +14,11 @@ export interface UserProfile {
   email: string;
   name: string;
   phone: string;
+  college?: string;
+  department?: string;
+  year?: string;
+  gender?: string;
+  city?: string;
   registeredEvents: string[];
 }
 

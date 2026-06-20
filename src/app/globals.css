@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #011213;
+  --background: #050816;
   --foreground: #f0f0f0;
-  --neon-cyan: #00f0ff;
-  --neon-magenta: #ff006e;
-  --neon-violet: #8b5cf6;
-  --neon-gold: #fbbf24;
-  --neon-lime: #a3e635;
+  --neon-cyan: #00E5FF;
+  --neon-magenta: #8B5CF6; /* Replacing magenta with new primary purple */
+  --neon-violet: #6C63FF;
+  --neon-gold: #3B82F6; /* Replacing gold with primary blue */
+  --neon-lime: #00FFA3;
   --glass-bg: rgba(255, 255, 255, 0.04);
   --glass-border: rgba(255, 255, 255, 0.08);
 }
@@ -21,7 +21,8 @@
   --color-neon-gold: var(--neon-gold);
   --color-neon-lime: var(--neon-lime);
   --font-sans: var(--font-inter);
-  --font-mono: var(--font-geist-mono);
+  --font-heading-main: var(--font-space-grotesk);
+  --font-heading-sub: var(--font-poppins);
   --font-display: var(--font-orbitron);
 }
 
@@ -35,6 +36,14 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
   overflow-x: hidden;
+}
+
+h1, h2 {
+  font-family: var(--font-heading-main, 'Space Grotesk', sans-serif);
+}
+
+h3, h4, h5, h6 {
+  font-family: var(--font-heading-sub, 'Poppins', sans-serif);
 }
 
 /* ─── CUSTOM SCROLLBAR ─── */

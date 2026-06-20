@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Clock, AlertTriangle, ArrowRight } from 'lucide-react';
+import { ArrowRight, Ticket, Zap, AlertTriangle } from 'lucide-react';
+import MagneticButton from '../ui/MagneticButton';
 import { useStore } from '../../lib/useStore';
 import { useRouter } from 'next/navigation';
 import AuthModal from '../AuthModal';
@@ -178,17 +179,20 @@ export default function CountdownCTAScene() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <button
-            onClick={handleRegister}
-            className="group relative inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-2xl font-bold text-lg text-white overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(0,240,255,0.3)]"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
-            <span className="relative z-10 flex items-center gap-2.5">
-              <Zap className="w-5 h-5" />
-              REGISTER NOW
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </button>
+          <MagneticButton strength={35}>
+            <button
+              onClick={handleRegister}
+              className="group relative flex items-center justify-center gap-2 px-10 py-5 rounded-2xl font-bold text-white text-lg sm:text-xl overflow-hidden transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(0,240,255,0.4)] hover:shadow-[0_0_60px_rgba(0,240,255,0.6)] mx-auto animate-breathe"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
+              <div className="absolute inset-[2px] rounded-[14px] bg-[#010008]/80 group-hover:bg-transparent transition-all duration-300" />
+              <span className="relative z-10 flex items-center gap-3 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+                <Ticket className="w-6 h-6 text-[var(--neon-gold)] group-hover:rotate-12 transition-transform" />
+                Claim Your Ticket Now
+                <ArrowRight className="w-6 h-6 group-hover:translate-x-1.5 transition-transform" />
+              </span>
+            </button>
+          </MagneticButton>
 
           <p className="mt-4 text-xs text-gray-500">
             Free entry for first 500 registrations • Instant confirmation
