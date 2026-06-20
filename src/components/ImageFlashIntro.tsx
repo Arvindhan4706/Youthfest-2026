@@ -23,22 +23,22 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [flashCount, setFlashCount] = useState(0);
   const [revealedLetters, setRevealedLetters] = useState(0);
-  const [phase, setPhase] = useState<'chaos' | 'reveal' | 'hold' | 'finale'>('chaos');
+  const [phase, setPhase] = useState<'chaos' | 'reveal' | 'hold' | 'finale'>('reveal');
   const [showWhiteFlash, setShowWhiteFlash] = useState(false);
   const [glitchOffset, setGlitchOffset] = useState({ x: 0, y: 0 });
   const hasCompleted = useRef(false);
 
-  // Phase 1: Chaos — rapid image flashes, 12 total
-  const CHAOS_FLASHES = 14;
+  // Phase 1: Chaos — rapid image flashes
+  const CHAOS_FLASHES = 6;
   // Phase 2: Reveal — one letter per flash burst (7 letters, ~2-3 flashes each)
   const FLASHES_PER_LETTER = 3;
   const REVEAL_FLASHES = YOUTHFEST_LETTERS.length * FLASHES_PER_LETTER;
 
   const getInterval = useCallback((count: number, currentPhase: string) => {
     if (currentPhase === 'chaos') {
-      // Start at 250ms, accelerate to 100ms
+      // Start at 150ms, accelerate to 80ms
       const t = count / CHAOS_FLASHES;
-      return 250 - t * 150;
+      return 150 - t * 70;
     }
     if (currentPhase === 'reveal') {
       // Each letter reveal: fast flash then brief pause

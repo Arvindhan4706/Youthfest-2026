@@ -156,7 +156,7 @@ export default function HeroScene() {
     }
   };
   
-  const letterVariants = {
+  const letterVariants: any = {
     hidden: { opacity: 0, y: 40, rotateX: -90 },
     visible: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.8, ease: "backOut" } }
   };
