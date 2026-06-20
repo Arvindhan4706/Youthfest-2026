@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "YUVENZA 2026 | The Biggest Youth Festival",
     description:
-      "5000+ students. 50+ events. 25+ colleges. One legendary festival. August 12, 2026.",
+      "5000+ students. 50+ events. One legendary festival. August 12, 2026.",
     type: "website",
   },
 };

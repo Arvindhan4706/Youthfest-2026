@@ -13,7 +13,7 @@ const TRAILER_CAPTIONS: Caption[] = [
   { time: 0, text: '5000 students. One legendary night.' },
   { time: 3, text: 'Technology. Creativity. Gaming. Culture.' },
   { time: 6, text: 'The ultimate showcase of talent.' },
-  { time: 10, text: '25+ colleges. The biggest stage awaits.' },
+  { time: 10, text: 'The biggest stage awaits.' },
   { time: 14, text: 'YUVENZA 2026. Are you in?' },
 ];
 

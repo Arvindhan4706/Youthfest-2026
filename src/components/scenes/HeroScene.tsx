@@ -284,11 +284,10 @@ export default function HeroScene() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.4 }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 w-full max-w-2xl"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full max-w-2xl"
         >
           <StatBadge value={5000} suffix="+" label="Students" icon={<Zap className="w-5 h-5" />} delay={1.5} />
           <StatBadge value={50} suffix="+" label="Events" icon={<Zap className="w-5 h-5" />} delay={1.6} />
-          <StatBadge value={25} suffix="+" label="Colleges" icon={<Zap className="w-5 h-5" />} delay={1.7} />
         </motion.div>
       </div>
 

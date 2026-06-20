@@ -37,7 +37,6 @@ function useCountUp(target: number, duration: number = 2200) {
 const STATS = [
   { value: 5000, suffix: '+', label: 'STUDENTS EXPECTED', icon: Users, color: 'var(--neon-cyan)' },
   { value: 50, suffix: '+', label: 'FLAGSHIP EVENTS', icon: Trophy, color: 'var(--neon-magenta)' },
-  { value: 25, suffix: '+', label: 'COLLEGES COMPETING', icon: School, color: 'var(--neon-violet)' },
 ];
 
 export default function StatsBarScene() {
@@ -51,7 +50,7 @@ export default function StatsBarScene() {
       <div className="absolute bottom-0 right-[20%] w-[250px] h-[250px] rounded-full bg-[var(--neon-violet)]/[0.04] blur-[80px] pointer-events-none animate-float" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {STATS.map((stat, idx) => {
             const { count, ref } = useCountUp(stat.value);
             const Icon = stat.icon;
