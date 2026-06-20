@@ -15,7 +15,6 @@ const TrailerScene = dynamic(() => import('../components/scenes/TrailerScene'), 
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
 const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
 const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
-const CollegeProofScene = dynamic(() => import('../components/scenes/CollegeProofScene'), { ssr: false });
 const FAQScene = dynamic(() => import('../components/scenes/FAQScene'), { ssr: false });
 const FooterScene = dynamic(() => import('../components/scenes/FooterScene'), { ssr: false });
 
@@ -82,7 +81,6 @@ export default function Home() {
       <TrailerScene />
       <MemoriesScene />
       <SpeakersScene />
-      <CollegeProofScene />
       <CountdownCTAScene />
       <FAQScene />
       <FooterScene />
