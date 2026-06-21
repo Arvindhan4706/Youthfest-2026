@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Play, Pause, Volume2, VolumeX, Film } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
+import { ContainerScroll } from '../ui/ContainerScroll';
 
 interface Caption {
   time: number;
@@ -97,67 +98,69 @@ export default function TrailerScene() {
 
   return (
     <section
-      ref={containerRef}
       id="trailer"
-      className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center"
+      className="relative w-full flex flex-col items-center justify-center"
       style={{ background: '#010008' }}
     >
-      {/* Section heading (visible above video) */}
-      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs text-gray-400 font-bold uppercase tracking-widest">
-          <Film className="w-3 h-3 text-[var(--neon-magenta)]" />
-          Official Festival Trailer
-        </div>
-      </div>
-
-      {/* Background blur */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-md pointer-events-none z-0" />
-
-      {/* Video Container */}
-      <div
-        ref={videoWrapperRef}
-        className="relative aspect-video w-full max-w-6xl rounded-2xl overflow-hidden z-10 flex items-center justify-center bg-zinc-950"
-        style={{ boxShadow: '0 0 80px rgba(139, 92, 246, 0.2), 0 0 120px rgba(0, 240, 255, 0.1)' }}
+      <ContainerScroll
+        titleComponent={
+          <>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs text-gray-400 font-bold uppercase tracking-widest mb-6">
+              <Film className="w-3 h-3 text-[var(--neon-magenta)]" />
+              Official Festival Trailer
+            </div>
+            <h2 className="text-4xl md:text-6xl font-black text-white font-[var(--font-orbitron)] uppercase tracking-wide">
+              Witness The <span className="text-[var(--neon-cyan)]">Glory</span>
+            </h2>
+          </>
+        }
       >
-        <video
-          ref={videoRef}
-          src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-subway-station-with-neon-lights-4413-large.mp4"
-          className="w-full h-full object-cover"
-          loop
-          muted={isMuted}
-          playsInline
-        />
+        {/* Video Container */}
+        <div
+          ref={videoWrapperRef}
+          className="relative w-full h-full rounded-2xl overflow-hidden z-10 flex items-center justify-center bg-zinc-950"
+          style={{ boxShadow: '0 0 80px rgba(139, 92, 246, 0.2), 0 0 120px rgba(0, 240, 255, 0.1)' }}
+        >
+          <video
+            ref={videoRef}
+            src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-subway-station-with-neon-lights-4413-large.mp4"
+            className="w-full h-full object-cover"
+            loop
+            muted={isMuted}
+            playsInline
+          />
 
-        {/* Cinematic letterbox */}
-        <div className="absolute top-0 left-0 w-full h-[8%] bg-black z-20 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-full h-[8%] bg-black z-20 pointer-events-none" />
+          {/* Cinematic letterbox */}
+          <div className="absolute top-0 left-0 w-full h-[8%] bg-black z-20 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-full h-[8%] bg-black z-20 pointer-events-none" />
 
-        {/* Synced captions */}
-        <div className="absolute bottom-[12%] left-1/2 -translate-x-1/2 text-center w-[85%] z-20 pointer-events-none">
-          <p
-            className="text-white text-base sm:text-xl font-[var(--font-orbitron)] font-bold tracking-wide uppercase min-h-[30px]"
-            style={{ textShadow: '0 2px 12px rgba(0,0,0,0.9), 0 0 30px rgba(0,240,255,0.3)' }}
-          >
-            {activeCaption}
-          </p>
+          {/* Synced captions */}
+          <div className="absolute bottom-[12%] left-1/2 -translate-x-1/2 text-center w-[85%] z-20 pointer-events-none">
+            <p
+              className="text-white text-base sm:text-xl font-[var(--font-orbitron)] font-bold tracking-wide uppercase min-h-[30px]"
+              style={{ textShadow: '0 2px 12px rgba(0,0,0,0.9), 0 0 30px rgba(0,240,255,0.3)' }}
+            >
+              {activeCaption}
+            </p>
+          </div>
+
+          {/* Video controls */}
+          <div className="absolute bottom-[12%] right-6 z-30 flex items-center gap-3">
+            <button
+              onClick={togglePlay}
+              className="p-2.5 rounded-full bg-black/60 border border-white/20 text-white hover:bg-white hover:text-black transition-colors"
+            >
+              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            </button>
+            <button
+              onClick={toggleMute}
+              className="p-2.5 rounded-full bg-black/60 border border-white/20 text-white hover:bg-white hover:text-black transition-colors"
+            >
+              {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+            </button>
+          </div>
         </div>
-
-        {/* Video controls */}
-        <div className="absolute bottom-[12%] right-6 z-30 flex items-center gap-3">
-          <button
-            onClick={togglePlay}
-            className="p-2.5 rounded-full bg-black/60 border border-white/20 text-white hover:bg-white hover:text-black transition-colors"
-          >
-            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-          </button>
-          <button
-            onClick={toggleMute}
-            className="p-2.5 rounded-full bg-black/60 border border-white/20 text-white hover:bg-white hover:text-black transition-colors"
-          >
-            {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
-          </button>
-        </div>
-      </div>
+      </ContainerScroll>
     </section>
   );
 }

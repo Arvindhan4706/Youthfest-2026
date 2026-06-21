@@ -109,27 +109,41 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-1.5">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleSmoothScroll(e, link.href)}
-                className={`relative px-3 py-1.5 rounded-lg transition-colors duration-200 text-sm font-medium ${
-                  activeSection === link.href ? 'text-white' : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                {link.label}
-                {activeSection === link.href && (
-                  <motion.div
-                    layoutId="navbar-indicator"
-                    className="absolute left-0 bottom-0 w-full h-[2px] bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] shadow-[0_0_10px_rgba(0,240,255,0.5)]"
-                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-              </Link>
-            ))}
+          {/* Desktop Navigation Links (Tubelight Effect) */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => handleSmoothScroll(e, link.href)}
+                  className={`relative px-4 py-2 rounded-full transition-colors duration-200 text-sm font-semibold ${
+                    isActive ? 'text-white' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <span className="relative z-10">{link.label}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="lamp"
+                      className="absolute inset-0 w-full bg-white/5 rounded-full -z-10"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30,
+                      }}
+                    >
+                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-[var(--neon-cyan)] rounded-t-full">
+                        <div className="absolute w-12 h-6 bg-[var(--neon-cyan)]/20 rounded-full blur-md -top-2 -left-2" />
+                        <div className="absolute w-8 h-6 bg-[var(--neon-cyan)]/20 rounded-full blur-md -top-1" />
+                        <div className="absolute w-4 h-4 bg-[var(--neon-cyan)]/20 rounded-full blur-sm top-0 left-2" />
+                      </div>
+                    </motion.div>
+                  )}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Right Side: CTA + User */}
