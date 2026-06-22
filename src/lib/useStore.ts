@@ -85,7 +85,7 @@ export const useStore = create<AppState>((set, get) => {
     setSecretMode: (active) => {
       set({ isSecretMode: active });
       if (active) {
-        get().addToast('🌌 Secret Wellness Flow Unlocked!');
+        get().addToast('Secret Wellness Flow Unlocked!');
         get().setCursorMode('neon');
       }
     },

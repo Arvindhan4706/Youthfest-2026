@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useStore, ToastMessage } from '../lib/useStore';
-import { Award, Zap } from 'lucide-react';
+import { Award, Zap, X } from 'lucide-react';
 
 export default function ToastContainer() {
   const toasts = useStore((state) => state.toasts);
@@ -46,7 +46,7 @@ export default function ToastContainer() {
               onClick={() => removeToast(toast.id)}
               className="text-white/40 hover:text-white text-xs flex-shrink-0 transition-colors"
             >
-              ✕
+              <X className="w-4 h-4" />
             </button>
           </motion.div>
         ))}

@@ -344,7 +344,7 @@ export default function HeroScene() {
               <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
               <div className="absolute inset-[1px] rounded-[15px] bg-[#011213]/50 group-hover:bg-transparent transition-all duration-300" />
               <span className="relative z-10 flex items-center gap-2 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
-                Register Now — Spots Filling Fast 🔥 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                Register Now — Spots Filling Fast <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </span>
             </button>
           </MagneticButton>
