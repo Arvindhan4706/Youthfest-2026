@@ -74,7 +74,7 @@ export default function StatsBarScene() {
             </h2>
             
             <p className="text-lg text-gray-400 leading-relaxed max-w-lg">
-              Youthfest 2026 is the pinnacle of technology, culture, and innovation. Hosted by Yuvenza Club, we bring together the brightest minds across the nation for three days of intense competition, collaborative workshops, and unforgettable experiences.
+              Yuvenza proudly conducts Youthfest 2026, the pinnacle of technology, culture, and innovation. We bring together the brightest minds across the nation for a single, action-packed day of intense competition, collaborative workshops, and unforgettable experiences.
             </p>
             <p className="text-lg text-gray-400 leading-relaxed max-w-lg">
               Step into the future, showcase your talent, and claim your glory on the most prestigious stage of the year.

@@ -13,7 +13,6 @@ const navLinks = [
   { href: '#events', label: 'Events' },
   { href: '#schedule', label: 'Schedule' },
   { href: '#sponsors', label: 'Sponsors' },
-  { href: '#team', label: 'Team' },
   { href: '#faq', label: 'FAQ' },
   { href: '#contact', label: 'Contact' },
 ];
@@ -101,9 +100,12 @@ export default function Navbar() {
             <div className="relative flex items-center justify-center">
               <img src="/eventlogo.png" alt="Youthfest Logo" className="w-8 h-8 object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.4)] group-hover:scale-105 transition-transform duration-300" />
             </div>
-            <span className="font-[var(--font-orbitron)] font-extrabold text-lg tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
-              YOUTHFEST
-            </span>
+            <div className="flex flex-col">
+              <span className="text-[7px] uppercase tracking-[0.2em] text-gray-400 font-bold leading-none mb-0.5">Yuvenza Presents</span>
+              <span className="font-[var(--font-orbitron)] font-extrabold text-lg leading-none tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
+                YOUTHFEST
+              </span>
+            </div>
             <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-widest bg-white/10 text-white/70 px-2 py-0.5 rounded-full border border-white/10">
               2026
             </span>

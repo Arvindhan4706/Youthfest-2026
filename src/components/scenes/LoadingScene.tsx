@@ -84,7 +84,7 @@ export default function LoadingScene({ onComplete }: { onComplete: () => void })
 
             {/* Glowing Festival Name */}
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-[0.2em] mb-2 uppercase">
-              Youthfest <span className="bg-gradient-to-r from-teal-400 via-emerald-500 to-amber-500 bg-clip-text text-transparent">2026</span>
+              Yuvenza&apos;s Youthfest <span className="bg-gradient-to-r from-teal-400 via-emerald-500 to-amber-500 bg-clip-text text-transparent">2026</span>
             </h1>
             <p className="text-gray-400 text-sm tracking-widest uppercase mb-12">Youth & Wellness Festival</p>
 

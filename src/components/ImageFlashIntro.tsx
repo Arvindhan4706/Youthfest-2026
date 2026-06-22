@@ -237,6 +237,22 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
           transform: `translate(${isFlashing ? glitchOffset.x * 0.5 : 0}px, ${isFlashing ? glitchOffset.y * 0.5 : 0}px)`,
         }}
       >
+        {/* Yuvenza Presents Label */}
+        {revealedLetters > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: phase === 'hold' ? 1 : 0.8, y: 0 }}
+            transition={{ duration: 1 }}
+            className="mb-8 flex items-center justify-center gap-4 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl"
+          >
+            <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/60" />
+            <span className="text-sm sm:text-base md:text-xl font-extrabold uppercase tracking-[0.6em] text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]">
+              Yuvenza Presents
+            </span>
+            <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/60" />
+          </motion.div>
+        )}
+
         {/* Letter row */}
         <div className="flex items-center justify-center gap-1 sm:gap-2 md:gap-4">
           {YOUTHFEST_LETTERS.map((letter, i) => {

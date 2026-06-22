@@ -222,7 +222,7 @@ export default function HeroScene() {
           className="mb-6 relative"
         >
           <div className="relative z-10" style={{ animation: 'glitch-1 0.4s ease-in-out 0.8s 2' }}>
-            <img src="/yuvenzalogo.png" alt="Youthfest Event Logo" className="w-48 h-auto object-contain drop-shadow-[0_0_30px_rgba(0,240,255,0.6)]" />
+            <img src="/yuvenzalogo.png" alt="Youthfest Event Logo" className="w-[280px] sm:w-[350px] md:w-[400px] h-auto object-contain drop-shadow-[0_0_30px_rgba(0,240,255,0.6)]" />
           </div>
           <motion.div 
             initial={{ opacity: 0 }}
@@ -232,20 +232,19 @@ export default function HeroScene() {
           />
         </motion.div>
 
-        {/* Date badge */}
+        {/* 'Presents' Label */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 3.5 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full neon-border bg-white/[0.03] mb-8 animate-breathe"
+          transition={{ duration: 0.8, delay: 1.5 }}
+          className="mb-6 flex items-center justify-center gap-4 w-full max-w-md"
         >
-          <Calendar className="w-3.5 h-3.5 text-[var(--neon-cyan)]" />
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--neon-cyan)]">
-            August 12, 2026
+          <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/40" />
+          <span className="text-sm sm:text-base md:text-lg font-extrabold uppercase tracking-[0.5em] text-gray-300 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
+            Presents
           </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-cyan)] animate-pulse" />
+          <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/40" />
         </motion.div>
-
         {/* Main title with letter-by-letter reveal and glitch effect */}
         <motion.div
           variants={{
@@ -300,6 +299,37 @@ export default function HeroScene() {
             2026
           </span>
         </motion.div>
+
+        {/* Date badge */}
+        <motion.a
+          href="#schedule"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover="hover"
+          whileTap={{ scale: 0.98 }}
+          transition={{ duration: 0.8, delay: 3.5 }}
+          className="group relative inline-flex items-center gap-3 px-8 py-3 rounded-full overflow-hidden backdrop-blur-md bg-white/5 border border-white/10 mb-8 cursor-pointer transition-all duration-500 hover:bg-[var(--neon-cyan)]/10 hover:border-[var(--neon-cyan)]/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.2)]"
+        >
+          {/* Animated Sweep / Shine effect on hover */}
+          <motion.div 
+            variants={{
+              hover: { x: ["-100%", "200%"] }
+            }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+            className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12"
+          />
+          
+          <Calendar className="relative z-10 w-5 h-5 text-gray-400 group-hover:text-[var(--neon-cyan)] transition-colors duration-300" />
+          <span className="relative z-10 text-sm sm:text-base font-bold uppercase tracking-[0.25em] text-white group-hover:text-[var(--neon-cyan)] transition-colors duration-300">
+            August 12, 2026
+          </span>
+          
+          {/* Status Dot */}
+          <div className="relative z-10 flex items-center justify-center w-3 h-3 ml-2">
+            <span className="absolute w-full h-full rounded-full bg-[var(--neon-cyan)] opacity-70 animate-ping" />
+            <span className="relative w-1.5 h-1.5 rounded-full bg-[var(--neon-cyan)] shadow-[0_0_8px_var(--neon-cyan)]" />
+          </div>
+        </motion.a>
 
         {/* Tagline */}
         <motion.p

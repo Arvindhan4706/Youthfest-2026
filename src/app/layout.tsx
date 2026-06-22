@@ -29,7 +29,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "YOUTHFEST 2026 | The Biggest Youth Festival of the Year",
+  title: "YUVENZA'S YOUTHFEST 2026 | The Biggest Youth Festival of the Year",
   description:
     "5000+ students, 50+ events across Technology, Creativity, Gaming & Culture. August 12, 2026. Register now before spots run out!",
   keywords: [
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     "student festival",
   ],
   openGraph: {
-    title: "YOUTHFEST 2026 | The Biggest Youth Festival",
+    title: "YUVENZA'S YOUTHFEST 2026 | The Biggest Youth Festival",
     description:
       "5000+ students. 50+ events. One legendary festival. August 12, 2026.",
     type: "website",

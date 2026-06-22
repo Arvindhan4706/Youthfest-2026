@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import ImageFlashIntro from '../components/ImageFlashIntro';
 import Navbar from '../components/Navbar';
 import ToastContainer from '../components/ToastContainer';
 
 // Dynamic imports of scenes for performance optimization and SSR safety
+const ImageFlashIntro = dynamic(() => import('../components/ImageFlashIntro'), { ssr: false });
 const AuthModal = dynamic(() => import('../components/AuthModal'), { ssr: false });
 const PaymentModal = dynamic(() => import('../components/PaymentModal'), { ssr: false });
 const HeroScene = dynamic(() => import('../components/scenes/HeroScene'), { ssr: false });
@@ -18,6 +18,7 @@ const TrailerScene = dynamic(() => import('../components/scenes/TrailerScene'), 
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
 const TestimonialsScene = dynamic(() => import('../components/scenes/TestimonialsScene'), { ssr: false });
 const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
+const LeadersScene = dynamic(() => import('../components/scenes/LeadersScene'), { ssr: false });
 const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
 const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
 const FAQScene = dynamic(() => import('../components/scenes/FAQScene'), { ssr: false });
@@ -43,19 +44,9 @@ export default function Home() {
     // Welcome toast after intro completes
     addToast('Welcome to YOUTHFEST 2026!', { points: 50 });
 
-    // Initialize Lenis smooth scroll
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      wheelMultiplier: 1,
+      autoRaf: true,
     });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
 
     return () => {
       lenis.destroy();
@@ -93,6 +84,7 @@ export default function Home() {
       <TestimonialsScene />
       <SpeakersScene />
       <SponsorsScene />
+      <LeadersScene />
       <CountdownCTAScene />
       <FAQScene />
       <FooterScene />
