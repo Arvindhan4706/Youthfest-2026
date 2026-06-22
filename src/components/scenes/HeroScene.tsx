@@ -222,7 +222,7 @@ export default function HeroScene() {
           className="mb-6 relative"
         >
           <div className="relative z-10" style={{ animation: 'glitch-1 0.4s ease-in-out 0.8s 2' }}>
-            <img src="/eventlogo.png" alt="Youthfest Event Logo" className="w-32 h-auto object-contain drop-shadow-[0_0_30px_rgba(0,240,255,0.6)]" />
+            <img src="/yuvenzalogo.png" alt="Youthfest Event Logo" className="w-48 h-auto object-contain drop-shadow-[0_0_30px_rgba(0,240,255,0.6)]" />
           </div>
           <motion.div 
             initial={{ opacity: 0 }}
