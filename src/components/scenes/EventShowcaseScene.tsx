@@ -6,7 +6,7 @@ import { useStore } from '../../lib/useStore';
 import {
   Trophy, Users, Layers, BadgeAlert, ArrowRight,
   Code2, Palette, Gamepad2, Globe, Sparkles, BookOpen, Cpu, Search, Filter,
-  X, Calendar, MapPin, ScrollText
+  X, Calendar, MapPin, ScrollText, Timer, Ticket
 } from 'lucide-react';
 
 interface EventItem {
@@ -131,6 +131,20 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
     Hard: 'bg-red-500/20 text-red-400 border-red-500/30 shadow-[0_0_10px_rgba(239,68,68,0.3)]',
   };
 
+  // Generate random countdown and seats left based on event ID for demo purposes
+  const generateRandomStats = (id: string) => {
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+      hash = id.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const days = Math.abs(hash % 10) + 1;
+    const hours = Math.abs((hash * 3) % 24);
+    const seats = Math.abs(hash % 50) + 5;
+    return { days, hours, seats };
+  };
+
+  const { days, hours, seats } = useMemo(() => generateRandomStats(event.id), [event.id]);
+
   return (
     <div
       ref={cardRef}
@@ -178,12 +192,16 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-2 border-t border-white/5 pt-4 mb-5">
+        <div className="grid grid-cols-2 gap-y-3 gap-x-2 border-t border-white/5 pt-4 mb-5">
           <div className="flex items-center gap-1.5 text-xs text-gray-300">
             <Users className="w-3.5 h-3.5 text-[var(--neon-cyan)]" /> {event.team}
           </div>
           <div className="flex items-center gap-1.5 text-xs text-gray-300">
-            <Layers className="w-3.5 h-3.5 text-[var(--neon-lime)]" /> Fee: {event.fee}
+            <Ticket className="w-3.5 h-3.5 text-[var(--neon-magenta)]" /> Seats: <span className="text-white font-bold">{seats} Left</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-[10px] text-gray-400 col-span-2">
+            <Timer className="w-3.5 h-3.5 text-[var(--neon-lime)] animate-pulse" /> 
+            Starts in: <span className="text-white font-mono font-bold tracking-widest">{String(days).padStart(2, '0')}d {String(hours).padStart(2, '0')}h</span>
           </div>
         </div>
 

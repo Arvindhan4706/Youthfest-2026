@@ -30,6 +30,8 @@ import Lenis from 'lenis';
 
 export default function Home() {
   const [showFlashIntro, setShowFlashIntro] = useState(true);
+  const [hasMounted, setHasMounted] = useState(false);
+
   const isSecretMode = useStore((state) => state.isSecretMode);
   const addToast = useStore((state) => state.addToast);
   const isAuthOpen = useStore((state) => state.isAuthOpen);
@@ -39,10 +41,20 @@ export default function Home() {
   useKonamiCode();
 
   useEffect(() => {
-    if (showFlashIntro) return;
+    setHasMounted(true);
+    if (sessionStorage.getItem('hasSeenIntro')) {
+      setShowFlashIntro(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hasMounted || showFlashIntro) return;
     
-    // Welcome toast after intro completes
-    addToast('Welcome to YOUTHFEST 2026!', { points: 50 });
+    // Only show the toast if we actually just finished the intro (not if we skipped it via session)
+    if (!sessionStorage.getItem('hasSeenIntro')) {
+      addToast('Welcome to YOUTHFEST 2026!', { points: 50 });
+      sessionStorage.setItem('hasSeenIntro', 'true');
+    }
 
     const lenis = new Lenis({
       autoRaf: true,
@@ -51,11 +63,17 @@ export default function Home() {
     return () => {
       lenis.destroy();
     };
-  }, [showFlashIntro, addToast]);
+  }, [showFlashIntro, hasMounted, addToast]);
+
+  if (!hasMounted) return null;
 
   // Image Flash Intro with cinematic YOUTHFEST reveal
   if (showFlashIntro) {
-    return <ImageFlashIntro onComplete={() => setShowFlashIntro(false)} />;
+    return <ImageFlashIntro onComplete={() => {
+      setShowFlashIntro(false);
+      sessionStorage.setItem('hasSeenIntro', 'true');
+      addToast('Welcome to YOUTHFEST 2026!', { points: 50 });
+    }} />;
   }
 
   return (

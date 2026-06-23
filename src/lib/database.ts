@@ -203,7 +203,7 @@ export const db = {
   },
 
   /**
-   * Verify a ticket for scanner.
+   * Verify a ticket for scanner and mark attendance.
    */
   async verifyTicket(email: string, eventId: string): Promise<Visitor> {
     const { data: visitor, error } = await supabase
@@ -221,6 +221,35 @@ export const db = {
       throw new Error(`UNAUTHORIZED: Not registered for ${eventId}`);
     }
 
+    // Try to mark attendance
+    const { error: attendanceError } = await supabase
+      .from('attendance')
+      .insert({
+        visitor_id: visitor.id,
+        event_id: eventId,
+      });
+
+    // If it violates unique constraint, they are already checked in
+    if (attendanceError) {
+      if (attendanceError.code === '23505') { // Postgres unique violation code
+        throw new Error('ALREADY ENTERED: This ticket was already scanned.');
+      } else {
+        throw new Error(`Attendance Error: ${attendanceError.message}`);
+      }
+    }
+
     return visitor;
+  },
+
+  /**
+   * Get Total Check-ins
+   */
+  async getAttendanceCount(): Promise<number> {
+    const { count, error } = await supabase
+      .from('attendance')
+      .select('*', { count: 'exact', head: true });
+
+    if (error) throw new Error(error.message);
+    return count || 0;
   },
 };

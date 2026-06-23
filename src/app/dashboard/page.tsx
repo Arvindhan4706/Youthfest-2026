@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useStore } from '../../lib/useStore';
 import { db } from '../../lib/database';
 import { motion } from 'framer-motion';
-import { ArrowLeft, User, Mail, Calendar, QrCode, Download, LogOut, MailOpen, Inbox, ChevronRight } from 'lucide-react';
+import { ArrowLeft, User, Mail, Calendar, QrCode, Download, LogOut, MailOpen, Inbox, ChevronRight, FileText, Upload } from 'lucide-react';
 
 import ToastContainer from '../../components/ToastContainer';
 
@@ -314,7 +314,7 @@ export default function Dashboard() {
                   )}
                 </div>
               </div>
-            ) : (
+            ) : activeTab === 'inbox' ? (
               /* Inbox & Email Messages tab view */
               <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch w-full">
                 
@@ -410,7 +410,7 @@ export default function Dashboard() {
                 </div>
 
               </div>
-            )}
+            ) : null}
 
           </div>
 
