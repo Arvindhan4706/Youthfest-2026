@@ -29,8 +29,8 @@ export default function AdminPortal() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const correctPasskey = process.env.NEXT_PUBLIC_ADMIN_PASSKEY;
-    if (passkeyInput === correctPasskey) {
+    const correctPasskey = (process.env.NEXT_PUBLIC_ADMIN_PASSKEY || '').trim();
+    if (passkeyInput.trim() === correctPasskey) {
       setIsAuthenticated(true);
       setAuthError(false);
     } else {
