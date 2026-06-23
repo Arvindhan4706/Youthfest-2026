@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { X, Mail, Phone, User, Loader2, Building, BookOpen, Calendar, MapPin, CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react';
 import gsap from 'gsap';
 import { useStore } from '../lib/useStore';
-import { db } from '../lib/database';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -74,7 +73,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
     try {
       if (activeTab === 'register') {
-        const visitor = await db.register({ name, email, phone, college, department, year, gender, city });
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, phone, college, department, year, gender, city })
+        });
+        
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Registration failed');
+        
+        const visitor = data.visitor;
         setUser({ 
           email: visitor.email, name: visitor.name, phone: visitor.phone, 
           college: visitor.college, department: visitor.department, 
@@ -97,7 +105,17 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         addToast('Registration successful! Welcome to Youthfest.', { points: 50 });
       } else {
         if (!email || !phone) throw new Error('Please fill in email and phone to login.');
-        const visitor = await db.login(email, phone);
+        
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, phone })
+        });
+        
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Login failed');
+        
+        const visitor = data.visitor;
         setUser({ 
           email: visitor.email, name: visitor.name, phone: visitor.phone, 
           college: visitor.college, department: visitor.department, 

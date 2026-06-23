@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
+import Image from 'next/image';
 import { ArrowRight, Play, Zap, Calendar, ChevronDown, Sparkles } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
 import { useRouter } from 'next/navigation';
@@ -222,7 +223,7 @@ export default function HeroScene() {
           className="mb-6 relative"
         >
           <div className="relative z-10" style={{ animation: 'glitch-1 0.4s ease-in-out 0.8s 2' }}>
-            <img src="/yuvenzalogo.png" alt="Youthfest Event Logo" className="w-[280px] sm:w-[350px] md:w-[400px] h-auto object-contain drop-shadow-[0_0_30px_rgba(0,240,255,0.6)]" />
+            <Image src="/yuvenzalogo.png" alt="Youthfest Event Logo" width={400} height={150} className="w-[280px] sm:w-[350px] md:w-[400px] h-auto object-contain drop-shadow-[0_0_30px_rgba(0,240,255,0.6)]" />
           </div>
           <motion.div 
             initial={{ opacity: 0 }}

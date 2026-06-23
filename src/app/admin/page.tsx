@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound } from 'lucide-react';
 import { db, Visitor } from '@/lib/database';
+import { supabase } from '@/lib/supabase';
 
 export default function AdminPortal() {
   const [visitors, setVisitors] = useState<Visitor[]>([]);
@@ -27,14 +28,23 @@ export default function AdminPortal() {
     }
   }, [isAuthenticated]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Using hardcoded passkey to bypass Turbopack .env caching issues
-    const correctPasskey = "yuvenza2026";
-    if (passkeyInput.trim() === correctPasskey) {
-      setIsAuthenticated(true);
-      setAuthError(false);
-    } else {
+    setAuthError(false);
+    
+    try {
+      const res = await fetch('/api/auth/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passkey: passkeyInput })
+      });
+      
+      if (res.ok) {
+        setIsAuthenticated(true);
+      } else {
+        setAuthError(true);
+      }
+    } catch (error) {
       setAuthError(true);
     }
   };

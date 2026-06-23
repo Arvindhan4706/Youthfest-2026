@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
 import { User, Menu, X, Zap, ShieldCheck } from 'lucide-react';
@@ -98,7 +99,7 @@ export default function Navbar() {
           {/* Brand Logo */}
           <Link href="/" className="group flex items-center gap-2.5" onClick={(e) => handleSmoothScroll(e, '#hero')}>
             <div className="relative flex items-center justify-center">
-              <img src="/eventlogo.png" alt="Youthfest Logo" className="w-8 h-8 object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.4)] group-hover:scale-105 transition-transform duration-300" />
+              <Image src="/eventlogo.png" alt="Youthfest Logo" width={32} height={32} className="w-8 h-8 object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.4)] group-hover:scale-105 transition-transform duration-300" />
             </div>
             <div className="flex flex-col">
               <span className="text-[7px] uppercase tracking-[0.2em] text-gray-400 font-bold leading-none mb-0.5">Yuvenza Presents</span>
