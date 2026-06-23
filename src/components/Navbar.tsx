@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
-import { User, Menu, X, Zap } from 'lucide-react';
+import { User, Menu, X, Zap, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthModal from './AuthModal';
 
@@ -150,6 +150,15 @@ export default function Navbar() {
 
           {/* Right Side: CTA + User */}
           <div className="flex items-center gap-2.5">
+            {/* Admin Secret Portal */}
+            <Link 
+              href="/admin" 
+              className="hidden sm:flex p-2 rounded-xl text-white/20 hover:bg-white/5 hover:text-[var(--neon-cyan)] transition-all duration-300"
+              title="Admin Portal"
+            >
+              <ShieldCheck className="w-4 h-4" />
+            </Link>
+
             {/* Register CTA */}
             <button
               onClick={handleRegisterCTA}

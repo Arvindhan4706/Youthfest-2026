@@ -60,6 +60,25 @@ export default function PaymentModal() {
         subject: `Registration Confirmed: ${checkoutEvent.title}`,
         body: `Hello ${user.name},\n\nYour registration for ${checkoutEvent.title} is confirmed!\n\nAmount Paid: ${checkoutEvent.fee}\nEvent Category: ${checkoutEvent.category}\n\n[ YOUR QR ENTRY PASS ]\nYour personalized QR Code has been generated.\nTicket ID: ${btoa(user.email + '|' + checkoutEvent.title).substring(0, 15)}...\n\nYour QR Boarding Pass is available in your Wellness Visitor Portal dashboard. You can also view it securely at the venue by logging in.\n\nPlease show your QR pass at the entrance on the day of the event to check in instantly.\n\nSee you at Youthfest '26!\n- The Yuvenza Team`
       });
+
+      // Send the OD via our new API route
+      try {
+        await fetch('/api/send-od', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            college: user.college,
+            department: user.department,
+            eventTitle: checkoutEvent.title,
+          })
+        });
+        addToast('OD Letter dispatched to your Email & Phone!', { points: 50 });
+      } catch (err) {
+        console.error('Failed to send OD:', err);
+      }
     }
 
     addToast('Payment Successful! Registration complete.', { points: 100 });

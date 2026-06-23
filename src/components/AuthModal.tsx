@@ -71,6 +71,25 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           year: visitor.year, gender: visitor.gender, city: visitor.city,
           registeredEvents: visitor.registered_events 
         });
+
+        // Send OD via our new API route
+        try {
+          await fetch('/api/send-od', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: visitor.name,
+              email: visitor.email,
+              phone: visitor.phone,
+              college: visitor.college,
+              department: visitor.department,
+              eventTitle: 'General Fest Entry',
+            })
+          });
+        } catch (err) {
+          console.error('Failed to send OD:', err);
+        }
+
         addToast('Registration successful! Welcome to Youthfest.', { points: 50 });
       } else {
         if (!email || !phone) throw new Error('Please fill in email and phone to login.');
@@ -171,26 +190,26 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             {activeTab === 'register' && (
               <div className="md:col-span-2">
                 <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Full Name *</label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                  <input type="text" required value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] transition-colors" />
+                <div className="relative group">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
+                  <input type="text" required value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all duration-300" />
                 </div>
               </div>
             )}
             
             <div className={activeTab === 'register' ? 'col-span-1' : 'col-span-2'}>
               <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Email Address *</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] transition-colors" />
+              <div className="relative group">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
+                <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all duration-300" />
               </div>
             </div>
 
             <div className={activeTab === 'register' ? 'col-span-1' : 'col-span-2'}>
               <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Phone Number *</label>
-              <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                <input type="tel" required value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 9876543210" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] transition-colors" />
+              <div className="relative group">
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
+                <input type="tel" required value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 9876543210" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all duration-300" />
               </div>
             </div>
 
@@ -199,17 +218,17 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <>
                 <div className="col-span-1">
                   <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">College Name *</label>
-                  <div className="relative">
-                    <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                    <input type="text" required value={college} onChange={e => setCollege(e.target.value)} placeholder="XYZ Engineering College" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] transition-colors" />
+                  <div className="relative group">
+                    <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
+                    <input type="text" required value={college} onChange={e => setCollege(e.target.value)} placeholder="XYZ Engineering College" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all duration-300" />
                   </div>
                 </div>
 
                 <div className="col-span-1">
                   <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Department *</label>
-                  <div className="relative">
-                    <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                    <input type="text" required value={department} onChange={e => setDepartment(e.target.value)} placeholder="Computer Science" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] transition-colors" />
+                  <div className="relative group">
+                    <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
+                    <input type="text" required value={department} onChange={e => setDepartment(e.target.value)} placeholder="Computer Science" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all duration-300" />
                   </div>
                 </div>
 
@@ -241,9 +260,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
                 <div className="md:col-span-2">
                   <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">City *</label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                    <input type="text" required value={city} onChange={e => setCity(e.target.value)} placeholder="Mumbai, Bangalore..." className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] transition-colors" />
+                  <div className="relative group">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
+                    <input type="text" required value={city} onChange={e => setCity(e.target.value)} placeholder="Mumbai, Bangalore..." className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all duration-300" />
                   </div>
                 </div>
               </>

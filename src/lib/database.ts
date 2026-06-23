@@ -188,4 +188,39 @@ export const db = {
     if (error) throw new Error(error.message);
     return data;
   },
+
+  /**
+   * Get all registered visitors (Admin feature).
+   */
+  async getAllVisitors(): Promise<Visitor[]> {
+    const { data, error } = await supabase
+      .from('visitors')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+
+  /**
+   * Verify a ticket for scanner.
+   */
+  async verifyTicket(email: string, eventId: string): Promise<Visitor> {
+    const { data: visitor, error } = await supabase
+      .from('visitors')
+      .select('*')
+      .eq('email', email.toLowerCase().trim())
+      .single();
+
+    if (error || !visitor) {
+      throw new Error('Ticket Invalid: Visitor not found.');
+    }
+
+    const events = visitor.registered_events || [];
+    if (!events.includes(eventId)) {
+      throw new Error(`UNAUTHORIZED: Not registered for ${eventId}`);
+    }
+
+    return visitor;
+  },
 };

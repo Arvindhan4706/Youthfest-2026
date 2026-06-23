@@ -33,9 +33,6 @@ export default function ScannerPortal() {
   const processScan = async (payload: string) => {
     setScanState({ status: 'scanning', message: 'Verifying Signature...' });
     
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-
     try {
       // Decode Payload: It should be "email|eventTitle" from the QR Code
       if (!payload.includes('|')) {
@@ -48,11 +45,15 @@ export default function ScannerPortal() {
         throw new Error('Corrupted Ticket Data.');
       }
 
+      // Verify against Supabase DB
+      const { db } = await import('@/lib/database');
+      const visitor = await db.verifyTicket(email, event);
+
       // Success!
       setScanState({
         status: 'success',
         message: 'ATTENDANCE MARKED',
-        ticketData: { email, event }
+        ticketData: { email: visitor.name || email, event }
       });
 
       // Reset to idle after 3 seconds
