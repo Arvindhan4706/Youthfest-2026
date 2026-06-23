@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS public.visitors (
 CREATE TABLE IF NOT EXISTS public.attendance (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     visitor_id UUID NOT NULL REFERENCES public.visitors(id) ON DELETE CASCADE,
+    visitor_name TEXT NOT NULL,
+    visitor_email TEXT NOT NULL,
     event_id TEXT NOT NULL,
     checkin_time TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     UNIQUE(visitor_id, event_id)

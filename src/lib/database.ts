@@ -226,6 +226,8 @@ export const db = {
       .from('attendance')
       .insert({
         visitor_id: visitor.id,
+        visitor_name: visitor.name || 'Unknown',
+        visitor_email: visitor.email || email,
         event_id: eventId,
       });
 
