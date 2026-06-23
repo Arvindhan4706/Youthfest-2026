@@ -29,7 +29,8 @@ export default function AdminPortal() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const correctPasskey = (process.env.NEXT_PUBLIC_ADMIN_PASSKEY || '').trim();
+    // Using hardcoded passkey to bypass Turbopack .env caching issues
+    const correctPasskey = "yuvenza2026";
     if (passkeyInput.trim() === correctPasskey) {
       setIsAuthenticated(true);
       setAuthError(false);
