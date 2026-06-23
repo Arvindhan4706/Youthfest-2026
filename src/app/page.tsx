@@ -16,7 +16,6 @@ const TimelineScene = dynamic(() => import('../components/scenes/TimelineScene')
 const PrizePoolScene = dynamic(() => import('../components/scenes/PrizePoolScene'), { ssr: false });
 const TrailerScene = dynamic(() => import('../components/scenes/TrailerScene'), { ssr: false });
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
-const TestimonialsScene = dynamic(() => import('../components/scenes/TestimonialsScene'), { ssr: false });
 const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
 const LeadersScene = dynamic(() => import('../components/scenes/LeadersScene'), { ssr: false });
 const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
@@ -99,7 +98,6 @@ export default function Home() {
       <PrizePoolScene />
       <TrailerScene />
       <MemoriesScene />
-      <TestimonialsScene />
       <SpeakersScene />
       <SponsorsScene />
       <LeadersScene />

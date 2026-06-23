@@ -193,10 +193,6 @@ export default function CountdownCTAScene() {
               </span>
             </button>
           </MagneticButton>
-
-          <p className="mt-4 text-xs text-gray-500">
-            Free entry for first 500 registrations • Instant confirmation
-          </p>
         </motion.div>
       </div>
 

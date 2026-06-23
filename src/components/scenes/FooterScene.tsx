@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useStore } from '../../lib/useStore';
 import { Mail, Phone, MapPin, Send, Zap } from 'lucide-react';
 
@@ -157,11 +158,11 @@ export default function FooterScene() {
           <div className="glass-strong p-6 rounded-2xl">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Quick Links</h4>
             <div className="flex flex-col gap-3 text-xs text-gray-300">
-              <a href="#home" className="hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all">Home</a>
-              <a href="#schedule" className="hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all">Schedule</a>
-              <a href="#events" className="hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all">Events</a>
-              <a href="#speakers" className="hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all">Speakers</a>
-              <a href="#faq" className="hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all">FAQ</a>
+              <Link href="#hero" className="hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all">Home</Link>
+              <Link href="#schedule" className="hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all">Schedule</Link>
+              <Link href="#events" className="hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all">Events</Link>
+              <Link href="#speakers" className="hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all">Speakers</Link>
+              <Link href="#faq" className="hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all">FAQ</Link>
             </div>
           </div>
         </div>
