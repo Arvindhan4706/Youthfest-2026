@@ -16,13 +16,13 @@ const registerSchema = z.object({
   city: z.string().optional()
 });
 
-const razorpay = new Razorpay({
-  key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || '',
-});
-
 export async function POST(request: Request) {
   try {
+    const razorpay = new Razorpay({
+      key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
+      key_secret: process.env.RAZORPAY_KEY_SECRET || '',
+    });
+
     const body = await request.json();
     
     // Validate the incoming data
