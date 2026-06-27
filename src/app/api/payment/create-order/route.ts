@@ -25,8 +25,14 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ order }, { status: 200 });
   } catch (error: unknown) {
-    console.error('Error creating Razorpay order:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    console.error('Raw Error creating Razorpay order:', error);
+    
+    // Razorpay often throws an object instead of a JS Error instance
+    const errorBody = error as any;
+    const errorMessage = errorBody?.error?.description 
+      || errorBody?.message 
+      || (error instanceof Error ? error.message : 'Internal Server Error');
+      
+    return NextResponse.json({ error: errorMessage, raw: errorBody }, { status: 500 });
   }
 }
