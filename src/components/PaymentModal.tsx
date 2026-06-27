@@ -82,7 +82,7 @@ export default function PaymentModal() {
         name: 'Youthfest 2026',
         description: `Registration for ${checkoutEvent.title}`,
         order_id: orderData.order.id,
-        handler: async function (response: any) {
+        handler: async function (response: Record<string, string>) {
           const verifyRes = await fetch('/api/payment/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -111,14 +111,16 @@ export default function PaymentModal() {
         }
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const paymentObject = new (window as any).Razorpay(options);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       paymentObject.on('payment.failed', function (response: any) {
         addToast('Payment failed: ' + response.error.description, { points: 0 });
         setIsLoading(false);
       });
       paymentObject.open();
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       addToast('Payment initialization failed.', { points: 0 });
       setIsLoading(false);

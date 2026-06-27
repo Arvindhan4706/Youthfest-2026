@@ -24,8 +24,9 @@ export async function POST(req: Request) {
     const order = await razorpay.orders.create(options);
 
     return NextResponse.json({ order }, { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating Razorpay order:', error);
-    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

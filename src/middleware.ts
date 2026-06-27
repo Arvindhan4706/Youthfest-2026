@@ -21,7 +21,7 @@ const ratelimit = redis
   : null;
 
 export async function middleware(request: NextRequest) {
-  const ip = request.ip || '127.0.0.1';
+  const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
   
   // Rate Limit API routes
   if (request.nextUrl.pathname.startsWith('/api/')) {

@@ -18,11 +18,11 @@ export async function POST(request: Request) {
     const visitor = await db.login(validatedData.email, validatedData.phone);
 
     return NextResponse.json({ success: true, visitor });
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ success: false, message: error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, message: (error as any).errors[0].message }, { status: 400 });
     }
     
-    return NextResponse.json({ success: false, message: error.message }, { status: 401 });
+    return NextResponse.json({ success: false, message: (error as Error).message }, { status: 401 });
   }
 }
