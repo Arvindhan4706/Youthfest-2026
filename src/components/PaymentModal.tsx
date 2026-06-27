@@ -39,12 +39,93 @@ export default function PaymentModal() {
 
   if (!shouldRender || !checkoutEvent) return null;
 
+  const loadScript = (src: string) => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handlePayment = async () => {
     setIsLoading(true);
-    
-    // Simulate 2 second payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
+    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+    if (!res) {
+      addToast('Razorpay SDK failed to load. Are you online?', { points: 0 });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const orderResponse = await fetch('/api/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: parseInt(checkoutEvent.fee.replace(/\D/g, '')) || 0 })
+      });
+      
+      if (!orderResponse.ok) {
+        const errText = await orderResponse.text();
+        console.error('Server returned error:', errText);
+        throw new Error(`Server error: ${orderResponse.status}`);
+      }
+      
+      const orderData = await orderResponse.json();
+      if (!orderData.order) throw new Error('Order creation failed');
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: orderData.order.amount,
+        currency: 'INR',
+        name: 'Youthfest 2026',
+        description: `Registration for ${checkoutEvent.title}`,
+        order_id: orderData.order.id,
+        handler: async function (response: any) {
+          const verifyRes = await fetch('/api/payment/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            })
+          });
+          
+          const verifyData = await verifyRes.json();
+          if (verifyData.isAuthentic) {
+            await completeRegistration();
+          } else {
+            addToast('Payment verification failed!', { points: 0 });
+            setIsLoading(false);
+          }
+        },
+        prefill: {
+          name: user?.name || '',
+          email: user?.email || '',
+          contact: user?.phone || ''
+        },
+        theme: {
+          color: '#00F0FF'
+        }
+      };
+
+      const paymentObject = new (window as any).Razorpay(options);
+      paymentObject.on('payment.failed', function (response: any) {
+        addToast('Payment failed: ' + response.error.description, { points: 0 });
+        setIsLoading(false);
+      });
+      paymentObject.open();
+
+    } catch (err: any) {
+      console.error(err);
+      addToast('Payment initialization failed.', { points: 0 });
+      setIsLoading(false);
+    }
+  };
+
+  const completeRegistration = async () => {
     // Perform registration (saves to supabase + zustand state)
     await registerForEvent(checkoutEvent.title);
     
@@ -122,17 +203,7 @@ export default function PaymentModal() {
           </div>
         </div>
 
-        {/* Mock Payment Options */}
-        <div className="space-y-3 mb-6">
-          <label className="flex items-center gap-3 p-4 rounded-xl border border-[var(--neon-violet)] bg-[var(--neon-violet)]/10 cursor-pointer">
-            <input type="radio" name="payment" defaultChecked className="text-[var(--neon-violet)] focus:ring-[var(--neon-violet)]" />
-            <span className="text-sm font-bold text-white">Credit / Debit Card</span>
-          </label>
-          <label className="flex items-center gap-3 p-4 rounded-xl border border-white/10 bg-white/5 cursor-not-allowed opacity-50">
-            <input type="radio" name="payment" disabled />
-            <span className="text-sm font-bold text-white">UPI / Net Banking (Unavailable)</span>
-          </label>
-        </div>
+
 
         <button 
           onClick={handlePayment}

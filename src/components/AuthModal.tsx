@@ -102,7 +102,58 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           });
         } catch (err) {}
 
-        addToast('Registration successful! Welcome to Youthfest.', { points: 50 });
+        if (data.order) {
+          const options = {
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+            amount: data.order.amount,
+            currency: data.order.currency,
+            name: "Youthfest 2026",
+            description: "Registration Fee",
+            order_id: data.order.id,
+            handler: async function (response: any) {
+              try {
+                const verifyRes = await fetch('/api/payment/verify', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature,
+                    email: visitor.email
+                  })
+                });
+                
+                const verifyData = await verifyRes.json();
+                if (verifyData.success) {
+                  addToast('Payment successful! Welcome to Youthfest.', { points: 50 });
+                  onClose();
+                } else {
+                  setError('Payment verification failed.');
+                }
+              } catch (err) {
+                setError('Payment verification failed.');
+              }
+            },
+            prefill: {
+              name: visitor.name,
+              email: visitor.email,
+              contact: visitor.phone
+            },
+            theme: {
+              color: "#3399cc"
+            }
+          };
+
+          const rzp1 = new (window as any).Razorpay(options);
+          rzp1.on('payment.failed', function (response: any) {
+            setError('Payment failed or cancelled.');
+          });
+          rzp1.open();
+          // We don't close the modal yet, wait for payment success
+        } else {
+          addToast('Registration successful! Welcome to Youthfest.', { points: 50 });
+          onClose();
+        }
       } else {
         if (!email || !phone) throw new Error('Please fill in email and phone to login.');
         
@@ -123,8 +174,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           registeredEvents: visitor.registered_events 
         });
         addToast(`Welcome back, ${visitor.name}!`);
+        if (activeTab === 'login') onClose();
       }
-      onClose();
     } catch (err: any) {
       setError(err.message);
     } finally {

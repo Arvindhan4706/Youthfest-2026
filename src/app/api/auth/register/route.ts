@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { db } from '@/lib/database';
 
+import Razorpay from 'razorpay';
+
 // Define the schema for visitor registration using Zod
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters long"),
@@ -14,6 +16,11 @@ const registerSchema = z.object({
   city: z.string().optional()
 });
 
+const razorpay = new Razorpay({
+  key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || '',
+});
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -24,7 +31,26 @@ export async function POST(request: Request) {
     // Call the database logic (which runs on the server side here)
     const newVisitor = await db.register(validatedData);
 
-    return NextResponse.json({ success: true, visitor: newVisitor });
+    // Registration Fee Amount (e.g., Rs 500 = 50000 paise)
+    const amountInPaise = 50000;
+
+    // Create a dynamic Razorpay order
+    const options = {
+      amount: amountInPaise,
+      currency: "INR",
+      receipt: `receipt_${newVisitor.id}`,
+    };
+    const order = await razorpay.orders.create(options);
+
+    return NextResponse.json({ 
+      success: true, 
+      visitor: newVisitor,
+      order: {
+        id: order.id,
+        amount: order.amount,
+        currency: order.currency
+      }
+    });
   } catch (error: any) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ success: false, message: error.errors[0].message }, { status: 400 });

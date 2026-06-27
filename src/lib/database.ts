@@ -11,6 +11,7 @@ export interface Visitor {
   gender?: string;
   city?: string;
   registered_events: string[];
+  payment_status: 'pending' | 'paid';
   created_at: string;
 }
 
@@ -55,6 +56,7 @@ export const db = {
         gender: data.gender,
         city: data.city,
         registered_events: [],
+        payment_status: 'pending',
       })
       .select()
       .single();
@@ -119,6 +121,26 @@ export const db = {
     const { data: updated, error } = await supabase
       .from('visitors')
       .update(payload)
+      .eq('email', emailLower)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return updated;
+  },
+
+  /**
+   * Update a visitor's payment status (usually called by Webhook).
+   */
+  async updatePaymentStatus(email: string, status: 'paid' | 'pending'): Promise<Visitor> {
+    const emailLower = email.toLowerCase().trim();
+
+    const { data: updated, error } = await supabase
+      .from('visitors')
+      .update({ payment_status: status })
       .eq('email', emailLower)
       .select()
       .single();

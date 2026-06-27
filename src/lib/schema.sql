@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS public.visitors (
     gender TEXT,
     city TEXT,
     registered_events JSONB DEFAULT '[]'::jsonb,
+    payment_status TEXT DEFAULT 'pending' NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -62,3 +63,24 @@ CREATE POLICY "Enable insert for all users" ON public.attendance FOR INSERT WITH
 CREATE POLICY "Enable read access for all users" ON public.od_requests FOR SELECT USING (true);
 CREATE POLICY "Enable insert for all users" ON public.od_requests FOR INSERT WITH CHECK (true);
 CREATE POLICY "Enable update for all users" ON public.od_requests FOR UPDATE USING (true);
+
+-- 7. Create the payments table
+CREATE TABLE IF NOT EXISTS public.payments (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    visitor_id UUID NOT NULL REFERENCES public.visitors(id) ON DELETE CASCADE,
+    event_id TEXT NOT NULL,
+    razorpay_order_id TEXT NOT NULL,
+    razorpay_payment_id TEXT,
+    amount NUMERIC NOT NULL,
+    status TEXT DEFAULT 'pending' NOT NULL CHECK (status IN ('pending', 'successful', 'failed')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Enable read access for all users" ON public.payments;
+DROP POLICY IF EXISTS "Enable insert for all users" ON public.payments;
+DROP POLICY IF EXISTS "Enable update for all users" ON public.payments;
+
+CREATE POLICY "Enable read access for all users" ON public.payments FOR SELECT USING (true);
+CREATE POLICY "Enable insert for all users" ON public.payments FOR INSERT WITH CHECK (true);
+CREATE POLICY "Enable update for all users" ON public.payments FOR UPDATE USING (true);
