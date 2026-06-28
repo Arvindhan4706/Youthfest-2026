@@ -39,26 +39,29 @@ const defaultRules = [
 
 const TRACKS: Track[] = [
   {
-    id: 'technical',
-    name: 'Technical',
-    icon: <Code2 className="w-5 h-5" />,
+    id: 'pre-events',
+    name: 'Pre-Events',
+    icon: <Users className="w-5 h-5" />,
     color: '#00f0ff',
-    tagline: 'Code. Build. Disrupt.',
+    tagline: 'The Warm Up.',
     events: [
-      { id: 'tech-1', title: 'AI Arena', desc: 'Code an autonomous game agent using machine learning algorithms.', team: 'Solo/Duo', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=600&q=80', date: 'Day 1 - 10:00 AM', venue: 'CS Lab 304', rules: ["Use of pre-trained models from the internet is strictly prohibited unless specified.", ...defaultRules] },
-      { id: 'tech-2', title: 'Cyber Security CTF', desc: 'Jeopardy-style capture the flag — exploit, decode, and hack your way to victory.', team: 'Solo', fee: 'Free', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80', date: 'Day 2 - 11:00 AM', venue: 'Server Room Alpha', rules: ["DDoS attacks on the CTF server will lead to disqualification.", ...defaultRules] },
-      { id: 'tech-3', title: 'Robo Wars', desc: 'Design and battle your combat robots in the ultimate arena showdown.', team: 'Squad', fee: '₹400', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=600&q=80', date: 'Day 3 - 2:00 PM', venue: 'Main Ground Arena', rules: ["Weight limit of the bot must not exceed 15kg.", ...defaultRules] },
+      { id: 'pre-1', title: 'Mock Parliament', desc: 'Debate, discuss, and legislate in a simulated parliamentary session.', team: 'Solo', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1541872519183-424a1b068a0a?auto=format&fit=crop&w=600&q=80', date: 'Day 1 - 10:00 AM', venue: 'Main Auditorium', rules: ["Formal attire is strictly mandatory.", ...defaultRules] },
+      { id: 'pre-2', title: 'Charity Match', desc: 'Participate in a friendly sports match to raise funds for a good cause.', team: 'Squad', fee: '₹200', difficulty: 'Easy', image: 'https://images.unsplash.com/photo-1518605368461-1e122705b766?auto=format&fit=crop&w=600&q=80', date: 'Day 1 - 4:00 PM', venue: 'Campus Grounds', rules: ["All proceeds go to charity.", ...defaultRules] },
+      { id: 'pre-3', title: 'Chess', desc: 'Strategic battle on the 64 squares. Prove you are the grandmaster.', team: 'Solo', fee: '₹50', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1528819622765-d6bcf132f793?auto=format&fit=crop&w=600&q=80', date: 'Day 2 - 9:00 AM', venue: 'Library Hall', rules: ["Standard FIDE rules apply.", ...defaultRules] },
+      { id: 'pre-4', title: 'Pickle Ball', desc: 'Fast-paced, fun, and highly competitive paddle sport.', team: 'Duo', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1622228945638-3f5f3e9e3e3b?auto=format&fit=crop&w=600&q=80', date: 'Day 2 - 2:00 PM', venue: 'Indoor Sports Complex', rules: ["Standard pickleball tournament rules apply.", ...defaultRules] },
     ],
   },
   {
-    id: 'non-technical',
-    name: 'Non Technical',
-    icon: <Users className="w-5 h-5" />,
-    color: '#facc15',
-    tagline: 'Lead. Manage. Excel.',
+    id: 'main-events',
+    name: 'Main Events',
+    icon: <Sparkles className="w-5 h-5" />,
+    color: '#ff006e',
+    tagline: 'The Grand Showdown.',
     events: [
-      { id: 'ntech-1', title: 'B-Plan Pitch', desc: 'Pitch your startup idea to a panel of expert investors.', team: 'Solo/Duo', fee: '₹200', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=600&q=80', date: 'Day 1 - 1:00 PM', venue: 'Seminar Hall B', rules: ["Presentations must not exceed 10 minutes.", ...defaultRules] },
-      { id: 'ntech-2', title: 'Treasure Hunt', desc: 'Solve riddles and race across the campus to find the hidden treasure.', team: 'Squad', fee: '₹100', difficulty: 'Easy', image: 'https://images.unsplash.com/photo-1501139083538-0139583c060f?auto=format&fit=crop&w=600&q=80', date: 'Day 2 - 9:00 AM', venue: 'Campus Wide', rules: ["Teams must stick together at all times.", ...defaultRules] },
+      { id: 'main-1', title: 'Squid Game', desc: 'Survive a series of intense, high-stakes childhood games.', team: 'Solo', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1616091216791-a5360b5fc78a?auto=format&fit=crop&w=600&q=80', date: 'Day 3 - 9:00 AM', venue: 'Main Arena', rules: ["Eliminated players must leave the arena immediately.", ...defaultRules] },
+      { id: 'main-2', title: 'Case Closed', desc: 'A murder mystery event. Gather clues, interrogate suspects, and solve the crime.', team: 'Squad', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1587399564875-c992c6ec35c2?auto=format&fit=crop&w=600&q=80', date: 'Day 3 - 1:00 PM', venue: 'Mystery Rooms', rules: ["Time limit of 60 minutes to solve the case.", ...defaultRules] },
+      { id: 'main-3', title: '7 Keys', desc: 'An ultimate escape room challenge. Find the 7 keys to unlock the final door.', team: 'Squad', fee: '₹400', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?auto=format&fit=crop&w=600&q=80', date: 'Day 4 - 10:00 AM', venue: 'Escape Zone', rules: ["No physical force should be used to open locks.", ...defaultRules] },
+      { id: 'main-4', title: 'Cypher', desc: 'The ultimate cryptic puzzle solving and cryptography challenge.', team: 'Duo', fee: '₹200', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format&fit=crop&w=600&q=80', date: 'Day 4 - 2:00 PM', venue: 'Tech Hub', rules: ["Internet access is allowed but sharing answers is strictly prohibited.", ...defaultRules] },
     ],
   },
   {
@@ -68,42 +71,7 @@ const TRACKS: Track[] = [
     color: '#10b981',
     tagline: 'Learn. Apply. Master.',
     events: [
-      { id: 'work-1', title: 'Web3 & Blockchain', desc: 'Hands-on workshop on building your first smart contract.', team: 'Solo', fee: '₹300', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1639762681485-074b7f4fc431?auto=format&fit=crop&w=600&q=80', date: 'Day 1 - 3:00 PM', venue: 'Tech Hub', rules: ["Bring your own laptop with Node.js installed.", ...defaultRules] },
-      { id: 'work-2', title: 'UI/UX Design', desc: 'Master Figma and design principles in this intensive 4-hour workshop.', team: 'Solo', fee: '₹250', difficulty: 'Easy', image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80', date: 'Day 2 - 2:00 PM', venue: 'Design Studio', rules: ["No prior design experience is required.", ...defaultRules] },
-    ],
-  },
-  {
-    id: 'hackathons',
-    name: 'Hackathons',
-    icon: <Cpu className="w-5 h-5" />,
-    color: '#ff006e',
-    tagline: 'Think. Hack. Innovate.',
-    events: [
-      { id: 'hack-1', title: 'Genesis Hackathon', desc: '24 Hours Coding Challenge. Build solutions for a better tomorrow.', team: 'Squad', fee: '₹500', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80', date: 'Day 1 & 2 (24 Hours)', venue: 'Innovation Center', rules: ["Code must be written entirely during the hackathon.", "Teams must submit their GitHub repositories before the deadline.", ...defaultRules] },
-      { id: 'hack-2', title: 'FinTech Sprint', desc: '12 Hours to revolutionize finance with code.', team: 'Solo/Duo', fee: '₹300', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80', date: 'Day 3 - 8:00 AM', venue: 'Business Center', rules: ["APIs provided by sponsors must be integrated into the solution.", ...defaultRules] },
-    ],
-  },
-  {
-    id: 'gaming',
-    name: 'Gaming',
-    icon: <Gamepad2 className="w-5 h-5" />,
-    color: '#8b5cf6',
-    tagline: 'Play. Compete. Dominate.',
-    events: [
-      { id: 'game-1', title: 'Valorant Showdown', desc: '5v5 custom lobby tactical shooter tournament on the main stage screen.', team: 'Squad', fee: '₹250', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80', date: 'Day 1 & 2', venue: 'E-Sports Arena', rules: ["Use of any third-party software or macros will result in a permanent ban.", ...defaultRules] },
-      { id: 'game-2', title: 'BGMI Clash', desc: 'Squad battle royale tournament — last team standing claims the crown.', team: 'Squad', fee: '₹200', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=600&q=80', date: 'Day 2', venue: 'E-Sports Arena', rules: ["Emulators are strictly prohibited. Mobile devices only.", ...defaultRules] },
-      { id: 'game-3', title: 'FIFA Championship', desc: 'Console 1v1 football tournament — prove you are the ultimate virtual footballer.', team: 'Solo', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=600&q=80', date: 'Day 3', venue: 'Gaming Lounge', rules: ["Standard tournament rules. 6-minute halves.", ...defaultRules] },
-    ],
-  },
-  {
-    id: 'cultural',
-    name: 'Cultural',
-    icon: <Palette className="w-5 h-5" />,
-    color: '#ff6b00',
-    tagline: 'Express. Perform. Inspire.',
-    events: [
-      { id: 'cult-1', title: 'Beat Drop Dance', desc: 'High energy crew street dance battle under dynamic lighting and bass drops.', team: 'Squad', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=600&q=80', date: 'Day 2 - 6:00 PM', venue: 'Main Stage', rules: ["Performance track must not exceed 5 minutes.", ...defaultRules] },
-      { id: 'cult-2', title: 'Acoustic Soul', desc: 'Showcase your acoustic vocal & instrumental covers on the main stage.', team: 'Solo/Duo', fee: '₹100', difficulty: 'Easy', image: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=600&q=80', date: 'Day 1 - 5:00 PM', venue: 'Open Air Theatre', rules: ["Backing tracks are not allowed. Live instruments only.", ...defaultRules] },
+      { id: 'work-1', title: 'Upcoming Workshop', desc: 'Details for this workshop will be updated soon.', team: 'Solo', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1639762681485-074b7f4fc431?auto=format&fit=crop&w=600&q=80', date: 'TBA', venue: 'Workshop Hall', rules: ["Bring your own laptop.", ...defaultRules] },
     ],
   },
 ];

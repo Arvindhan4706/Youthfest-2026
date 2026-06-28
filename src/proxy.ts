@@ -20,7 +20,7 @@ const ratelimit = redis
     })
   : null;
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
   
   // Rate Limit API routes

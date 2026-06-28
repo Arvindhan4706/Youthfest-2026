@@ -18,7 +18,7 @@ export default function LoadingScene({ onComplete }: { onComplete: () => void })
       { max: 100, stage: 'Aligning the growth pathway...' },
     ];
 
-    let currentInterval = 0;
+    const currentInterval = 0;
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {

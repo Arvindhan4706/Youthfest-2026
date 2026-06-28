@@ -116,7 +116,8 @@ function StatBadge({
   );
 }
 
-import ParticleUniverse from '../ui/ParticleUniverse';
+import dynamic from 'next/dynamic';
+const ParticleUniverse = dynamic(() => import('../ui/ParticleUniverse'), { ssr: false });
 
 export default function HeroScene() {
   const user = useStore((state) => state.user);
@@ -223,7 +224,7 @@ export default function HeroScene() {
           className="mb-6 relative"
         >
           <div className="relative z-10" style={{ animation: 'glitch-1 0.4s ease-in-out 0.8s 2' }}>
-            <Image src="/yuvenzalogo.png" alt="Youthfest Event Logo" width={400} height={150} className="w-[280px] sm:w-[350px] md:w-[400px] h-auto object-contain drop-shadow-[0_0_30px_rgba(0,240,255,0.6)]" />
+            <Image src="/yuvenzalogo.png" alt="Youthfest Event Logo" width={400} height={150} className="w-[280px] sm:w-[350px] md:w-[400px] h-auto object-contain drop-shadow-[0_0_30px_rgba(0,240,255,0.6)]" style={{ height: 'auto' }} />
           </div>
           <motion.div 
             initial={{ opacity: 0 }}

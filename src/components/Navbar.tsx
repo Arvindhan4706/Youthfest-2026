@@ -69,15 +69,6 @@ export default function Navbar() {
     } else {
       setAuthOpen(true);
     }
-  };
-
-  const handleRegisterCTA = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (user) {
-      router.push('/dashboard');
-    } else {
-      setAuthOpen(true);
-    }
     setMobileOpen(false);
   };
 
@@ -160,23 +151,32 @@ export default function Navbar() {
               <ShieldCheck className="w-4 h-4" />
             </Link>
 
-            {/* Register CTA */}
-            <button
-              onClick={handleRegisterCTA}
-              className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-white hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all duration-300 hover:scale-[1.02]"
-            >
-              <Zap className="w-3 h-3" />
-              Register
-            </button>
-
-            {/* User Icon */}
-            <button
-              onClick={handleUserClick}
-              className="p-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white transition-all duration-200"
-              title={user ? 'User Dashboard' : 'Login / Register'}
-            >
-              <User className="w-4 h-4" />
-            </button>
+            {/* Auth CTA */}
+            {!user ? (
+              <div className="hidden sm:flex items-center gap-2">
+                <button
+                  onClick={() => setAuthOpen(true, 'register')}
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all duration-300"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => setAuthOpen(true, 'login')}
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all duration-300"
+                >
+                  Log In
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => router.push('/dashboard')}
+                className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 border border-white/10 text-white transition-all duration-300"
+                title="User Dashboard"
+              >
+                <User className="w-3.5 h-3.5" />
+                Dashboard
+              </button>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button
@@ -211,13 +211,30 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <button
-                onClick={handleRegisterCTA}
-                className="mt-3 w-full flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-white shadow-[0_0_20px_rgba(0,240,255,0.3)]"
-              >
-                <Zap className="w-3.5 h-3.5" />
-                Register Now
-              </button>
+              {!user ? (
+                <div className="mt-3 flex flex-col gap-2">
+                  <button
+                    onClick={() => { setAuthOpen(true, 'register'); setMobileOpen(false); }}
+                    className="w-full flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-sm font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)]"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => { setAuthOpen(true, 'login'); setMobileOpen(false); }}
+                    className="w-full flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-sm font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)]"
+                  >
+                    Log In
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={handleUserClick}
+                  className="mt-3 w-full flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-sm font-bold bg-white/10 hover:bg-white/20 border border-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)]"
+                >
+                  <User className="w-3.5 h-3.5" />
+                  Dashboard
+                </button>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

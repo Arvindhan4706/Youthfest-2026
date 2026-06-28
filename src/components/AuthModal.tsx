@@ -18,7 +18,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const setUser = useStore(state => state.setUser);
   const addToast = useStore(state => state.addToast);
 
-  const [activeTab, setActiveTab] = useState<'login' | 'register'>('register');
+  const authModalTab = useStore(state => state.authModalTab);
+  const [activeTab, setActiveTab] = useState<'login' | 'register'>(authModalTab);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -34,8 +35,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [city, setCity] = useState('');
 
   useEffect(() => {
-    if (isOpen) setShouldRender(true);
-  }, [isOpen]);
+    if (isOpen) {
+      setShouldRender(true);
+      setActiveTab(authModalTab);
+    }
+  }, [isOpen, authModalTab]);
 
   useEffect(() => {
     if (shouldRender) {
@@ -126,12 +130,15 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 const verifyData = await verifyRes.json();
                 if (verifyData.success) {
                   addToast('Payment successful! Welcome to Youthfest.', { points: 50 });
+                  setIsLoading(false);
                   onClose();
                 } else {
                   setError('Payment verification failed.');
+                  setIsLoading(false);
                 }
               } catch (err) {
                 setError('Payment verification failed.');
+                setIsLoading(false);
               }
             },
             prefill: {
@@ -141,21 +148,32 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             },
             theme: {
               color: "#3399cc"
+            },
+            modal: {
+              ondismiss: function() {
+                setIsLoading(false);
+                setError('Payment cancelled by user.');
+              }
             }
           };
 
           const rzp1 = new (window as any).Razorpay(options);
           rzp1.on('payment.failed', function (response: any) {
-            setError('Payment failed or cancelled.');
+            setError(`Payment failed: ${response.error.description}`);
+            setIsLoading(false);
           });
           rzp1.open();
-          // We don't close the modal yet, wait for payment success
+          // Keep loading true while Razorpay is open
         } else {
           addToast('Registration successful! Welcome to Youthfest.', { points: 50 });
+          setIsLoading(false);
           onClose();
         }
       } else {
-        if (!email || !phone) throw new Error('Please fill in email and phone to login.');
+        if (!email || !phone) {
+          setIsLoading(false);
+          throw new Error('Please fill in email and phone to login.');
+        }
         
         const res = await fetch('/api/auth/login', {
           method: 'POST',
@@ -164,7 +182,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         });
         
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Login failed');
+        if (!res.ok) {
+          setIsLoading(false);
+          throw new Error(data.message || 'Login failed');
+        }
         
         const visitor = data.visitor;
         setUser({ 
@@ -174,11 +195,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           registeredEvents: visitor.registered_events 
         });
         addToast(`Welcome back, ${visitor.name}!`);
+        setIsLoading(false);
         if (activeTab === 'login') onClose();
       }
     } catch (err: any) {
       setError(err.message);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -186,33 +207,17 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   if (!shouldRender) return null;
 
   return (
-    <div ref={overlayRef} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md opacity-0 p-4">
-      <div ref={modalRef} className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto p-8 bg-[#011213] border border-[var(--neon-cyan)]/30 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.1)] opacity-0 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-        <button onClick={onClose} className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/10">
-          <X className="w-5 h-5" />
+    <div ref={overlayRef} onClick={onClose} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md opacity-0 p-4">
+      <div ref={modalRef} onClick={(e) => e.stopPropagation()} className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto p-8 bg-[#011213] border border-[var(--neon-cyan)]/30 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.1)] opacity-0 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+        <button type="button" onClick={onClose} className="absolute top-4 right-4 z-50 p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/10 cursor-pointer">
+          <X className="w-5 h-5 pointer-events-none" />
         </button>
         
         <h2 className="text-3xl font-[var(--font-orbitron)] font-black text-white mb-6 text-center mt-2">
           {activeTab === 'register' ? 'JOIN THE FESTIVAL' : 'VISITOR LOGIN'}
         </h2>
 
-        {/* Tabs */}
-        <div className="flex bg-white/5 rounded-xl p-1 mb-6">
-          <button
-            type="button"
-            onClick={() => { setActiveTab('register'); setError(''); setStep(1); }}
-            className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'register' ? 'bg-[var(--neon-violet)] text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
-          >
-            Create Profile
-          </button>
-          <button
-            type="button"
-            onClick={() => { setActiveTab('login'); setError(''); setStep(1); }}
-            className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'login' ? 'bg-[var(--neon-violet)] text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
-          >
-            Login
-          </button>
-        </div>
+        {/* No Tab Switcher (Managed by Navbar) */}
 
         {/* Progress Bar (Only for Register) */}
         {activeTab === 'register' && (

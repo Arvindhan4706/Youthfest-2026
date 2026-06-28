@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound } from 'lucide-react';
+import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings } from 'lucide-react';
 import { db, Visitor } from '@/lib/database';
 import { supabase } from '@/lib/supabase';
 
@@ -22,11 +22,39 @@ export default function AdminPortal() {
   const [filterDept, setFilterDept] = useState('');
   const [filterYear, setFilterYear] = useState('');
 
+  // Settings State
+  const [activeTab, setActiveTab] = useState<'visitors' | 'settings'>('visitors');
+  const [siteSettings, setSiteSettings] = useState<any>(null);
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchData();
+      fetchSettings();
     }
   }, [isAuthenticated]);
+
+  const fetchSettings = async () => {
+    try {
+      const settings = await db.getSiteSettings();
+      setSiteSettings(settings);
+    } catch (err) {
+      console.error('Failed to fetch settings', err);
+    }
+  };
+
+  const handleSaveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingSettings(true);
+    try {
+      await db.updateSiteSettings(siteSettings);
+      alert('Settings saved successfully!');
+    } catch (err) {
+      alert('Failed to save settings');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -186,8 +214,64 @@ export default function AdminPortal() {
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
+        {/* Tabs */}
+        <div className="flex gap-4 mb-8 border-b border-white/10 pb-4">
+          <button 
+            onClick={() => setActiveTab('visitors')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors ${activeTab === 'visitors' ? 'bg-[var(--neon-cyan)]/10 text-[var(--neon-cyan)] border border-[var(--neon-cyan)]/30' : 'text-gray-400 hover:text-white'}`}
+          >
+            <Users className="w-4 h-4" /> Visitors
+          </button>
+          <button 
+            onClick={() => setActiveTab('settings')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors ${activeTab === 'settings' ? 'bg-[var(--neon-violet)]/10 text-[var(--neon-violet)] border border-[var(--neon-violet)]/30' : 'text-gray-400 hover:text-white'}`}
+          >
+            <Settings className="w-4 h-4" /> Live Stats Settings
+          </button>
+        </div>
+
+        {activeTab === 'settings' && siteSettings ? (
+          <div className="glass rounded-3xl border border-white/10 p-8 max-w-4xl">
+            <h2 className="text-2xl font-[var(--font-orbitron)] font-black mb-6 text-[var(--neon-violet)]">Edit Live Stats</h2>
+            <form onSubmit={handleSaveSettings} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                { key: 'participants', label: 'Participants (5000+)' },
+                { key: 'events', label: 'Total Events (50+)' },
+                { key: 'prize_pool', label: 'Prize Pool in Lakhs (2L+)' },
+                { key: 'colleges', label: 'Colleges (100+)' },
+                { key: 'workshops', label: 'Workshops (10+)' },
+                { key: 'first_prize', label: '1st Prize Amount (₹)' },
+                { key: 'second_prize', label: '2nd Prize Amount (₹)' },
+                { key: 'third_prize', label: '3rd Prize Amount (₹)' },
+                { key: 'spots_remaining', label: 'Spots Remaining' },
+                { key: 'total_spots', label: 'Total Spots' }
+              ].map(field => (
+                <div key={field.key}>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{field.label}</label>
+                  <input
+                    type="number"
+                    value={siteSettings[field.key] || 0}
+                    onChange={(e) => setSiteSettings({ ...siteSettings, [field.key]: parseInt(e.target.value) || 0 })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-violet)] outline-none"
+                    required
+                  />
+                </div>
+              ))}
+              <div className="md:col-span-2 pt-4">
+                <button
+                  type="submit"
+                  disabled={isSavingSettings}
+                  className="w-full md:w-auto px-8 py-4 bg-[var(--neon-violet)] text-white font-bold rounded-xl hover:opacity-90 transition-opacity uppercase tracking-wider text-sm disabled:opacity-50"
+                >
+                  {isSavingSettings ? 'Saving...' : 'Save Settings'}
+                </button>
+              </div>
+            </form>
+          </div>
+        ) : activeTab === 'visitors' ? (
+          <>
+            {/* Filters */}
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
             <input 
@@ -261,6 +345,8 @@ export default function AdminPortal() {
             </table>
           </div>
         </div>
+        </>
+        ) : null}
         </div>
       )}
     </main>

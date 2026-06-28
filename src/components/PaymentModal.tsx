@@ -94,7 +94,7 @@ export default function PaymentModal() {
           });
           
           const verifyData = await verifyRes.json();
-          if (verifyData.isAuthentic) {
+          if (verifyData.success || verifyData.isAuthentic) {
             await completeRegistration();
           } else {
             addToast('Payment verification failed!', { points: 0 });
@@ -108,6 +108,12 @@ export default function PaymentModal() {
         },
         theme: {
           color: '#00F0FF'
+        },
+        modal: {
+          ondismiss: function() {
+            setIsLoading(false);
+            addToast('Payment cancelled.', { points: 0 });
+          }
         }
       };
 

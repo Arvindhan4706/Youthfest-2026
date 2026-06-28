@@ -78,9 +78,24 @@ export default function CountdownCTAScene() {
     }
   };
 
-  // Fake urgency: spots remaining (visual only)
-  const spotsRemaining = 847;
-  const totalSpots = 5000;
+  // Fetch real spots remaining
+  const [spotsRemaining, setSpotsRemaining] = useState(847);
+  const [totalSpots, setTotalSpots] = useState(5000);
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        const { db } = await import('@/lib/database');
+        const settings = await db.getSiteSettings();
+        setSpotsRemaining(settings.spots_remaining);
+        setTotalSpots(settings.total_spots);
+      } catch (err) {
+        console.error('Failed to load stats', err);
+      }
+    }
+    loadStats();
+  }, []);
+
   const progressPercent = ((totalSpots - spotsRemaining) / totalSpots) * 100;
 
   return (

@@ -62,12 +62,57 @@ function Universe(props: any) {
   );
 }
 
+class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean}> {
+  constructor(props: {children: React.ReactNode}) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: any) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any, errorInfo: any) {
+    // Suppress console error in Next.js overlay
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return null;
+    }
+    return this.props.children;
+  }
+}
+
+function isWebGLAvailable() {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+  } catch (e) {
+    return false;
+  }
+}
+
 export default function ParticleUniverse() {
+  const [webGLSupported, setWebGLSupported] = React.useState<boolean | null>(null);
+
+  React.useEffect(() => {
+    setWebGLSupported(isWebGLAvailable());
+  }, []);
+
+  if (webGLSupported === false) {
+    return null;
+  }
+
   return (
     <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
-      <Canvas camera={{ position: [0, 0, 1] }}>
-        <Universe />
-      </Canvas>
+      {webGLSupported && (
+        <ErrorBoundary>
+          <Canvas camera={{ position: [0, 0, 1] }}>
+            <Universe />
+          </Canvas>
+        </ErrorBoundary>
+      )}
     </div>
   );
 }

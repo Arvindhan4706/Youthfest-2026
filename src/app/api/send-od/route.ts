@@ -144,7 +144,7 @@ Youthfest 2026
       console.log('=================================================================\n');
     } else {
       await transporter?.sendMail({
-        from: `"Yuvenza Youthfest 2026" <${SMTP_USER}>`,
+        from: `"Yuvenza Youthfest 2026" <yuvenza@citchennai.net>`,
         to: recipientEmail, // Hardcoded as requested
         subject: emailSubject,
         text: emailBody,

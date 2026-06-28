@@ -15,6 +15,32 @@ export interface Visitor {
   created_at: string;
 }
 
+export interface Payment {
+  id: string;
+  visitor_id: string;
+  event_id: string;
+  razorpay_order_id: string;
+  razorpay_payment_id?: string;
+  amount: number;
+  status: 'pending' | 'successful' | 'failed';
+  created_at: string;
+}
+
+export interface SiteSettings {
+  id: string;
+  participants: number;
+  events: number;
+  prize_pool: number;
+  colleges: number;
+  workshops: number;
+  first_prize: number;
+  second_prize: number;
+  third_prize: number;
+  spots_remaining: number;
+  total_spots: number;
+  updated_at: string;
+}
+
 // ─── Public API ──────────────────────────────────────────
 
 export const db = {
@@ -276,4 +302,53 @@ export const db = {
     if (error) throw new Error(error.message);
     return count || 0;
   },
+
+  /**
+   * Get Site Settings
+   */
+  async getSiteSettings(): Promise<SiteSettings> {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('*')
+      .eq('id', 'stats')
+      .single();
+
+    if (error && error.code !== 'PGRST116') { // PGRST116 is not found
+      throw new Error(error.message);
+    }
+    
+    // Default fallback if table is empty
+    if (!data) {
+      return {
+        id: 'stats',
+        participants: 5000,
+        events: 50,
+        prize_pool: 2,
+        colleges: 100,
+        workshops: 10,
+        first_prize: 50000,
+        second_prize: 25000,
+        third_prize: 10000,
+        spots_remaining: 847,
+        total_spots: 5000,
+        updated_at: new Date().toISOString()
+      };
+    }
+    
+    return data as SiteSettings;
+  },
+
+  /**
+   * Update Site Settings
+   */
+  async updateSiteSettings(settings: Partial<SiteSettings>): Promise<SiteSettings> {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .upsert({ id: 'stats', ...settings, updated_at: new Date().toISOString() })
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data as SiteSettings;
+  }
 };

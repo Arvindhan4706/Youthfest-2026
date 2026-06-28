@@ -84,3 +84,28 @@ DROP POLICY IF EXISTS "Enable update for all users" ON public.payments;
 CREATE POLICY "Enable read access for all users" ON public.payments FOR SELECT USING (true);
 CREATE POLICY "Enable insert for all users" ON public.payments FOR INSERT WITH CHECK (true);
 CREATE POLICY "Enable update for all users" ON public.payments FOR UPDATE USING (true);
+
+-- 8. Create the site_settings table
+CREATE TABLE IF NOT EXISTS public.site_settings (
+    id TEXT PRIMARY KEY DEFAULT 'stats',
+    participants NUMERIC DEFAULT 5000,
+    events NUMERIC DEFAULT 50,
+    prize_pool NUMERIC DEFAULT 2,
+    colleges NUMERIC DEFAULT 100,
+    workshops NUMERIC DEFAULT 10,
+    first_prize NUMERIC DEFAULT 50000,
+    second_prize NUMERIC DEFAULT 25000,
+    third_prize NUMERIC DEFAULT 10000,
+    spots_remaining NUMERIC DEFAULT 847,
+    total_spots NUMERIC DEFAULT 5000,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Enable read access for all users" ON public.site_settings;
+DROP POLICY IF EXISTS "Enable insert for all users" ON public.site_settings;
+DROP POLICY IF EXISTS "Enable update for all users" ON public.site_settings;
+
+CREATE POLICY "Enable read access for all users" ON public.site_settings FOR SELECT USING (true);
+CREATE POLICY "Enable insert for all users" ON public.site_settings FOR INSERT WITH CHECK (true);
+CREATE POLICY "Enable update for all users" ON public.site_settings FOR UPDATE USING (true);

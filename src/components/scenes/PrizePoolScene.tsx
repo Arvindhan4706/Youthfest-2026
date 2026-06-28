@@ -43,7 +43,50 @@ const FloatingCurrency = () => {
 };
 
 export default function PrizePoolScene() {
-  const PRIZES = [
+  const [statsData, setStatsData] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    async function loadStats() {
+      try {
+        const { db } = await import('@/lib/database');
+        const data = await db.getSiteSettings();
+        setStatsData(data);
+      } catch (err) {
+        console.error('Failed to load site stats:', err);
+      }
+    }
+    loadStats();
+  }, []);
+
+  const PRIZES = statsData ? [
+    {
+      place: '2nd Prize',
+      amount: statsData.second_prize.toLocaleString('en-IN'),
+      color: '#c0c0c0', // Silver
+      bgGlow: 'rgba(192, 192, 192, 0.15)',
+      shadowGlow: '0 0 40px rgba(192, 192, 192, 0.4)',
+      delay: 0.2,
+      scale: 0.9,
+    },
+    {
+      place: '1st Prize',
+      amount: statsData.first_prize.toLocaleString('en-IN'),
+      color: '#ffd700', // Gold
+      bgGlow: 'rgba(255, 215, 0, 0.15)',
+      shadowGlow: '0 0 60px rgba(255, 215, 0, 0.5)',
+      delay: 0,
+      scale: 1.1,
+    },
+    {
+      place: '3rd Prize',
+      amount: statsData.third_prize.toLocaleString('en-IN'),
+      color: '#cd7f32', // Bronze
+      bgGlow: 'rgba(205, 127, 50, 0.15)',
+      shadowGlow: '0 0 40px rgba(205, 127, 50, 0.4)',
+      delay: 0.4,
+      scale: 0.85,
+    },
+  ] : [
     {
       place: '2nd Prize',
       amount: '25,000',

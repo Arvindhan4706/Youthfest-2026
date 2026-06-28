@@ -34,15 +34,37 @@ function useCountUp(target: number, duration: number = 2200) {
   return { count, ref };
 }
 
-const STATS = [
-  { value: 5000, suffix: '+', prefix: '', label: 'Participants', icon: Users, color: 'var(--neon-cyan)' },
-  { value: 50, suffix: '+', prefix: '', label: 'Events', icon: Trophy, color: 'var(--neon-magenta)' },
-  { value: 2, suffix: 'L+', prefix: '₹', label: 'Prize Pool', icon: IndianRupee, color: 'var(--neon-violet)' },
-  { value: 100, suffix: '+', prefix: '', label: 'Colleges', icon: School, color: 'var(--neon-cyan)' },
-  { value: 10, suffix: '+', prefix: '', label: 'Workshops', icon: Briefcase, color: 'var(--neon-magenta)' },
-];
+import { db, SiteSettings } from '@/lib/database';
 
 export default function StatsBarScene() {
+  const [statsData, setStatsData] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        const data = await db.getSiteSettings();
+        setStatsData(data);
+      } catch (err) {
+        console.error('Failed to load site stats:', err);
+      }
+    }
+    loadStats();
+  }, []);
+
+  const STATS = statsData ? [
+    { value: statsData.participants, suffix: '+', prefix: '', label: 'Participants', icon: Users, color: 'var(--neon-cyan)' },
+    { value: statsData.events, suffix: '+', prefix: '', label: 'Events', icon: Trophy, color: 'var(--neon-magenta)' },
+    { value: statsData.prize_pool, suffix: 'L+', prefix: '₹', label: 'Prize Pool', icon: IndianRupee, color: 'var(--neon-violet)' },
+    { value: statsData.colleges, suffix: '+', prefix: '', label: 'Colleges', icon: School, color: 'var(--neon-cyan)' },
+    { value: statsData.workshops, suffix: '+', prefix: '', label: 'Workshops', icon: Briefcase, color: 'var(--neon-magenta)' },
+  ] : [
+    { value: 5000, suffix: '+', prefix: '', label: 'Participants', icon: Users, color: 'var(--neon-cyan)' },
+    { value: 50, suffix: '+', prefix: '', label: 'Events', icon: Trophy, color: 'var(--neon-magenta)' },
+    { value: 2, suffix: 'L+', prefix: '₹', label: 'Prize Pool', icon: IndianRupee, color: 'var(--neon-violet)' },
+    { value: 100, suffix: '+', prefix: '', label: 'Colleges', icon: School, color: 'var(--neon-cyan)' },
+    { value: 10, suffix: '+', prefix: '', label: 'Workshops', icon: Briefcase, color: 'var(--neon-magenta)' },
+  ];
+
   return (
     <section id="about" className="relative py-24 overflow-hidden" style={{ background: 'linear-gradient(180deg, #010008 0%, #05001a 50%, #011213 100%)' }}>
       {/* Subtle grid */}

@@ -51,7 +51,8 @@ interface AppState {
   user: UserProfile | null;
   setUser: (user: UserProfile | null) => void;
   isAuthOpen: boolean;
-  setAuthOpen: (open: boolean) => void;
+  authModalTab: 'login' | 'register';
+  setAuthOpen: (open: boolean, tab?: 'login' | 'register') => void;
   checkoutEvent: EventDetails | null;
   setCheckoutEvent: (event: EventDetails | null) => void;
   messages: EmailMessage[];
@@ -64,19 +65,23 @@ interface AppState {
   addPoints: (points: number, reason: string) => void;
 }
 
-export const useStore = create<AppState>((set, get) => {
-  // Initialize messages from localStorage if available client-side
-  let initialMessages: EmailMessage[] = [];
-  if (typeof window !== 'undefined') {
-    try {
-      const stored = localStorage.getItem('y26_messages');
-      if (stored) initialMessages = JSON.parse(stored);
-    } catch (e) {
-      console.error(e);
-    }
-  }
+import { persist } from 'zustand/middleware';
 
-  return {
+export const useStore = create<AppState>()(
+  persist(
+    (set, get) => {
+      // Initialize messages from localStorage if available client-side
+      let initialMessages: EmailMessage[] = [];
+      if (typeof window !== 'undefined') {
+        try {
+          const stored = localStorage.getItem('y26_messages');
+          if (stored) initialMessages = JSON.parse(stored);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      return {
     isMuted: true,
     setMuted: (muted) => set({ isMuted: muted }),
     cursorMode: 'default',
@@ -92,7 +97,8 @@ export const useStore = create<AppState>((set, get) => {
     user: null,
     setUser: (user) => set({ user }),
     isAuthOpen: false,
-    setAuthOpen: (open) => set({ isAuthOpen: open }),
+    authModalTab: 'login',
+    setAuthOpen: (open, tab) => set({ isAuthOpen: open, authModalTab: tab || 'login' }),
     checkoutEvent: null,
     setCheckoutEvent: (event) => set({ checkoutEvent: event }),
     messages: initialMessages,
@@ -167,5 +173,15 @@ export const useStore = create<AppState>((set, get) => {
     addPoints: (points, reason) => {
       get().addToast(`+${points} Points: ${reason}`, { points });
     },
-  };
-});
+    };
+  },
+  {
+    name: 'youthfest-storage',
+    partialize: (state) => ({ 
+      user: state.user,
+      isMuted: state.isMuted,
+      isSecretMode: state.isSecretMode
+    }),
+  }
+)
+);
