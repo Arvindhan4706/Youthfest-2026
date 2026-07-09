@@ -150,8 +150,9 @@ export const useStore = create<AppState>()(
         });
 
         get().addToast(`Successfully registered for ${eventId}!`);
-      } catch (err: any) {
-        get().addToast(err.message || 'Failed to register for event.');
+      } catch (err: unknown) {
+        const errorMsg = err instanceof Error ? err.message : 'Failed to register for event.';
+        get().addToast(errorMsg);
       }
     },
     initiateRegistration: (event) => {

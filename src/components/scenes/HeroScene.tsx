@@ -193,24 +193,18 @@ export default function HeroScene() {
           className="absolute inset-0 bg-grid opacity-30 pointer-events-none" 
         />
 
-        {/* Radial glow spots */}
+        {/* Radial glow spots - Optimized (static scale/opacity, only parallax) */}
         <motion.div 
           style={{ x: parallaxX1, y: parallaxY1 }}
-          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-[10%] left-[20%] w-[500px] h-[500px] rounded-full bg-[var(--neon-cyan)]/[0.04] blur-[120px] pointer-events-none" 
+          className="absolute top-[10%] left-[20%] w-[500px] h-[500px] rounded-full bg-[var(--neon-cyan)]/[0.04] blur-[120px] pointer-events-none transform-gpu will-change-transform" 
         />
         <motion.div 
           style={{ x: parallaxX2, y: parallaxY2 }}
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-          className="absolute bottom-[10%] right-[15%] w-[400px] h-[400px] rounded-full bg-[var(--neon-violet)]/[0.05] blur-[100px] pointer-events-none" 
+          className="absolute bottom-[10%] right-[15%] w-[400px] h-[400px] rounded-full bg-[var(--neon-violet)]/[0.05] blur-[100px] pointer-events-none transform-gpu will-change-transform" 
         />
         <motion.div 
           style={{ x: parallaxX1, y: parallaxY2 }}
-          animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          className="absolute top-[50%] left-[60%] w-[300px] h-[300px] rounded-full bg-[var(--neon-magenta)]/[0.03] blur-[80px] pointer-events-none" 
+          className="absolute top-[50%] left-[60%] w-[300px] h-[300px] rounded-full bg-[var(--neon-magenta)]/[0.03] blur-[80px] pointer-events-none transform-gpu will-change-transform" 
         />
       </motion.div>
 
@@ -230,7 +224,7 @@ export default function HeroScene() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
             transition={{ delay: 1.2, duration: 2 }}
-            className="absolute inset-0 bg-[var(--neon-magenta)] blur-3xl animate-pulse pointer-events-none" 
+            className="absolute inset-0 bg-[var(--neon-magenta)] blur-3xl pointer-events-none transform-gpu" 
           />
         </motion.div>
 

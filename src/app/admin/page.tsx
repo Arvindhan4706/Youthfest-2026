@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings } from 'lucide-react';
-import { db, Visitor } from '@/lib/database';
+import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X } from 'lucide-react';
+import { db, Visitor, EventItem } from '@/lib/database';
 import { supabase } from '@/lib/supabase';
 
 export default function AdminPortal() {
@@ -15,17 +15,43 @@ export default function AdminPortal() {
   
   // Auth state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
   const [passkeyInput, setPasskeyInput] = useState('');
   const [authError, setAuthError] = useState(false);
+  const [loggedInEmail, setLoggedInEmail] = useState('');
   
   // Advanced Filters
   const [filterDept, setFilterDept] = useState('');
   const [filterYear, setFilterYear] = useState('');
 
   // Settings State
-  const [activeTab, setActiveTab] = useState<'visitors' | 'settings'>('visitors');
+  const [activeTab, setActiveTab] = useState<'visitors' | 'settings' | 'logs' | 'events'>('visitors');
   const [siteSettings, setSiteSettings] = useState<any>(null);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
+  
+  // Events State
+  const [events, setEvents] = useState<EventItem[]>([]);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
+  
+  // Logs State
+  const [adminLogs, setAdminLogs] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (activeTab === 'logs' && loggedInEmail === 'arvindhan476@gmail.com') {
+      fetchLogs();
+    }
+  }, [activeTab]);
+
+  const fetchLogs = async () => {
+    try {
+      const logs = await db.getAdminLogs();
+      setAdminLogs(logs);
+    } catch (err) {
+      console.error('Failed to fetch logs', err);
+    }
+  };
+
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -48,6 +74,7 @@ export default function AdminPortal() {
     setIsSavingSettings(true);
     try {
       await db.updateSiteSettings(siteSettings);
+      await db.logAdminAction(loggedInEmail, 'Updated Site Settings', siteSettings);
       alert('Settings saved successfully!');
     } catch (err) {
       alert('Failed to save settings');
@@ -59,32 +86,47 @@ export default function AdminPortal() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError(false);
+    setIsLoading(true);
     
     try {
-      const res = await fetch('/api/auth/admin', {
+      const res = await fetch('/api/auth/admin-secure', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ passkey: passkeyInput })
+        body: JSON.stringify({ email: emailInput, passkey: passkeyInput })
       });
       
-      if (res.ok) {
+      const data = await res.json();
+      
+      if (res.ok && data.success) {
+        setLoggedInEmail(data.email);
         setIsAuthenticated(true);
       } else {
         setAuthError(true);
       }
     } catch (error) {
       setAuthError(true);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleSignOut = async () => {
+    setIsAuthenticated(false);
+    setEmailInput('');
+    setPasskeyInput('');
+    setLoggedInEmail('');
   };
 
   const fetchData = async () => {
     try {
-      const [vData, aCount] = await Promise.all([
+      const [vData, aCount, eData] = await Promise.all([
         db.getAllVisitors(),
-        db.getAttendanceCount()
+        db.getAttendanceCount(),
+        db.getAllEvents()
       ]);
       setVisitors(vData);
       setAttendanceCount(aCount);
+      setEvents(eData);
     } catch (err) {
       console.error('Failed to fetch data:', err);
     } finally {
@@ -126,6 +168,52 @@ export default function AdminPortal() {
     document.body.removeChild(link);
   };
 
+  const handleSaveEvent = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const rulesStr = formData.get('rules') as string;
+    
+    const eventData: Omit<EventItem, 'created_at'> = {
+      id: (formData.get('id') as string).trim(),
+      track_id: (formData.get('track_id') as string).trim(),
+      title: (formData.get('title') as string).trim(),
+      description: (formData.get('description') as string).trim(),
+      team_size: (formData.get('team_size') as string).trim(),
+      fee: (formData.get('fee') as string).trim(),
+      difficulty: formData.get('difficulty') as 'Easy' | 'Medium' | 'Hard',
+      image_url: (formData.get('image_url') as string).trim(),
+      event_date: (formData.get('event_date') as string).trim(),
+      venue: (formData.get('venue') as string).trim(),
+      rules: rulesStr ? rulesStr.split('\n').map(r => r.trim()).filter(Boolean) : []
+    };
+
+    try {
+      if (editingEvent) {
+        await db.updateEvent(eventData.id, eventData);
+        await db.logAdminAction(loggedInEmail, 'Updated Event', { eventId: eventData.id });
+      } else {
+        await db.addEvent(eventData);
+        await db.logAdminAction(loggedInEmail, 'Added Event', { eventId: eventData.id });
+      }
+      setIsEventModalOpen(false);
+      setEditingEvent(null);
+      fetchData(); // Refresh events
+    } catch (error: any) {
+      alert('Error saving event: ' + error.message);
+    }
+  };
+
+  const handleDeleteEvent = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this event?')) return;
+    try {
+      await db.deleteEvent(id);
+      await db.logAdminAction(loggedInEmail, 'Deleted Event', { eventId: id });
+      fetchData(); // Refresh events
+    } catch (error: any) {
+      alert('Error deleting event: ' + error.message);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[#011213] text-white p-6 relative overflow-hidden flex flex-col">
       <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[var(--neon-cyan)]/5 rounded-full blur-[120px] pointer-events-none" />
@@ -146,10 +234,21 @@ export default function AdminPortal() {
               <Lock className="w-8 h-8 text-[var(--neon-cyan)]" />
             </div>
             <h1 className="text-2xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-wider mb-2">Restricted Access</h1>
-            <p className="text-xs text-gray-400 mb-8 font-mono">Enter Admin Passkey to continue</p>
+            <p className="text-xs text-gray-400 mb-8 font-mono">Enter Admin Credentials to continue</p>
             
             <form onSubmit={handleLogin} className="space-y-4">
-              <div>
+              <div className="space-y-4">
+                <div className="relative">
+                  <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  <input
+                    type="email"
+                    required
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    placeholder="Admin Email"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors font-mono tracking-wide"
+                  />
+                </div>
                 <div className="relative">
                   <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <input
@@ -157,11 +256,11 @@ export default function AdminPortal() {
                     required
                     value={passkeyInput}
                     onChange={(e) => setPasskeyInput(e.target.value)}
-                    placeholder="Enter Passkey..."
-                    className="w-full bg-black/40 border border-white/10 rounded-xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors font-mono tracking-[0.2em] text-center"
+                    placeholder="Global Passkey"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors font-mono tracking-[0.2em]"
                   />
                 </div>
-                {authError && <p className="text-red-400 text-xs mt-2 font-bold uppercase tracking-wider">Invalid Passkey</p>}
+                {authError && <p className="text-red-400 text-xs mt-2 font-bold uppercase tracking-wider text-center">Invalid Credentials</p>}
               </div>
               <button
                 type="submit"
@@ -186,12 +285,15 @@ export default function AdminPortal() {
             </h1>
           </div>
           
-          <div className="flex gap-4 w-full md:w-auto">
+          <div className="flex flex-wrap gap-4 w-full md:w-auto">
             <Link href="/scanner" className="flex-1 md:flex-none px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:border-[var(--neon-cyan)]/50 transition-colors font-bold text-sm text-center">
               Launch Scanner
             </Link>
             <button onClick={exportCSV} className="flex-1 md:flex-none px-6 py-3 rounded-xl bg-[var(--neon-cyan)] text-[#011213] font-bold text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
               <Download className="w-4 h-4" /> Export CSV
+            </button>
+            <button onClick={handleSignOut} className="flex-1 md:flex-none px-6 py-3 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/40 hover:text-white transition-colors font-bold text-sm text-center">
+              Sign Out
             </button>
           </div>
         </div>
@@ -227,6 +329,20 @@ export default function AdminPortal() {
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors ${activeTab === 'settings' ? 'bg-[var(--neon-violet)]/10 text-[var(--neon-violet)] border border-[var(--neon-violet)]/30' : 'text-gray-400 hover:text-white'}`}
           >
             <Settings className="w-4 h-4" /> Live Stats Settings
+          </button>
+          {loggedInEmail === 'arvindhan476@gmail.com' && (
+            <button 
+              onClick={() => setActiveTab('logs')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors ${activeTab === 'logs' ? 'bg-red-500/10 text-red-400 border border-red-500/30' : 'text-gray-400 hover:text-white'}`}
+            >
+              <ShieldCheck className="w-4 h-4" /> Audit Logs
+            </button>
+          )}
+          <button 
+            onClick={() => setActiveTab('events')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors ${activeTab === 'events' ? 'bg-[var(--neon-magenta)]/10 text-[var(--neon-magenta)] border border-[var(--neon-magenta)]/30' : 'text-gray-400 hover:text-white'}`}
+          >
+            <Calendar className="w-4 h-4" /> Events
           </button>
         </div>
 
@@ -267,6 +383,35 @@ export default function AdminPortal() {
                 </button>
               </div>
             </form>
+          </div>
+        ) : activeTab === 'logs' ? (
+          <div className="glass rounded-3xl border border-white/10 p-8 max-w-4xl">
+            <h2 className="text-2xl font-[var(--font-orbitron)] font-black mb-6 text-red-400">Security Audit Logs</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-white/10 text-gray-400 font-mono text-xs uppercase">
+                    <th className="py-4 font-bold">Admin Email</th>
+                    <th className="py-4 font-bold">Action</th>
+                    <th className="py-4 font-bold">Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminLogs.map((log: any) => (
+                    <tr key={log.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                      <td className="py-4 font-mono text-[var(--neon-cyan)]">{log.admin_email}</td>
+                      <td className="py-4 font-bold">{log.action}</td>
+                      <td className="py-4 text-gray-400 text-xs">{new Date(log.created_at).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                  {adminLogs.length === 0 && (
+                    <tr>
+                      <td colSpan={3} className="py-8 text-center text-gray-500 font-mono">No logs found</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         ) : activeTab === 'visitors' ? (
           <>
@@ -346,6 +491,149 @@ export default function AdminPortal() {
           </div>
         </div>
         </>
+        ) : activeTab === 'events' ? (
+          <>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-[var(--font-orbitron)] font-black text-[var(--neon-magenta)]">Event Management</h2>
+              <button 
+                onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }}
+                className="px-4 py-2 rounded-xl bg-[var(--neon-magenta)] text-white font-bold text-sm hover:opacity-90 transition-opacity flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" /> Add Event
+              </button>
+            </div>
+            
+            <div className="glass rounded-3xl border border-white/10 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm whitespace-nowrap">
+                  <thead className="bg-white/5 border-b border-white/10">
+                    <tr>
+                      <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Event</th>
+                      <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Track</th>
+                      <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Difficulty</th>
+                      <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan={4} className="px-6 py-12 text-center text-gray-400">
+                          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-[var(--neon-magenta)]" />
+                        </td>
+                      </tr>
+                    ) : events.length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="px-6 py-12 text-center text-gray-400">No events found.</td>
+                      </tr>
+                    ) : (
+                      events.map(event => (
+                        <tr key={event.id} className="hover:bg-white/[0.02]">
+                          <td className="px-6 py-4">
+                            <div className="font-bold text-white">{event.title}</div>
+                            <div className="text-xs text-gray-500">{event.event_date}</div>
+                          </td>
+                          <td className="px-6 py-4 text-gray-300 font-mono text-xs">{event.track_id}</td>
+                          <td className="px-6 py-4">
+                            <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full border ${event.difficulty === 'Easy' ? 'border-green-500/30 text-green-400 bg-green-500/10' : event.difficulty === 'Medium' ? 'border-yellow-500/30 text-yellow-400 bg-yellow-500/10' : 'border-red-500/30 text-red-400 bg-red-500/10'}`}>
+                              {event.difficulty}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <button onClick={() => { setEditingEvent(event); setIsEventModalOpen(true); }} className="text-[var(--neon-cyan)] hover:text-white mr-4 p-2 transition-colors">
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => handleDeleteEvent(event.id)} className="text-red-400 hover:text-red-300 p-2 transition-colors">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {isEventModalOpen && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="bg-[#030014] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative"
+                >
+                  <button onClick={() => setIsEventModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white">
+                    <X className="w-5 h-5" />
+                  </button>
+                  <div className="p-6 md:p-8">
+                    <h2 className="text-2xl font-[var(--font-orbitron)] font-black text-white mb-6">
+                      {editingEvent ? 'Edit Event' : 'Add New Event'}
+                    </h2>
+                    <form onSubmit={handleSaveEvent} className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Event ID</label>
+                          <input name="id" defaultValue={editingEvent?.id} required disabled={!!editingEvent} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white disabled:opacity-50" placeholder="e.g. main-1" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Track ID</label>
+                          <select name="track_id" defaultValue={editingEvent?.track_id || 'pre-events'} className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white">
+                            <option value="pre-events">Pre-Events</option>
+                            <option value="main-events">Main Events</option>
+                            <option value="workshops">Workshops</option>
+                          </select>
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Title</label>
+                          <input name="title" defaultValue={editingEvent?.title} required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" />
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Description</label>
+                          <textarea name="description" defaultValue={editingEvent?.description} required rows={3} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Team Size</label>
+                          <input name="team_size" defaultValue={editingEvent?.team_size} required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="e.g. Solo, Duo, Squad" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Fee</label>
+                          <input name="fee" defaultValue={editingEvent?.fee} required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="e.g. ₹100" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Difficulty</label>
+                          <select name="difficulty" defaultValue={editingEvent?.difficulty || 'Medium'} className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white">
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Date & Time</label>
+                          <input name="event_date" defaultValue={editingEvent?.event_date} required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="e.g. Day 1 - 10:00 AM" />
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Venue</label>
+                          <input name="venue" defaultValue={editingEvent?.venue} required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" />
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Image URL</label>
+                          <input name="image_url" defaultValue={editingEvent?.image_url} required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" />
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Rules (One per line)</label>
+                          <textarea name="rules" defaultValue={editingEvent?.rules.join('\n')} rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Rule 1\nRule 2" />
+                        </div>
+                      </div>
+                      <div className="pt-4 flex gap-4">
+                        <button type="submit" className="flex-1 py-3 bg-[var(--neon-magenta)] text-white font-bold rounded-xl hover:opacity-90">
+                          {editingEvent ? 'Update Event' : 'Create Event'}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </>
         ) : null}
         </div>
       )}

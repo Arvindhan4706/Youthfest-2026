@@ -3,6 +3,7 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../../lib/useStore';
+import { db } from '../../lib/database';
 import {
   Trophy, Users, Layers, BadgeAlert, ArrowRight,
   Code2, Palette, Gamepad2, Globe, Sparkles, BookOpen, Cpu, Search, Filter,
@@ -20,6 +21,7 @@ interface EventItem {
   date: string;
   venue: string;
   rules: string[];
+  track_id?: string;
 }
 
 interface Track {
@@ -37,19 +39,13 @@ const defaultRules = [
   "Any form of indiscipline or rule violation will lead to immediate disqualification."
 ];
 
-const TRACKS: Track[] = [
+const TRACKS_TEMPLATE: Omit<Track, 'events'>[] = [
   {
     id: 'pre-events',
     name: 'Pre-Events',
     icon: <Users className="w-5 h-5" />,
     color: '#00f0ff',
     tagline: 'The Warm Up.',
-    events: [
-      { id: 'pre-1', title: 'Mock Parliament', desc: 'Debate, discuss, and legislate in a simulated parliamentary session.', team: 'Solo', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1541872519183-424a1b068a0a?auto=format&fit=crop&w=600&q=80', date: 'Day 1 - 10:00 AM', venue: 'Main Auditorium', rules: ["Formal attire is strictly mandatory.", ...defaultRules] },
-      { id: 'pre-2', title: 'Charity Match', desc: 'Participate in a friendly sports match to raise funds for a good cause.', team: 'Squad', fee: '₹200', difficulty: 'Easy', image: 'https://images.unsplash.com/photo-1518605368461-1e122705b766?auto=format&fit=crop&w=600&q=80', date: 'Day 1 - 4:00 PM', venue: 'Campus Grounds', rules: ["All proceeds go to charity.", ...defaultRules] },
-      { id: 'pre-3', title: 'Chess', desc: 'Strategic battle on the 64 squares. Prove you are the grandmaster.', team: 'Solo', fee: '₹50', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1528819622765-d6bcf132f793?auto=format&fit=crop&w=600&q=80', date: 'Day 2 - 9:00 AM', venue: 'Library Hall', rules: ["Standard FIDE rules apply.", ...defaultRules] },
-      { id: 'pre-4', title: 'Pickle Ball', desc: 'Fast-paced, fun, and highly competitive paddle sport.', team: 'Duo', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1622228945638-3f5f3e9e3e3b?auto=format&fit=crop&w=600&q=80', date: 'Day 2 - 2:00 PM', venue: 'Indoor Sports Complex', rules: ["Standard pickleball tournament rules apply.", ...defaultRules] },
-    ],
   },
   {
     id: 'main-events',
@@ -57,12 +53,6 @@ const TRACKS: Track[] = [
     icon: <Sparkles className="w-5 h-5" />,
     color: '#ff006e',
     tagline: 'The Grand Showdown.',
-    events: [
-      { id: 'main-1', title: 'Squid Game', desc: 'Survive a series of intense, high-stakes childhood games.', team: 'Solo', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1616091216791-a5360b5fc78a?auto=format&fit=crop&w=600&q=80', date: 'Day 3 - 9:00 AM', venue: 'Main Arena', rules: ["Eliminated players must leave the arena immediately.", ...defaultRules] },
-      { id: 'main-2', title: 'Case Closed', desc: 'A murder mystery event. Gather clues, interrogate suspects, and solve the crime.', team: 'Squad', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1587399564875-c992c6ec35c2?auto=format&fit=crop&w=600&q=80', date: 'Day 3 - 1:00 PM', venue: 'Mystery Rooms', rules: ["Time limit of 60 minutes to solve the case.", ...defaultRules] },
-      { id: 'main-3', title: '7 Keys', desc: 'An ultimate escape room challenge. Find the 7 keys to unlock the final door.', team: 'Squad', fee: '₹400', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?auto=format&fit=crop&w=600&q=80', date: 'Day 4 - 10:00 AM', venue: 'Escape Zone', rules: ["No physical force should be used to open locks.", ...defaultRules] },
-      { id: 'main-4', title: 'Cypher', desc: 'The ultimate cryptic puzzle solving and cryptography challenge.', team: 'Duo', fee: '₹200', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format&fit=crop&w=600&q=80', date: 'Day 4 - 2:00 PM', venue: 'Tech Hub', rules: ["Internet access is allowed but sharing answers is strictly prohibited.", ...defaultRules] },
-    ],
   },
   {
     id: 'workshops',
@@ -70,10 +60,7 @@ const TRACKS: Track[] = [
     icon: <BookOpen className="w-5 h-5" />,
     color: '#10b981',
     tagline: 'Learn. Apply. Master.',
-    events: [
-      { id: 'work-1', title: 'Upcoming Workshop', desc: 'Details for this workshop will be updated soon.', team: 'Solo', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1639762681485-074b7f4fc431?auto=format&fit=crop&w=600&q=80', date: 'TBA', venue: 'Workshop Hall', rules: ["Bring your own laptop.", ...defaultRules] },
-    ],
-  },
+  }
 ];
 
 function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColor: string; onClick: () => void }) {
@@ -329,6 +316,43 @@ export default function EventShowcaseScene() {
   const [teamSizeFilter, setTeamSizeFilter] = useState('All');
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
   
+  const [dbEvents, setDbEvents] = useState<EventItem[]>([]);
+  const [isFetchingEvents, setIsFetchingEvents] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const events = await db.getAllEvents();
+        const mappedEvents: EventItem[] = events.map(e => ({
+          id: e.id,
+          title: e.title,
+          desc: e.description,
+          team: e.team_size,
+          fee: e.fee,
+          difficulty: e.difficulty,
+          image: e.image_url,
+          date: e.event_date,
+          venue: e.venue,
+          rules: e.rules,
+          track_id: e.track_id
+        }));
+        setDbEvents(mappedEvents);
+      } catch (err) {
+        console.error('Failed to fetch events', err);
+      } finally {
+        setIsFetchingEvents(false);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  const TRACKS = useMemo(() => {
+    return TRACKS_TEMPLATE.map(t => ({
+      ...t,
+      events: dbEvents.filter(e => e.track_id === t.id)
+    }));
+  }, [dbEvents]);
+
   const track = TRACKS[activeTrack];
 
   // Derive Team Sizes based on data

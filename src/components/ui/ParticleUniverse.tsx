@@ -97,6 +97,7 @@ export default function ParticleUniverse() {
   const [webGLSupported, setWebGLSupported] = React.useState<boolean | null>(null);
 
   React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setWebGLSupported(isWebGLAvailable());
   }, []);
 
@@ -108,7 +109,7 @@ export default function ParticleUniverse() {
     <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
       {webGLSupported && (
         <ErrorBoundary>
-          <Canvas camera={{ position: [0, 0, 1] }}>
+          <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 1] }} performance={{ min: 0.5 }}>
             <Universe />
           </Canvas>
         </ErrorBoundary>

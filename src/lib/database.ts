@@ -41,6 +41,29 @@ export interface SiteSettings {
   updated_at: string;
 }
 
+export interface AdminLog {
+  id: string;
+  admin_email: string;
+  action: string;
+  details: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface EventItem {
+  id: string;
+  track_id: string;
+  title: string;
+  description: string;
+  team_size: string;
+  fee: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  image_url: string;
+  event_date: string;
+  venue: string;
+  rules: string[];
+  created_at?: string;
+}
+
 // ─── Public API ──────────────────────────────────────────
 
 export const db = {
@@ -121,7 +144,7 @@ export const db = {
    */
   async updateProfile(email: string, updates: { name?: string; email?: string; college?: string; department?: string; year?: string; gender?: string; city?: string }): Promise<Visitor> {
     const emailLower = email.toLowerCase().trim();
-    const payload: any = {};
+    const payload: Partial<Visitor> = {};
     if (updates.name) payload.name = updates.name.trim();
     if (updates.college) payload.college = updates.college.trim();
     if (updates.department) payload.department = updates.department.trim();
@@ -251,6 +274,34 @@ export const db = {
   },
 
   /**
+   * Log an admin action
+   */
+  async logAdminAction(adminEmail: string, action: string, details?: Record<string, unknown>): Promise<void> {
+    try {
+      await supabase.from('admin_logs').insert({
+        admin_email: adminEmail,
+        action,
+        details: details || {}
+      });
+    } catch (err) {
+      console.error('Failed to log admin action', err);
+    }
+  },
+
+  /**
+   * Get all admin logs (Super Admin only)
+   */
+  async getAdminLogs(): Promise<AdminLog[]> {
+    const { data, error } = await supabase
+      .from('admin_logs')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+
+  /**
    * Verify a ticket for scanner and mark attendance.
    */
   async verifyTicket(email: string, eventId: string): Promise<Visitor> {
@@ -350,5 +401,59 @@ export const db = {
 
     if (error) throw new Error(error.message);
     return data as SiteSettings;
+  },
+
+  /**
+   * Get all events from the database
+   */
+  async getAllEvents(): Promise<EventItem[]> {
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+
+  /**
+   * Add a new event
+   */
+  async addEvent(event: Omit<EventItem, 'created_at'>): Promise<EventItem> {
+    const { data, error } = await supabase
+      .from('events')
+      .insert(event)
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  /**
+   * Update an existing event
+   */
+  async updateEvent(id: string, updates: Partial<EventItem>): Promise<EventItem> {
+    const { data, error } = await supabase
+      .from('events')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  /**
+   * Delete an event
+   */
+  async deleteEvent(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('events')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw new Error(error.message);
   }
 };
