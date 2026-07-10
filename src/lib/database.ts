@@ -64,6 +64,15 @@ export interface EventItem {
   created_at?: string;
 }
 
+export type Role = 'Super Admin' | 'Editor' | 'Scanner' | 'Viewer';
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  role: Role;
+  created_at: string;
+}
+
 // ─── Public API ──────────────────────────────────────────
 
 export const db = {
@@ -451,6 +460,74 @@ export const db = {
   async deleteEvent(id: string): Promise<void> {
     const { error } = await supabase
       .from('events')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw new Error(error.message);
+  },
+
+  /**
+   * Get an admin user by email
+   */
+  async getAdminUserByEmail(email: string): Promise<AdminUser | null> {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('*')
+      .eq('email', email.toLowerCase().trim())
+      .maybeSingle();
+
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  /**
+   * Get all admin users (Super Admin only)
+   */
+  async getAllAdminUsers(): Promise<AdminUser[]> {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+
+  /**
+   * Add a new admin user
+   */
+  async addAdminUser(email: string, role: Role): Promise<AdminUser> {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .insert({ email: email.toLowerCase().trim(), role })
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  /**
+   * Update an admin user's role
+   */
+  async updateAdminUser(id: string, role: Role): Promise<AdminUser> {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .update({ role })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
+  /**
+   * Delete an admin user
+   */
+  async deleteAdminUser(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('admin_users')
       .delete()
       .eq('id', id);
 

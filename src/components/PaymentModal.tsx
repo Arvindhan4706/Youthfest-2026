@@ -90,6 +90,7 @@ export default function PaymentModal() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
+              email: user?.email
             })
           });
           

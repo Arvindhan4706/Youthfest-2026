@@ -28,19 +28,19 @@ export async function POST(request: Request) {
     // Validate the incoming data
     const validatedData = registerSchema.parse(body);
 
-    // Call the database logic (which runs on the server side here)
-    const newVisitor = await db.register(validatedData);
-
     // Registration Fee Amount (e.g., Rs 500 = 50000 paise)
     const amountInPaise = 50000;
 
-    // Create a dynamic Razorpay order
+    // Create a dynamic Razorpay order BEFORE inserting user
     const options = {
       amount: amountInPaise,
       currency: "INR",
-      receipt: `receipt_${newVisitor.id}`,
+      receipt: `receipt_${Date.now()}_${Math.floor(Math.random()*1000)}`,
     };
     const order = await razorpay.orders.create(options);
+
+    // Call the database logic only if order creation succeeds
+    const newVisitor = await db.register(validatedData);
 
     return NextResponse.json({ 
       success: true, 

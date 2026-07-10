@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { db } from '@/lib/database';
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, email } = body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json({ error: 'Missing required payment details' }, { status: 400 });
@@ -21,11 +22,16 @@ export async function POST(req: Request) {
     const isAuthentic = expectedSignature === razorpay_signature;
 
     if (isAuthentic) {
-      // Payment is verified
+      // Actually update the database status here
+      if (email) {
+        await db.updatePaymentStatus(email, 'paid');
+      }
+      
       return NextResponse.json(
-        { message: 'Payment successfully verified', isAuthentic: true },
+        { success: true, message: 'Payment successfully verified', isAuthentic: true },
         { status: 200 }
       );
+
     } else {
       return NextResponse.json(
         { error: 'Invalid signature', isAuthentic: false },

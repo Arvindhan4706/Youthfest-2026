@@ -4,40 +4,40 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, IndianRupee, Sparkles } from 'lucide-react';
 
-// Floating Currency Background Component
 const FloatingCurrency = () => {
-  const particles = useMemo(() => Array.from({ length: 20 }), []);
+  const particles = useMemo(() => {
+    return Array.from({ length: 20 }).map(() => ({
+      left: `${Math.random() * 100}%`,
+      size: Math.random() * 20 + 10,
+      duration: Math.random() * 10 + 10,
+      delay: Math.random() * 5,
+      opacity: Math.random() * 0.15 + 0.05,
+      xTarget: `${Math.random() * 100 - 50}px`
+    }));
+  }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      {particles.map((_, i) => {
-        const left = `${Math.random() * 100}%`;
-        const size = Math.random() * 20 + 10;
-        const duration = Math.random() * 10 + 10;
-        const delay = Math.random() * 5;
-        const opacity = Math.random() * 0.15 + 0.05;
-
-        return (
-          <motion.div
-            key={i}
-            className="absolute bottom-[-10%] text-[var(--neon-cyan)] flex items-center justify-center font-bold"
-            style={{ left, fontSize: size, opacity }}
-            animate={{
-              y: ['0vh', '-110vh'],
-              x: ['0px', `${Math.random() * 100 - 50}px`],
-              rotate: [0, 360],
-            }}
-            transition={{
-              duration,
-              delay,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-          >
-            ₹
-          </motion.div>
-        );
-      })}
+      {particles.map((p, i) => (
+        <motion.div
+          key={i}
+          className="absolute bottom-[-10%] text-[var(--neon-cyan)] flex items-center justify-center font-bold"
+          style={{ left: p.left, fontSize: p.size, opacity: p.opacity }}
+          animate={{
+            y: ['0vh', '-110vh'],
+            x: ['0px', p.xTarget],
+            rotate: [0, 360],
+          }}
+          transition={{
+            duration: p.duration,
+            delay: p.delay,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
+        >
+          ₹
+        </motion.div>
+      ))}
     </div>
   );
 };

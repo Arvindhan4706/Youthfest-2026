@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/database';
 
-// You can add your team members' emails here
-const ALLOWED_ADMIN_EMAILS = [
-  'arvindhan476@gmail.com', // Super Admin
-];
+// You can add your team members' emails here or in .env.local
+const defaultEmails = ['arvindhan476@gmail.com'];
 
 export async function POST(request: Request) {
   try {
@@ -14,24 +12,40 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email and Passkey are required' }, { status: 400 });
     }
 
-    // 1. Verify Passkey
-    const correctPasskey = process.env.ADMIN_PASSKEY || 'admin123';
+    // 1. Verify Passkey (Reads from NEXT_PUBLIC_ADMIN_PASSKEY)
+    const correctPasskey = process.env.NEXT_PUBLIC_ADMIN_PASSKEY || process.env.ADMIN_PASSKEY || 'admin123';
     if (passkey !== correctPasskey) {
       return NextResponse.json({ error: 'Invalid Passkey' }, { status: 401 });
     }
 
-    // 2. Verify Email Whitelist
+    // 2. Verify Email & Role from Database
     const normalizedEmail = email.toLowerCase().trim();
-    if (!ALLOWED_ADMIN_EMAILS.includes(normalizedEmail)) {
+    
+    // Auto-initialize first admin if table is empty
+    let allUsers = await db.getAllAdminUsers().catch(() => []);
+    if (allUsers.length === 0) {
+      const envEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS 
+        ? process.env.NEXT_PUBLIC_ADMIN_EMAILS.split(',').map(e => e.trim().toLowerCase()) 
+        : defaultEmails;
+      
+      for (const envEmail of envEmails) {
+        await db.addAdminUser(envEmail, 'Super Admin').catch(() => {});
+      }
+      allUsers = await db.getAllAdminUsers().catch(() => []);
+    }
+
+    const adminUser = await db.getAdminUserByEmail(normalizedEmail).catch(() => null);
+
+    if (!adminUser) {
       // Secretly log unauthorized access attempts for security
-      await db.logAdminAction('UNAUTHORIZED', 'Failed Login Attempt (Not Whitelisted)', { email: normalizedEmail }).catch(() => {});
+      await db.logAdminAction('UNAUTHORIZED', 'Failed Login Attempt (Not in DB)', { email: normalizedEmail }).catch(() => {});
       return NextResponse.json({ error: 'Email not authorized' }, { status: 403 });
     }
 
     // 3. Log successful login
     await db.logAdminAction(normalizedEmail, 'Login', { ip: request.headers.get('x-forwarded-for') }).catch(() => {});
 
-    return NextResponse.json({ success: true, email: normalizedEmail }, { status: 200 });
+    return NextResponse.json({ success: true, email: normalizedEmail, role: adminUser.role }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

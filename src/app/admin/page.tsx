@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X } from 'lucide-react';
-import { db, Visitor, EventItem } from '@/lib/database';
+import { db, Visitor, EventItem, AdminUser, Role } from '@/lib/database';
 import { supabase } from '@/lib/supabase';
 
 export default function AdminPortal() {
@@ -19,13 +19,14 @@ export default function AdminPortal() {
   const [passkeyInput, setPasskeyInput] = useState('');
   const [authError, setAuthError] = useState(false);
   const [loggedInEmail, setLoggedInEmail] = useState('');
+  const [userRole, setUserRole] = useState<Role | ''>('');
   
   // Advanced Filters
   const [filterDept, setFilterDept] = useState('');
   const [filterYear, setFilterYear] = useState('');
 
   // Settings State
-  const [activeTab, setActiveTab] = useState<'visitors' | 'settings' | 'logs' | 'events'>('visitors');
+  const [activeTab, setActiveTab] = useState<'visitors' | 'settings' | 'logs' | 'events' | 'users'>('visitors');
   const [siteSettings, setSiteSettings] = useState<any>(null);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   
@@ -37,11 +38,53 @@ export default function AdminPortal() {
   // Logs State
   const [adminLogs, setAdminLogs] = useState<any[]>([]);
 
+  // Users State
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserRole, setNewUserRole] = useState<Role>('Viewer');
+
   useEffect(() => {
-    if (activeTab === 'logs' && loggedInEmail === 'arvindhan476@gmail.com') {
+    if (activeTab === 'logs' && userRole === 'Super Admin') {
       fetchLogs();
     }
-  }, [activeTab]);
+    if (activeTab === 'users' && userRole === 'Super Admin') {
+      fetchAdminUsers();
+    }
+  }, [activeTab, userRole]);
+
+  const fetchAdminUsers = async () => {
+    try {
+      const users = await db.getAllAdminUsers();
+      setAdminUsers(users);
+    } catch (err) {
+      console.error('Failed to fetch admin users', err);
+    }
+  };
+
+  const handleAddAdminUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await db.addAdminUser(newUserEmail, newUserRole);
+      await db.logAdminAction(loggedInEmail, 'Added Admin User', { email: newUserEmail, role: newUserRole });
+      setNewUserEmail('');
+      fetchAdminUsers();
+      alert('User added successfully');
+    } catch (err: any) {
+      alert('Failed to add user: ' + err.message);
+    }
+  };
+
+  const handleDeleteAdminUser = async (id: string, email: string) => {
+    if (!confirm(`Are you sure you want to remove ${email}?`)) return;
+    try {
+      await db.deleteAdminUser(id);
+      await db.logAdminAction(loggedInEmail, 'Removed Admin User', { email });
+      fetchAdminUsers();
+    } catch (err: any) {
+      alert('Failed to remove user: ' + err.message);
+    }
+  };
+
 
   const fetchLogs = async () => {
     try {
@@ -52,13 +95,6 @@ export default function AdminPortal() {
     }
   };
 
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchData();
-      fetchSettings();
-    }
-  }, [isAuthenticated]);
 
   const fetchSettings = async () => {
     try {
@@ -99,7 +135,11 @@ export default function AdminPortal() {
       
       if (res.ok && data.success) {
         setLoggedInEmail(data.email);
+        setUserRole(data.role);
         setIsAuthenticated(true);
+        if (data.role === 'Scanner') {
+           window.location.href = '/scanner';
+        }
       } else {
         setAuthError(true);
       }
@@ -115,6 +155,7 @@ export default function AdminPortal() {
     setEmailInput('');
     setPasskeyInput('');
     setLoggedInEmail('');
+    setUserRole('');
   };
 
   const fetchData = async () => {
@@ -133,6 +174,13 @@ export default function AdminPortal() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchData();
+      fetchSettings();
+    }
+  }, [isAuthenticated, fetchData, fetchSettings]);
 
   const filteredVisitors = visitors.filter(v => {
     const matchesSearch = v.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -317,33 +365,47 @@ export default function AdminPortal() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 mb-8 border-b border-white/10 pb-4">
-          <button 
-            onClick={() => setActiveTab('visitors')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors ${activeTab === 'visitors' ? 'bg-[var(--neon-cyan)]/10 text-[var(--neon-cyan)] border border-[var(--neon-cyan)]/30' : 'text-gray-400 hover:text-white'}`}
-          >
-            <Users className="w-4 h-4" /> Visitors
-          </button>
-          <button 
-            onClick={() => setActiveTab('settings')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors ${activeTab === 'settings' ? 'bg-[var(--neon-violet)]/10 text-[var(--neon-violet)] border border-[var(--neon-violet)]/30' : 'text-gray-400 hover:text-white'}`}
-          >
-            <Settings className="w-4 h-4" /> Live Stats Settings
-          </button>
-          {loggedInEmail === 'arvindhan476@gmail.com' && (
+        <div className="flex gap-4 mb-8 border-b border-white/10 pb-4 overflow-x-auto">
+          {['Super Admin', 'Editor', 'Viewer'].includes(userRole) && (
+            <button 
+              onClick={() => setActiveTab('visitors')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'visitors' ? 'bg-[var(--neon-cyan)]/10 text-[var(--neon-cyan)] border border-[var(--neon-cyan)]/30' : 'text-gray-400 hover:text-white'}`}
+            >
+              <Users className="w-4 h-4" /> Visitors
+            </button>
+          )}
+          {userRole === 'Super Admin' && (
+            <button 
+              onClick={() => setActiveTab('settings')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'settings' ? 'bg-[var(--neon-violet)]/10 text-[var(--neon-violet)] border border-[var(--neon-violet)]/30' : 'text-gray-400 hover:text-white'}`}
+            >
+              <Settings className="w-4 h-4" /> Live Stats
+            </button>
+          )}
+          {userRole === 'Super Admin' && (
+            <button 
+              onClick={() => setActiveTab('users')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'users' ? 'bg-orange-500/10 text-orange-400 border border-orange-500/30' : 'text-gray-400 hover:text-white'}`}
+            >
+              <Users className="w-4 h-4" /> Manage Roles
+            </button>
+          )}
+          {userRole === 'Super Admin' && (
             <button 
               onClick={() => setActiveTab('logs')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors ${activeTab === 'logs' ? 'bg-red-500/10 text-red-400 border border-red-500/30' : 'text-gray-400 hover:text-white'}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'logs' ? 'bg-red-500/10 text-red-400 border border-red-500/30' : 'text-gray-400 hover:text-white'}`}
             >
               <ShieldCheck className="w-4 h-4" /> Audit Logs
             </button>
           )}
-          <button 
-            onClick={() => setActiveTab('events')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors ${activeTab === 'events' ? 'bg-[var(--neon-magenta)]/10 text-[var(--neon-magenta)] border border-[var(--neon-magenta)]/30' : 'text-gray-400 hover:text-white'}`}
-          >
-            <Calendar className="w-4 h-4" /> Events
-          </button>
+          {['Super Admin', 'Editor', 'Viewer'].includes(userRole) && (
+            <button 
+              onClick={() => setActiveTab('events')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'events' ? 'bg-[var(--neon-magenta)]/10 text-[var(--neon-magenta)] border border-[var(--neon-magenta)]/30' : 'text-gray-400 hover:text-white'}`}
+            >
+              <Calendar className="w-4 h-4" /> Events
+            </button>
+          )}
         </div>
 
         {activeTab === 'settings' && siteSettings ? (
@@ -407,6 +469,75 @@ export default function AdminPortal() {
                   {adminLogs.length === 0 && (
                     <tr>
                       <td colSpan={3} className="py-8 text-center text-gray-500 font-mono">No logs found</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : activeTab === 'users' ? (
+          <div className="glass rounded-3xl border border-white/10 p-8 max-w-4xl">
+            <h2 className="text-2xl font-[var(--font-orbitron)] font-black mb-6 text-orange-400">Manage Roles</h2>
+            
+            <form onSubmit={handleAddAdminUser} className="flex flex-col md:flex-row gap-4 mb-8 bg-white/5 p-4 rounded-xl border border-white/10">
+              <input
+                type="email"
+                placeholder="User Email"
+                required
+                value={newUserEmail}
+                onChange={(e) => setNewUserEmail(e.target.value)}
+                className="flex-1 bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-orange-500"
+              />
+              <select 
+                value={newUserRole}
+                onChange={(e) => setNewUserRole(e.target.value as Role)}
+                className="bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-orange-500"
+              >
+                <option value="Super Admin">Super Admin</option>
+                <option value="Editor">Editor</option>
+                <option value="Scanner">Scanner</option>
+                <option value="Viewer">Viewer</option>
+              </select>
+              <button type="submit" className="bg-orange-500/20 text-orange-400 border border-orange-500/30 hover:bg-orange-500 hover:text-white transition-colors font-bold rounded-lg px-6 py-3 text-sm flex items-center gap-2">
+                <Plus className="w-4 h-4" /> Add User
+              </button>
+            </form>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-white/10 text-gray-400 font-mono text-xs uppercase">
+                    <th className="py-4 font-bold">Email</th>
+                    <th className="py-4 font-bold">Role</th>
+                    <th className="py-4 font-bold text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminUsers.map((user) => (
+                    <tr key={user.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                      <td className="py-4 font-mono text-white">{user.email}</td>
+                      <td className="py-4">
+                        <span className={`text-xs font-bold px-2 py-1 rounded-full border 
+                          ${user.role === 'Super Admin' ? 'border-orange-500/30 text-orange-400 bg-orange-500/10' : 
+                            user.role === 'Editor' ? 'border-[var(--neon-magenta)]/30 text-[var(--neon-magenta)] bg-[var(--neon-magenta)]/10' : 
+                            user.role === 'Scanner' ? 'border-[var(--neon-cyan)]/30 text-[var(--neon-cyan)] bg-[var(--neon-cyan)]/10' : 
+                            'border-gray-500/30 text-gray-400 bg-gray-500/10'}`}
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="py-4 text-right">
+                        {user.email !== loggedInEmail && (
+                          <button onClick={() => handleDeleteAdminUser(user.id, user.email)} className="text-red-400 hover:text-red-300 p-2 transition-colors">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                  {adminUsers.length === 0 && (
+                    <tr>
+                      <td colSpan={3} className="py-8 text-center text-gray-500 font-mono">No users found</td>
                     </tr>
                   )}
                 </tbody>
@@ -495,12 +626,14 @@ export default function AdminPortal() {
           <>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-[var(--font-orbitron)] font-black text-[var(--neon-magenta)]">Event Management</h2>
-              <button 
-                onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }}
-                className="px-4 py-2 rounded-xl bg-[var(--neon-magenta)] text-white font-bold text-sm hover:opacity-90 transition-opacity flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" /> Add Event
-              </button>
+              {['Super Admin', 'Editor'].includes(userRole) && (
+                <button 
+                  onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }}
+                  className="px-4 py-2 rounded-xl bg-[var(--neon-magenta)] text-white font-bold text-sm hover:opacity-90 transition-opacity flex items-center gap-2"
+                >
+                  <Plus className="w-4 h-4" /> Add Event
+                </button>
+              )}
             </div>
             
             <div className="glass rounded-3xl border border-white/10 overflow-hidden">
@@ -539,12 +672,18 @@ export default function AdminPortal() {
                             </span>
                           </td>
                           <td className="px-6 py-4 text-right">
-                            <button onClick={() => { setEditingEvent(event); setIsEventModalOpen(true); }} className="text-[var(--neon-cyan)] hover:text-white mr-4 p-2 transition-colors">
-                              <Edit className="w-4 h-4" />
-                            </button>
-                            <button onClick={() => handleDeleteEvent(event.id)} className="text-red-400 hover:text-red-300 p-2 transition-colors">
-                              <Trash2 className="w-4 h-4" />
-                            </button>
+                            {['Super Admin', 'Editor'].includes(userRole) ? (
+                              <>
+                                <button onClick={() => { setEditingEvent(event); setIsEventModalOpen(true); }} className="text-[var(--neon-cyan)] hover:text-white mr-4 p-2 transition-colors">
+                                  <Edit className="w-4 h-4" />
+                                </button>
+                                <button onClick={() => handleDeleteEvent(event.id)} className="text-red-400 hover:text-red-300 p-2 transition-colors">
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </>
+                            ) : (
+                               <span className="text-xs text-gray-500 font-mono">Read Only</span>
+                            )}
                           </td>
                         </tr>
                       ))

@@ -36,6 +36,47 @@ function useCountUp(target: number, duration: number = 2200) {
 
 import { db, SiteSettings } from '@/lib/database';
 
+function StatCard({ stat, idx }: { stat: any, idx: number }) {
+  const { count, ref } = useCountUp(stat.value);
+  const Icon = stat.icon;
+  const colSpanClass = stat.label === 'Prize Pool' ? 'col-span-2 md:col-span-1' : 'col-span-1';
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay: idx * 0.1 }}
+      className={`group relative p-6 rounded-2xl glass-strong hover:bg-white/[0.08] transition-all duration-500 text-center cursor-default overflow-hidden flex flex-col items-center justify-center ${colSpanClass}`}
+      style={{ boxShadow: `0 0 30px ${stat.color}08, inset 0 0 30px ${stat.color}04` }}
+    >
+      <div
+        className="absolute -top-8 -right-8 w-20 h-20 rounded-full blur-[30px] opacity-20 group-hover:opacity-40 transition-opacity"
+        style={{ background: stat.color }}
+      />
+      <div
+        className="mb-4 w-12 h-12 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110"
+        style={{ background: `${stat.color}15`, border: `1px solid ${stat.color}30` }}
+      >
+        <Icon className="w-5 h-5" style={{ color: stat.color }} />
+      </div>
+      <div className="text-3xl font-[var(--font-orbitron)] font-black text-white tabular-nums mb-1 flex justify-center items-end">
+        <span>{stat.prefix}</span>
+        <span>{count.toLocaleString('en-IN')}</span>
+        <span>{stat.suffix}</span>
+      </div>
+      <div className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-semibold mt-2">
+        {stat.label}
+      </div>
+      <div
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] group-hover:w-3/4 transition-all duration-500"
+        style={{ background: `linear-gradient(90deg, transparent, ${stat.color}, transparent)` }}
+      />
+    </motion.div>
+  );
+}
+
 export default function StatsBarScene() {
   const [statsData, setStatsData] = useState<SiteSettings | null>(null);
 
@@ -67,17 +108,13 @@ export default function StatsBarScene() {
 
   return (
     <section id="about" className="relative py-24 overflow-hidden" style={{ background: 'linear-gradient(180deg, #010008 0%, #05001a 50%, #011213 100%)' }}>
-      {/* Subtle grid */}
       <div className="absolute inset-0 bg-grid-dense opacity-20 pointer-events-none" />
-
-      {/* Floating orbs */}
       <div className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[var(--neon-cyan)]/[0.03] blur-[120px] pointer-events-none animate-float-slow" />
       <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full bg-[var(--neon-violet)]/[0.04] blur-[100px] pointer-events-none animate-float" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 items-center">
           
-          {/* Left Column: Description */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -104,57 +141,10 @@ export default function StatsBarScene() {
             
           </motion.div>
 
-          {/* Right Column: Stats Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-            {STATS.map((stat, idx) => {
-              const { count, ref } = useCountUp(stat.value);
-              const Icon = stat.icon;
-              
-              // Make Prize Pool span 2 columns on small screens to align nicely if it's odd length, or just keep it dynamic
-              const colSpanClass = stat.label === 'Prize Pool' ? 'col-span-2 md:col-span-1' : 'col-span-1';
-
-              return (
-                <motion.div
-                  key={stat.label}
-                  ref={ref}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  className={`group relative p-6 rounded-2xl glass-strong hover:bg-white/[0.08] transition-all duration-500 text-center cursor-default overflow-hidden flex flex-col items-center justify-center ${colSpanClass}`}
-                  style={{ boxShadow: `0 0 30px ${stat.color}08, inset 0 0 30px ${stat.color}04` }}
-                >
-                  {/* Corner accent glow */}
-                  <div
-                    className="absolute -top-8 -right-8 w-20 h-20 rounded-full blur-[30px] opacity-20 group-hover:opacity-40 transition-opacity"
-                    style={{ background: stat.color }}
-                  />
-
-                  <div
-                    className="mb-4 w-12 h-12 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110"
-                    style={{ background: `${stat.color}15`, border: `1px solid ${stat.color}30` }}
-                  >
-                    <Icon className="w-5 h-5" style={{ color: stat.color }} />
-                  </div>
-
-                  <div className="text-3xl font-[var(--font-orbitron)] font-black text-white tabular-nums mb-1 flex justify-center items-end">
-                    <span>{stat.prefix}</span>
-                    <span>{count.toLocaleString('en-IN')}</span>
-                    <span>{stat.suffix}</span>
-                  </div>
-
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-semibold mt-2">
-                    {stat.label}
-                  </div>
-
-                  {/* Bottom accent line */}
-                  <div
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] group-hover:w-3/4 transition-all duration-500"
-                    style={{ background: `linear-gradient(90deg, transparent, ${stat.color}, transparent)` }}
-                  />
-                </motion.div>
-              );
-            })}
+            {STATS.map((stat, idx) => (
+              <StatCard key={stat.label} stat={stat} idx={idx} />
+            ))}
           </div>
 
         </div>

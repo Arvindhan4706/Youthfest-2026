@@ -109,3 +109,23 @@ DROP POLICY IF EXISTS "Enable update for all users" ON public.site_settings;
 CREATE POLICY "Enable read access for all users" ON public.site_settings FOR SELECT USING (true);
 CREATE POLICY "Enable insert for all users" ON public.site_settings FOR INSERT WITH CHECK (true);
 CREATE POLICY "Enable update for all users" ON public.site_settings FOR UPDATE USING (true);
+
+-- 9. Create the admin_users table
+CREATE TABLE IF NOT EXISTS public.admin_users (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    role TEXT NOT NULL CHECK (role IN ('Super Admin', 'Editor', 'Scanner', 'Viewer')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Enable read access for all users" ON public.admin_users;
+DROP POLICY IF EXISTS "Enable insert for all users" ON public.admin_users;
+DROP POLICY IF EXISTS "Enable update for all users" ON public.admin_users;
+DROP POLICY IF EXISTS "Enable delete for all users" ON public.admin_users;
+
+CREATE POLICY "Enable read access for all users" ON public.admin_users FOR SELECT USING (true);
+CREATE POLICY "Enable insert for all users" ON public.admin_users FOR INSERT WITH CHECK (true);
+CREATE POLICY "Enable update for all users" ON public.admin_users FOR UPDATE USING (true);
+CREATE POLICY "Enable delete for all users" ON public.admin_users FOR DELETE USING (true);
+
