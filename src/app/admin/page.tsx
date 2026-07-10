@@ -22,8 +22,7 @@ export default function AdminPortal() {
   const [userRole, setUserRole] = useState<Role | ''>('');
   
   // Advanced Filters
-  const [filterDept, setFilterDept] = useState('');
-  const [filterYear, setFilterYear] = useState('');
+  const [filterTrack, setFilterTrack] = useState('');
 
   // Settings State
   const [activeTab, setActiveTab] = useState<'visitors' | 'settings' | 'logs' | 'events' | 'users'>('visitors');
@@ -188,10 +187,11 @@ export default function AdminPortal() {
                           v.phone.includes(searchTerm) ||
                           (v.college || '').toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesDept = filterDept ? (v.department || '').toLowerCase() === filterDept.toLowerCase() : true;
-    const matchesYear = filterYear ? v.year === filterYear : true;
+    const matchesTrack = filterTrack
+      ? (v.registered_events || []).some(evtId => evtId.startsWith(filterTrack))
+      : true;
 
-    return matchesSearch && matchesDept && matchesYear;
+    return matchesSearch && matchesTrack;
   });
 
   const exportCSV = () => {
@@ -559,19 +559,11 @@ export default function AdminPortal() {
             />
           </div>
           <div className="flex gap-4">
-            <select value={filterDept} onChange={e => setFilterDept(e.target.value)} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 outline-none">
-              <option value="">[Department ▼]</option>
-              <option value="IT">IT</option>
-              <option value="CSE">CSE</option>
-              <option value="ECE">ECE</option>
-              <option value="MECH">MECH</option>
-            </select>
-            <select value={filterYear} onChange={e => setFilterYear(e.target.value)} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 outline-none">
-              <option value="">[Year ▼]</option>
-              <option value="1">1st Year</option>
-              <option value="2">2nd Year</option>
-              <option value="3">3rd Year</option>
-              <option value="4">4th Year</option>
+            <select value={filterTrack} onChange={e => setFilterTrack(e.target.value)} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 outline-none focus:border-[var(--neon-cyan)] transition-colors">
+              <option value="">All Tracks ▼</option>
+              <option value="main">🎯 Main Events</option>
+              <option value="workshop">🔧 Workshops</option>
+              <option value="pre">⚡ Pre-Events</option>
             </select>
           </div>
         </div>
