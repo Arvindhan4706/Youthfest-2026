@@ -9,8 +9,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email and Passkey are required' }, { status: 400 });
     }
 
-    // 1. Verify Passkey from environment variable only
-    const correctPasskey = process.env.ADMIN_PASSKEY;
+    // 1. Verify Passkey — reads ADMIN_PASSKEY (server-only) or falls back to NEXT_PUBLIC_ADMIN_PASSKEY
+    const correctPasskey = process.env.ADMIN_PASSKEY || process.env.NEXT_PUBLIC_ADMIN_PASSKEY;
     if (!correctPasskey) {
       return NextResponse.json({ error: 'Server misconfiguration: passkey not set' }, { status: 500 });
     }
