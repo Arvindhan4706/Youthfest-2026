@@ -47,18 +47,13 @@ h3, h4, h5, h6 {
 }
 
 /* ─── CUSTOM SCROLLBAR ─── */
+/* Hiding global scrollbar as requested */
 ::-webkit-scrollbar {
-  width: 6px;
+  display: none;
 }
-::-webkit-scrollbar-track {
-  background: #0a0020;
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--neon-cyan), var(--neon-violet));
-  border-radius: 999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--neon-magenta), var(--neon-cyan));
+html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 /* ─── KEYFRAME ANIMATIONS ─── */
