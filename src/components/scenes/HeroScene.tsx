@@ -382,16 +382,7 @@ export default function HeroScene() {
           </a>
         </motion.div>
 
-        {/* Stats row */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 5.5 }}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full max-w-2xl"
-        >
-          <StatBadge value={5000} suffix="+" label="Students" icon={<Sparkles className="w-5 h-5" />} delay={5.6} />
-          <StatBadge value={50} suffix="+" label="Events" icon={<Zap className="w-5 h-5" />} delay={5.7} />
-        </motion.div>
+
       </div>
 
       {/* Scroll indicator */}
