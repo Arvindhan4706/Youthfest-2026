@@ -75,12 +75,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${orbitron.variable} ${poppins.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${inter.variable} ${orbitron.variable} ${poppins.variable} ${spaceGrotesk.variable} antialiased`}
     >
       <head>
         <meta name="theme-color" content="#050816" />
       </head>
-      <body className="min-h-full flex flex-col font-sans">
+      <body className="min-h-screen font-sans">
         {children}
         <Analytics />
         <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>

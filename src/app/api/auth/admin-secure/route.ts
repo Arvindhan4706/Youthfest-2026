@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/database';
 
-// You can add your team members' emails here or in .env.local
-const defaultEmails = ['arvindhan476@gmail.com'];
-
 export async function POST(request: Request) {
   try {
     const { email, passkey } = await request.json();
@@ -12,8 +9,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email and Passkey are required' }, { status: 400 });
     }
 
-    // 1. Verify Passkey (Reads from NEXT_PUBLIC_ADMIN_PASSKEY)
-    const correctPasskey = process.env.NEXT_PUBLIC_ADMIN_PASSKEY || process.env.ADMIN_PASSKEY || 'admin123';
+    // 1. Verify Passkey from environment variable only
+    const correctPasskey = process.env.ADMIN_PASSKEY;
+    if (!correctPasskey) {
+      return NextResponse.json({ error: 'Server misconfiguration: passkey not set' }, { status: 500 });
+    }
     if (passkey !== correctPasskey) {
       return NextResponse.json({ error: 'Invalid Passkey' }, { status: 401 });
     }
@@ -24,9 +24,9 @@ export async function POST(request: Request) {
     // Auto-initialize first admin if table is empty
     let allUsers = await db.getAllAdminUsers().catch(() => []);
     if (allUsers.length === 0) {
-      const envEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS 
-        ? process.env.NEXT_PUBLIC_ADMIN_EMAILS.split(',').map(e => e.trim().toLowerCase()) 
-        : defaultEmails;
+      const envEmails = process.env.ADMIN_EMAILS
+        ? process.env.ADMIN_EMAILS.split(',').map(e => e.trim().toLowerCase())
+        : ['arvindhan476@gmail.com'];
       
       for (const envEmail of envEmails) {
         await db.addAdminUser(envEmail, 'Super Admin').catch(() => {});

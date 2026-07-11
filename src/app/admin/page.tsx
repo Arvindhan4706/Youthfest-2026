@@ -117,11 +117,20 @@ export default function AdminPortal() {
     });
 
     try {
-      await db.updateSiteSettings(sanitizedSettings);
+      // Use server-side API route to bypass Supabase RLS
+      const res = await fetch('/api/settings/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ settings: sanitizedSettings })
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to save');
       await db.logAdminAction(loggedInEmail, 'Updated Site Settings', sanitizedSettings);
-      alert('Settings saved successfully!');
-    } catch (err) {
-      alert('Failed to save settings');
+      // Update local state with confirmed data from server
+      setSiteSettings(result.data);
+      alert('Settings saved successfully! The website will now show the updated stats.');
+    } catch (err: any) {
+      alert('Failed to save settings: ' + err.message);
     } finally {
       setIsSavingSettings(false);
     }

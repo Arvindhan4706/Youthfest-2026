@@ -31,11 +31,19 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ─── CUSTOM SCROLLBAR ─── */
+/* Hiding global scrollbar as requested */
+::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
   overflow-x: hidden;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 h1, h2 {
@@ -46,15 +54,7 @@ h3, h4, h5, h6 {
   font-family: var(--font-heading-sub, 'Poppins', sans-serif);
 }
 
-/* ─── CUSTOM SCROLLBAR ─── */
-/* Hiding global scrollbar as requested */
-::-webkit-scrollbar {
-  display: none;
-}
-html {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
+
 
 /* ─── KEYFRAME ANIMATIONS ─── */
 
