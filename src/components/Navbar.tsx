@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useStore } from '../lib/useStore';
@@ -53,12 +53,28 @@ export default function Navbar() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
   
   const activeSection = useActiveSection(navLinks.map(l => l.href));
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 50);
+
+      // Hide if scrolling down past 100px
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setHidden(true);
+      } 
+      // Show if scrolling up or at the very top
+      else if (currentScrollY < lastScrollY.current || currentScrollY <= 100) {
+        setHidden(false);
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -79,8 +95,15 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Invisible hover area at top of screen to reveal navbar */}
+      <div 
+        className="fixed top-0 left-0 w-full h-12 z-[60]" 
+        onMouseEnter={() => setHidden(false)} 
+      />
       <nav
-        className={`fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 rounded-2xl transition-all duration-500 ${
+        className={`fixed left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 rounded-2xl transition-all duration-500 ${
+          hidden ? '-top-32 opacity-0' : 'top-4 opacity-100'
+        } ${
           scrolled
             ? 'bg-black/60 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]'
             : 'bg-white/[0.02] backdrop-blur-md border border-white/[0.05]'

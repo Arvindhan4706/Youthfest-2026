@@ -273,13 +273,18 @@ export const db = {
    * Get all registered visitors (Admin feature).
    */
   async getAllVisitors(): Promise<Visitor[]> {
-    const { data, error } = await supabase
-      .from('visitors')
-      .select('*')
-      .order('created_at', { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from('visitors')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    if (error) throw new Error(error.message);
-    return data || [];
+      if (error) throw new Error(error.message);
+      return data || [];
+    } catch (e) {
+      console.warn('Failed to fetch visitors, using fallback empty array:', e);
+      return [];
+    }
   },
 
   /**
@@ -355,47 +360,59 @@ export const db = {
    * Get Total Check-ins
    */
   async getAttendanceCount(): Promise<number> {
-    const { count, error } = await supabase
-      .from('attendance')
-      .select('*', { count: 'exact', head: true });
+    try {
+      const { count, error } = await supabase
+        .from('attendance')
+        .select('*', { count: 'exact', head: true });
 
-    if (error) throw new Error(error.message);
-    return count || 0;
+      if (error) throw new Error(error.message);
+      return count || 0;
+    } catch (e) {
+      console.warn('Failed to fetch attendance count, using fallback 0:', e);
+      return 0;
+    }
   },
 
   /**
    * Get Site Settings
    */
   async getSiteSettings(): Promise<SiteSettings> {
-    const { data, error } = await supabase
-      .from('site_settings')
-      .select('*')
-      .eq('id', 'stats')
-      .single();
+    const defaultSettings = {
+      id: 'stats',
+      participants: 5000,
+      events: 50,
+      prize_pool: 2,
+      colleges: 100,
+      workshops: 10,
+      first_prize: 50000,
+      second_prize: 25000,
+      third_prize: 10000,
+      spots_remaining: 847,
+      total_spots: 5000,
+      updated_at: new Date().toISOString()
+    };
+    
+    try {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('*')
+        .eq('id', 'stats')
+        .single();
 
-    if (error && error.code !== 'PGRST116') { // PGRST116 is not found
-      throw new Error(error.message);
+      if (error && error.code !== 'PGRST116') { // PGRST116 is not found
+        throw new Error(error.message);
+      }
+      
+      // Default fallback if table is empty
+      if (!data) {
+        return defaultSettings;
+      }
+      
+      return data as SiteSettings;
+    } catch (e) {
+      console.warn('Failed to fetch site settings, using fallback settings:', e);
+      return defaultSettings;
     }
-    
-    // Default fallback if table is empty
-    if (!data) {
-      return {
-        id: 'stats',
-        participants: 5000,
-        events: 50,
-        prize_pool: 2,
-        colleges: 100,
-        workshops: 10,
-        first_prize: 50000,
-        second_prize: 25000,
-        third_prize: 10000,
-        spots_remaining: 847,
-        total_spots: 5000,
-        updated_at: new Date().toISOString()
-      };
-    }
-    
-    return data as SiteSettings;
   },
 
   /**
@@ -416,13 +433,18 @@ export const db = {
    * Get all events from the database
    */
   async getAllEvents(): Promise<EventItem[]> {
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .order('created_at', { ascending: true });
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('created_at', { ascending: true });
 
-    if (error) throw new Error(error.message);
-    return data || [];
+      if (error) throw new Error(error.message);
+      return data || [];
+    } catch (e) {
+      console.warn('Failed to fetch events, using fallback empty array:', e);
+      return [];
+    }
   },
 
   /**

@@ -23,28 +23,73 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [flashCount, setFlashCount] = useState(0);
   const [revealedLetters, setRevealedLetters] = useState(0);
-  const [phase, setPhase] = useState<'chaos' | 'reveal' | 'hold' | 'finale'>('reveal');
+  const [phase, setPhase] = useState<'start' | 'chaos' | 'reveal' | 'hold' | 'finale'>('start');
   const [showWhiteFlash, setShowWhiteFlash] = useState(false);
   const [glitchOffset, setGlitchOffset] = useState({ x: 0, y: 0 });
   const hasCompleted = useRef(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Play audio when phase changes to chaos
+  useEffect(() => {
+    if (phase === 'chaos') {
+      const audio = new Audio('/intro-bgm.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(err => console.log("Audio play failed:", err));
+      audioRef.current = audio;
+    }
+  }, [phase]);
+
+  // Pleasant audio fade-out during finale
+  useEffect(() => {
+    if (phase === 'finale' && audioRef.current) {
+      const audio = audioRef.current;
+      const startVolume = audio.volume;
+      const fadeDuration = 2500; // 2.5 seconds fade out
+      const steps = 25;
+      const stepTime = fadeDuration / steps;
+      const volumeStep = startVolume / steps;
+
+      const fadeInterval = setInterval(() => {
+        if (audio.volume - volumeStep > 0.01) {
+          audio.volume -= volumeStep;
+        } else {
+          audio.volume = 0;
+          audio.pause();
+          clearInterval(fadeInterval);
+        }
+      }, stepTime);
+
+      return () => clearInterval(fadeInterval);
+    }
+  }, [phase]);
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
+  }, []);
 
   // Phase 1: Chaos — rapid image flashes
-  const CHAOS_FLASHES = 6;
-  // Phase 2: Reveal — one letter per flash burst (7 letters, ~2-3 flashes each)
-  const FLASHES_PER_LETTER = 3;
+  const CHAOS_FLASHES = 18;
+  // Phase 2: Reveal — one letter per flash burst
+  const FLASHES_PER_LETTER = 4;
   const REVEAL_FLASHES = YOUTHFEST_LETTERS.length * FLASHES_PER_LETTER;
 
   const getInterval = useCallback((count: number, currentPhase: string) => {
     if (currentPhase === 'chaos') {
-      // Start at 150ms, accelerate to 80ms
+      // Start at 250ms, accelerate to 120ms
       const t = count / CHAOS_FLASHES;
-      return 150 - t * 70;
+      return 250 - t * 130;
     }
     if (currentPhase === 'reveal') {
-      // Each letter reveal: fast flash then brief pause
+      // Each letter reveal: fast flashes then longer pause
       const withinLetter = count % FLASHES_PER_LETTER;
-      if (withinLetter === FLASHES_PER_LETTER - 1) return 400; // pause after letter appears
-      return 90; // rapid flashes between
+      if (withinLetter === FLASHES_PER_LETTER - 1) return 990; // slightly faster pause (990ms) to hit 22s total
+      return 120; // smooth flashes between
     }
     return 100;
   }, [CHAOS_FLASHES, FLASHES_PER_LETTER]);
@@ -66,7 +111,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
 
   // Main timeline driver
   useEffect(() => {
-    if (phase === 'hold' || phase === 'finale') return;
+    if (phase === 'hold' || phase === 'finale' || phase === 'start') return;
 
     const timeout = setTimeout(() => {
       if (phase === 'chaos') {
@@ -105,7 +150,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
     if (phase !== 'hold') return;
     const timer = setTimeout(() => {
       setPhase('finale');
-    }, 1800);
+    }, 3000);
     return () => clearTimeout(timer);
   }, [phase]);
 
@@ -115,7 +160,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
     hasCompleted.current = true;
     const timer = setTimeout(() => {
       onComplete();
-    }, 1200);
+    }, 3500); // Increased from 2500 to 3500 to hold for 1 additional second
     return () => clearTimeout(timer);
   }, [phase, onComplete]);
 
@@ -128,6 +173,19 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
 
   const transform = getRandomTransform();
   const isFlashing = phase === 'chaos' || phase === 'reveal';
+
+  if (phase === 'start') {
+    return (
+      <div 
+        className="fixed inset-0 z-[99999] bg-black flex items-center justify-center cursor-pointer"
+        onClick={() => setPhase('chaos')}
+      >
+        <p className="text-white/70 text-sm sm:text-base md:text-xl tracking-[0.4em] uppercase animate-pulse font-light font-[var(--font-orbitron)]">
+          Click to Enter
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-[99999] bg-black overflow-hidden select-none">
@@ -144,8 +202,8 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
             y: phase === 'hold' ? '0%' : transform.y,
           }}
           transition={{
-            duration: phase === 'hold' ? 1.8 : phase === 'finale' ? 1.0 : 0.05,
-            ease: phase === 'hold' ? 'easeOut' : 'linear',
+            duration: phase === 'hold' ? 3.0 : phase === 'finale' ? 2.5 : 0.15,
+            ease: phase === 'hold' ? 'easeOut' : 'easeInOut',
           }}
           className="absolute inset-0"
         >
@@ -363,7 +421,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.0, ease: 'easeIn' }}
+          transition={{ duration: 2.5, ease: 'easeIn' }}
           className="absolute inset-0 pointer-events-none"
           style={{ background: '#011213' }}
         />
