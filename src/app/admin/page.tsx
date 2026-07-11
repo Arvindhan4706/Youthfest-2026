@@ -428,8 +428,11 @@ export default function AdminPortal() {
                   <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{field.label}</label>
                   <input
                     type="number"
-                    value={siteSettings[field.key] || 0}
-                    onChange={(e) => setSiteSettings({ ...siteSettings, [field.key]: parseInt(e.target.value) || 0 })}
+                    value={siteSettings[field.key] === '' ? '' : (siteSettings[field.key] ?? 0)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setSiteSettings({ ...siteSettings, [field.key]: val === '' ? '' : parseInt(val) });
+                    }}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-violet)] outline-none"
                     required
                   />
