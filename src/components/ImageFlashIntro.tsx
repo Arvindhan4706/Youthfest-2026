@@ -4,11 +4,11 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const FLASH_IMAGES = [
-  '/flash-crowd.png',
-  '/flash-wellness.png',
-  '/flash-colors.png',
-  '/flash-stage.png',
-  '/flash-energy.png',
+  '/flash-crowd-opt.webp',
+  '/flash-wellness-opt.webp',
+  '/flash-colors-opt.webp',
+  '/flash-stage-opt.webp',
+  '/flash-energy-opt.webp',
 ];
 
 const YOUTHFEST_LETTERS = ['Y', 'O', 'U', 'T', 'H', 'F', 'E', 'S', 'T'];
