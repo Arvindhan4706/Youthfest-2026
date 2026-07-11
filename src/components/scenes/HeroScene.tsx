@@ -167,7 +167,7 @@ export default function HeroScene() {
     <section
       id="hero"
       onMouseMove={handleMouseMove}
-      className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden px-4 py-20"
+      className="relative min-h-[100dvh] w-full flex flex-col items-center justify-center overflow-x-hidden px-4 py-20"
       style={{ background: 'radial-gradient(ellipse at 50% 0%, #0a0030 0%, #011213 50%, #010008 100%)' }}
     >
       {/* WebGL Particle Universe */}
@@ -254,7 +254,7 @@ export default function HeroScene() {
           animate="visible"
           className="relative mb-4 perspective-1000"
         >
-          <h1 className="flex justify-center text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-white leading-none z-10 relative">
+          <h1 className="flex justify-center text-5xl sm:text-7xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-white leading-none z-10 relative">
             {titleText.split('').map((char, index) => (
               <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>
                 {char}
@@ -266,7 +266,7 @@ export default function HeroScene() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.7 }}
             transition={{ delay: 3.0, duration: 1 }}
-            className="absolute inset-0 text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-cyan)] leading-none pointer-events-none mix-blend-screen"
+            className="absolute inset-0 text-5xl sm:text-7xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-cyan)] leading-none pointer-events-none mix-blend-screen"
             style={{ animation: 'glitch-1 4s ease-in-out infinite' }}
             aria-hidden="true"
           >
@@ -276,7 +276,7 @@ export default function HeroScene() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.7 }}
             transition={{ delay: 3.0, duration: 1 }}
-            className="absolute inset-0 text-6xl sm:text-8xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-magenta)] leading-none pointer-events-none mix-blend-screen"
+            className="absolute inset-0 text-5xl sm:text-7xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-magenta)] leading-none pointer-events-none mix-blend-screen"
             style={{ animation: 'glitch-2 4s ease-in-out infinite' }}
             aria-hidden="true"
           >

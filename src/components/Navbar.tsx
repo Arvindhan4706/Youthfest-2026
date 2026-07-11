@@ -206,7 +206,7 @@ export default function Navbar() {
               onClick={() => setMobileOpen(!mobileOpen)}
               className="md:hidden p-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white transition-all"
             >
-              {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
@@ -218,7 +218,7 @@ export default function Navbar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-white/5 px-5 pb-4 pt-2 flex flex-col gap-1 overflow-hidden bg-black/40 backdrop-blur-2xl rounded-b-2xl"
+              className="md:hidden border-t border-white/5 px-5 pb-4 pt-2 flex flex-col gap-1 overflow-y-auto max-h-[75dvh] bg-black/40 backdrop-blur-2xl rounded-b-2xl"
             >
               {navLinks.map((link) => (
                 <Link

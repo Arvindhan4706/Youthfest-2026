@@ -98,7 +98,7 @@ export default function TrailerScene() {
   return (
     <section
       id="trailer"
-      className="relative w-full min-h-screen flex flex-col items-center justify-center py-12 px-4"
+      className="relative w-full min-h-[100dvh] flex flex-col items-center justify-center py-12 px-4"
       style={{ background: '#010008' }}
     >
       <div className="w-full flex flex-col items-center justify-center max-w-5xl mx-auto">

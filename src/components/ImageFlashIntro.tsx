@@ -177,7 +177,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
   if (phase === 'start') {
     return (
       <div 
-        className="fixed inset-0 z-[99999] bg-black flex items-center justify-center cursor-pointer"
+        className="fixed inset-0 z-[99999] h-[100dvh] bg-black flex items-center justify-center cursor-pointer"
         onClick={() => setPhase('chaos')}
       >
         <p className="text-white/70 text-sm sm:text-base md:text-xl tracking-[0.4em] uppercase animate-pulse font-light font-[var(--font-orbitron)]">
