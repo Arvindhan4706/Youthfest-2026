@@ -190,51 +190,62 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
   return (
     <div className="fixed inset-0 z-[99999] bg-black overflow-hidden select-none">
       {/* === BACKGROUND IMAGE FLASHES === */}
-      <AnimatePresence mode="sync">
-        <motion.div
-          key={`img-${currentImgIndex}-${flashCount}`}
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: phase === 'finale' ? 0 : phase === 'hold' ? 0.3 : 0.7,
-            scale: phase === 'hold' ? 1.2 : transform.scale,
-            rotate: phase === 'hold' ? 0 : transform.rotate,
-            x: phase === 'hold' ? '0%' : transform.x,
-            y: phase === 'hold' ? '0%' : transform.y,
-          }}
-          transition={{
-            duration: phase === 'hold' ? 3.0 : phase === 'finale' ? 2.5 : 0.15,
-            ease: phase === 'hold' ? 'easeOut' : 'easeInOut',
-          }}
-          className="absolute inset-0"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={FLASH_IMAGES[currentImgIndex]}
-            alt=""
-            className="w-full h-full object-cover"
-            style={{
-              filter: `contrast(${phase === 'hold' ? 1.2 : 1.3 + Math.random() * 0.3}) saturate(${phase === 'hold' ? 0.8 : 1.3}) brightness(${phase === 'hold' ? 0.4 : 0.8 + Math.random() * 0.3})`,
+      {FLASH_IMAGES.map((src, index) => {
+        const isActive = index === currentImgIndex;
+        return (
+          <motion.div
+            key={`img-${index}`}
+            initial={false}
+            animate={{
+              opacity: phase === 'finale' ? 0 : phase === 'hold' ? (isActive ? 0.3 : 0) : (isActive ? 0.7 : 0),
+              scale: phase === 'hold' ? 1.2 : (isActive ? transform.scale : 1.05),
+              rotate: phase === 'hold' ? 0 : (isActive ? transform.rotate : 0),
+              x: phase === 'hold' ? '0%' : (isActive ? transform.x : '0%'),
+              y: phase === 'hold' ? '0%' : (isActive ? transform.y : '0%'),
             }}
-          />
-        </motion.div>
-      </AnimatePresence>
+            transition={{
+              duration: phase === 'hold' ? 3.0 : phase === 'finale' ? 2.5 : 0.15,
+              ease: phase === 'hold' ? 'easeOut' : 'easeInOut',
+            }}
+            className="absolute inset-0"
+            style={{ pointerEvents: isActive ? 'auto' : 'none', zIndex: isActive ? 10 : 1 }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={src}
+              alt=""
+              className="w-full h-full object-cover"
+              style={{
+                filter: `contrast(${phase === 'hold' ? 1.2 : 1.4}) saturate(${phase === 'hold' ? 0.8 : 1.3}) brightness(${phase === 'hold' ? 0.4 : 1.0})`,
+              }}
+            />
+          </motion.div>
+        );
+      })}
 
       {/* === GLITCH RGB SPLIT OVERLAY === */}
-      {isFlashing && (
-        <div className="absolute inset-0 pointer-events-none mix-blend-screen" style={{ opacity: 0.15 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={FLASH_IMAGES[currentImgIndex]}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{
-              transform: `translate(${glitchOffset.x}px, ${glitchOffset.y}px)`,
-              filter: 'hue-rotate(120deg)',
-              opacity: 0.6,
-            }}
-          />
-        </div>
-      )}
+      {FLASH_IMAGES.map((src, index) => {
+        const isActive = index === currentImgIndex && isFlashing;
+        return (
+          <div 
+            key={`glitch-${index}`}
+            className="absolute inset-0 pointer-events-none mix-blend-screen transition-opacity duration-75" 
+            style={{ opacity: isActive ? 0.15 : 0, zIndex: 20 }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={src}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                transform: `translate(${glitchOffset.x}px, ${glitchOffset.y}px)`,
+                filter: 'hue-rotate(120deg)',
+                opacity: 0.6,
+              }}
+            />
+          </div>
+        );
+      })}
 
       {/* === SCAN LINES === */}
       <div
