@@ -217,7 +217,27 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           {activeTab === 'register' ? 'JOIN THE FESTIVAL' : 'VISITOR LOGIN'}
         </h2>
 
-        {/* No Tab Switcher (Managed by Navbar) */}
+        {/* Tab Switcher */}
+        <div className="flex p-1 bg-white/5 rounded-xl mb-6">
+          <button
+            type="button"
+            onClick={() => { setActiveTab('register'); setStep(1); setError(''); }}
+            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
+              activeTab === 'register' ? 'bg-[var(--neon-cyan)] text-black shadow-[0_0_15px_rgba(0,240,255,0.3)]' : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            onClick={() => { setActiveTab('login'); setError(''); }}
+            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
+              activeTab === 'login' ? 'bg-[var(--neon-cyan)] text-black shadow-[0_0_15px_rgba(0,240,255,0.3)]' : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            Log In
+          </button>
+        </div>
 
         {/* Progress Bar (Only for Register) */}
         {activeTab === 'register' && (

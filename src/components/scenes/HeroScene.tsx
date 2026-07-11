@@ -121,8 +121,8 @@ const ParticleUniverse = dynamic(() => import('../ui/ParticleUniverse'), { ssr: 
 
 export default function HeroScene() {
   const user = useStore((state) => state.user);
+  const setAuthOpen = useStore((state) => state.setAuthOpen);
   const router = useRouter();
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const countdown = useCountdown();
 
   const mouseX = useMotionValue(0);
@@ -145,7 +145,7 @@ export default function HeroScene() {
     if (user) {
       router.push('/dashboard');
     } else {
-      setIsAuthOpen(true);
+      setAuthOpen(true, 'register');
     }
   };
 
@@ -362,28 +362,24 @@ export default function HeroScene() {
           transition={{ duration: 0.8, delay: 5.0 }}
           className="flex flex-col sm:flex-row items-center gap-4 mb-16"
         >
-          <MagneticButton strength={40}>
-            <button
-              onClick={handleRegisterClick}
-              className="group relative flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-white text-base overflow-hidden transition-all duration-300 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_50px_rgba(0,240,255,0.6)] animate-breathe"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
-              <div className="absolute inset-[1px] rounded-[15px] bg-[#011213]/50 group-hover:bg-transparent transition-all duration-300" />
-              <span className="relative z-10 flex items-center gap-2 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
-                Register Now — Spots Filling Fast <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </button>
-          </MagneticButton>
+          <button
+            onClick={handleRegisterClick}
+            className="group relative flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-white text-base overflow-hidden transition-all duration-300 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_50px_rgba(0,240,255,0.6)] animate-breathe"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
+            <div className="absolute inset-[1px] rounded-[15px] bg-[#011213]/50 group-hover:bg-transparent transition-all duration-300" />
+            <span className="relative z-10 flex items-center gap-2 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+              Register Now — Spots Filling Fast <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </button>
 
-          <MagneticButton strength={25}>
-            <a
-              href="#trailer"
-              className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-semibold border border-white/10 text-gray-300 hover:text-white hover:bg-white/5 hover:border-white/20 transition-all backdrop-blur-md"
-            >
-              <Play className="w-4 h-4 text-[var(--neon-magenta)]" />
-              Watch Trailer
-            </a>
-          </MagneticButton>
+          <a
+            href="#trailer"
+            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-semibold border border-white/10 text-gray-300 hover:text-white hover:bg-white/5 hover:border-white/20 transition-all backdrop-blur-md"
+          >
+            <Play className="w-4 h-4 text-[var(--neon-magenta)]" />
+            Watch Trailer
+          </a>
         </motion.div>
 
         {/* Stats row */}
@@ -414,7 +410,6 @@ export default function HeroScene() {
         </motion.div>
       </motion.div>
 
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </section>
   );
 }

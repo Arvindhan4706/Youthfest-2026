@@ -65,8 +65,8 @@ function FlipUnit({ value, label }: { value: number; label: string }) {
 
 export default function CountdownCTAScene() {
   const user = useStore((state) => state.user);
+  const setAuthOpen = useStore((state) => state.setAuthOpen);
   const router = useRouter();
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const countdown = useCountdown();
 
   const handleRegister = (e: React.MouseEvent) => {
@@ -78,25 +78,6 @@ export default function CountdownCTAScene() {
     }
   };
 
-  // Fetch real spots remaining
-  const [spotsRemaining, setSpotsRemaining] = useState(847);
-  const [totalSpots, setTotalSpots] = useState(5000);
-
-  useEffect(() => {
-    async function loadStats() {
-      try {
-        const { db } = await import('@/lib/database');
-        const settings = await db.getSiteSettings();
-        setSpotsRemaining(settings.spots_remaining);
-        setTotalSpots(settings.total_spots);
-      } catch (err) {
-        console.error('Failed to load stats', err);
-      }
-    }
-    loadStats();
-  }, []);
-
-  const progressPercent = ((totalSpots - spotsRemaining) / totalSpots) * 100;
 
   return (
     <section className="relative py-28 overflow-hidden" style={{ background: 'linear-gradient(180deg, #011213 0%, #0a0025 50%, #011213 100%)' }}>
@@ -163,55 +144,35 @@ export default function CountdownCTAScene() {
           <FlipUnit value={countdown.seconds} label="Seconds" />
         </motion.div>
 
-        {/* Spots remaining bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="max-w-md mx-auto mb-10"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-gray-400 font-semibold">
-              <span className="text-[var(--neon-magenta)] font-bold">{spotsRemaining}</span> spots remaining
-            </span>
-            <span className="text-xs text-gray-500">{totalSpots} total</span>
-          </div>
-          <div className="w-full h-2 rounded-full bg-white/[0.06] overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: `${progressPercent}%` }}
-              viewport={{ once: true }}
-              transition={{ duration: 2, ease: 'easeOut' }}
-              className="h-full rounded-full"
-              style={{ background: 'linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta))' }}
-            />
-          </div>
-        </motion.div>
 
         {/* CTA Button */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          className="flex flex-col items-center justify-center mt-6"
         >
-          <MagneticButton strength={35}>
-            <button
-              onClick={handleRegister}
-              className="group relative flex items-center justify-center gap-2 px-10 py-5 rounded-2xl font-bold text-white text-lg sm:text-xl overflow-hidden transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(0,240,255,0.4)] hover:shadow-[0_0_60px_rgba(0,240,255,0.6)] mx-auto animate-breathe"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
-              <div className="absolute inset-[2px] rounded-[14px] bg-[#010008]/80 group-hover:bg-transparent transition-all duration-300" />
-              <span className="relative z-10 flex items-center gap-3 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-                <Ticket className="w-6 h-6 text-[var(--neon-gold)] group-hover:rotate-12 transition-transform" />
-                Claim Your Ticket Now
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-1.5 transition-transform" />
-              </span>
-            </button>
-          </MagneticButton>
+          <button
+            onClick={(e) => { 
+              e.preventDefault(); 
+              if (user) {
+                router.push('/dashboard');
+              } else {
+                setAuthOpen(true, 'register'); 
+              }
+            }}
+            className="group relative flex items-center justify-center gap-2 px-10 py-5 rounded-2xl font-bold text-white text-lg sm:text-xl overflow-hidden transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(0,240,255,0.4)] hover:shadow-[0_0_60px_rgba(0,240,255,0.6)] mx-auto animate-breathe"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
+            <div className="absolute inset-[2px] rounded-[14px] bg-[#010008]/80 group-hover:bg-transparent transition-all duration-300" />
+            <span className="relative z-10 flex items-center gap-3 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+              <Ticket className="w-6 h-6 text-[var(--neon-gold)] group-hover:rotate-12 transition-transform" />
+              {user ? 'Go To Dashboard' : 'Claim Your Ticket Now'}
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-1.5 transition-transform" />
+            </span>
+          </button>
         </motion.div>
       </div>
-
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </section>
   );
 }
