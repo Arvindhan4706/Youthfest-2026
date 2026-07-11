@@ -69,14 +69,7 @@ export default function CountdownCTAScene() {
   const router = useRouter();
   const countdown = useCountdown();
 
-  const handleRegister = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (user) {
-      router.push('/dashboard');
-    } else {
-      setIsAuthOpen(true);
-    }
-  };
+
 
 
   return (
