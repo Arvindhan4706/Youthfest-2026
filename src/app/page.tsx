@@ -15,7 +15,7 @@ const StatsBarScene = dynamic(() => import('../components/scenes/StatsBarScene')
 const EventShowcaseScene = dynamic(() => import('../components/scenes/EventShowcaseScene'), { ssr: false });
 const TimelineScene = dynamic(() => import('../components/scenes/TimelineScene'), { ssr: false });
 const PrizePoolScene = dynamic(() => import('../components/scenes/PrizePoolScene'), { ssr: false });
-const TrailerScene = dynamic(() => import('../components/scenes/TrailerScene'), { ssr: false });
+
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
 const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
 const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
@@ -111,10 +111,6 @@ export default function Home() {
         <PrizePoolScene />
       </LazyScene>
 
-      {/* TrailerScene has video — load late with extra margin */}
-      <LazyScene placeholderHeight={500} rootMargin="200px">
-        <TrailerScene />
-      </LazyScene>
 
       {/* MemoriesScene has video — load late */}
       <LazyScene placeholderHeight={600} rootMargin="200px">

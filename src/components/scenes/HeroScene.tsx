@@ -373,13 +373,7 @@ export default function HeroScene() {
             </span>
           </button>
 
-          <a
-            href="#trailer"
-            className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-semibold border border-white/10 text-gray-300 hover:text-white hover:bg-white/5 hover:border-white/20 transition-all backdrop-blur-md"
-          >
-            <Play className="w-4 h-4 text-[var(--neon-magenta)]" />
-            Watch Trailer
-          </a>
+
         </motion.div>
 
 
