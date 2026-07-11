@@ -16,9 +16,9 @@ interface GalleryItem {
 const GALLERY_IMAGES: GalleryItem[] = [
   { id: 1, type: 'image', url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80', title: 'Cosmic Concert Night', year: 'Youthfest 25', desc: 'DJ lasers cutting through an audience of 5,000 students. Absolute chaos.' },
   { id: 2, type: 'image', url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80', title: 'Genesis Hackathon', year: 'Youthfest 25', desc: 'Teams pushing code at 3AM. 200+ developers competing for glory.' },
-  { id: 3, type: 'video', url: 'https://cdn.pixabay.com/vimeo/143526543/concert-1065.mp4?width=1280&hash=85061f0084478f24b2bb08a1d7fce531fc4ef166', title: 'EDM Closing Set', year: 'Youthfest 24', desc: 'The insane energy during the final drop of the festival.' },
+  { id: 3, type: 'image', url: 'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=800&q=80', title: 'EDM Closing Set', year: 'Youthfest 24', desc: 'The insane energy during the final drop of the festival.' },
   { id: 4, type: 'image', url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80', title: 'Robo Wars Arena', year: 'Youthfest 24', desc: 'Sparks flying, metal clashing — the arena went absolutely wild.' },
-  { id: 5, type: 'video', url: 'https://cdn.pixabay.com/vimeo/328236166/lights-22736.mp4?width=1280&hash=8dfaf38c5f5ad2732c2538f9b964d39c091bc860', title: 'Laser Show Finale', year: 'Youthfest 25', desc: 'The moment the entire campus was lit up with our custom laser rig.' },
+  { id: 5, type: 'image', url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=800&q=80', title: 'Laser Show Finale', year: 'Youthfest 25', desc: 'The moment the entire campus was lit up with our custom laser rig.' },
   { id: 6, type: 'image', url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80', title: 'Main Stage Headliner', year: 'Youthfest 24', desc: 'The crowd when the headliner dropped the first beat. Legendary.' },
 ];
 
