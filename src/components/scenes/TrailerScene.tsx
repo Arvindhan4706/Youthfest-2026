@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Play, Pause, Volume2, VolumeX, Film } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
 
@@ -18,63 +18,45 @@ const TRAILER_CAPTIONS: Caption[] = [
 ];
 
 export default function TrailerScene() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const videoWrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [activeCaption, setActiveCaption] = useState('');
+  // Key fix: video src is only set after the user clicks play — prevents browser
+  // from loading the entire video file into memory on page load.
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
   const addPoints = useStore((state) => state.addPoints);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    const wrapper = videoWrapperRef.current;
-    const video = videoRef.current;
-
-    if (!container || !wrapper || !video) return;
-
-    // Intersection observer for play/pause
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            video.play().then(() => setIsPlaying(true)).catch(() => {});
-          } else {
-            video.pause();
-            setIsPlaying(false);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    
-    if (wrapper) {
-      observer.observe(wrapper);
+  const handleFirstPlay = () => {
+    if (!videoSrc) {
+      // Only NOW do we set the src and start loading
+      setVideoSrc('/trailer.mp4');
+      // Play after a short tick so the src is applied
+      setTimeout(() => {
+        const video = videoRef.current;
+        if (!video) return;
+        video.addEventListener('timeupdate', handleTimeUpdate);
+        video.play().then(() => setIsPlaying(true)).catch(() => {});
+      }, 100);
+    } else {
+      togglePlay();
     }
+  };
 
-    // Track captions
-    const handleTimeUpdate = () => {
-      const currentTime = video.currentTime;
-      const currentCaption = TRAILER_CAPTIONS.reduce((acc, cap) => {
-        if (currentTime >= cap.time) return cap.text;
-        return acc;
-      }, '');
-      setActiveCaption(currentCaption);
-
-      if (currentTime > 5 && currentTime < 5.2) {
-        addPoints(5, 'Watching official event trailer');
-      }
-    };
-
-    video.addEventListener('timeupdate', handleTimeUpdate);
-
-    return () => {
-      video.removeEventListener('timeupdate', handleTimeUpdate);
-      if (wrapper) observer.unobserve(wrapper);
-    };
-  }, [addPoints]);
+  const handleTimeUpdate = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    const currentTime = video.currentTime;
+    const currentCaption = TRAILER_CAPTIONS.reduce((acc, cap) => {
+      if (currentTime >= cap.time) return cap.text;
+      return acc;
+    }, '');
+    setActiveCaption(currentCaption);
+    if (currentTime > 5 && currentTime < 5.2) {
+      addPoints(5, 'Watching official event trailer');
+    }
+  };
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -112,25 +94,38 @@ export default function TrailerScene() {
           </h2>
         </div>
 
-        {/* Square Video Container - scaled to fit viewport height and reduced size */}
+        {/* Video Container */}
         <div className="w-full max-w-[85vw] md:max-w-[65vw] lg:w-[45vh] lg:max-w-[500px] aspect-square border border-white/10 p-1 bg-black rounded-[20px] shadow-[0_0_40px_rgba(0,0,0,0.5)]">
           <div
-            ref={videoWrapperRef}
             className="relative w-full h-full rounded-[16px] overflow-hidden z-10 flex items-center justify-center bg-[#010008]"
             style={{ boxShadow: '0 0 60px rgba(139, 92, 246, 0.15), 0 0 80px rgba(0, 240, 255, 0.1)' }}
           >
-            {/* Edge fade overlay to seamlessly blend video edges into background */}
+            {/* Edge fade overlay */}
             <div className="absolute inset-0 z-15 pointer-events-none rounded-[16px] shadow-[inset_0_0_80px_40px_#010008]" />
 
+            {/* Video — src is only set after user clicks play */}
             <video
               ref={videoRef}
-              src="/trailer.mp4"
+              src={videoSrc ?? undefined}
               className="w-full h-full object-contain"
               preload="none"
               loop
               muted={isMuted}
               playsInline
             />
+
+            {/* Big play button overlay — shown when video hasn't started */}
+            {!isPlaying && (
+              <button
+                onClick={handleFirstPlay}
+                className="absolute inset-0 flex items-center justify-center z-20 group"
+                aria-label="Play trailer"
+              >
+                <div className="w-16 h-16 rounded-full bg-white/10 border border-white/30 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 group-hover:bg-white/20 transition-all duration-300">
+                  <Play className="w-6 h-6 text-white ml-1" fill="white" />
+                </div>
+              </button>
+            )}
 
             {/* Synced captions */}
             <div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 text-center w-[90%] z-20 pointer-events-none">
@@ -142,21 +137,23 @@ export default function TrailerScene() {
               </p>
             </div>
 
-            {/* Video controls */}
-            <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
-              <button
-                onClick={togglePlay}
-                className="p-2 rounded-full bg-black/60 border border-white/20 text-white hover:bg-white hover:text-black transition-colors"
-              >
-                {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-              </button>
-              <button
-                onClick={toggleMute}
-                className="p-2 rounded-full bg-black/60 border border-white/20 text-white hover:bg-white hover:text-black transition-colors"
-              >
-                {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400" />}
-              </button>
-            </div>
+            {/* Video controls — only shown when playing */}
+            {isPlaying && (
+              <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
+                <button
+                  onClick={togglePlay}
+                  className="p-2 rounded-full bg-black/60 border border-white/20 text-white hover:bg-white hover:text-black transition-colors"
+                >
+                  {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                </button>
+                <button
+                  onClick={toggleMute}
+                  className="p-2 rounded-full bg-black/60 border border-white/20 text-white hover:bg-white hover:text-black transition-colors"
+                >
+                  {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400" />}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

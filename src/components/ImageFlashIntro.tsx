@@ -189,9 +189,10 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
 
   return (
     <div className="fixed inset-0 z-[99999] bg-black overflow-hidden select-none">
-      {/* === BACKGROUND IMAGE FLASHES === */}
+      {/* === BACKGROUND IMAGE FLASHES — only active image rendered === */}
       {FLASH_IMAGES.map((src, index) => {
         const isActive = index === currentImgIndex;
+        if (!isActive && phase !== 'hold' && phase !== 'finale') return null;
         return (
           <motion.div
             key={`img-${index}`}
@@ -223,29 +224,25 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
         );
       })}
 
-      {/* === GLITCH RGB SPLIT OVERLAY === */}
-      {FLASH_IMAGES.map((src, index) => {
-        const isActive = index === currentImgIndex && isFlashing;
-        return (
-          <div 
-            key={`glitch-${index}`}
-            className="absolute inset-0 pointer-events-none mix-blend-screen transition-opacity duration-75" 
-            style={{ opacity: isActive ? 0.15 : 0, zIndex: 20 }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={src}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{
-                transform: `translate(${glitchOffset.x}px, ${glitchOffset.y}px)`,
-                filter: 'hue-rotate(120deg)',
-                opacity: 0.6,
-              }}
-            />
-          </div>
-        );
-      })}
+      {/* === GLITCH RGB SPLIT OVERLAY — only for active image === */}
+      {isFlashing && (
+        <div
+          className="absolute inset-0 pointer-events-none mix-blend-screen transition-opacity duration-75"
+          style={{ opacity: 0.15, zIndex: 20 }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={FLASH_IMAGES[currentImgIndex]}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              transform: `translate(${glitchOffset.x}px, ${glitchOffset.y}px)`,
+              filter: 'hue-rotate(120deg)',
+              opacity: 0.6,
+            }}
+          />
+        </div>
+      )}
 
       {/* === SCAN LINES === */}
       <div
