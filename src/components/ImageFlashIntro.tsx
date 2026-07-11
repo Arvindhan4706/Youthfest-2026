@@ -216,7 +216,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
               alt=""
               className="w-full h-full object-cover"
               style={{
-                filter: `contrast(${phase === 'hold' ? 1.2 : 1.4}) saturate(${phase === 'hold' ? 0.8 : 1.3}) brightness(${phase === 'hold' ? 0.4 : 1.0})`,
+                filter: `contrast(${phase === 'hold' ? 1.2 : 1.4}) saturate(${phase === 'hold' ? 0.8 : 1.3}) brightness(${phase === 'hold' ? 0.4 : 0.6})`,
               }}
             />
           </motion.div>

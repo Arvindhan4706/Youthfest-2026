@@ -126,6 +126,7 @@ export default function TrailerScene() {
               ref={videoRef}
               src="/trailer.mp4"
               className="w-full h-full object-contain"
+              preload="none"
               loop
               muted={isMuted}
               playsInline

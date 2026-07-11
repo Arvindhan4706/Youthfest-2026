@@ -126,7 +126,7 @@ export default function MemoriesScene() {
               whileHover={{ scale: 1.01 }}
             >
               {item.type === 'video' ? (
-                <video src={item.url} className="w-full object-cover max-h-[450px]" muted loop autoPlay playsInline />
+                <video src={item.url} className="w-full object-cover max-h-[450px]" muted loop playsInline preload="none" />
               ) : (
                 <img src={item.url} alt={item.title} className="w-full object-cover max-h-[450px]" />
               )}
