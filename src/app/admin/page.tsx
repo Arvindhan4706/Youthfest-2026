@@ -107,9 +107,18 @@ export default function AdminPortal() {
   const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSavingSettings(true);
+    
+    // Convert any string values (from typing) back to integers before saving
+    const sanitizedSettings = { ...siteSettings };
+    Object.keys(sanitizedSettings).forEach(key => {
+      if (typeof sanitizedSettings[key] === 'string') {
+        sanitizedSettings[key] = parseInt(sanitizedSettings[key]) || 0;
+      }
+    });
+
     try {
-      await db.updateSiteSettings(siteSettings);
-      await db.logAdminAction(loggedInEmail, 'Updated Site Settings', siteSettings);
+      await db.updateSiteSettings(sanitizedSettings);
+      await db.logAdminAction(loggedInEmail, 'Updated Site Settings', sanitizedSettings);
       alert('Settings saved successfully!');
     } catch (err) {
       alert('Failed to save settings');
@@ -428,11 +437,8 @@ export default function AdminPortal() {
                   <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{field.label}</label>
                   <input
                     type="number"
-                    value={siteSettings[field.key] === '' ? '' : (siteSettings[field.key] ?? 0)}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setSiteSettings({ ...siteSettings, [field.key]: val === '' ? '' : parseInt(val) });
-                    }}
+                    value={siteSettings[field.key] ?? ''}
+                    onChange={(e) => setSiteSettings({ ...siteSettings, [field.key]: e.target.value })}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-violet)] outline-none"
                     required
                   />
