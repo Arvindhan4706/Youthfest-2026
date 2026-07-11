@@ -17,7 +17,7 @@ const PrizePoolScene = dynamic(() => import('../components/scenes/PrizePoolScene
 const TrailerScene = dynamic(() => import('../components/scenes/TrailerScene'), { ssr: false });
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
 const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
-const LeadersScene = dynamic(() => import('../components/scenes/LeadersScene'), { ssr: false });
+
 const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
 const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
 const FAQScene = dynamic(() => import('../components/scenes/FAQScene'), { ssr: false });
@@ -25,7 +25,6 @@ const FooterScene = dynamic(() => import('../components/scenes/FooterScene'), { 
 
 import { useKonamiCode } from '../hooks/useKonamiCode';
 import { useStore } from '../lib/useStore';
-import Lenis from 'lenis';
 
 export default function Home() {
   const [showFlashIntro, setShowFlashIntro] = useState(true);
@@ -48,21 +47,23 @@ export default function Home() {
 
   useEffect(() => {
     if (!hasMounted || showFlashIntro) return;
-    
-    // Only show the toast if we actually just finished the intro (not if we skipped it via session)
-    if (!sessionStorage.getItem('hasSeenIntro')) {
-      addToast('Welcome to YOUTHFEST 2026!', { points: 50 });
-      sessionStorage.setItem('hasSeenIntro', 'true');
-    }
 
-    const lenis = new Lenis({
-      autoRaf: true,
-    });
+    // Initialise Lenis smooth scroll — wrapped in try/catch for iOS Safari safety
+    let lenis: any = null;
+    const initLenis = async () => {
+      try {
+        const { default: Lenis } = await import('lenis');
+        lenis = new Lenis({ autoRaf: true });
+      } catch (err) {
+        console.warn('Lenis failed to initialise (likely iOS):', err);
+      }
+    };
+    initLenis();
 
     return () => {
-      lenis.destroy();
+      try { lenis?.destroy(); } catch (_) {}
     };
-  }, [showFlashIntro, hasMounted, addToast]);
+  }, [showFlashIntro, hasMounted]);
 
   if (!hasMounted) return null;
 
@@ -73,6 +74,7 @@ export default function Home() {
       sessionStorage.setItem('hasSeenIntro', 'true');
       addToast('Welcome to YOUTHFEST 2026!', { points: 50 });
     }} />;
+  // eslint-disable-next-line no-unreachable
   }
 
   return (
@@ -100,7 +102,6 @@ export default function Home() {
       <MemoriesScene />
       <SpeakersScene />
       <SponsorsScene />
-      <LeadersScene />
       <CountdownCTAScene />
       <FAQScene />
       <FooterScene />
