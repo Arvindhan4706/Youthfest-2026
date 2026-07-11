@@ -3,11 +3,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import { ArrowRight, Play, Zap, Calendar, ChevronDown, Sparkles } from 'lucide-react';
+import { ArrowRight, Zap, Calendar, ChevronDown, Sparkles } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
 import { useRouter } from 'next/navigation';
-import AuthModal from '../AuthModal';
-import MagneticButton from '../ui/MagneticButton';
 
 // Target date: August 12, 2026
 const TARGET_DATE = new Date('2026-08-12T10:00:00+05:30').getTime();
@@ -129,6 +127,8 @@ export default function HeroScene() {
   const mouseY = useMotionValue(0);
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    // Skip parallax on touch/mobile devices to save CPU
+    if (window.matchMedia('(hover: none)').matches) return;
     const { clientX, clientY } = e;
     const { innerWidth, innerHeight } = window;
     mouseX.set((clientX / innerWidth) * 2 - 1);
@@ -209,7 +209,7 @@ export default function HeroScene() {
       </motion.div>
 
       {/* Main content */}
-      <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center mt-16">
+      <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center mt-8 sm:mt-16">
         {/* Event Logo with Cinematic Glitch Reveal */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8, filter: 'brightness(0) contrast(100%)' }}
@@ -254,7 +254,7 @@ export default function HeroScene() {
           animate="visible"
           className="relative mb-4 perspective-1000"
         >
-          <h1 className="flex justify-center text-5xl sm:text-7xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-white leading-none z-10 relative">
+          <h1 className="flex justify-center flex-wrap text-5xl sm:text-7xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-white leading-none z-10 relative">
             {titleText.split('').map((char, index) => (
               <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>
                 {char}
@@ -344,7 +344,7 @@ export default function HeroScene() {
           initial={{ opacity: 0, scale: 0.5, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1, delay: 4.2, type: "spring", bounce: 0.4 }}
-          className="flex items-center gap-3 sm:gap-5 mb-12"
+          className="flex items-center justify-center gap-2 sm:gap-3 md:gap-5 mb-10 sm:mb-12 flex-wrap"
         >
           <CountdownUnit value={countdown.days} label="Days" />
           <span className="text-2xl text-[var(--neon-cyan)] font-bold mt-[-20px] animate-pulse">:</span>
@@ -360,11 +360,11 @@ export default function HeroScene() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 5.0 }}
-          className="flex flex-col sm:flex-row items-center gap-4 mb-16"
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 w-full px-4 sm:px-0"
         >
           <button
             onClick={handleRegisterClick}
-            className="group relative flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-white text-base overflow-hidden transition-all duration-300 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_50px_rgba(0,240,255,0.6)] animate-breathe"
+            className="group relative flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-white text-base overflow-hidden transition-all duration-300 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_50px_rgba(0,240,255,0.6)] animate-breathe"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
             <div className="absolute inset-[1px] rounded-[15px] bg-[#011213]/50 group-hover:bg-transparent transition-all duration-300" />

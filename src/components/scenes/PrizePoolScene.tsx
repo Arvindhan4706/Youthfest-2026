@@ -6,7 +6,7 @@ import { Trophy, IndianRupee, Sparkles } from 'lucide-react';
 
 const FloatingCurrency = () => {
   const particles = useMemo(() => {
-    return Array.from({ length: 20 }).map(() => ({
+    return Array.from({ length: 8 }).map(() => ({
       left: `${Math.random() * 100}%`,
       size: Math.random() * 20 + 10,
       duration: Math.random() * 10 + 10,
