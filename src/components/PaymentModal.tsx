@@ -35,84 +35,28 @@ export default function PaymentModal() {
  const handlePayment = async () => {
  setIsLoading(true);
 
- // Dynamically load Razorpay on demand if not already available
- if (!(window as any).Razorpay) {
-   await new Promise((resolve) => {
-     const script = document.createElement('script');
-     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-     script.onload = () => resolve(true);
-     script.onerror = () => resolve(false); // Fails silently as requested
-     document.body.appendChild(script);
-   });
- }
-
- // If it's STILL not loaded (e.g. adblocker), we just silently fail and stop loading 
- // to prevent a hard crash, as requested by the user (no error messages).
- if (!(window as any).Razorpay) {
-   setIsLoading(false);
-   return; 
- }
- try {
- const orderResponse = await fetch('/api/payment/create-order', {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ amount: parseInt(checkoutEvent.fee.replace(/\D/g, '')) || 0 })
- });
- if (!orderResponse.ok) {
- const errText = await orderResponse.text();
- console.error('Server returned error:', errText);
- throw new Error(`Server error: ${orderResponse.status}`);
- }
- const orderData = await orderResponse.json();
- if (!orderData.order) throw new Error('Order creation failed');
- const options = {
- key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
- amount: orderData.order.amount,
- currency: 'INR',
- name: 'Youthfest 2026',
- description: `Registration for ${checkoutEvent.title}`,
- order_id: orderData.order.id,
- handler: async function (response: Record<string, string>) {
- const verifyRes = await fetch('/api/payment/verify', {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({
- razorpay_order_id: response.razorpay_order_id,
- razorpay_payment_id: response.razorpay_payment_id,
- razorpay_signature: response.razorpay_signature,
- email: user?.email
- })
- });
- const verifyData = await verifyRes.json();
- if (verifyData.success || verifyData.isAuthentic) {
- await completeRegistration();
- } else {
- addToast('Payment verification failed!', { points: 0 });
- setIsLoading(false);
- }
- },
- prefill: {
- name: user?.name || '',
- email: user?.email || '',
- contact: user?.phone || ''
- },
- theme: {
- color: '#00F0FF'
- },
- modal: {
- ondismiss: function() {
- setIsLoading(false);
- addToast('Payment cancelled.', { points: 0 });
- }
- }
- };
- const paymentObject = new (window as any).Razorpay(options);
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
- paymentObject.on('payment.failed', function (response: any) {
- addToast('Payment failed: ' + response.error.description, { points: 0 });
- setIsLoading(false);
- });
- paymentObject.open();
+  try {
+    const orderResponse = await fetch('/api/payment/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        amount: parseInt(checkoutEvent.fee.replace(/\D/g, '')) || 0,
+        email: user?.email,
+        eventTitle: checkoutEvent.title
+      })
+    });
+    if (!orderResponse.ok) {
+      const errText = await orderResponse.text();
+      console.error('Server returned error:', errText);
+      throw new Error(`Server error: ${orderResponse.status}`);
+    }
+    const orderData = await orderResponse.json();
+    if (orderData.paymentLinkUrl) {
+      window.location.href = orderData.paymentLinkUrl;
+      return;
+    } else {
+      throw new Error('Payment Link creation failed');
+    }
  } catch (err: unknown) {
  console.error(err);
  addToast('Payment initialization failed.', { points: 0 });

@@ -19,10 +19,29 @@ export async function POST(req: Request) {
     const options = {
       amount: parseInt(amount) * 100, // Amount in paise
       currency: 'INR',
-      receipt: receipt || `receipt_${Math.random().toString(36).substring(2, 9)}`,
+      accept_partial: false,
+      description: "Yuvenza Youthfest 2026 Registration",
+      customer: {
+        email: body.email || 'guest@youthfest2026.com'
+      },
+      notify: { sms: false, email: false },
+      reminder_enable: false,
+      reference_id: body.email || `receipt_${Math.random().toString(36).substring(2, 9)}`,
+      callback_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://youthfest-2026.vercel.app'}/payment-success${body.eventTitle ? `?eventTitle=${encodeURIComponent(body.eventTitle)}` : ''}`,
+      callback_method: "get"
     };
-    const order = await razorpay.orders.create(options);
-    return NextResponse.json({ order }, { status: 200 });
+
+    // @ts-ignore
+    const paymentLink = await razorpay.paymentLink.create(options);
+
+    return NextResponse.json({ 
+      paymentLinkUrl: paymentLink.short_url,
+      order: {
+        id: paymentLink.id,
+        amount: paymentLink.amount,
+        currency: paymentLink.currency
+      }
+    }, { status: 200 });
   } catch (error: unknown) {
     console.error('Raw Error creating Razorpay order:', error);
     // Razorpay often throws an object instead of a JS Error instance

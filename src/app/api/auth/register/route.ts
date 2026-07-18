@@ -24,22 +24,41 @@ export async function POST(request: Request) {
     const validatedData = registerSchema.parse(body);
     // Registration Fee Amount (e.g., Rs 500 = 50000 paise)
     const amountInPaise = 50000;
-    // Create a dynamic Razorpay order BEFORE inserting user
+    // Create a dynamic Razorpay Payment Link
     const options = {
       amount: amountInPaise,
       currency: "INR",
-      receipt: `receipt_${Date.now()}_${Math.floor(Math.random()*1000)}`,
+      accept_partial: false,
+      description: "Yuvenza Youthfest 2026 Registration",
+      customer: {
+        name: validatedData.name,
+        email: validatedData.email,
+        contact: validatedData.phone
+      },
+      notify: {
+        sms: false,
+        email: false
+      },
+      reminder_enable: false,
+      reference_id: validatedData.email,
+      callback_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://youthfest-2026.vercel.app'}/payment-success`,
+      callback_method: "get"
     };
-    const order = await razorpay.orders.create(options);
-    // Call the database logic only if order creation succeeds
+    
+    // @ts-ignore - razorpay node SDK might be slightly outdated with typings, but the method exists
+    const paymentLink = await razorpay.paymentLink.create(options);
+
+    // Call the database logic only if link creation succeeds
     const newVisitor = await db.register(validatedData);
+
     return NextResponse.json({ 
       success: true, 
       visitor: newVisitor,
+      paymentLinkUrl: paymentLink.short_url,
       order: {
-        id: order.id,
-        amount: order.amount,
-        currency: order.currency
+        id: paymentLink.id,
+        amount: paymentLink.amount,
+        currency: paymentLink.currency
       }
     });
   } catch (error: any) {

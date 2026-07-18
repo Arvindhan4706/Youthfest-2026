@@ -91,85 +91,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  })
  });
  } catch (err) {}
- if (data.order) {
- const options = {
- key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
- amount: data.order.amount,
- currency: data.order.currency,
- name: "Youthfest 2026",
- description: "Registration Fee",
- order_id: data.order.id,
- handler: async function (response: any) {
- try {
- const verifyRes = await fetch('/api/payment/verify', {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({
- razorpay_order_id: response.razorpay_order_id,
- razorpay_payment_id: response.razorpay_payment_id,
- razorpay_signature: response.razorpay_signature,
- email: visitor.email
- })
- });
- const verifyData = await verifyRes.json();
- if (verifyData.success) {
- addToast('Payment successful! Welcome to Youthfest.', { points: 50 });
- setIsLoading(false);
- onClose();
- } else {
- setError('Payment verification failed.');
- setIsLoading(false);
- }
- } catch (err) {
- setError('Payment verification failed.');
- setIsLoading(false);
- }
- },
- prefill: {
- name: visitor.name,
- email: visitor.email,
- contact: visitor.phone
- },
- theme: {
- color: "#3399cc"
- },
- modal: {
- ondismiss: function() {
- setIsLoading(false);
- setError('Payment cancelled by user.');
- }
- }
- };
  
-  const handleRazorpayLoad = async (options: any) => {
-    // Dynamically load Razorpay on demand if not already available
-    if (!(window as any).Razorpay) {
-      await new Promise((resolve) => {
-        const script = document.createElement('script');
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-        script.onload = () => resolve(true);
-        script.onerror = () => resolve(false); // Fails silently as requested
-        document.body.appendChild(script);
-      });
-    }
-
-    // If it's STILL not loaded (e.g. adblocker), we just silently fail and stop loading 
-    // to prevent a hard crash, as requested by the user (no error messages).
-    if (!(window as any).Razorpay) {
-      setIsLoading(false);
-      return; 
-    }
-    
-    const rzp1 = new (window as any).Razorpay(options);
-    rzp1.on('payment.failed', function (response: any) {
-      setError(`Payment failed: ${response.error.description}`);
-      setIsLoading(false);
-    });
-    rzp1.open();
-  };
-
-  await handleRazorpayLoad(options);
- // Keep loading true while Razorpay is open
+ if (data.paymentLinkUrl) {
+  window.location.href = data.paymentLinkUrl;
+  return;
  } else {
  addToast('Registration successful! Welcome to Youthfest.', { points: 50 });
  setIsLoading(false);
