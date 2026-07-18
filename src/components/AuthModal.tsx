@@ -3,12 +3,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { X, Mail, Phone, User, Loader2, Building, BookOpen, Calendar, MapPin, CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react';
 import gsap from 'gsap';
 import { useStore } from '../lib/useStore';
+import useRazorpay from 'react-razorpay';
 
 interface AuthModalProps {
  isOpen: boolean;
  onClose: () => void;
 }
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
+ const { error: razorpayError, Razorpay } = useRazorpay();
  const modalRef = useRef<HTMLDivElement>(null);
  const overlayRef = useRef<HTMLDivElement>(null);
  const [shouldRender, setShouldRender] = useState(isOpen);
@@ -142,26 +144,13 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  };
  
   const handleRazorpayLoad = async (options: any) => {
-    let isLoaded = !!(window as any).Razorpay;
-    
-    if (!isLoaded) {
-      // Fallback: Try to inject it dynamically if the global one was blocked or delayed
-      isLoaded = await new Promise((resolve) => {
-        const script = document.createElement('script');
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-        script.onload = () => resolve(true);
-        script.onerror = () => resolve(false);
-        document.body.appendChild(script);
-      });
-    }
-
-    if (!isLoaded || !(window as any).Razorpay) {
+    if (razorpayError || !Razorpay) {
       setError('Unable to load payment gateway. Please check your internet connection.');
       setIsLoading(false);
       return;
     }
     
-    const rzp1 = new (window as any).Razorpay(options);
+    const rzp1 = new Razorpay(options);
     rzp1.on('payment.failed', function (response: any) {
       setError(`Payment failed: ${response.error.description}`);
       setIsLoading(false);
