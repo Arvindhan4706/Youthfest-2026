@@ -76,7 +76,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  Medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30 shadow-[0_0_10px_rgba(234,179,8,0.3)]',
  Hard: 'bg-red-500/20 text-red-400 border-red-500/30 shadow-[0_0_10px_rgba(239,68,68,0.3)]',
  };
- // Generate random countdown and seats left based on event ID for demo purposes
+ // Generate random countdown based on event ID for demo purposes
  const generateRandomStats = (id: string) => {
  let hash = 0;
  for (let i = 0; i < id.length; i++) {
@@ -84,10 +84,9 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  }
  const days = Math.abs(hash % 10) + 1;
  const hours = Math.abs((hash * 3) % 24);
- const seats = Math.abs(hash % 50) + 5;
- return { days, hours, seats };
+ return { days, hours };
  };
- const { days, hours, seats } = useMemo(() => generateRandomStats(event.id), [event.id]);
+ const { days, hours } = useMemo(() => generateRandomStats(event.id), [event.id]);
  return (
  <div
  ref={cardRef}
@@ -134,12 +133,9 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  <div className="flex items-center gap-1.5 text-xs text-gray-300">
  <Users className="w-3.5 h-3.5 text-[var(--neon-cyan)]" /> {event.team}
  </div>
- <div className="flex items-center gap-1.5 text-xs text-gray-300">
- <Ticket className="w-3.5 h-3.5 text-[var(--neon-magenta)]" /> Seats: <span className="text-white font-bold">{seats} Left</span>
- </div>
- <div className="flex items-center gap-1.5 text-[10px] text-gray-400 col-span-2">
+ <div className="flex items-center gap-1.5 text-[10px] text-gray-400">
  <Timer className="w-3.5 h-3.5 text-[var(--neon-lime)] animate-pulse" /> 
- Starts in: <span className="text-white font-mono font-bold tracking-widest">{String(days).padStart(2, '0')}d {String(hours).padStart(2, '0')}h</span>
+ <span className="text-white font-mono font-bold tracking-widest">{String(days).padStart(2, '0')}d {String(hours).padStart(2, '0')}h</span>
  </div>
  </div>
  {/* Register button (now just acts as a cue to open modal) */}
@@ -279,15 +275,15 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
 }
 const STATIC_EVENTS: EventItem[] = [
   // Main Events
-  { id: 'main-1', track_id: 'main-events', title: 'Squid Game', desc: 'Survive the ultimate challenge. Do you have what it takes?', team: '1', fee: '₹150', difficulty: 'Hard', image: '/events/squid_game.png', date: 'Day 2 - 10:00 AM', venue: 'Main Arena', rules: defaultRules },
-  { id: 'main-2', track_id: 'main-events', title: 'Case Closed', desc: 'A murder mystery where you act as the detective to find the culprit.', team: '2-4', fee: '₹200', difficulty: 'Medium', image: '/events/case_closed.png', date: 'Day 1 - 02:00 PM', venue: 'Seminar Hall 1', rules: defaultRules },
-  { id: 'main-3', track_id: 'main-events', title: '7 Keys', desc: 'An escape room style treasure hunt. Find the 7 glowing magical keys.', team: '3-5', fee: '₹250', difficulty: 'Hard', image: '/events/seven_keys.png', date: 'Day 2 - 01:00 PM', venue: 'Campus Ground', rules: defaultRules },
-  { id: 'main-4', track_id: 'main-events', title: 'Cypher', desc: 'The ultimate 24-hour hackathon. Code your way to victory.', team: '2-4', fee: '₹300', difficulty: 'Hard', image: '/events/cypher.png', date: 'Day 1 - 09:00 AM', venue: 'Tech Lab 4', rules: defaultRules },
+  { id: 'main-1', track_id: 'main-events', title: 'Squid Game', desc: 'Survive the ultimate challenge. Do you have what it takes?', team: '1', fee: '₹150', difficulty: 'Hard', image: '/events/squid_game.png', date: 'August 12 - 10:00 AM', venue: 'Main Arena', rules: defaultRules },
+  { id: 'main-2', track_id: 'main-events', title: 'Case Closed', desc: 'A murder mystery where you act as the detective to find the culprit.', team: '2-4', fee: '₹200', difficulty: 'Medium', image: '/events/case_closed.png', date: 'August 12 - 02:00 PM', venue: 'Seminar Hall 1', rules: defaultRules },
+  { id: 'main-3', track_id: 'main-events', title: '7 Keys', desc: 'An escape room style treasure hunt. Find the 7 glowing magical keys.', team: '3-5', fee: '₹250', difficulty: 'Hard', image: '/events/seven_keys.png', date: 'August 12 - 01:00 PM', venue: 'Campus Ground', rules: defaultRules },
+  { id: 'main-4', track_id: 'main-events', title: 'Cypher', desc: 'The ultimate 24-hour hackathon. Code your way to victory.', team: '2-4', fee: '₹300', difficulty: 'Hard', image: '/events/cypher.png', date: 'August 12 - 09:00 AM', venue: 'Tech Lab 4', rules: defaultRules },
   // Pre Events
-  { id: 'pre-1', track_id: 'pre-events', title: 'Mock Parliament', desc: 'Debate on national issues in this intense mock parliament.', team: '1', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1577563908411-5079b6a66019?auto=format&fit=crop&w=800&q=80', date: 'Pre-Event - 10:00 AM', venue: 'Auditorium', rules: defaultRules },
-  { id: 'pre-2', track_id: 'pre-events', title: 'Charity Match', desc: 'A football match for a good cause. Show your sportsmanship!', team: '11', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1574629810360-7efbb1b379e0?auto=format&fit=crop&w=800&q=80', date: 'Pre-Event - 04:00 PM', venue: 'Football Ground', rules: defaultRules },
-  { id: 'pre-3', track_id: 'pre-events', title: 'Chess', desc: 'Intense chess tournament. Outsmart your opponents.', team: '1', fee: '₹100', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=800&q=80', date: 'Pre-Event - 09:00 AM', venue: 'Indoor Stadium', rules: defaultRules },
-  { id: 'pre-4', track_id: 'pre-events', title: 'Pickle Ball', desc: 'Fast-paced pickleball action. Grab your paddles!', team: '2', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1622279457486-69d73ad5e4d2?auto=format&fit=crop&w=800&q=80', date: 'Pre-Event - 02:00 PM', venue: 'Tennis Court', rules: defaultRules },
+  { id: 'pre-1', track_id: 'pre-events', title: 'Mock Parliament', desc: 'Debate on national issues in this intense mock parliament.', team: '1', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1577563908411-5079b6a66019?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 10:00 AM', venue: 'Auditorium', rules: defaultRules },
+  { id: 'pre-2', track_id: 'pre-events', title: 'Charity Match', desc: 'A football match for a good cause. Show your sportsmanship!', team: '11', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1574629810360-7efbb1b379e0?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 04:00 PM', venue: 'Football Ground', rules: defaultRules },
+  { id: 'pre-3', track_id: 'pre-events', title: 'Chess', desc: 'Intense chess tournament. Outsmart your opponents.', team: '1', fee: '₹100', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 09:00 AM', venue: 'Indoor Stadium', rules: defaultRules },
+  { id: 'pre-4', track_id: 'pre-events', title: 'Pickle Ball', desc: 'Fast-paced pickleball action. Grab your paddles!', team: '2', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1622279457486-69d73ad5e4d2?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 02:00 PM', venue: 'Tennis Court', rules: defaultRules },
 ];
 
 export default function EventShowcaseScene() {
