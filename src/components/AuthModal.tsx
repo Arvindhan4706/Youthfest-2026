@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { X, Mail, Phone, User, Loader2, Building, BookOpen, Calendar, MapPin, CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react';
 import gsap from 'gsap';
 import { useStore } from '../lib/useStore';
-import { loadRazorpayScript } from '../lib/loadRazorpay';
 
 interface AuthModalProps {
  isOpen: boolean;
@@ -143,9 +142,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  };
  
   const handleRazorpayLoad = async (options: any) => {
-    const res = await loadRazorpayScript();
-    
-    if (!res) {
+    if (!(window as any).Razorpay) {
       setError('Razorpay blocked! Please disable Adblockers/Brave Shields.');
       setIsLoading(false);
       return;

@@ -4,7 +4,6 @@ import { X, CreditCard, ShieldCheck, Loader2 } from 'lucide-react';
 import gsap from 'gsap';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
-import { loadRazorpayScript } from '../lib/loadRazorpay';
 export default function PaymentModal() {
  const modalRef = useRef<HTMLDivElement>(null);
  const overlayRef = useRef<HTMLDivElement>(null);
@@ -35,9 +34,7 @@ export default function PaymentModal() {
  const handlePayment = async () => {
  setIsLoading(true);
  
- const res = await loadRazorpayScript();
-
- if (!res) {
+ if (!(window as any).Razorpay) {
  addToast('Razorpay blocked! Please disable Adblockers/Brave Shields.', { points: 0 });
  setIsLoading(false);
  return;
