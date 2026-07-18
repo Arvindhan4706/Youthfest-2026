@@ -42,10 +42,11 @@ export async function POST(request: Request) {
         currency: order.currency
       }
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ success: false, message: (error as any).errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, message: error.errors[0].message }, { status: 400 });
     }
-    return NextResponse.json({ success: false, message: (error as Error).message }, { status: 400 });
+    const errorMsg = error?.error?.description || error?.message || 'Failed to create Razorpay order';
+    return NextResponse.json({ success: false, message: errorMsg }, { status: 400 });
   }
 }

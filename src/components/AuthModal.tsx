@@ -139,18 +139,36 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  }
  }
  };
- if (!(window as any).Razorpay) {
-    setError('Razorpay SDK failed to load. Please check your connection or disable adblockers.');
-    setIsLoading(false);
-    return;
-  }
-  
-  const rzp1 = new (window as any).Razorpay(options);
-  rzp1.on('payment.failed', function (response: any) {
- setError(`Payment failed: ${response.error.description}`);
- setIsLoading(false);
- });
- rzp1.open();
+ 
+  // Dynamic script loader
+  const loadScript = (src: string) => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleRazorpayLoad = async (options: any) => {
+    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+    
+    if (!res || !(window as any).Razorpay) {
+      setError('Razorpay SDK failed to load. Please check your connection or disable adblockers.');
+      setIsLoading(false);
+      return;
+    }
+    
+    const rzp1 = new (window as any).Razorpay(options);
+    rzp1.on('payment.failed', function (response: any) {
+      setError(`Payment failed: ${response.error.description}`);
+      setIsLoading(false);
+    });
+    rzp1.open();
+  };
+
+  await handleRazorpayLoad(options);
  // Keep loading true while Razorpay is open
  } else {
  addToast('Registration successful! Welcome to Youthfest.', { points: 50 });
