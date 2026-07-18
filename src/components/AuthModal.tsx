@@ -400,7 +400,6 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  )}
  </form>
  </div>
- </div>
  <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
  </div>
  );
