@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     if (!settings) {
       return NextResponse.json({ error: 'No settings provided' }, { status: 400 });
     }
-    // Sanitize: ensure all values are numbers
+    // Sanitize: ensure all values are numbers where appropriate
     const sanitized: Record<string, number | string> = {};
     const numericKeys = [
       'participants', 'events', 'prize_pool', 'colleges', 'workshops',
@@ -18,6 +18,16 @@ export async function POST(request: Request) {
         sanitized[key] = parseInt(settings[key]) || 0;
       }
     }
+
+    const stringKeys = [
+      'contact_institute', 'contact_address', 'contact_email', 'contact_phone', 'contact_whatsapp'
+    ];
+    for (const key of stringKeys) {
+      if (key in settings && settings[key] !== undefined) {
+        sanitized[key] = String(settings[key]);
+      }
+    }
+
     const { data, error } = await supabase
       .from('site_settings')
       .upsert({ id: 'stats', ...sanitized, updated_at: new Date().toISOString() })

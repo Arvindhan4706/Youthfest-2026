@@ -208,9 +208,10 @@ export default function AdminPortal() {
  e.preventDefault();
  const formData = new FormData(e.currentTarget);
  const rulesStr = formData.get('rules') as string;
+ const eventId = editingEvent ? editingEvent.id : (formData.get('id') as string)?.trim() || '';
  const eventData: Omit<EventItem, 'created_at'> = {
- id: (formData.get('id') as string).trim(),
- track_id: (formData.get('track_id') as string).trim(),
+ id: eventId,
+ track_id: (formData.get('track_id') as string)?.trim() || '',
  title: (formData.get('title') as string).trim(),
  description: (formData.get('description') as string).trim(),
  team_size: (formData.get('team_size') as string).trim(),

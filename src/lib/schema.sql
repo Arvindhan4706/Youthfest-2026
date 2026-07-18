@@ -134,3 +134,29 @@ CREATE POLICY "Enable insert for all users" ON public.admin_users FOR INSERT WIT
 CREATE POLICY "Enable update for all users" ON public.admin_users FOR UPDATE USING (true);
 CREATE POLICY "Enable delete for all users" ON public.admin_users FOR DELETE USING (true);
 
+-- 10. Create the events table
+CREATE TABLE IF NOT EXISTS public.events (
+    id TEXT PRIMARY KEY,
+    track_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    team_size TEXT NOT NULL,
+    fee TEXT NOT NULL,
+    difficulty TEXT NOT NULL CHECK (difficulty IN ('Easy', 'Medium', 'Hard')),
+    image_url TEXT NOT NULL,
+    event_date TEXT NOT NULL,
+    venue TEXT NOT NULL,
+    rules JSONB DEFAULT '[]'::jsonb NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Enable read access for all users" ON public.events;
+DROP POLICY IF EXISTS "Enable insert for all users" ON public.events;
+DROP POLICY IF EXISTS "Enable update for all users" ON public.events;
+DROP POLICY IF EXISTS "Enable delete for all users" ON public.events;
+
+CREATE POLICY "Enable read access for all users" ON public.events FOR SELECT USING (true);
+CREATE POLICY "Enable insert for all users" ON public.events FOR INSERT WITH CHECK (true);
+CREATE POLICY "Enable update for all users" ON public.events FOR UPDATE USING (true);
+CREATE POLICY "Enable delete for all users" ON public.events FOR DELETE USING (true);

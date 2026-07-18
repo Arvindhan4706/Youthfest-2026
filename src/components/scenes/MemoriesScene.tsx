@@ -11,12 +11,15 @@ interface GalleryItem {
  desc: string;
 }
 const GALLERY_IMAGES: GalleryItem[] = [
- { id: 3, type: 'image', url: 'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=800&q=80', title: 'EDM Closing Set', year: 'Youthfest 24', desc: 'The insane energy during the final drop of the festival.' },
- { id: 4, type: 'image', url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80', title: 'Robo Wars Arena', year: 'Youthfest 24', desc: 'Sparks flying, metal clashing — the arena went absolutely wild.' },
- { id: 6, type: 'image', url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80', title: 'Main Stage Headliner', year: 'Youthfest 24', desc: 'The crowd when the headliner dropped the first beat. Legendary.' },
- { id: 1, type: 'image', url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80', title: 'Cosmic Concert Night', year: 'Youthfest 25', desc: 'DJ lasers cutting through an audience of 5,000 students. Absolute chaos.' },
- { id: 2, type: 'image', url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80', title: 'Genesis Hackathon', year: 'Youthfest 25', desc: 'Teams pushing code at 3AM. 200+ developers competing for glory.' },
- { id: 5, type: 'image', url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=800&q=80', title: 'Laser Show Finale', year: 'Youthfest 25', desc: 'The moment the entire campus was lit up with our custom laser rig.' },
+  { id: 1, type: 'image', url: '/memories/yf24.png', title: 'Youthfest 2024', year: '2024', desc: 'A massive, vibrant youth festival, neon lights, energetic crowd, concert atmosphere.' },
+  { id: 2, type: 'image', url: '/memories/marathon.png', title: 'Marathon', year: '2024', desc: 'A college marathon event, students running together, energetic, early morning sunlight.' },
+  { id: 3, type: 'image', url: '/memories/cancer_panel.png', title: 'Cancer Awareness Day Panel', year: '2024', desc: 'A panel discussion on a stage in a college auditorium, serious but hopeful tone.' },
+  { id: 4, type: 'image', url: '/memories/republic25.png', title: 'Republic Day 2025', year: '2025', desc: 'Indian Republic day celebration in a college, tricolor flags, patriotic atmosphere.' },
+  { id: 5, type: 'image', url: '/memories/nyabagam.png', title: 'Nyabagam Varuthe', year: '2025', desc: 'A nostalgic cultural college event, traditional vibes, emotional, memory lane.' },
+  { id: 6, type: 'image', url: '/memories/yf25.png', title: 'Youthfest\'25', year: '2025', desc: 'Futuristic youth festival, cyberpunk neon aesthetic, glowing stage, massive energetic crowd.' },
+  { id: 7, type: 'image', url: '/memories/onam25.png', title: 'Onam 25', year: '2025', desc: 'Vibrant Onam celebration in a college, students in traditional kerala attire, flower rangoli.' },
+  { id: 8, type: 'image', url: '/memories/christmas25.png', title: 'Christmas 25', year: '2025', desc: 'Festive Christmas celebration on campus, decorated christmas tree, fairy lights.' },
+  { id: 9, type: 'image', url: '/memories/republic26.png', title: 'Republic Day 2026', year: '2026', desc: 'Majestic Indian Republic day event, students marching, patriotic spirit, large flag.' },
 ];
 const HIGHLIGHTS = [
  "10,000+ Social Media Impressions",
