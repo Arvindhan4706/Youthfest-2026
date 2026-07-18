@@ -76,17 +76,38 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  Medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30 shadow-[0_0_10px_rgba(234,179,8,0.3)]',
  Hard: 'bg-red-500/20 text-red-400 border-red-500/30 shadow-[0_0_10px_rgba(239,68,68,0.3)]',
  };
- // Generate random countdown based on event ID for demo purposes
- const generateRandomStats = (id: string) => {
- let hash = 0;
- for (let i = 0; i < id.length; i++) {
- hash = id.charCodeAt(i) + ((hash << 5) - hash);
- }
- const days = Math.abs(hash % 10) + 1;
- const hours = Math.abs((hash * 3) % 24);
- return { days, hours };
- };
- const { days, hours } = useMemo(() => generateRandomStats(event.id), [event.id]);
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0 });
+
+  useEffect(() => {
+    // Parse "August 12 - 10:00 AM" into a real Date object
+    // Assuming year is 2026 for Youthfest 2026
+    let dateStr = event.date;
+    if (dateStr.includes('-')) {
+      const parts = dateStr.split('-');
+      const datePart = parts[0].trim();
+      const timePart = parts[1].trim();
+      dateStr = `${datePart} 2026 ${timePart}`;
+    } else {
+      dateStr = `${dateStr} 2026 10:00 AM`;
+    }
+
+    const targetDate = new Date(dateStr).getTime();
+
+    const tick = () => {
+      const now = Date.now();
+      const diff = Math.max(0, targetDate - now);
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+      });
+    };
+
+    tick();
+    const interval = setInterval(tick, 1000 * 60 * 60); // Update every hour
+    return () => clearInterval(interval);
+  }, [event.date]);
+
+  const { days, hours } = timeLeft;
  return (
  <div
  ref={cardRef}
