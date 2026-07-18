@@ -37,7 +37,7 @@ export default function PaymentModal() {
  
  // Wait for Next.js Script to populate window.Razorpay
  let attempts = 0;
- while (!(window as any).Razorpay && attempts < 20) {
+ while (!(window as any).Razorpay && attempts < 50) {
  await new Promise(r => setTimeout(r, 150));
  attempts++;
  }
@@ -201,7 +201,7 @@ export default function PaymentModal() {
  )}
  </button>
  </div>
- <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+ <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
  </div>
  );
 }
