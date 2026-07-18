@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Mail, Phone, User, Loader2, Building, BookOpen, Calendar, MapPin, CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react';
 import gsap from 'gsap';
+import Script from 'next/script';
 import { useStore } from '../lib/useStore';
 interface AuthModalProps {
  isOpen: boolean;
@@ -140,26 +141,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  }
  };
  
-  // Dynamic script loader
-  const loadScript = (src: string) => {
-    return new Promise((resolve) => {
-      if ((window as any).Razorpay) {
-        resolve(true);
-        return;
-      }
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
-
   const handleRazorpayLoad = async (options: any) => {
-    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+    // Wait for Next.js Script to populate window.Razorpay
+    let attempts = 0;
+    while (!(window as any).Razorpay && attempts < 20) {
+      await new Promise(r => setTimeout(r, 150));
+      attempts++;
+    }
     
-    if (!res || !(window as any).Razorpay) {
-      setError('Razorpay SDK failed to load. Please check your connection or disable adblockers.');
+    if (!(window as any).Razorpay) {
+      setError('Razorpay blocked! Please disable Adblockers/Brave Shields.');
       setIsLoading(false);
       return;
     }
@@ -409,6 +400,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  )}
  </form>
  </div>
+ </div>
+ <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
  </div>
  );
 }

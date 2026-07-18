@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, CreditCard, ShieldCheck, Loader2 } from 'lucide-react';
 import gsap from 'gsap';
+import Script from 'next/script';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
 export default function PaymentModal() {
@@ -31,23 +32,17 @@ export default function PaymentModal() {
  }
  }, [checkoutEvent, shouldRender]);
  if (!shouldRender || !checkoutEvent) return null;
- const loadScript = (src: string) => {
- return new Promise((resolve) => {
- if ((window as any).Razorpay) {
- resolve(true);
- return;
- }
- const script = document.createElement('script');
- script.src = src;
- script.onload = () => resolve(true);
- script.onerror = () => resolve(false);
- document.body.appendChild(script);
- });
- };
  const handlePayment = async () => {
  setIsLoading(true);
- const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
- if (!res) {
+ 
+ // Wait for Next.js Script to populate window.Razorpay
+ let attempts = 0;
+ while (!(window as any).Razorpay && attempts < 20) {
+ await new Promise(r => setTimeout(r, 150));
+ attempts++;
+ }
+
+ if (!(window as any).Razorpay) {
  addToast('Razorpay blocked! Please disable Adblockers/Brave Shields.', { points: 0 });
  setIsLoading(false);
  return;
@@ -206,6 +201,7 @@ export default function PaymentModal() {
  )}
  </button>
  </div>
+ <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
  </div>
  );
 }
