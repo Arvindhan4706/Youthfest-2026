@@ -4,7 +4,7 @@ import { X, CreditCard, ShieldCheck, Loader2 } from 'lucide-react';
 import gsap from 'gsap';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
-import useRazorpay from 'react-razorpay';
+import { useRazorpay } from 'react-razorpay';
 
 export default function PaymentModal() {
  const { error: razorpayError, Razorpay } = useRazorpay();

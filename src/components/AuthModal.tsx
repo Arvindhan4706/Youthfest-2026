@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { X, Mail, Phone, User, Loader2, Building, BookOpen, Calendar, MapPin, CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react';
 import gsap from 'gsap';
 import { useStore } from '../lib/useStore';
-import useRazorpay from 'react-razorpay';
+import { useRazorpay } from 'react-razorpay';
 
 interface AuthModalProps {
  isOpen: boolean;
