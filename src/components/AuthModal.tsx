@@ -143,6 +143,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   // Dynamic script loader
   const loadScript = (src: string) => {
     return new Promise((resolve) => {
+      if ((window as any).Razorpay) {
+        resolve(true);
+        return;
+      }
       const script = document.createElement('script');
       script.src = src;
       script.onload = () => resolve(true);

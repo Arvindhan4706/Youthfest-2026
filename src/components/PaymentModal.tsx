@@ -33,6 +33,10 @@ export default function PaymentModal() {
  if (!shouldRender || !checkoutEvent) return null;
  const loadScript = (src: string) => {
  return new Promise((resolve) => {
+ if ((window as any).Razorpay) {
+ resolve(true);
+ return;
+ }
  const script = document.createElement('script');
  script.src = src;
  script.onload = () => resolve(true);
