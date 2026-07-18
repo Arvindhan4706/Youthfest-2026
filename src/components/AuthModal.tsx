@@ -3,14 +3,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { X, Mail, Phone, User, Loader2, Building, BookOpen, Calendar, MapPin, CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react';
 import gsap from 'gsap';
 import { useStore } from '../lib/useStore';
-import { useRazorpay } from 'react-razorpay';
 
 interface AuthModalProps {
  isOpen: boolean;
  onClose: () => void;
 }
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
- const { error: razorpayError, Razorpay } = useRazorpay();
  const modalRef = useRef<HTMLDivElement>(null);
  const overlayRef = useRef<HTMLDivElement>(null);
  const [shouldRender, setShouldRender] = useState(isOpen);
@@ -144,13 +142,25 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  };
  
   const handleRazorpayLoad = async (options: any) => {
-    if (razorpayError || !Razorpay) {
-      setError('Unable to load payment gateway. Please check your internet connection.');
+    // Dynamically load Razorpay on demand if not already available
+    if (!(window as any).Razorpay) {
+      await new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false); // Fails silently as requested
+        document.body.appendChild(script);
+      });
+    }
+
+    // If it's STILL not loaded (e.g. adblocker), we just silently fail and stop loading 
+    // to prevent a hard crash, as requested by the user (no error messages).
+    if (!(window as any).Razorpay) {
       setIsLoading(false);
-      return;
+      return; 
     }
     
-    const rzp1 = new Razorpay(options);
+    const rzp1 = new (window as any).Razorpay(options);
     rzp1.on('payment.failed', function (response: any) {
       setError(`Payment failed: ${response.error.description}`);
       setIsLoading(false);

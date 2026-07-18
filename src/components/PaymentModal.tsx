@@ -4,10 +4,8 @@ import { X, CreditCard, ShieldCheck, Loader2 } from 'lucide-react';
 import gsap from 'gsap';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
-import { useRazorpay } from 'react-razorpay';
 
 export default function PaymentModal() {
- const { error: razorpayError, Razorpay } = useRazorpay();
  const modalRef = useRef<HTMLDivElement>(null);
  const overlayRef = useRef<HTMLDivElement>(null);
  const checkoutEvent = useStore(state => state.checkoutEvent);
@@ -37,10 +35,22 @@ export default function PaymentModal() {
  const handlePayment = async () => {
  setIsLoading(true);
 
- if (razorpayError || !Razorpay) {
-   addToast('Unable to load payment gateway. Please check your internet connection.', { points: 0 });
+ // Dynamically load Razorpay on demand if not already available
+ if (!(window as any).Razorpay) {
+   await new Promise((resolve) => {
+     const script = document.createElement('script');
+     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+     script.onload = () => resolve(true);
+     script.onerror = () => resolve(false); // Fails silently as requested
+     document.body.appendChild(script);
+   });
+ }
+
+ // If it's STILL not loaded (e.g. adblocker), we just silently fail and stop loading 
+ // to prevent a hard crash, as requested by the user (no error messages).
+ if (!(window as any).Razorpay) {
    setIsLoading(false);
-   return;
+   return; 
  }
  try {
  const orderResponse = await fetch('/api/payment/create-order', {
@@ -96,7 +106,7 @@ export default function PaymentModal() {
  }
  }
  };
- const paymentObject = new Razorpay(options);
+ const paymentObject = new (window as any).Razorpay(options);
  // eslint-disable-next-line @typescript-eslint/no-explicit-any
  paymentObject.on('payment.failed', function (response: any) {
  addToast('Payment failed: ' + response.error.description, { points: 0 });
