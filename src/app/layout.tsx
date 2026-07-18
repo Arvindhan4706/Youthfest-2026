@@ -62,6 +62,11 @@ export const metadata: Metadata = {
  images: ['/og-image.jpg'],
  },
 };
+
+export const viewport = {
+  themeColor: '#050816',
+};
+
 export default function RootLayout({
  children,
 }: Readonly<{
@@ -72,13 +77,10 @@ export default function RootLayout({
  lang="en"
  className={`${inter.variable} ${orbitron.variable} ${poppins.variable} ${spaceGrotesk.variable} antialiased`}
  >
- <head>
- <meta name="theme-color" content="#050816" />
- <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
- </head>
  <body className="min-h-screen font-sans">
  {children}
  <Analytics />
+ <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
  </body>
  </html>
  );
