@@ -397,6 +397,5 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  </form>
  </div>
  </div>
- </div>
  );
 }
