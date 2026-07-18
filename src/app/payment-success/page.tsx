@@ -20,6 +20,7 @@ function PaymentSuccessContent() {
         const paymentLinkStatus = searchParams.get('razorpay_payment_link_status');
         const signature = searchParams.get('razorpay_signature');
         const eventTitle = searchParams.get('eventTitle');
+        const email = searchParams.get('email');
 
         if (!paymentId || !paymentLinkId || !signature) {
           throw new Error('Missing payment verification details from Razorpay.');
@@ -37,6 +38,7 @@ function PaymentSuccessContent() {
             razorpay_payment_link_status: paymentLinkStatus,
             razorpay_signature: signature,
             eventTitle: eventTitle,
+            email: email,
           }),
         });
 

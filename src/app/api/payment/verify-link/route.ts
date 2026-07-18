@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     );
 
     if (isAuthentic) {
-      const email = razorpay_payment_link_reference_id; // We passed email as reference_id
+      const email = body.email; // We passed email via callback query params
 
       if (email) {
         // Update general payment status

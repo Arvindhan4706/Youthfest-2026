@@ -40,8 +40,8 @@ export async function POST(request: Request) {
         email: false
       },
       reminder_enable: false,
-      reference_id: validatedData.email,
-      callback_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://youthfest-2026.vercel.app'}/payment-success`,
+      reference_id: `rcpt_${Math.random().toString(36).substring(2, 9)}`,
+      callback_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://youthfest-2026.vercel.app'}/payment-success?email=${encodeURIComponent(validatedData.email)}`,
       callback_method: "get"
     };
     

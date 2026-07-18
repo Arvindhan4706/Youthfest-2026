@@ -26,8 +26,8 @@ export async function POST(req: Request) {
       },
       notify: { sms: false, email: false },
       reminder_enable: false,
-      reference_id: body.email || `receipt_${Math.random().toString(36).substring(2, 9)}`,
-      callback_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://youthfest-2026.vercel.app'}/payment-success${body.eventTitle ? `?eventTitle=${encodeURIComponent(body.eventTitle)}` : ''}`,
+      reference_id: `rcpt_${Math.random().toString(36).substring(2, 9)}`,
+      callback_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://youthfest-2026.vercel.app'}/payment-success?email=${encodeURIComponent(body.email || 'guest@youthfest2026.com')}${body.eventTitle ? `&eventTitle=${encodeURIComponent(body.eventTitle)}` : ''}`,
       callback_method: "get"
     };
 
