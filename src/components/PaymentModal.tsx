@@ -48,7 +48,7 @@ export default function PaymentModal() {
  }
 
  if (!isLoaded || !(window as any).Razorpay) {
-   addToast('Razorpay blocked! Please disable Adblockers/Brave Shields.', { points: 0 });
+   addToast('Unable to load payment gateway. Please check your internet connection.', { points: 0 });
    setIsLoading(false);
    return;
  }

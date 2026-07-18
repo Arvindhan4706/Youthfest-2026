@@ -156,7 +156,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
 
     if (!isLoaded || !(window as any).Razorpay) {
-      setError('Razorpay blocked! Please disable Adblockers/Brave Shields.');
+      setError('Unable to load payment gateway. Please check your internet connection.');
       setIsLoading(false);
       return;
     }
