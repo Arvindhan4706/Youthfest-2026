@@ -51,6 +51,7 @@ export default function MobileBottomNav() {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
+    setActiveSection(id);
     const element = document.getElementById(id.replace('#', ''));
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
