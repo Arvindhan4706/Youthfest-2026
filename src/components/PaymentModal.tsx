@@ -2,9 +2,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, CreditCard, ShieldCheck, Loader2 } from 'lucide-react';
 import gsap from 'gsap';
-import Script from 'next/script';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
+import { loadRazorpayScript } from '../lib/loadRazorpay';
 export default function PaymentModal() {
  const modalRef = useRef<HTMLDivElement>(null);
  const overlayRef = useRef<HTMLDivElement>(null);
@@ -35,14 +35,9 @@ export default function PaymentModal() {
  const handlePayment = async () => {
  setIsLoading(true);
  
- // Wait for Next.js Script to populate window.Razorpay
- let attempts = 0;
- while (!(window as any).Razorpay && attempts < 50) {
- await new Promise(r => setTimeout(r, 150));
- attempts++;
- }
+ const res = await loadRazorpayScript();
 
- if (!(window as any).Razorpay) {
+ if (!res) {
  addToast('Razorpay blocked! Please disable Adblockers/Brave Shields.', { points: 0 });
  setIsLoading(false);
  return;
@@ -201,7 +196,6 @@ export default function PaymentModal() {
  )}
  </button>
  </div>
- <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
  </div>
  );
 }

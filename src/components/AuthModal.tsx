@@ -2,8 +2,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Mail, Phone, User, Loader2, Building, BookOpen, Calendar, MapPin, CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react';
 import gsap from 'gsap';
-import Script from 'next/script';
 import { useStore } from '../lib/useStore';
+import { loadRazorpayScript } from '../lib/loadRazorpay';
+
 interface AuthModalProps {
  isOpen: boolean;
  onClose: () => void;
@@ -142,14 +143,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  };
  
   const handleRazorpayLoad = async (options: any) => {
-    // Wait for Next.js Script to populate window.Razorpay
-    let attempts = 0;
-    while (!(window as any).Razorpay && attempts < 50) {
-      await new Promise(r => setTimeout(r, 150));
-      attempts++;
-    }
+    const res = await loadRazorpayScript();
     
-    if (!(window as any).Razorpay) {
+    if (!res) {
       setError('Razorpay blocked! Please disable Adblockers/Brave Shields.');
       setIsLoading(false);
       return;
@@ -400,7 +396,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  )}
  </form>
  </div>
- <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
+ </div>
  </div>
  );
 }
