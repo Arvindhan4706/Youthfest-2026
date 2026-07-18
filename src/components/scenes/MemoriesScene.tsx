@@ -61,7 +61,6 @@ function SpringImage({
  // Cinematic depth of field with a softer "plateau" for smoother scrolling
  const opacity = useTransform(distance, [-0.25, -0.06, -0.02, 0.02, 0.06, 0.25], [0, 0.6, 1, 1, 0.6, 0]);
  const scale = useTransform(distance, [-0.2, -0.02, 0.02, 0.2], [0.5, 1.4, 1.4, 0.5]);
- const blur = useTransform(distance, [-0.2, -0.06, -0.02, 0.02, 0.06, 0.2], ["blur(8px)", "blur(2px)", "blur(0px)", "blur(0px)", "blur(2px)", "blur(8px)"]);
  // Dynamic glow that stays activated during the softer plateau
  const boxShadow = useTransform(
  distance,
@@ -94,7 +93,7 @@ function SpringImage({
  >
  <motion.div 
  className="w-[75vw] sm:w-[500px] pointer-events-auto" 
- style={{ scale, opacity, filter: blur, transformStyle: 'preserve-3d' }}
+ style={{ scale, opacity, transformStyle: 'preserve-3d' }}
  >
  <motion.div
  layoutId={`memories-container-${item.id}`}
