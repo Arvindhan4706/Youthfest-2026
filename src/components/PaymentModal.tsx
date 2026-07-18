@@ -33,11 +33,24 @@ export default function PaymentModal() {
  if (!shouldRender || !checkoutEvent) return null;
  const handlePayment = async () => {
  setIsLoading(true);
- 
- if (!(window as any).Razorpay) {
- addToast('Razorpay blocked! Please disable Adblockers/Brave Shields.', { points: 0 });
- setIsLoading(false);
- return;
+
+ let isLoaded = !!(window as any).Razorpay;
+    
+ if (!isLoaded) {
+   // Fallback: Try to inject it dynamically if the global one was blocked or delayed
+   isLoaded = await new Promise((resolve) => {
+     const script = document.createElement('script');
+     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+     script.onload = () => resolve(true);
+     script.onerror = () => resolve(false);
+     document.body.appendChild(script);
+   });
+ }
+
+ if (!isLoaded || !(window as any).Razorpay) {
+   addToast('Razorpay blocked! Please disable Adblockers/Brave Shields.', { points: 0 });
+   setIsLoading(false);
+   return;
  }
  try {
  const orderResponse = await fetch('/api/payment/create-order', {

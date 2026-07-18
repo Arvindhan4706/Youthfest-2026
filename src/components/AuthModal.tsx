@@ -142,7 +142,20 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  };
  
   const handleRazorpayLoad = async (options: any) => {
-    if (!(window as any).Razorpay) {
+    let isLoaded = !!(window as any).Razorpay;
+    
+    if (!isLoaded) {
+      // Fallback: Try to inject it dynamically if the global one was blocked or delayed
+      isLoaded = await new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      });
+    }
+
+    if (!isLoaded || !(window as any).Razorpay) {
       setError('Razorpay blocked! Please disable Adblockers/Brave Shields.');
       setIsLoading(false);
       return;
