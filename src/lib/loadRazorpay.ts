@@ -29,8 +29,9 @@ export const loadRazorpayScript = (): Promise<boolean> => {
 
     const script = document.createElement('script');
     script.id = 'razorpay-sdk';
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.crossOrigin = 'anonymous';
+    
+    // BYPASS ADBLOCKER: Load from our own domain instead of checkout.razorpay.com
+    script.src = '/payment-sdk.js';
     
     script.onload = () => {
       resolve(true);
