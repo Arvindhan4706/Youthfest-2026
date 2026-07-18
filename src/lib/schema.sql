@@ -98,6 +98,11 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
     third_prize NUMERIC DEFAULT 10000,
     spots_remaining NUMERIC DEFAULT 847,
     total_spots NUMERIC DEFAULT 5000,
+    contact_institute TEXT DEFAULT 'Chennai Institute of Technology',
+    contact_address TEXT DEFAULT 'Sarathy Nagar, Kundrathur, Chennai - 600069, Tamil Nadu',
+    contact_email TEXT DEFAULT 'support@youthfest2026.com',
+    contact_phone TEXT DEFAULT '+91 98765 43210',
+    contact_whatsapp TEXT DEFAULT '+919876543210',
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

@@ -1,5 +1,4 @@
 import { supabase } from './supabase';
-
 export interface Visitor {
   id: string;
   email: string;
@@ -14,7 +13,6 @@ export interface Visitor {
   payment_status: 'pending' | 'paid';
   created_at: string;
 }
-
 export interface Payment {
   id: string;
   visitor_id: string;
@@ -25,7 +23,6 @@ export interface Payment {
   status: 'pending' | 'successful' | 'failed';
   created_at: string;
 }
-
 export interface SiteSettings {
   id: string;
   participants: number;
@@ -38,9 +35,13 @@ export interface SiteSettings {
   third_prize: number;
   spots_remaining: number;
   total_spots: number;
+  contact_institute: string;
+  contact_address: string;
+  contact_email: string;
+  contact_phone: string;
+  contact_whatsapp: string;
   updated_at: string;
 }
-
 export interface AdminLog {
   id: string;
   admin_email: string;
@@ -48,7 +49,6 @@ export interface AdminLog {
   details: Record<string, unknown> | null;
   created_at: string;
 }
-
 export interface EventItem {
   id: string;
   track_id: string;
@@ -63,18 +63,14 @@ export interface EventItem {
   rules: string[];
   created_at?: string;
 }
-
 export type Role = 'Super Admin' | 'Editor' | 'Scanner' | 'Viewer';
-
 export interface AdminUser {
   id: string;
   email: string;
   role: Role;
   created_at: string;
 }
-
 // ─── Public API ──────────────────────────────────────────
-
 export const db = {
   /**
    * Register a new visitor. Returns the new visitor or throws if email/phone already exists.
@@ -83,17 +79,14 @@ export const db = {
     const emailLower = data.email.toLowerCase().trim();
     const phoneTrim = data.phone.trim();
     const nameTrim = data.name.trim();
-
     // Check if email or phone already exists
     const { data: existing, error: checkError } = await supabase
       .from('visitors')
       .select('*')
       .or(`email.eq.${emailLower},phone.eq.${phoneTrim}`);
-
     if (checkError) {
       throw new Error(checkError.message);
     }
-
     if (existing && existing.length > 0) {
       const emailMatch = existing.some(v => v.email.toLowerCase() === emailLower);
       if (emailMatch) {
@@ -101,7 +94,6 @@ export const db = {
       }
       throw new Error('This phone number is already registered. Please login instead.');
     }
-
     const { data: newVisitor, error: insertError } = await supabase
       .from('visitors')
       .insert({
@@ -118,14 +110,11 @@ export const db = {
       })
       .select()
       .single();
-
     if (insertError) {
       throw new Error(insertError.message);
     }
-
     return newVisitor;
   },
-
   /**
    * Login by email + phone. Returns the visitor or throws if not found.
    */
@@ -136,18 +125,14 @@ export const db = {
       .eq('email', email.toLowerCase().trim())
       .eq('phone', phone.trim())
       .maybeSingle();
-
     if (error) {
       throw new Error(error.message);
     }
-
     if (!visitor) {
       throw new Error('Invalid email or contact number. Please check and try again.');
     }
-
     return visitor;
   },
-
   /**
    * Update a visitor's profile by email.
    */
@@ -168,48 +153,39 @@ export const db = {
         .select('id')
         .eq('email', newEmail)
         .maybeSingle();
-
       if (checkError) throw new Error(checkError.message);
       if (conflict) {
         throw new Error('This email is already taken by another visitor.');
       }
       payload.email = newEmail;
     }
-
     const { data: updated, error } = await supabase
       .from('visitors')
       .update(payload)
       .eq('email', emailLower)
       .select()
       .single();
-
     if (error) {
       throw new Error(error.message);
     }
-
     return updated;
   },
-
   /**
    * Update a visitor's payment status (usually called by Webhook).
    */
   async updatePaymentStatus(email: string, status: 'paid' | 'pending'): Promise<Visitor> {
     const emailLower = email.toLowerCase().trim();
-
     const { data: updated, error } = await supabase
       .from('visitors')
       .update({ payment_status: status })
       .eq('email', emailLower)
       .select()
       .single();
-
     if (error) {
       throw new Error(error.message);
     }
-
     return updated;
   },
-
   /**
    * Register a visitor for an event.
    */
@@ -221,28 +197,22 @@ export const db = {
       .select('*')
       .eq('email', emailLower)
       .single();
-
     if (getError) throw new Error(getError.message);
     if (!visitor) throw new Error('Visitor not found.');
-
     const events = visitor.registered_events || [];
     if (events.includes(eventId)) {
       throw new Error('You are already registered for this event.');
     }
-
     const updatedEvents = [...events, eventId];
-
     const { data: updated, error: updateError } = await supabase
       .from('visitors')
       .update({ registered_events: updatedEvents })
       .eq('email', emailLower)
       .select()
       .single();
-
     if (updateError) throw new Error(updateError.message);
     return updated;
   },
-
   /**
    * Get total registered count.
    */
@@ -250,11 +220,9 @@ export const db = {
     const { count, error } = await supabase
       .from('visitors')
       .select('*', { count: 'exact', head: true });
-
     if (error) throw new Error(error.message);
     return count || 0;
   },
-
   /**
    * Get a visitor by email.
    */
@@ -264,11 +232,9 @@ export const db = {
       .select('*')
       .eq('email', email.toLowerCase().trim())
       .maybeSingle();
-
     if (error) throw new Error(error.message);
     return data;
   },
-
   /**
    * Get all registered visitors (Admin feature).
    */
@@ -278,7 +244,6 @@ export const db = {
         .from('visitors')
         .select('*')
         .order('created_at', { ascending: false });
-
       if (error) throw new Error(error.message);
       return data || [];
     } catch (e) {
@@ -286,7 +251,6 @@ export const db = {
       return [];
     }
   },
-
   /**
    * Log an admin action
    */
@@ -301,7 +265,6 @@ export const db = {
       console.error('Failed to log admin action', err);
     }
   },
-
   /**
    * Get all admin logs (Super Admin only)
    */
@@ -310,11 +273,9 @@ export const db = {
       .from('admin_logs')
       .select('*')
       .order('created_at', { ascending: false });
-
     if (error) throw new Error(error.message);
     return data || [];
   },
-
   /**
    * Verify a ticket for scanner and mark attendance.
    */
@@ -324,16 +285,13 @@ export const db = {
       .select('*')
       .eq('email', email.toLowerCase().trim())
       .single();
-
     if (error || !visitor) {
       throw new Error('Ticket Invalid: Visitor not found.');
     }
-
     const events = visitor.registered_events || [];
     if (!events.includes(eventId)) {
       throw new Error(`UNAUTHORIZED: Not registered for ${eventId}`);
     }
-
     // Try to mark attendance
     const { error: attendanceError } = await supabase
       .from('attendance')
@@ -343,7 +301,6 @@ export const db = {
         visitor_email: visitor.email || email,
         event_id: eventId,
       });
-
     // If it violates unique constraint, they are already checked in
     if (attendanceError) {
       if (attendanceError.code === '23505') { // Postgres unique violation code
@@ -352,10 +309,8 @@ export const db = {
         throw new Error(`Attendance Error: ${attendanceError.message}`);
       }
     }
-
     return visitor;
   },
-
   /**
    * Get Total Check-ins
    */
@@ -364,7 +319,6 @@ export const db = {
       const { count, error } = await supabase
         .from('attendance')
         .select('*', { count: 'exact', head: true });
-
       if (error) throw new Error(error.message);
       return count || 0;
     } catch (e) {
@@ -372,7 +326,6 @@ export const db = {
       return 0;
     }
   },
-
   /**
    * Get Site Settings
    */
@@ -389,32 +342,32 @@ export const db = {
       third_prize: 10000,
       spots_remaining: 847,
       total_spots: 5000,
+      contact_institute: 'Chennai Institute of Technology',
+      contact_address: 'Sarathy Nagar, Kundrathur, Chennai - 600069, Tamil Nadu',
+      contact_email: 'support@youthfest2026.com',
+      contact_phone: '+91 98765 43210',
+      contact_whatsapp: '+919876543210',
       updated_at: new Date().toISOString()
     };
-    
     try {
       const { data, error } = await supabase
         .from('site_settings')
         .select('*')
         .eq('id', 'stats')
         .single();
-
       if (error && error.code !== 'PGRST116') { // PGRST116 is not found
         throw new Error(error.message);
       }
-      
       // Default fallback if table is empty
       if (!data) {
         return defaultSettings;
       }
-      
       return data as SiteSettings;
     } catch (e) {
       console.warn('Failed to fetch site settings, using fallback settings:', e);
       return defaultSettings;
     }
   },
-
   /**
    * Update Site Settings
    */
@@ -424,11 +377,9 @@ export const db = {
       .upsert({ id: 'stats', ...settings, updated_at: new Date().toISOString() })
       .select()
       .single();
-
     if (error) throw new Error(error.message);
     return data as SiteSettings;
   },
-
   /**
    * Get all events from the database
    */
@@ -438,7 +389,6 @@ export const db = {
         .from('events')
         .select('*')
         .order('created_at', { ascending: true });
-
       if (error) throw new Error(error.message);
       return data || [];
     } catch (e) {
@@ -446,7 +396,6 @@ export const db = {
       return [];
     }
   },
-
   /**
    * Add a new event
    */
@@ -456,11 +405,9 @@ export const db = {
       .insert(event)
       .select()
       .single();
-
     if (error) throw new Error(error.message);
     return data;
   },
-
   /**
    * Update an existing event
    */
@@ -471,11 +418,9 @@ export const db = {
       .eq('id', id)
       .select()
       .single();
-
     if (error) throw new Error(error.message);
     return data;
   },
-
   /**
    * Delete an event
    */
@@ -484,10 +429,8 @@ export const db = {
       .from('events')
       .delete()
       .eq('id', id);
-
     if (error) throw new Error(error.message);
   },
-
   /**
    * Get an admin user by email
    */
@@ -497,11 +440,9 @@ export const db = {
       .select('*')
       .eq('email', email.toLowerCase().trim())
       .maybeSingle();
-
     if (error) throw new Error(error.message);
     return data;
   },
-
   /**
    * Get all admin users (Super Admin only)
    */
@@ -510,11 +451,9 @@ export const db = {
       .from('admin_users')
       .select('*')
       .order('created_at', { ascending: false });
-
     if (error) throw new Error(error.message);
     return data || [];
   },
-
   /**
    * Add a new admin user
    */
@@ -524,11 +463,9 @@ export const db = {
       .insert({ email: email.toLowerCase().trim(), role })
       .select()
       .single();
-
     if (error) throw new Error(error.message);
     return data;
   },
-
   /**
    * Update an admin user's role
    */
@@ -539,11 +476,9 @@ export const db = {
       .eq('id', id)
       .select()
       .single();
-
     if (error) throw new Error(error.message);
     return data;
   },
-
   /**
    * Delete an admin user
    */
@@ -552,7 +487,6 @@ export const db = {
       .from('admin_users')
       .delete()
       .eq('id', id);
-
     if (error) throw new Error(error.message);
   }
 };

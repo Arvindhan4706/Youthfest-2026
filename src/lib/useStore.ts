@@ -1,15 +1,12 @@
 import { create } from 'zustand';
 import { db } from './database';
-
 export type CursorMode = 'default' | 'gaming' | 'festival' | 'neon';
-
 export interface ToastMessage {
   id: string;
   message: string;
   badge?: string;
   points?: number;
 }
-
 export interface UserProfile {
   email: string;
   name: string;
@@ -21,7 +18,6 @@ export interface UserProfile {
   city?: string;
   registeredEvents: string[];
 }
-
 export interface EventDetails {
   id: string;
   title: string;
@@ -29,7 +25,6 @@ export interface EventDetails {
   fee: string;
   desc?: string;
 }
-
 export interface EmailMessage {
   id: string;
   eventId: string;
@@ -40,7 +35,6 @@ export interface EmailMessage {
   subject: string;
   body: string;
 }
-
 interface AppState {
   isMuted: boolean;
   setMuted: (muted: boolean) => void;
@@ -64,9 +58,7 @@ interface AppState {
   initiateRegistration: (event: EventDetails) => void;
   addPoints: (points: number, reason: string) => void;
 }
-
 import { persist } from 'zustand/middleware';
-
 export const useStore = create<AppState>()(
   persist(
     (set, get) => {
@@ -80,7 +72,6 @@ export const useStore = create<AppState>()(
           console.error(e);
         }
       }
-
       return {
     isMuted: true,
     setMuted: (muted) => set({ isMuted: muted }),
@@ -118,9 +109,7 @@ export const useStore = create<AppState>()(
         badge: options?.badge,
         points: options?.points,
       };
-      
       set((state) => ({ toasts: [...state.toasts, newToast] }));
-
       // Auto-remove toast after 4s
       setTimeout(() => {
         get().removeToast(id);
@@ -132,23 +121,19 @@ export const useStore = create<AppState>()(
     registerForEvent: async (eventId) => {
       const user = get().user;
       if (!user) return;
-      
       if (user.registeredEvents.includes(eventId)) {
         get().addToast('You are already registered for this event!');
         return;
       }
-
       try {
         // Persist to Supabase database
         const updated = await db.registerForEvent(user.email, eventId);
-        
         set({
           user: {
             ...user,
             registeredEvents: updated.registered_events,
           },
         });
-
         get().addToast(`Successfully registered for ${eventId}!`);
       } catch (err: unknown) {
         const errorMsg = err instanceof Error ? err.message : 'Failed to register for event.';
@@ -162,12 +147,10 @@ export const useStore = create<AppState>()(
         get().setAuthOpen(true);
         return;
       }
-
       if (user.registeredEvents.includes(event.title)) {
         get().addToast('You are already registered for this event!');
         return;
       }
-
       // Open checkout modal
       get().setCheckoutEvent(event);
     },

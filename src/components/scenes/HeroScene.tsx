@@ -187,11 +187,7 @@ export default function HeroScene() {
         className="absolute inset-0 pointer-events-none"
       >
         
-        {/* Grid overlay */}
-        <motion.div 
-          style={{ x: parallaxX1, y: parallaxY1 }} 
-          className="absolute inset-0 bg-grid opacity-30 pointer-events-none" 
-        />
+        {/* Grid overlay removed as requested */}
 
         {/* Radial glow spots - Optimized (static scale/opacity, only parallax) */}
         <motion.div 
@@ -367,7 +363,7 @@ export default function HeroScene() {
             className="group relative flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-white text-base overflow-hidden transition-all duration-300 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_50px_rgba(0,240,255,0.6)] animate-breathe"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
-            <div className="absolute inset-[1px] rounded-[15px] bg-[#011213]/50 group-hover:bg-transparent transition-all duration-300" />
+            <div className="absolute inset-[1px] rounded-[15px] glass group-hover:bg-transparent transition-all duration-300" />
             <span className="relative z-10 flex items-center gap-2 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
               Register Now — Spots Filling Fast <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </span>
