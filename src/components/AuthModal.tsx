@@ -139,8 +139,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  }
  }
  };
- const rzp1 = new (window as any).Razorpay(options);
- rzp1.on('payment.failed', function (response: any) {
+ if (!(window as any).Razorpay) {
+    setError('Razorpay SDK failed to load. Please check your connection or disable adblockers.');
+    setIsLoading(false);
+    return;
+  }
+  
+  const rzp1 = new (window as any).Razorpay(options);
+  rzp1.on('payment.failed', function (response: any) {
  setError(`Payment failed: ${response.error.description}`);
  setIsLoading(false);
  });

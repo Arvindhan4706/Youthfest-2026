@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Orbitron, Poppins, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
 import "./globals.css";
 const inter = Inter({
  variable: "--font-inter",
@@ -77,7 +78,7 @@ export default function RootLayout({
  <body className="min-h-screen font-sans">
  {children}
  <Analytics />
- <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
+ <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
  </body>
  </html>
  );
