@@ -80,11 +80,11 @@ export default function FAQScene() {
  <motion.div
  key={idx}
  layout
- className="glass-strong rounded-2xl overflow-hidden transition-colors hover:border-[var(--neon-cyan)]/15"
+ className="glass-strong rounded-3xl overflow-hidden transition-colors hover:border-[var(--neon-cyan)]/15"
  >
  <button
  onClick={() => toggleFAQ(idx)}
- className="w-full px-6 py-5 flex items-center justify-between text-left gap-4"
+ className="w-full px-4 sm:px-6 py-5 sm:py-6 flex items-center justify-between text-left gap-4"
  >
  <div className="flex items-center gap-3">
  <span className={`text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded border ${categoryColors[faq.category]}`}>

@@ -40,7 +40,7 @@ function StatCard({ stat, idx }: { stat: any, idx: number }) {
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true, margin: "-50px" }}
  transition={{ duration: 0.6, delay: idx * 0.1 }}
- className={`group relative p-6 rounded-2xl glass-strong hover:bg-white/[0.08] transition-all duration-500 text-center cursor-default overflow-hidden flex flex-col items-center justify-center ${colSpanClass}`}
+ className={`group relative p-4 sm:p-6 rounded-3xl glass-strong hover:bg-white/[0.08] transition-all duration-500 text-center cursor-default overflow-hidden flex flex-col items-center justify-center ${colSpanClass}`}
  style={{ boxShadow: `0 0 30px ${stat.color}08, inset 0 0 30px ${stat.color}04` }}
  >
  <div

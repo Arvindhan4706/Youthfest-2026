@@ -42,10 +42,19 @@ function SpringImage({
  scrollYProgress: MotionValue<number>,
  openLightbox: (i: number) => void 
 }) {
- const angleDeg = idx * 72; // 5 items per coil
- const radius = 750; // Extra wide circle
- const verticalStep = 450;
- const y = idx * verticalStep;
+  const [radius, setRadius] = useState(750);
+  useEffect(() => {
+    const handleResize = () => {
+      setRadius(window.innerWidth < 768 ? Math.min(window.innerWidth * 0.6, 300) : 750);
+    };
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const angleDeg = idx * 72; // 5 items per coil
+  const verticalStep = typeof window !== 'undefined' && window.innerWidth < 768 ? 350 : 450;
+  const y = idx * verticalStep;
  // Calculate how close this item is to being the "active" center item
  const centerProgress = 0.1 + (idx / (total - 1 || 1)) * 0.8;
  const distance = useTransform(scrollYProgress, (p) => p - centerProgress);
@@ -84,7 +93,7 @@ function SpringImage({
  }}
  >
  <motion.div 
- className="w-[85vw] sm:w-[500px] pointer-events-auto" 
+ className="w-[75vw] sm:w-[500px] pointer-events-auto" 
  style={{ scale, opacity, filter: blur, transformStyle: 'preserve-3d' }}
  >
  <motion.div
@@ -152,34 +161,47 @@ function SpringImage({
  );
 }
 export default function MemoriesScene() {
- const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
- const lightboxRef = useRef<HTMLDivElement>(null);
- const targetRef = useRef<HTMLDivElement>(null);
- const { scrollYProgress } = useScroll({ 
- target: targetRef,
- offset: ["start start", "end end"]
- });
- const total = GALLERY_IMAGES.length;
- // Calculate stepped scrolling maps for the master container
- // This creates a physical "pause" where the helix locks in place when an image is centered
- const scrollMap = [];
- const yMap = [];
- const rotateMap = [];
- const startScroll = 0.1;
- const endScroll = 0.9;
- const stepSize = (endScroll - startScroll) / (total - 1 || 1); // Space between each image
- const pauseDelta = stepSize * 0.12; // Reduced pause time to 12% for much smoother continuous scrolling
- for (let i = 0; i < total; i++) {
- const center = startScroll + i * stepSize;
- // Start of the pause plateau
- scrollMap.push(center - pauseDelta);
- yMap.push(-i * 450);
- rotateMap.push(-i * 72);
- // End of the pause plateau
- scrollMap.push(center + pauseDelta);
- yMap.push(-i * 450);
- rotateMap.push(-i * 72);
- }
+  const [config, setConfig] = useState({ verticalStep: 450 });
+  
+  useEffect(() => {
+    const handleResize = () => {
+      setConfig({
+        verticalStep: window.innerWidth < 768 ? 350 : 450
+      });
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const lightboxRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ 
+    target: targetRef,
+    offset: ["start start", "end end"]
+  });
+
+  const total = GALLERY_IMAGES.length;
+  const scrollMap = [];
+  const yMap = [];
+  const rotateMap = [];
+  
+  const startScroll = 0.1;
+  const endScroll = 0.9;
+  const stepSize = (endScroll - startScroll) / (total - 1 || 1); 
+  const pauseDelta = stepSize * 0.12; 
+  
+  for (let i = 0; i < total; i++) {
+    const center = startScroll + i * stepSize;
+    scrollMap.push(center - pauseDelta);
+    yMap.push(-i * config.verticalStep);
+    rotateMap.push(-i * 72);
+    
+    scrollMap.push(center + pauseDelta);
+    yMap.push(-i * config.verticalStep);
+    rotateMap.push(-i * 72);
+  }
  // Map the stepped arrays to the master container
  const springY = useTransform(scrollYProgress, scrollMap, yMap);
  const springRotateY = useTransform(scrollYProgress, scrollMap, rotateMap);

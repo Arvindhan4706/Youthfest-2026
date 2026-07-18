@@ -250,7 +250,7 @@ export default function HeroScene() {
           animate="visible"
           className="relative mb-4 perspective-1000"
         >
-          <h1 className="flex justify-center flex-wrap text-5xl sm:text-7xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-white leading-none z-10 relative">
+          <h1 className="flex justify-center flex-wrap text-[11vw] sm:text-[10vw] md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-white leading-none z-10 relative">
             {titleText.split('').map((char, index) => (
               <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>
                 {char}
@@ -262,7 +262,7 @@ export default function HeroScene() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.7 }}
             transition={{ delay: 3.0, duration: 1 }}
-            className="absolute inset-0 text-5xl sm:text-7xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-cyan)] leading-none pointer-events-none mix-blend-screen"
+            className="absolute inset-0 text-[11vw] sm:text-[10vw] md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-cyan)] leading-none pointer-events-none mix-blend-screen"
             style={{ animation: 'glitch-1 4s ease-in-out infinite' }}
             aria-hidden="true"
           >
@@ -272,7 +272,7 @@ export default function HeroScene() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.7 }}
             transition={{ delay: 3.0, duration: 1 }}
-            className="absolute inset-0 text-5xl sm:text-7xl md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-magenta)] leading-none pointer-events-none mix-blend-screen"
+            className="absolute inset-0 text-[11vw] sm:text-[10vw] md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-magenta)] leading-none pointer-events-none mix-blend-screen"
             style={{ animation: 'glitch-2 4s ease-in-out infinite' }}
             aria-hidden="true"
           >
@@ -340,14 +340,14 @@ export default function HeroScene() {
           initial={{ opacity: 0, scale: 0.5, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1, delay: 4.2, type: "spring", bounce: 0.4 }}
-          className="flex items-center justify-center gap-2 sm:gap-3 md:gap-5 mb-10 sm:mb-12 flex-wrap"
+          className="flex items-center justify-center gap-1 sm:gap-3 md:gap-5 mb-10 sm:mb-12 mx-auto scale-95 sm:scale-100"
         >
           <CountdownUnit value={countdown.days} label="Days" />
-          <span className="text-2xl text-[var(--neon-cyan)] font-bold mt-[-20px] animate-pulse">:</span>
+          <span className="text-xl sm:text-2xl text-[var(--neon-cyan)] font-bold mt-[-20px] animate-pulse">:</span>
           <CountdownUnit value={countdown.hours} label="Hours" />
-          <span className="text-2xl text-[var(--neon-cyan)] font-bold mt-[-20px] animate-pulse">:</span>
+          <span className="text-xl sm:text-2xl text-[var(--neon-cyan)] font-bold mt-[-20px] animate-pulse">:</span>
           <CountdownUnit value={countdown.minutes} label="Mins" />
-          <span className="text-2xl text-[var(--neon-cyan)] font-bold mt-[-20px] animate-pulse">:</span>
+          <span className="text-xl sm:text-2xl text-[var(--neon-cyan)] font-bold mt-[-20px] animate-pulse">:</span>
           <CountdownUnit value={countdown.seconds} label="Secs" />
         </motion.div>
 

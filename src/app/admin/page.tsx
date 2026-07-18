@@ -273,6 +273,7 @@ export default function AdminPortal() {
  <input
  type="email"
  required
+ autoComplete="off"
  value={emailInput}
  onChange={(e) => setEmailInput(e.target.value)}
  placeholder="Admin Email"
@@ -284,6 +285,7 @@ export default function AdminPortal() {
  <input
  type="password"
  required
+ autoComplete="new-password"
  value={passkeyInput}
  onChange={(e) => setPasskeyInput(e.target.value)}
  placeholder="Global Passkey"

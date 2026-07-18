@@ -141,7 +141,7 @@ export default function PrizePoolScene() {
  </p>
  </div>
  {/* Podium Layout */}
- <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-4 lg:gap-8 items-end h-auto md:h-[500px]">
+ <div className="grid grid-cols-2 md:flex md:flex-row items-end justify-center gap-4 md:gap-4 lg:gap-8 h-auto md:h-[500px]">
  {PRIZES.map((prize, idx) => {
  const isCenter = idx === 1;
  return (
@@ -149,55 +149,55 @@ export default function PrizePoolScene() {
  key={prize.place}
  initial={{ opacity: 0, y: 100 }}
  whileInView={{ opacity: 1, y: 0 }}
- viewport={{ once: true, margin: "-100px" }}
+ viewport={{ once: true, margin: "-50px" }}
  transition={{ duration: 0.8, delay: prize.delay, type: 'spring', bounce: 0.4 }}
- className={`w-full max-w-sm md:w-1/3 relative flex flex-col items-center justify-end ${isCenter ? 'order-first md:order-none z-20 mb-8 md:mb-0' : 'z-10'}`}
+ className={`w-full relative flex flex-col items-center justify-end ${
+ isCenter ? 'col-span-2 order-first md:order-none z-20 mb-4 md:mb-0' : 'col-span-1 z-10'
+ } md:w-1/3`}
  style={{ transform: `scale(${prize.scale})` }}
  >
- {/* Glowing Aura behind trophy */}
- <div 
- style={{ background: prize.color }}
- />
  {/* The Card */}
  <div 
- className="w-full relative rounded-t-3xl border-t border-x border-white/10 overflow-hidden flex flex-col items-center pt-16 pb-12 px-6 group "
+ className={`w-full relative rounded-t-3xl border-t border-x border-white/10 overflow-hidden flex flex-col items-center pt-8 sm:pt-16 pb-6 sm:pb-12 px-2 sm:px-6 group ${
+ isCenter ? 'h-[300px] sm:h-[350px] md:h-[450px]' : 'h-[220px] sm:h-[280px] md:h-[380px]'
+ }`}
  style={{ 
  background: `linear-gradient(180deg, ${prize.bgGlow} 0%, rgba(3,0,20,0.8) 100%)`,
- boxShadow: prize.shadowGlow,
- height: isCenter ? '450px' : '380px'
+ boxShadow: prize.shadowGlow
  }}
  >
  {/* Trophy Icon */}
  <motion.div 
- className="relative mb-8 text-center flex justify-center"
+ className="relative mb-4 sm:mb-8 text-center flex justify-center"
  animate={{ y: [0, -10, 0] }}
  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: prize.delay }}
  >
  <Trophy 
- className={`${isCenter ? 'w-32 h-32' : 'w-24 h-24'} drop-shadow-2xl transition-transform duration-500 group-hover:scale-110`}
+ className={`${isCenter ? 'w-20 h-20 sm:w-32 sm:h-32' : 'w-12 h-12 sm:w-24 sm:h-24'} drop-shadow-2xl transition-transform duration-500 group-hover:scale-110`}
  style={{ color: prize.color, filter: `drop-shadow(0 0 20px ${prize.color})` }}
  strokeWidth={1.5}
  />
  {isCenter && (
- <Sparkles className="absolute -top-4 -right-4 w-8 h-8 text-white animate-pulse" />
+ <Sparkles className="absolute -top-2 sm:-top-4 -right-2 sm:-right-4 w-6 h-6 sm:w-8 sm:h-8 text-white animate-pulse" />
  )}
  </motion.div>
  {/* Text Content */}
  <div className="text-center mt-auto w-full">
  <h3 
- className="text-lg font-bold uppercase tracking-widest mb-2"
+ className={`font-bold uppercase tracking-widest mb-1 sm:mb-2 ${isCenter ? 'text-base sm:text-lg' : 'text-xs sm:text-lg'}`}
  style={{ color: prize.color }}
  >
  {prize.place}
  </h3>
- <div className="text-4xl sm:text-5xl font-[var(--font-orbitron)] font-black text-white tabular-nums flex items-start justify-center gap-1">
- <span className="text-2xl mt-1 text-gray-400">₹</span>
+ <div className={`font-[var(--font-orbitron)] font-black text-white tabular-nums flex items-start justify-center gap-1 ${isCenter ? 'text-3xl sm:text-5xl' : 'text-xl sm:text-4xl md:text-5xl'}`}>
+ <span className="text-lg sm:text-2xl mt-0.5 sm:mt-1 text-gray-400">₹</span>
  {prize.amount}
  </div>
  </div>
  {/* Animated Bottom Line */}
  <div 
  className="absolute bottom-0 left-0 w-full h-1"
+ style={{ background: prize.color, boxShadow: `0 0 10px ${prize.color}` }}
  />
  </div>
  </motion.div>

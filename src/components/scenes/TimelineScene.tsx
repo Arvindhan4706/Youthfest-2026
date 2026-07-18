@@ -89,7 +89,7 @@ export default function TimelineScene() {
  return (
  <div key={eventIdx} className="relative flex items-center w-full group">
  {/* Center Node / Dot */}
- <div className="absolute left-[30px] sm:left-[60px] -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#030014] bg-white transition-all duration-500 group-hover:scale-150 group-hover:shadow-[0_0_15px_white] z-20" />
+ <div className="absolute left-[30px] sm:left-[60px] -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#030014] bg-white transition-all duration-500 scale-125 sm:scale-100 sm:group-hover:scale-150 shadow-[0_0_10px_white] sm:shadow-none sm:group-hover:shadow-[0_0_15px_white] z-20" />
  {/* Content Card Wrapper */}
  <motion.div
  initial={{ opacity: 0, y: 30 }}
@@ -100,7 +100,7 @@ export default function TimelineScene() {
  >
  {/* The Card */}
  <div 
- className="w-full p-5 sm:p-6 rounded-2xl border border-white/5 bg-white/[0.02] transition-all duration-500 hover:bg-white/[0.04] hover:border-white/20 hover:shadow-2xl relative overflow-hidden group-hover:-translate-y-1"
+ className="w-full p-5 sm:p-6 rounded-3xl border border-white/5 bg-white/[0.02] transition-all duration-500 hover:bg-white/[0.04] hover:border-white/20 hover:shadow-2xl relative overflow-hidden group-hover:-translate-y-1"
  style={{ boxShadow: `0 4px 30px rgba(0, 0, 0, 0.1), inset 0 0 20px ${event.color}05` }}
  >
  {/* Hover accent line */}

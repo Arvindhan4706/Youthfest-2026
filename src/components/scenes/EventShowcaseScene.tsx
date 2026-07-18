@@ -94,17 +94,17 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  onMouseMove={handleMouseMove}
  onMouseLeave={handleMouseLeave}
  onClick={onClick}
- className="relative w-full rounded-2xl border border-white/[0.08] bg-[#05001a]/40 overflow-hidden transition-all duration-300 ease-out shadow-2xl flex flex-col group cursor-pointer hover:border-transparent hover:scale-[1.02] hover:z-10"
+ className="relative w-full rounded-3xl border border-white/[0.08] bg-[#05001a]/40 overflow-hidden transition-all duration-300 ease-out shadow-2xl flex flex-col group cursor-pointer hover:border-transparent hover:scale-[1.02] hover:z-10 shadow-[0_0_20px_rgba(255,255,255,0.02)] sm:shadow-2xl"
  style={{
  transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
  }}
  >
  {/* Animated Glowing Border via pseudo-element */}
  <div 
- className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
+ className="absolute inset-0 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-3xl"
  style={{ 
  boxShadow: `0 0 20px ${trackColor}40, inset 0 0 20px ${trackColor}20`,
- border: `1px solid ${trackColor}`
+ border: `1px solid ${trackColor}50`
  }}
  />
  {/* Hover glow background */}
@@ -112,7 +112,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
  />
  {/* Image */}
- <div className="relative h-44 w-full overflow-hidden">
+ <div className="relative h-44 sm:h-48 w-full overflow-hidden">
  <img src={event.image} alt={event.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#010008] via-black/20 to-transparent" />
  <span

@@ -86,13 +86,13 @@ export default function Navbar() {
  onMouseEnter={() => setHidden(false)} 
  />
  <nav
- className={`fixed left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 rounded-2xl transition-all duration-500 ${
- hidden ? '-top-32 opacity-0' : 'top-4 opacity-100'
- } ${
- scrolled
- ? 'bg-black/60 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]'
- : 'bg-white/[0.02] border border-white/[0.05]'
- }`}
+  className={`fixed left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 rounded-2xl transition-all duration-500 backdrop-blur-xl ${
+  hidden ? '-top-32 opacity-0' : 'top-4 opacity-100'
+  } ${
+  scrolled || mobileOpen
+  ? 'bg-[#030014]/80 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]'
+  : 'bg-white/[0.02] border border-white/[0.05]'
+  }`}
  >
  <div className="px-5 py-3 flex items-center justify-between">
  {/* Brand Logo */}
@@ -151,7 +151,7 @@ export default function Navbar() {
  {/* Admin Secret Portal */}
  <Link 
  href="/admin" 
- className="hidden sm:flex p-2 rounded-xl text-white/20 hover:bg-white/5 hover:text-[var(--neon-cyan)] transition-all duration-300"
+ className="flex p-2 rounded-xl text-white/20 hover:bg-white/5 hover:text-[var(--neon-cyan)] transition-all duration-300"
  title="Admin Portal"
  >
  <ShieldCheck className="w-4 h-4" />
@@ -182,65 +182,8 @@ export default function Navbar() {
  Dashboard
  </button>
  )}
- {/* Mobile Menu Toggle */}
- <button
- onClick={() => setMobileOpen(!mobileOpen)}
- className="md:hidden p-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white transition-all"
- >
- {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
- </button>
  </div>
  </div>
- {/* Mobile Menu */}
- <AnimatePresence>
- {mobileOpen && (
- <motion.div 
- initial={{ opacity: 0, height: 0 }}
- animate={{ opacity: 1, height: 'auto' }}
- exit={{ opacity: 0, height: 0 }}
- className="md:hidden border-t border-white/5 px-5 pb-4 pt-2 flex flex-col gap-1 overflow-y-auto max-h-[75dvh] bg-black/40 rounded-b-2xl"
- >
- {navLinks.map((link) => (
- <Link
- key={link.href}
- href={link.href}
- onClick={(e) => handleSmoothScroll(e, link.href)}
- className={`text-sm py-3 px-4 rounded-xl transition-all flex items-center ${
- activeSection === link.href 
- ? 'bg-white/10 text-white font-semibold shadow-[inset_2px_0_0_var(--neon-cyan)]' 
- : 'text-gray-400 hover:bg-white/5 hover:text-white'
- }`}
- >
- {link.label}
- </Link>
- ))}
- {!user ? (
- <div className="mt-3 flex flex-col gap-2">
- <button
- onClick={() => { setAuthOpen(true, 'register'); setMobileOpen(false); }}
- className="w-full flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-sm font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)]"
- >
- Sign In
- </button>
- <button
- onClick={() => { setAuthOpen(true, 'login'); setMobileOpen(false); }}
- className="w-full flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-sm font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)]"
- >
- Log In
- </button>
- </div>
- ) : (
- <button
- onClick={handleUserClick}
- className="mt-3 w-full flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-sm font-bold bg-white/10 hover:bg-white/20 border border-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)]"
- >
- <User className="w-3.5 h-3.5" />
- Dashboard
- </button>
- )}
- </motion.div>
- )}
- </AnimatePresence>
  </nav>
  <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
  </>

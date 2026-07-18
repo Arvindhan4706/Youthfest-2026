@@ -47,11 +47,11 @@ function MarqueeRow({ sponsors, direction, speed, title, color }: { sponsors: Sp
  </div>
  <div className="relative w-full overflow-hidden flex items-center h-28 group">
  {/* Left/Right Fade Masks */}
- <div className="absolute top-0 bottom-0 left-0 w-24 bg-gradient-to-r from-[#010008] to-transparent z-10 pointer-events-none" />
- <div className="absolute top-0 bottom-0 right-0 w-24 bg-gradient-to-l from-[#010008] to-transparent z-10 pointer-events-none" />
+ <div className="absolute top-0 bottom-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#010008] to-transparent z-10 pointer-events-none" />
+ <div className="absolute top-0 bottom-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#010008] to-transparent z-10 pointer-events-none" />
  {/* Scrolling Container */}
  <motion.div
- className="flex whitespace-nowrap gap-8 px-4 w-max"
+ className="flex whitespace-nowrap gap-4 sm:gap-8 px-4 w-max"
  animate={{
  x: direction === 'left' ? ['0%', '-33.33%'] : ['-33.33%', '0%']
  }}
@@ -66,12 +66,12 @@ function MarqueeRow({ sponsors, direction, speed, title, color }: { sponsors: Sp
  {marqueeItems.map((sponsor, index) => (
  <div 
  key={`${sponsor.id}-${index}`}
- className="inline-flex shrink-0 items-center justify-center w-48 h-20 rounded-xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:scale-105 group/card cursor-pointer"
+ className="inline-flex shrink-0 items-center justify-center w-36 sm:w-48 h-16 sm:h-20 rounded-xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:scale-105 group/card cursor-pointer"
  >
  <img 
  src={sponsor.logo} 
  alt={sponsor.name} 
- className="max-w-[120px] max-h-[40px] object-contain opacity-50 grayscale transition-all duration-300 group-hover/card:opacity-100 group-hover/card:grayscale-0"
+ className="max-w-[90px] sm:max-w-[120px] max-h-[30px] sm:max-h-[40px] object-contain opacity-50 grayscale transition-all duration-300 group-hover/card:opacity-100 group-hover/card:grayscale-0"
  />
  </div>
  ))}

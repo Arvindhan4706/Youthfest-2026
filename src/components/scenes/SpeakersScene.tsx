@@ -67,16 +67,16 @@ function GuestCard({ guest, index }: { guest: Guest; index: number }) {
  transition={{ duration: 0.6, delay: index * 0.15 }}
  onMouseEnter={() => setHovered(true)}
  onMouseLeave={() => setHovered(false)}
- className="relative group rounded-2xl glass-strong p-6 text-center hover:scale-[1.02] transition-all duration-300 cursor-default overflow-hidden"
+ className="relative group rounded-3xl glass-strong p-6 text-center hover:scale-[1.02] transition-all duration-300 cursor-default overflow-hidden"
  style={{ boxShadow: hovered ? `0 0 40px ${guest.color}15` : undefined }}
  >
  {/* Corner glow */}
  <div
- className="absolute -top-10 -right-10 w-24 h-24 rounded-full blur-[40px] opacity-0 group-hover:opacity-30 transition-opacity"
+ className="absolute -top-10 -right-10 w-24 h-24 rounded-full blur-[40px] opacity-20 sm:opacity-0 group-hover:opacity-30 transition-opacity"
  style={{ background: guest.color }}
  />
  {/* Avatar circle */}
- <div className="mx-auto mb-5 relative w-24 h-24">
+ <div className="mx-auto mb-5 relative w-24 h-24 sm:w-28 sm:h-28">
  <div
  className="w-full h-full rounded-full overflow-hidden transition-all duration-300"
  style={{
@@ -84,7 +84,7 @@ function GuestCard({ guest, index }: { guest: Guest; index: number }) {
  boxShadow: hovered ? `0 0 30px ${guest.color}30` : `0 0 15px ${guest.color}10`,
  }}
  >
- <img src={guest.image} alt={guest.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+ <img src={guest.image} alt={guest.name} className="w-full h-full object-cover opacity-100 sm:opacity-80 group-hover:opacity-100 transition-opacity" />
  </div>
  {/* Online dot */}
  <div
@@ -92,40 +92,34 @@ function GuestCard({ guest, index }: { guest: Guest; index: number }) {
  style={{ background: guest.color }}
  />
  </div>
- <h3 className="text-white font-bold text-lg mb-1">{guest.name}</h3>
+ <h3 className="text-white font-bold text-lg sm:text-xl mb-1">{guest.name}</h3>
  <p className="text-xs text-gray-400 mb-0.5 uppercase tracking-widest">{guest.industry}</p>
- <p className="text-sm font-semibold mb-4" style={{ color: guest.color }}>{guest.title}</p>
- {/* Bio and Socials (visible on hover) */}
- <AnimatePresence>
- {hovered && (
- <motion.div
- initial={{ opacity: 0, height: 0 }}
- animate={{ opacity: 1, height: 'auto' }}
- exit={{ opacity: 0, height: 0 }}
- transition={{ duration: 0.2 }}
- className="flex flex-col items-center"
- >
- <p className="text-[12px] text-gray-300 leading-relaxed mb-4">{guest.bio}</p>
- <div className="flex gap-4 mb-2">
+ <p className="text-sm font-semibold mb-4 sm:mb-2" style={{ color: guest.color }}>{guest.title}</p>
+ {/* Bio and Socials (Always visible on mobile, hover on desktop) */}
+ <div className="max-h-[500px] sm:max-h-0 sm:group-hover:max-h-[500px] sm:opacity-0 sm:group-hover:opacity-100 overflow-hidden transition-all duration-500 ease-in-out">
+ <div className="pt-2 sm:pt-4 border-t border-white/10 mt-2">
+ <p className="text-sm text-gray-400 leading-relaxed mb-4">
+ {guest.bio}
+ </p>
+ <div className="flex items-center justify-center gap-4">
  {guest.socials.twitter && (
- <a href={guest.socials.twitter} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors hover:scale-110">
- <Twitter className="w-4 h-4" />
+ <a href={guest.socials.twitter} className="text-gray-500 hover:text-[var(--neon-cyan)] transition-colors">
+ <Twitter className="w-5 h-5" />
  </a>
  )}
  {guest.socials.instagram && (
- <a href={guest.socials.instagram} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors hover:scale-110">
- <Instagram className="w-4 h-4" />
+ <a href={guest.socials.instagram} className="text-gray-500 hover:text-[var(--neon-magenta)] transition-colors">
+ <Instagram className="w-5 h-5" />
  </a>
  )}
  {guest.socials.linkedin && (
- <a href={guest.socials.linkedin} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors hover:scale-110">
- <Linkedin className="w-4 h-4" />
+ <a href={guest.socials.linkedin} className="text-gray-500 hover:text-[var(--neon-violet)] transition-colors">
+ <Linkedin className="w-5 h-5" />
  </a>
  )}
  </div>
- </motion.div>
- )}
- </AnimatePresence>
+ </div>
+ </div>
  {/* Bottom accent */}
  <div
  className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] group-hover:w-2/3 transition-all duration-500"

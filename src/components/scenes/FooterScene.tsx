@@ -70,7 +70,7 @@ export default function FooterScene() {
  {/* Background */}
  <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 items-start mb-16 relative z-10">
  {/* Contact Form */}
- <div className="lg:col-span-4 glass-strong p-6 sm:p-8 rounded-2xl">
+ <div className="lg:col-span-4 glass-strong p-6 sm:p-8 rounded-3xl">
  <h3 className="text-lg font-[var(--font-orbitron)] font-bold text-white mb-6 uppercase tracking-wider">
  Contact <span className="text-[var(--neon-cyan)]">Committee</span>
  </h3>
@@ -120,7 +120,7 @@ export default function FooterScene() {
  </div>
  {/* Venue & Info */}
  <div className="lg:col-span-3 flex flex-col gap-6">
- <div className="glass-strong p-6 rounded-2xl">
+ <div className="glass-strong p-6 rounded-3xl">
  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Event Coordinators</h4>
  <div className="flex flex-col gap-4 text-xs text-gray-300">
   <div className="flex items-start gap-2.5 hover:text-white transition-colors group">
@@ -184,20 +184,20 @@ export default function FooterScene() {
  </button>
  </form>
  </div>
- {/* Social Links */}
- <div className="flex gap-3 justify-center lg:justify-start">
- <a href="#" className="p-3 rounded-xl glass text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all">
- <GithubIcon />
- </a>
- <a href="#" className="p-3 rounded-xl glass text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all">
- <TwitterIcon />
- </a>
- <a href="#" className="p-3 rounded-xl glass text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all">
- <InstagramIcon />
- </a>
- </div>
- </div>
- </div>
+  {/* Social Links */}
+  <div className="flex gap-4 sm:gap-3 justify-center lg:justify-start mt-4 sm:mt-0">
+  <a href="#" className="p-4 sm:p-3 rounded-2xl sm:rounded-xl glass text-gray-400 hover:text-[var(--neon-cyan)] hover:bg-white/[0.06] transition-all">
+  <GithubIcon />
+  </a>
+  <a href="#" className="p-4 sm:p-3 rounded-2xl sm:rounded-xl glass text-gray-400 hover:text-[var(--neon-cyan)] hover:bg-white/[0.06] transition-all">
+  <TwitterIcon />
+  </a>
+  <a href="#" className="p-4 sm:p-3 rounded-2xl sm:rounded-xl glass text-gray-400 hover:text-[var(--neon-cyan)] hover:bg-white/[0.06] transition-all">
+  <InstagramIcon />
+  </a>
+  </div>
+  </div>
+  </div>
  {/* Copyright */}
  <div className="max-w-6xl mx-auto border-t border-white/5 pt-8 text-center flex flex-col items-center justify-center gap-4 text-xs text-gray-500 select-none relative z-10">
  <p className="flex items-center justify-center gap-2">
