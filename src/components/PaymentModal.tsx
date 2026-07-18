@@ -48,7 +48,7 @@ export default function PaymentModal() {
  setIsLoading(true);
  const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
  if (!res) {
- addToast('Razorpay SDK failed to load. Are you online?', { points: 0 });
+ addToast('Razorpay blocked! Please disable Adblockers/Brave Shields.', { points: 0 });
  setIsLoading(false);
  return;
  }
