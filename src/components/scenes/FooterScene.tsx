@@ -147,8 +147,6 @@ export default function FooterScene() {
   transition={{ duration: 0.6, delay: 0.4 }}
   className="flex flex-col gap-6"
  >
- <div className="glass-strong p-8 rounded-[2rem] h-full flex flex-col relative overflow-hidden group">
- <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none group-hover:from-[var(--neon-cyan)]/5 transition-colors duration-500" />
  <div>
  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-8 flex items-center gap-2">
   <Users className="w-4 h-4 text-[var(--neon-cyan)]" />
@@ -164,7 +162,6 @@ export default function FooterScene() {
     <a href="#" className="p-4 rounded-2xl bg-white/[0.03] text-gray-400 hover:text-black hover:bg-[var(--neon-cyan)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:-translate-y-1 transition-all duration-300">
     <InstagramIcon />
     </a>
- </div>
  </div>
  </div>
  </motion.div>
