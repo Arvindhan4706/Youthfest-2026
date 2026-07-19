@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     if (!correctPasskey) {
       return NextResponse.json({ error: 'Server misconfiguration: passkey not set' }, { status: 500 });
     }
-    if (passkey !== correctPasskey) {
+    if (passkey.trim() !== correctPasskey.trim()) {
       return NextResponse.json({ error: 'Invalid Passkey' }, { status: 401 });
     }
     // 2. Verify Email & Role from Database
