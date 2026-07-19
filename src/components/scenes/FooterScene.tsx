@@ -65,8 +65,7 @@ export default function FooterScene() {
   transition={{ duration: 0.6 }}
   className="flex flex-col gap-6"
  >
- <div className="glass-strong p-8 rounded-[2rem] h-full relative overflow-hidden group">
-  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none group-hover:from-[var(--neon-magenta)]/5 transition-colors duration-500" />
+ <div>
  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-8 flex items-center gap-2">
   <MapPin className="w-4 h-4 text-[var(--neon-magenta)]" />
   Event Coordinators
@@ -104,7 +103,6 @@ export default function FooterScene() {
   <span className="font-medium group-hover/item:text-white transition-colors">WhatsApp Coordinator</span>
   </a>
   </div>
-  </div>
   </motion.div>
 
  {/* Quick Links */}
@@ -115,8 +113,6 @@ export default function FooterScene() {
   transition={{ duration: 0.6, delay: 0.2 }}
   className="flex flex-col gap-6"
  >
- <div className="glass-strong p-8 rounded-[2rem] h-full flex flex-col relative overflow-hidden group">
- <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none group-hover:from-[var(--neon-violet)]/5 transition-colors duration-500" />
  <div>
  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-8 flex items-center gap-2">
   <Zap className="w-4 h-4 text-[var(--neon-violet)]" />
@@ -134,7 +130,6 @@ export default function FooterScene() {
       <ChevronRight className="w-4 h-4 ml-auto opacity-0 -translate-x-2 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all duration-300" />
     </Link>
   ))}
- </div>
  </div>
  </div>
  </motion.div>
