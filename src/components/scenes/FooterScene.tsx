@@ -55,7 +55,7 @@ export default function FooterScene() {
  return (
  <footer id="contact" className="relative pt-24 pb-12 px-4 border-t border-white/[0.06] overflow-hidden" >
  {/* Background */}
- <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch mb-20 relative z-10">
+ <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch mb-20 relative z-10">
  
  {/* Venue & Info */}
  <motion.div 
@@ -65,8 +65,8 @@ export default function FooterScene() {
   transition={{ duration: 0.6 }}
   className="flex flex-col gap-6"
  >
- <div className="glass-strong p-8 sm:p-10 rounded-[2rem] h-full relative overflow-hidden group">
-  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none group-hover:from-[var(--neon-cyan)]/5 transition-colors duration-500" />
+ <div className="glass-strong p-8 rounded-[2rem] h-full relative overflow-hidden group">
+  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none group-hover:from-[var(--neon-magenta)]/5 transition-colors duration-500" />
  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-8 flex items-center gap-2">
   <MapPin className="w-4 h-4 text-[var(--neon-magenta)]" />
   Event Coordinators
@@ -107,7 +107,7 @@ export default function FooterScene() {
   </div>
   </motion.div>
 
- {/* Quick Links & Social */}
+ {/* Quick Links */}
  <motion.div 
   initial={{ opacity: 0, y: 30 }}
   whileInView={{ opacity: 1, y: 0 }}
@@ -115,14 +115,14 @@ export default function FooterScene() {
   transition={{ duration: 0.6, delay: 0.2 }}
   className="flex flex-col gap-6"
  >
- <div className="glass-strong p-8 sm:p-10 rounded-[2rem] h-full flex flex-col justify-between relative overflow-hidden group">
+ <div className="glass-strong p-8 rounded-[2rem] h-full flex flex-col relative overflow-hidden group">
  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none group-hover:from-[var(--neon-violet)]/5 transition-colors duration-500" />
  <div>
  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-8 flex items-center gap-2">
   <Zap className="w-4 h-4 text-[var(--neon-violet)]" />
   Quick Links
  </h4>
- <div className="grid grid-cols-2 gap-4 text-sm text-gray-300">
+ <div className="grid grid-cols-1 gap-4 text-sm text-gray-300">
   {links.map((link) => (
     <Link 
       key={link.label}
@@ -136,11 +136,25 @@ export default function FooterScene() {
   ))}
  </div>
  </div>
- 
-  {/* Social Links */}
-  <div className="mt-12 pt-8 border-t border-white/5">
-    <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-6">Connect With Us</h4>
-    <div className="flex gap-4">
+ </div>
+ </motion.div>
+
+ {/* Connect With Us */}
+ <motion.div 
+  initial={{ opacity: 0, y: 30 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6, delay: 0.4 }}
+  className="flex flex-col gap-6"
+ >
+ <div className="glass-strong p-8 rounded-[2rem] h-full flex flex-col relative overflow-hidden group">
+ <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none group-hover:from-[var(--neon-cyan)]/5 transition-colors duration-500" />
+ <div>
+ <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-8 flex items-center gap-2">
+  <Users className="w-4 h-4 text-[var(--neon-cyan)]" />
+  Connect With Us
+ </h4>
+ <div className="flex flex-wrap gap-4">
     <a href="#" className="p-4 rounded-2xl bg-white/[0.03] text-gray-400 hover:text-black hover:bg-[var(--neon-cyan)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:-translate-y-1 transition-all duration-300">
     <GithubIcon />
     </a>
@@ -150,11 +164,11 @@ export default function FooterScene() {
     <a href="#" className="p-4 rounded-2xl bg-white/[0.03] text-gray-400 hover:text-black hover:bg-[var(--neon-cyan)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:-translate-y-1 transition-all duration-300">
     <InstagramIcon />
     </a>
-    </div>
-  </div>
-  </div>
-  </motion.div>
-
+ </div>
+ </div>
+ </div>
+ </motion.div>
+ 
   </div>
 
  {/* Copyright */}
