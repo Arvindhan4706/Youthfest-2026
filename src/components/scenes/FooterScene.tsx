@@ -55,7 +55,7 @@ export default function FooterScene() {
  return (
  <footer id="contact" className="relative pt-24 pb-12 px-4 border-t border-white/[0.06] overflow-hidden" >
  {/* Background */}
- <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 items-stretch mb-20 relative z-10">
+ <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:justify-between gap-12 lg:gap-8 items-start mb-20 relative z-10 px-4 lg:px-0">
 
  {/* Explore (formerly Quick Links) */}
  <motion.div 
@@ -70,12 +70,12 @@ export default function FooterScene() {
   <Zap className="w-4 h-4 text-[var(--neon-violet)]" />
   Explore
  </h4>
- <div className="flex flex-col gap-5 text-sm text-gray-300 mt-2">
+ <div className="flex flex-col gap-3 text-sm text-gray-300 mt-2">
   {links.map((link) => (
     <Link 
       key={link.label}
       href={link.href} 
-      className="flex items-center gap-3 h-10 text-gray-400 hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all group/link"
+      className="flex items-center gap-3 py-2 text-gray-400 hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all group/link"
     >
       <link.icon className="w-4 h-4 opacity-70 group-hover/link:opacity-100 transition-opacity" />
       <span className="font-medium">{link.label}</span>
@@ -92,7 +92,7 @@ export default function FooterScene() {
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true }}
   transition={{ duration: 0.6, delay: 0.1 }}
-  className="flex flex-col gap-6"
+  className="flex flex-col gap-6 lg:max-w-[300px]"
  >
  <div>
  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-6 flex items-center gap-2 pb-4 border-b border-white/10">
@@ -167,14 +167,14 @@ export default function FooterScene() {
   <Users className="w-4 h-4 text-[var(--neon-cyan)]" />
   Connect With Us
  </h4>
- <div className="flex flex-wrap gap-5 mt-2">
-    <a href="#" className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 text-gray-400 hover:text-black hover:bg-[var(--neon-cyan)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:-translate-y-1 transition-all duration-300">
+ <div className="flex flex-wrap gap-4 mt-2">
+    <a href="#" className="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 text-gray-400 hover:text-black hover:bg-[var(--neon-cyan)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:-translate-y-1 transition-all duration-300">
     <GithubIcon />
     </a>
-    <a href="#" className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 text-gray-400 hover:text-black hover:bg-[var(--neon-cyan)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:-translate-y-1 transition-all duration-300">
+    <a href="#" className="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 text-gray-400 hover:text-black hover:bg-[var(--neon-cyan)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:-translate-y-1 transition-all duration-300">
     <TwitterIcon />
     </a>
-    <a href="#" className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 text-gray-400 hover:text-black hover:bg-[var(--neon-cyan)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:-translate-y-1 transition-all duration-300">
+    <a href="#" className="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 text-gray-400 hover:text-black hover:bg-[var(--neon-cyan)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:-translate-y-1 transition-all duration-300">
     <InstagramIcon />
     </a>
  </div>
