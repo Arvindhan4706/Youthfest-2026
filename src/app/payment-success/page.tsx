@@ -87,9 +87,9 @@ function PaymentSuccessContent() {
             </p>
             <Link 
               href="/"
-              className="flex items-center gap-2 px-6 py-3 bg-[var(--neon-cyan)] text-black font-bold rounded-full hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all"
+              className="flex items-center gap-2 px-6 py-2.5 bg-[var(--neon-cyan)] text-black font-semibold rounded-xl hover:bg-white shadow-sm transition-colors"
             >
-              <Home className="w-5 h-5" />
+              <Home className="w-4 h-4" />
               Return to Dashboard
             </Link>
           </div>
@@ -106,9 +106,9 @@ function PaymentSuccessContent() {
             </p>
             <Link 
               href="/"
-              className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition-all"
+              className="flex items-center gap-2 px-6 py-2.5 border border-white/20 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors"
             >
-              <Home className="w-5 h-5" />
+              <Home className="w-4 h-4" />
               Return to Home
             </Link>
           </div>

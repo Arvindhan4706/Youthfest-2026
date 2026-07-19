@@ -360,13 +360,9 @@ export default function HeroScene() {
         >
           <button
             onClick={handleRegisterClick}
-            className="group relative flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-white text-base overflow-hidden transition-all duration-300 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_50px_rgba(0,240,255,0.6)] animate-breathe"
+            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-black bg-[var(--neon-cyan)] hover:bg-white transition-all duration-300 shadow-[0_4px_14px_0_rgba(0,240,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,240,255,0.23)] hover:-translate-y-0.5"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
-            <div className="absolute inset-[1px] rounded-[15px] glass group-hover:bg-transparent transition-all duration-300" />
-            <span className="relative z-10 flex items-center gap-2 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
-              Register Now — Spots Filling Fast <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </span>
+            Register Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
 
 
