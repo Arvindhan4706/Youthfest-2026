@@ -103,6 +103,7 @@ export default function FooterScene() {
   <span className="font-medium group-hover/item:text-white transition-colors">WhatsApp Coordinator</span>
   </a>
   </div>
+  </div>
   </motion.div>
 
  {/* Quick Links */}
