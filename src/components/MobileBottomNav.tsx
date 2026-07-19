@@ -24,7 +24,7 @@ export default function MobileBottomNav() {
       },
       { rootMargin: '-30% 0px -70% 0px' }
     );
-    const sections = ['#hero', '#events', '#schedule', '#sponsors', '#faq', '#contact'];
+    const sections = ['#hero', '#events', '#schedule', '#sponsors', '#contact'];
     sections.forEach((id) => {
       const element = document.getElementById(id.replace('#', ''));
       if (element) {

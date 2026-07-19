@@ -49,7 +49,6 @@ export default function FooterScene() {
    { label: 'Schedule', href: '#schedule', icon: Calendar },
    { label: 'Events', href: '#events', icon: Flag },
    { label: 'Speakers', href: '#speakers', icon: Users },
-   { label: 'FAQ', href: '#faq', icon: HelpCircle },
  ];
 
  return (

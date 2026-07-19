@@ -12,7 +12,6 @@ const navLinks = [
  { href: '#events', label: 'Events' },
  { href: '#schedule', label: 'Schedule' },
  { href: '#sponsors', label: 'Sponsors' },
- { href: '#faq', label: 'FAQ' },
  { href: '#contact', label: 'Contact' },
 ];
 function useActiveSection(sectionIds: string[]) {

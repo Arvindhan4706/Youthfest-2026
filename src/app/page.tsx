@@ -19,7 +19,6 @@ const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene')
 const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
 const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
 const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
-const FAQScene = dynamic(() => import('../components/scenes/FAQScene'), { ssr: false });
 const FooterScene = dynamic(() => import('../components/scenes/FooterScene'), { ssr: false });
 
 import { useKonamiCode } from '../hooks/useKonamiCode';
@@ -128,10 +127,6 @@ export default function Home() {
 
         <LazyScene placeholderHeight={500}>
           <CountdownCTAScene />
-        </LazyScene>
-
-        <LazyScene placeholderHeight={800}>
-          <FAQScene />
         </LazyScene>
 
         <LazyScene placeholderHeight={500}>
