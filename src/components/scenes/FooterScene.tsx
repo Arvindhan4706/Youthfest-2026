@@ -55,9 +55,9 @@ export default function FooterScene() {
  return (
  <footer id="contact" className="relative pt-24 pb-12 px-4 border-t border-white/[0.06] overflow-hidden" >
  {/* Background */}
- <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch mb-20 relative z-10">
- 
- {/* Venue & Info */}
+ <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 items-stretch mb-20 relative z-10">
+
+ {/* Explore (formerly Quick Links) */}
  <motion.div 
   initial={{ opacity: 0, y: 30 }}
   whileInView={{ opacity: 1, y: 0 }}
@@ -67,8 +67,37 @@ export default function FooterScene() {
  >
  <div>
  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-6 flex items-center gap-2 pb-4 border-b border-white/10">
+  <Zap className="w-4 h-4 text-[var(--neon-violet)]" />
+  Explore
+ </h4>
+ <div className="flex flex-col gap-3 text-sm text-gray-300 mt-2">
+  {links.map((link) => (
+    <Link 
+      key={link.label}
+      href={link.href} 
+      className="flex items-center gap-3 py-2 text-gray-400 hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all group/link"
+    >
+      <link.icon className="w-4 h-4 opacity-70 group-hover/link:opacity-100 transition-opacity" />
+      <span className="font-medium">{link.label}</span>
+      <ChevronRight className="w-4 h-4 ml-auto opacity-0 -translate-x-2 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all duration-300" />
+    </Link>
+  ))}
+ </div>
+ </div>
+ </motion.div>
+ 
+ {/* Address */}
+ <motion.div 
+  initial={{ opacity: 0, y: 30 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6, delay: 0.1 }}
+  className="flex flex-col gap-6"
+ >
+ <div>
+ <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-6 flex items-center gap-2 pb-4 border-b border-white/10">
   <MapPin className="w-4 h-4 text-[var(--neon-magenta)]" />
-  Event Coordinators
+  Address
  </h4>
  <div className="flex flex-col gap-5 text-sm text-gray-300 mt-2">
   
@@ -81,7 +110,26 @@ export default function FooterScene() {
   <span className="text-gray-400 leading-relaxed block pr-4">{settings?.contact_address || 'Sarathy Nagar, Kundrathur, Chennai - 600069, Tamil Nadu'}</span>
   </span>
   </div>
+  
+  </div>
+  </div>
+  </motion.div>
 
+ {/* Contact */}
+ <motion.div 
+  initial={{ opacity: 0, y: 30 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6, delay: 0.2 }}
+  className="flex flex-col gap-6"
+ >
+ <div>
+ <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-6 flex items-center gap-2 pb-4 border-b border-white/10">
+  <Phone className="w-4 h-4 text-[var(--neon-lime)]" />
+  Contact
+ </h4>
+ <div className="flex flex-col gap-5 text-sm text-gray-300 mt-2">
+  
   <a href={`mailto:${settings?.contact_email || 'support@youthfest2026.com'}`} className="flex items-center gap-4 transition-all duration-300 group/item hover:translate-x-1">
   <div className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full group-hover/item:bg-[var(--neon-cyan)]/20 transition-colors shrink-0">
     <Mail className="w-4 h-4 text-gray-400 group-hover/item:text-[var(--neon-cyan)] transition-colors" /> 
@@ -106,41 +154,12 @@ export default function FooterScene() {
   </div>
   </motion.div>
 
- {/* Quick Links */}
- <motion.div 
-  initial={{ opacity: 0, y: 30 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true }}
-  transition={{ duration: 0.6, delay: 0.2 }}
-  className="flex flex-col gap-6"
- >
- <div>
- <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-6 flex items-center gap-2 pb-4 border-b border-white/10">
-  <Zap className="w-4 h-4 text-[var(--neon-violet)]" />
-  Quick Links
- </h4>
- <div className="flex flex-col gap-3 text-sm text-gray-300 mt-2">
-  {links.map((link) => (
-    <Link 
-      key={link.label}
-      href={link.href} 
-      className="flex items-center gap-3 py-2 text-gray-400 hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all group/link"
-    >
-      <link.icon className="w-4 h-4 opacity-70 group-hover/link:opacity-100 transition-opacity" />
-      <span className="font-medium">{link.label}</span>
-      <ChevronRight className="w-4 h-4 ml-auto opacity-0 -translate-x-2 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all duration-300" />
-    </Link>
-  ))}
- </div>
- </div>
- </motion.div>
-
  {/* Connect With Us */}
  <motion.div 
   initial={{ opacity: 0, y: 30 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true }}
-  transition={{ duration: 0.6, delay: 0.4 }}
+  transition={{ duration: 0.6, delay: 0.3 }}
   className="flex flex-col gap-6"
  >
  <div>
