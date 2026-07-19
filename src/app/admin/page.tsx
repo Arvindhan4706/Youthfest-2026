@@ -14,7 +14,7 @@ export default function AdminPortal() {
  const [isAuthenticated, setIsAuthenticated] = useState(false);
  const [emailInput, setEmailInput] = useState('');
  const [passkeyInput, setPasskeyInput] = useState('');
- const [authError, setAuthError] = useState(false);
+ const [authError, setAuthError] = useState('');
  const [loggedInEmail, setLoggedInEmail] = useState('');
  const [userRole, setUserRole] = useState<Role | ''>('');
  // Advanced Filters
@@ -119,7 +119,7 @@ export default function AdminPortal() {
  };
  const handleLogin = async (e: React.FormEvent) => {
  e.preventDefault();
- setAuthError(false);
+ setAuthError('');
  setIsLoading(true);
  try {
  const res = await fetch('/api/auth/admin-secure', {
@@ -136,10 +136,10 @@ export default function AdminPortal() {
  window.location.href = '/scanner';
  }
  } else {
- setAuthError(true);
+ setAuthError(data.error || 'Invalid Credentials');
  }
  } catch (error) {
- setAuthError(true);
+ setAuthError('Network error or server unreachable');
  } finally {
  setIsLoading(false);
  }
@@ -292,7 +292,7 @@ export default function AdminPortal() {
  className="w-full bg-black/40 border border-white/10 rounded-xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors font-mono tracking-[0.2em]"
  />
  </div>
- {authError && <p className="text-red-400 text-xs mt-2 font-bold uppercase tracking-wider text-center">Invalid Credentials</p>}
+ {authError && <p className="text-red-400 text-xs mt-2 font-bold uppercase tracking-wider text-center">{authError}</p>}
  </div>
  <button
  type="submit"
