@@ -205,7 +205,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  <input type="tel" required value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 9876543210" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 transition-all duration-300" />
  </div>
  </div>
- <button type="submit" disabled={isLoading} className="w-full py-4 bg-[var(--neon-violet)] text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+ <button type="submit" disabled={isLoading} className="w-full py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all flex items-center justify-center gap-2">
  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Access Portal'}
  </button>
  </div>
@@ -312,16 +312,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  {/* Navigation Buttons */}
   <div className="flex gap-4 pt-4">
   {step > 1 && (
-  <button type="button" onClick={prevStep} className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl transition-colors flex justify-center items-center gap-2">
+  <button type="button" onClick={prevStep} className="flex-1 py-3.5 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-full transition-colors flex justify-center items-center gap-2">
   <ChevronLeft className="w-4 h-4" /> Back
   </button>
   )}
   {step < 4 ? (
-  <button type="button" onClick={nextStep} className="flex-[2] py-3 bg-white text-black font-semibold rounded-xl hover:bg-gray-100 transition-colors flex justify-center items-center gap-2 shadow-sm hover:-translate-y-0.5">
+  <button type="button" onClick={nextStep} className="flex-[2] py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors flex justify-center items-center gap-2">
   Next Step <ChevronRight className="w-4 h-4" />
   </button>
   ) : (
-  <button type="submit" disabled={isLoading} className="flex-[2] py-3 bg-[var(--neon-cyan)] text-black font-bold rounded-xl hover:bg-white transition-all duration-300 flex justify-center items-center gap-2 disabled:opacity-50 shadow-[0_4px_14px_0_rgba(0,240,255,0.25)] hover:shadow-[0_6px_20px_rgba(0,240,255,0.2)] hover:-translate-y-0.5">
+  <button type="submit" disabled={isLoading} className="flex-[2] py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 flex justify-center items-center gap-2 disabled:opacity-50">
   {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirm Registration'}
   </button>
   )}

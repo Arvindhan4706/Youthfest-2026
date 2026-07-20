@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X } from 'lucide-react';
+import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X, LogOut, RefreshCw } from 'lucide-react';
 import { db, Visitor, EventItem, AdminUser, Role } from '@/lib/database';
 import { supabase } from '@/lib/supabase';
 export default function AdminPortal() {
@@ -321,11 +321,11 @@ export default function AdminPortal() {
  <Link href="/scanner" className="flex-1 md:flex-none px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:border-[var(--neon-cyan)]/50 transition-colors font-bold text-sm text-center">
  Launch Scanner
  </Link>
- <button onClick={exportCSV} className="flex-1 md:flex-none px-6 py-3 rounded-xl bg-[var(--neon-cyan)] text-[#000000] font-bold text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+ <button onClick={exportCSV} className="flex-1 md:flex-none px-6 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
  <Download className="w-4 h-4" /> Export CSV
  </button>
- <button onClick={handleSignOut} className="flex-1 md:flex-none px-6 py-3 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/40 hover:text-white transition-colors font-bold text-sm text-center">
- Sign Out
+ <button onClick={handleSignOut} className="flex-1 md:flex-none px-6 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+ <LogOut className="w-4 h-4" /> Sign Out
  </button>
  </div>
  </div>
@@ -443,7 +443,7 @@ export default function AdminPortal() {
  <button
  type="submit"
  disabled={isSavingSettings}
- className="w-full md:w-auto px-8 py-4 bg-[var(--neon-violet)] text-white font-bold rounded-xl hover:opacity-90 transition-opacity uppercase tracking-wider text-sm disabled:opacity-50"
+ className="w-full md:w-auto px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors uppercase tracking-wider text-sm disabled:opacity-50"
  >
  {isSavingSettings ? 'Saving...' : 'Save Settings'}
  </button>
@@ -501,8 +501,8 @@ export default function AdminPortal() {
  <option value="Scanner">Scanner</option>
  <option value="Viewer">Viewer</option>
  </select>
- <button type="submit" className="bg-orange-500/20 text-orange-400 border border-orange-500/30 hover:bg-orange-500 hover:text-white transition-colors font-bold rounded-lg px-6 py-3 text-sm flex items-center gap-2">
- <Plus className="w-4 h-4" /> Add User
+ <button type="submit" className="bg-white text-black hover:bg-gray-200 transition-colors font-semibold rounded-full px-6 py-3 text-sm flex items-center justify-center gap-2">
+ Make Admin
  </button>
  </form>
  <div className="overflow-x-auto">
@@ -622,7 +622,7 @@ export default function AdminPortal() {
  {['Super Admin', 'Editor'].includes(userRole) && (
  <button 
  onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }}
- className="px-4 py-2 rounded-xl bg-[var(--neon-magenta)] text-white font-bold text-sm hover:opacity-90 transition-opacity flex items-center gap-2"
+ className="px-4 py-2 rounded-xl bg-white text-black font-semibold text-sm hover:bg-gray-200 transition-colors flex items-center gap-2"
  >
  <Plus className="w-4 h-4" /> Add Event
  </button>
@@ -753,8 +753,8 @@ export default function AdminPortal() {
  <textarea name="rules" defaultValue={editingEvent?.rules.join('\n')} rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Rule 1\nRule 2" />
  </div>
  </div>
- <div className="pt-4 flex gap-4">
- <button type="submit" className="flex-1 py-3 bg-[var(--neon-magenta)] text-white font-bold rounded-xl hover:opacity-90">
+ <div className="pt-4 flex">
+ <button type="submit" className="flex-1 py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-colors">
  {editingEvent ? 'Update Event' : 'Create Event'}
  </button>
  </div>

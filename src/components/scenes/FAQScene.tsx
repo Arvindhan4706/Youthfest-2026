@@ -46,7 +46,7 @@ export default function FAQScene() {
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true }}
- className="text-3xl sm:text-5xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-wider mb-4 flex items-center justify-center gap-3"
+ className="text-3xl sm:text-5xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4 flex items-center justify-center gap-3"
  >
  <HelpCircle className="w-8 sm:w-10 h-8 sm:h-10 text-[var(--neon-cyan)]" />
  <span>

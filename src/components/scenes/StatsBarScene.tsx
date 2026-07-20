@@ -53,7 +53,7 @@ function StatCard({ stat, idx }: { stat: any, idx: number }) {
  >
  <Icon className="w-5 h-5" style={{ color: stat.color }} />
  </div>
- <div className="text-3xl font-[var(--font-orbitron)] font-black text-white tabular-nums mb-1 flex justify-center items-end">
+ <div className="text-3xl font-[var(--font-heading-main)] font-black text-white tabular-nums mb-1 flex justify-center items-end">
  <span>{stat.prefix}</span>
  <span>{count.toLocaleString('en-IN')}</span>
  <span>{stat.suffix}</span>
@@ -108,7 +108,7 @@ export default function StatsBarScene() {
  <div className="h-[2px] w-12 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)]" />
  <span className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--neon-cyan)]">About The Event</span>
  </div>
- <h2 className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-orbitron)] font-black leading-tight text-white">
+ <h2 className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black leading-tight text-white">
  THE ULTIMATE <br />
  <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">CONVERGENCE</span>
  </h2>

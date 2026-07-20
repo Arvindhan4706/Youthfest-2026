@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { AlertTriangle, RotateCcw } from 'lucide-react';
+import { AlertTriangle, RotateCcw, Home } from 'lucide-react';
 export default function Error({
  error,
  reset,
@@ -27,19 +27,20 @@ export default function Error({
  A critical error occurred in the mainframe. Our engineering team has been notified.
  </p>
  <div className="flex flex-col sm:flex-row gap-4 justify-center">
- <button 
- onClick={() => reset()}
- className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-500/10 text-red-400 border border-red-500/30 font-bold uppercase tracking-wider rounded-xl hover:bg-red-500/20 transition-all"
- >
- <RotateCcw className="w-4 h-4" />
- Retry Connection
- </button>
- <Link 
- href="/"
- className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 text-white border border-white/20 font-bold uppercase tracking-wider rounded-xl hover:bg-white/20 transition-all"
- >
- Return to Hub
- </Link>
+          <button 
+            onClick={() => reset()}
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all"
+          >
+            <RotateCcw className="w-4 h-4" />
+            Retry Connection
+          </button>
+          <Link 
+            href="/"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gray-200 text-black font-semibold rounded-full hover:bg-white transition-all"
+          >
+            <Home className="w-4 h-4" />
+            Return Home
+          </Link>
  </div>
  </div>
  </main>

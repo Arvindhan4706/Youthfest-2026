@@ -30,12 +30,12 @@ function FlipUnit({ value, label }: { value: number; label: string }) {
  <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl overflow-hidden" style={{ perspective: '400px' }}>
  <div className="absolute inset-0 glass-strong" style={{ boxShadow: '0 0 30px rgba(0,240,255,0.08)' }} />
  <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/[0.03] border-b border-white/[0.06] flex items-end justify-center pb-0">
- <span className="text-xl sm:text-3xl md:text-5xl font-[var(--font-orbitron)] font-black text-white leading-none translate-y-[55%]">
+ <span className="text-xl sm:text-3xl md:text-5xl font-[var(--font-heading-main)] font-black text-white leading-none translate-y-[55%]">
  {String(value).padStart(2, '0')}
  </span>
  </div>
  <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-white/[0.01] flex items-start justify-center pt-0">
- <span className="text-xl sm:text-3xl md:text-5xl font-[var(--font-orbitron)] font-black text-white/90 leading-none -translate-y-[45%]">
+ <span className="text-xl sm:text-3xl md:text-5xl font-[var(--font-heading-main)] font-black text-white/90 leading-none -translate-y-[45%]">
  {String(value).padStart(2, '0')}
  </span>
  </div>
@@ -77,7 +77,7 @@ export default function CountdownCTAScene() {
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true }}
- className="text-3xl sm:text-5xl md:text-6xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-wider mb-5"
+ className="text-3xl sm:text-5xl md:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-5"
  >
  DON&apos;T MISS{' '}
  <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent animate-gradient">
@@ -123,15 +123,10 @@ export default function CountdownCTAScene() {
  setAuthOpen(true, 'register'); 
  }
  }}
- className="group relative flex items-center justify-center gap-2 w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 rounded-2xl font-bold text-white text-base sm:text-lg overflow-hidden transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(0,240,255,0.4)] hover:shadow-[0_0_60px_rgba(0,240,255,0.6)] mx-auto animate-breathe"
+ className="group flex items-center justify-center gap-2 w-full sm:w-auto px-10 py-5 rounded-full font-semibold text-black bg-white hover:bg-gray-200 transition-all duration-300 text-lg mx-auto"
  >
- <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] animate-gradient" />
- <div className="absolute inset-[2px] rounded-[14px] glass group-hover:bg-transparent transition-all duration-300" />
- <span className="relative z-10 flex items-center gap-3 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
- <Ticket className="w-6 h-6 text-[var(--neon-gold)] group-hover:rotate-12 transition-transform" />
  {user ? 'Go To Dashboard' : 'Claim Your Ticket Now'}
- <ArrowRight className="w-6 h-6 group-hover:translate-x-1.5 transition-transform" />
- </span>
+ <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
  </button>
  </motion.div>
  </div>

@@ -100,7 +100,7 @@ export default function SponsorsScene() {
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true }}
- className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-wider mb-4"
+ className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
  >
  PROUD{' '}
  <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">

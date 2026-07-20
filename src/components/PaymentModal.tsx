@@ -132,10 +132,10 @@ export default function PaymentModal() {
  </div>
  </div>
  <button 
- onClick={handlePayment}
- disabled={isLoading}
- className="w-full py-3 bg-[var(--neon-cyan)] text-black font-bold rounded-xl hover:bg-white transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_4px_14px_0_rgba(0,240,255,0.25)] hover:shadow-[0_6px_20px_rgba(0,240,255,0.2)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
- >
+          onClick={handlePayment} 
+          disabled={isLoading || !user}
+          className="w-full py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
  {isLoading ? (
  <>
  <Loader2 className="w-5 h-5 animate-spin" />

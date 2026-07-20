@@ -253,7 +253,7 @@ export default function MemoriesScene() {
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true }}
- className="text-3xl sm:text-5xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-wider mb-4"
+ className="text-3xl sm:text-5xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
  >
  PREVIOUS{' '}
  <span className="bg-gradient-to-r from-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">

@@ -154,10 +154,10 @@ export default function ScannerPortal() {
  </Link>
  </div>
  <div className="absolute top-8 right-8">
- <button 
- onClick={() => setUseCamera(!useCamera)}
- className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 border transition-all ${useCamera ? 'bg-[var(--neon-cyan)] text-[#000000] border-[var(--neon-cyan)]' : 'bg-white/5 text-gray-400 border-white/10 hover:border-[var(--neon-cyan)] hover:text-white'}`}
- >
+        <button 
+          onClick={() => setUseCamera(!useCamera)}
+          className={`px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border transition-all ${useCamera ? 'bg-white text-black border-white' : 'bg-white/5 text-gray-400 border-white/10 hover:border-white hover:text-white'}`}
+        >
  {useCamera ? <ScanLine className="w-4 h-4" /> : <Camera className="w-4 h-4" />}
  {useCamera ? 'Use USB Scanner' : 'Use Camera'}
  </button>

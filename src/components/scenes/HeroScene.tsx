@@ -71,9 +71,8 @@ function useCountUp(target: number, duration: number = 2000, startOnMount: boole
 function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl glass neon-border flex items-center justify-center overflow-hidden group">
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--neon-cyan)]/5 to-transparent" />
-        <span className="relative text-2xl sm:text-3xl font-[var(--font-orbitron)] font-black text-white tabular-nums">
+      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+        <span className="relative text-2xl sm:text-3xl font-[var(--font-heading-main)] font-bold text-white tabular-nums">
           {String(value).padStart(2, '0')}
         </span>
       </div>
@@ -106,7 +105,7 @@ function StatBadge({
       className="flex flex-col items-center gap-1 p-4 rounded-2xl glass hover:bg-white/[0.06] transition-all duration-300 group cursor-default min-w-[120px]"
     >
       <div className="text-[var(--neon-cyan)] mb-1 group-hover:scale-110 transition-transform">{icon}</div>
-      <span className="text-2xl sm:text-3xl font-[var(--font-orbitron)] font-black text-white tabular-nums">
+      <span className="text-2xl sm:text-3xl font-[var(--font-heading-main)] font-black text-white tabular-nums">
         {count.toLocaleString()}{suffix}
       </span>
       <span className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold">{label}</span>
@@ -206,22 +205,16 @@ export default function HeroScene() {
 
       {/* Main content */}
       <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center mt-8 sm:mt-16">
-        {/* Event Logo with Cinematic Glitch Reveal */}
+        {/* Event Logo */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8, filter: 'brightness(0) contrast(100%)' }}
-          animate={{ opacity: 1, scale: 1, filter: 'brightness(1) contrast(100%)' }}
-          transition={{ duration: 0.5, delay: 0.5 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
           className="mb-6 relative"
         >
-          <div className="relative z-10" style={{ animation: 'glitch-1 0.4s ease-in-out 0.8s 2' }}>
-            <Image src="/yuvenzalogo.png" alt="Youthfest Event Logo" width={400} height={150} className="w-[280px] sm:w-[350px] md:w-[400px] h-auto object-contain drop-shadow-[0_0_30px_rgba(0,240,255,0.6)]" style={{ height: 'auto' }} />
+          <div className="relative z-10">
+            <Image src="/yuvenzalogo.png" alt="Youthfest Event Logo" width={300} height={112} className="w-[200px] sm:w-[250px] md:w-[300px] h-auto object-contain" />
           </div>
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            transition={{ delay: 1.2, duration: 2 }}
-            className="absolute inset-0 bg-[var(--neon-magenta)] blur-3xl pointer-events-none transform-gpu" 
-          />
         </motion.div>
 
         {/* 'Presents' Label */}
@@ -237,57 +230,36 @@ export default function HeroScene() {
           </span>
           <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/40" />
         </motion.div>
-        {/* Main title with letter-by-letter reveal and glitch effect */}
+        {/* Main title with letter-by-letter reveal */}
         <motion.div
           variants={{
             hidden: { opacity: 0 },
             visible: { 
               opacity: 1, 
-              transition: { staggerChildren: 0.1, delayChildren: 2.0 }
+              transition: { staggerChildren: 0.1, delayChildren: 1.0 }
             }
           }}
           initial="hidden"
           animate="visible"
           className="relative mb-4 perspective-1000"
         >
-          <h1 className="flex justify-center flex-wrap text-[11vw] sm:text-[10vw] md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-white leading-none z-10 relative">
+          <h1 className="flex justify-center flex-wrap text-[11vw] sm:text-[10vw] md:text-8xl lg:text-9xl font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative">
             {titleText.split('').map((char, index) => (
               <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>
                 {char}
               </motion.span>
             ))}
           </h1>
-          {/* Glitch layers */}
-          <motion.h1
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.7 }}
-            transition={{ delay: 3.0, duration: 1 }}
-            className="absolute inset-0 text-[11vw] sm:text-[10vw] md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-cyan)] leading-none pointer-events-none mix-blend-screen"
-            style={{ animation: 'glitch-1 4s ease-in-out infinite' }}
-            aria-hidden="true"
-          >
-            YOUTHFEST
-          </motion.h1>
-          <motion.h1
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.7 }}
-            transition={{ delay: 3.0, duration: 1 }}
-            className="absolute inset-0 text-[11vw] sm:text-[10vw] md:text-9xl font-[var(--font-orbitron)] font-black tracking-tight text-[var(--neon-magenta)] leading-none pointer-events-none mix-blend-screen"
-            style={{ animation: 'glitch-2 4s ease-in-out infinite' }}
-            aria-hidden="true"
-          >
-            YOUTHFEST
-          </motion.h1>
         </motion.div>
 
-        {/* Year with neon glow */}
+        {/* Year */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 3.2 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.5 }}
           className="mb-6"
         >
-          <span className="text-4xl sm:text-5xl md:text-6xl font-[var(--font-orbitron)] font-black bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent animate-gradient">
+          <span className="text-4xl sm:text-5xl md:text-6xl font-[var(--font-heading-main)] font-bold text-gray-200">
             2026
           </span>
         </motion.div>
@@ -297,10 +269,8 @@ export default function HeroScene() {
           href="#schedule"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          whileHover="hover"
-          whileTap={{ scale: 0.98 }}
-          transition={{ duration: 0.8, delay: 3.5 }}
-          className="group relative inline-flex items-center gap-3 px-8 py-3 rounded-full overflow-hidden backdrop-blur-md bg-white/5 border border-white/10 mb-8 cursor-pointer transition-all duration-500 hover:bg-[var(--neon-cyan)]/10 hover:border-[var(--neon-cyan)]/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.2)]"
+          transition={{ duration: 0.8, delay: 2.0 }}
+          className="group relative inline-flex items-center gap-3 px-8 py-3 rounded-full overflow-hidden backdrop-blur-md bg-white/5 border border-white/10 mb-8 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-white/20"
         >
           {/* Animated Sweep / Shine effect on hover */}
           <motion.div 
@@ -311,43 +281,43 @@ export default function HeroScene() {
             className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12"
           />
           
-          <Calendar className="relative z-10 w-5 h-5 text-gray-400 group-hover:text-[var(--neon-cyan)] transition-colors duration-300" />
-          <span className="relative z-10 text-sm sm:text-base font-bold uppercase tracking-[0.25em] text-white group-hover:text-[var(--neon-cyan)] transition-colors duration-300">
+          
+          <Calendar className="relative z-10 w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
+          <span className="relative z-10 text-sm sm:text-base font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300">
             August 12, 2026
           </span>
           
           {/* Status Dot */}
-          <div className="relative z-10 flex items-center justify-center w-3 h-3 ml-2">
-            <span className="absolute w-full h-full rounded-full bg-[var(--neon-cyan)] opacity-70 animate-ping" />
-            <span className="relative w-1.5 h-1.5 rounded-full bg-[var(--neon-cyan)] shadow-[0_0_8px_var(--neon-cyan)]" />
+          <div className="relative z-10 flex items-center justify-center w-2 h-2 ml-2">
+            <span className="absolute w-full h-full rounded-full bg-blue-500 opacity-70 animate-ping" />
+            <span className="relative w-1.5 h-1.5 rounded-full bg-blue-500" />
           </div>
         </motion.a>
 
         {/* Tagline */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 3.8 }}
-          className="text-base sm:text-xl text-gray-400 font-light tracking-wide mb-10 max-w-2xl leading-relaxed"
+          transition={{ duration: 0.8, delay: 2.2 }}
+          className="text-base sm:text-lg text-gray-400 font-normal tracking-normal mb-10 max-w-2xl leading-relaxed"
         >
           THE BIGGEST YOUTH FESTIVAL IS HERE — Technology. Creativity. Gaming. Culture.
           <br className="hidden sm:block" />
           <span className="text-white font-medium">Presented by Yuvenza Club. One legendary stage. Infinite glory.</span>
         </motion.p>
 
-        {/* Countdown timer */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.5, y: 40 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1, delay: 4.2, type: "spring", bounce: 0.4 }}
-          className="flex items-center justify-center gap-1 sm:gap-3 md:gap-5 mb-10 sm:mb-12 mx-auto scale-95 sm:scale-100"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 2.4 }}
+          className="flex items-center justify-center gap-2 sm:gap-4 mb-10 mx-auto"
         >
           <CountdownUnit value={countdown.days} label="Days" />
-          <span className="text-xl sm:text-2xl text-[var(--neon-cyan)] font-bold mt-[-20px] animate-pulse">:</span>
+          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px]">:</span>
           <CountdownUnit value={countdown.hours} label="Hours" />
-          <span className="text-xl sm:text-2xl text-[var(--neon-cyan)] font-bold mt-[-20px] animate-pulse">:</span>
+          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px]">:</span>
           <CountdownUnit value={countdown.minutes} label="Mins" />
-          <span className="text-xl sm:text-2xl text-[var(--neon-cyan)] font-bold mt-[-20px] animate-pulse">:</span>
+          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px]">:</span>
           <CountdownUnit value={countdown.seconds} label="Secs" />
         </motion.div>
 
@@ -360,7 +330,7 @@ export default function HeroScene() {
         >
           <button
             onClick={handleRegisterClick}
-            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-black bg-[var(--neon-cyan)] hover:bg-white transition-all duration-300 shadow-[0_4px_14px_0_rgba(0,240,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,240,255,0.23)] hover:-translate-y-0.5"
+            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full font-semibold text-black bg-white hover:bg-gray-200 transition-all duration-300"
           >
             Register Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>

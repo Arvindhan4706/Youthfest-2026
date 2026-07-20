@@ -160,13 +160,13 @@ export default function Navbar() {
  <div className="hidden sm:flex items-center gap-2">
  <button
  onClick={() => setAuthOpen(true, 'register')}
- className="px-4 py-2 rounded-xl text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all duration-300"
+ className="px-5 py-2 rounded-full text-xs font-semibold bg-white text-black hover:bg-gray-200 transition-all duration-300"
  >
  Sign In
  </button>
  <button
  onClick={() => setAuthOpen(true, 'login')}
- className="px-4 py-2 rounded-xl text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all duration-300"
+ className="px-5 py-2 rounded-full text-xs font-semibold bg-white text-black hover:bg-gray-200 transition-all duration-300"
  >
  Log In
  </button>
@@ -174,7 +174,7 @@ export default function Navbar() {
  ) : (
  <button
  onClick={() => router.push('/dashboard')}
- className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 border border-white/10 text-white transition-all duration-300"
+ className="hidden sm:flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-semibold bg-white text-black hover:bg-gray-200 transition-all duration-300"
  title="User Dashboard"
  >
  <User className="w-3.5 h-3.5" />

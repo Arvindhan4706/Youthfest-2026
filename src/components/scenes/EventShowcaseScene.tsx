@@ -159,18 +159,13 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  <span className="text-white font-mono font-bold tracking-widest">{String(days).padStart(2, '0')}d {String(hours).padStart(2, '0')}h</span>
  </div>
  </div>
- {/* Register button (now just acts as a cue to open modal) */}
- <button
- className="relative w-full py-3 rounded-xl font-bold text-xs text-white transition-all duration-300 flex items-center justify-center gap-1.5 overflow-hidden group/btn border border-white/10 backdrop-blur-md"
- style={{
- background: `linear-gradient(135deg, ${trackColor}66, ${trackColor}44)`,
- boxShadow: `0 4px 20px ${trackColor}20`,
- }}
- >
- <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
- <span className="relative z-10">View Details</span>
- <ArrowRight className="w-3.5 h-3.5 relative z-10 group-hover/btn:translate-x-1 transition-transform duration-300" />
- </button>
+        {/* View Details Button */}
+        <button
+          className="w-full py-3 rounded-full font-semibold text-sm text-black bg-white hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 group/btn"
+        >
+          <span>View Details</span>
+          <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
+        </button>
  </div>
  </div>
  );
@@ -217,7 +212,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  >
  {event.difficulty} Difficulty
  </span>
- <h2 className="text-3xl font-[var(--font-orbitron)] font-black text-white">{event.title}</h2>
+ <h2 className="text-3xl font-[var(--font-heading-main)] font-black text-white">{event.title}</h2>
  </div>
  </div>
  {/* Scrollable Content */}
@@ -270,25 +265,22 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  </div>
  {/* Sticky Footer */}
  <div className="p-6 border-t border-white/10 bg-[#030014] shrink-0">
- <button
- onClick={() => {
- onClose();
- initiateRegistration({
- id: event.id,
- title: event.title,
- category: event.id.split('-')[0],
- fee: event.fee,
- desc: event.desc,
- });
- }}
- className="w-full py-4 rounded-xl font-bold text-sm text-white transition-all flex items-center justify-center gap-2 hover:shadow-[0_0_30px_rgba(0,240,255,0.3)] hover:scale-[1.02]"
- style={{
- background: `linear-gradient(135deg, ${trackColor}, ${trackColor}aa)`,
- }}
- >
- <span>Register Now</span>
- <ArrowRight className="w-4 h-4" />
- </button>
+        <button
+          onClick={() => {
+            onClose();
+            initiateRegistration({
+              id: event.id,
+              title: event.title,
+              category: event.id.split('-')[0],
+              fee: event.fee,
+              desc: event.desc,
+            });
+          }}
+          className="w-full py-3.5 rounded-full font-semibold text-base text-black bg-white hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 group/btn"
+        >
+          <span>Register Now</span>
+          <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+        </button>
  </div>
  </motion.div>
  </div>
@@ -400,7 +392,7 @@ export default function EventShowcaseScene() {
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true }}
- className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-wider mb-4"
+ className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
  >
  EVENT{' '}
  <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">

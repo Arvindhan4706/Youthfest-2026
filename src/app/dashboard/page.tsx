@@ -89,13 +89,13 @@ export default function Dashboard() {
  <span className="text-xs font-bold font-mono text-teal-400 uppercase tracking-widest">
  WELLNESS VISITOR PORTAL
  </span>
- <button
- onClick={handleLogout}
- title="Logout"
- className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 text-[10px] font-bold uppercase tracking-wider transition-all"
- >
- <LogOut className="w-3 h-3" /> Logout
- </button>
+        <button
+          onClick={handleLogout}
+          title="Logout"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-black hover:bg-gray-200 text-[10px] font-semibold uppercase tracking-wider transition-all"
+        >
+          <LogOut className="w-3 h-3" /> Logout
+        </button>
  </div>
  </div>
  {/* Dashboard Grid */}
@@ -168,7 +168,7 @@ export default function Dashboard() {
  </div>
  <button
  type="submit"
- className="w-full py-3 bg-white hover:bg-purple-500 text-black hover:text-white font-bold text-xs rounded-xl transition-all shadow-lg"
+ className="w-full py-3.5 bg-white hover:bg-gray-200 text-black font-semibold text-sm rounded-full transition-all"
  >
  Save Details
  </button>
@@ -179,22 +179,22 @@ export default function Dashboard() {
  {/* Tabs selector */}
  <div className="flex gap-2 p-1.5 bg-white/5 border border-white/10 rounded-2xl self-start ">
  <button
- type="button"
- onClick={() => setActiveTab('tickets')}
- className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all uppercase tracking-wider ${
- activeTab === 'tickets' 
- ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20' 
- : 'text-gray-400 hover:text-white hover:bg-white/5'
- }`}
- >
- Boarding Passes
- </button>
+              type="button"
+              onClick={() => setActiveTab('tickets')}
+              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all uppercase tracking-wider ${
+                activeTab === 'tickets' 
+                ? 'bg-white text-black shadow-lg' 
+                : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              Boarding Passes
+            </button>
  <button
  type="button"
  onClick={() => setActiveTab('inbox')}
- className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all uppercase tracking-wider flex items-center gap-2 ${
+ className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all uppercase tracking-wider flex items-center gap-2 ${
  activeTab === 'inbox' 
- ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20' 
+ ? 'bg-white text-black shadow-lg' 
  : 'text-gray-400 hover:text-white hover:bg-white/5'
  }`}
  >
@@ -267,13 +267,13 @@ export default function Dashboard() {
  <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
  <span className="text-[10px] text-gray-400 block mb-6 font-mono">Visitor: {user.name}</span>
  <span className="text-[8px] text-purple-400/80 block -mt-5 mb-6 font-mono uppercase tracking-widest break-all">ID: {btoa(user.email + '|' + selectedEventTicket).substring(0, 15)}...</span>
- <button
- onClick={handleDownloadTicket}
- className="w-full py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white text-white hover:text-black font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
- >
- <Download className="w-4 h-4" />
- <span>Download ticket</span>
- </button>
+                <button
+                  onClick={handleDownloadTicket}
+                  className="w-full py-3 rounded-full bg-white text-black hover:bg-gray-200 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download ticket</span>
+                </button>
  </motion.div>
  ) : (
  <div className="w-full h-full border border-dashed border-white/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center bg-black/10 min-h-[300px]">

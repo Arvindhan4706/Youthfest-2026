@@ -129,7 +129,7 @@ export default function PrizePoolScene() {
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true }}
- className="text-4xl sm:text-6xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-wider mb-4"
+ className="text-4xl sm:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
  >
  THE PRIZE{' '}
  <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
@@ -189,7 +189,7 @@ export default function PrizePoolScene() {
  >
  {prize.place}
  </h3>
- <div className={`font-[var(--font-orbitron)] font-black text-white tabular-nums flex items-start justify-center gap-1 ${isCenter ? 'text-3xl sm:text-5xl' : 'text-xl sm:text-4xl md:text-5xl'}`}>
+ <div className={`font-[var(--font-heading-main)] font-black text-white tabular-nums flex items-start justify-center gap-1 ${isCenter ? 'text-3xl sm:text-5xl' : 'text-xl sm:text-4xl md:text-5xl'}`}>
  <span className="text-lg sm:text-2xl mt-0.5 sm:mt-1 text-gray-400">₹</span>
  {prize.amount}
  </div>
