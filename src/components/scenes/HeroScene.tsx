@@ -188,7 +188,7 @@ export default function HeroScene() {
         className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
       >
         {/* Infinite scrolling background text - 3 Lines */}
-        <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-between py-24 sm:py-32 overflow-hidden opacity-5 pointer-events-none select-none z-0">
+        <div className="absolute top-0 left-0 w-full flex flex-col overflow-hidden pointer-events-none select-none z-0 h-full sm:h-[120%] justify-between sm:justify-start py-24 sm:py-0 sm:pt-20 opacity-5 sm:opacity-10 space-y-0 sm:space-y-8 translate-y-0 sm:-translate-y-10">
           {/* Line 1 - Scrolling Right (Left to Right) */}
           <motion.div
             animate={{ x: ["-50%", 0] }}
