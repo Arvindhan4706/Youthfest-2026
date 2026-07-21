@@ -43,7 +43,6 @@ export default function TimelineScene() {
  viewport={{ once: true }}
  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-violet)]/30 bg-[var(--neon-violet)]/5 text-xs text-[var(--neon-violet)] font-semibold uppercase tracking-widest mb-6 shadow-[0_0_15px_rgba(139,92,246,0.2)]"
  >
- <Clock className="w-3.5 h-3.5" />
  1 Epic Day of Chaos
  </motion.div>
  <motion.h2

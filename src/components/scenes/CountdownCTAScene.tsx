@@ -68,7 +68,6 @@ export default function CountdownCTAScene() {
  viewport={{ once: true }}
  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--neon-magenta)]/30 bg-[var(--neon-magenta)]/[0.08] text-[var(--neon-magenta)] text-xs font-bold uppercase tracking-widest mb-8"
  >
- <AlertTriangle className="w-3.5 h-3.5" />
  <span>Registration Closing Soon</span>
  <span className="w-2 h-2 rounded-full bg-[var(--neon-magenta)]" style={{ animation: 'pulse-dot 1.5s ease-in-out infinite' }} />
  </motion.div>

@@ -385,7 +385,6 @@ export default function EventShowcaseScene() {
  viewport={{ once: true }}
  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-xs text-[var(--neon-cyan)] font-semibold uppercase tracking-widest mb-6 shadow-[0_0_15px_rgba(0,240,255,0.2)]"
  >
- <Sparkles className="w-3.5 h-3.5" />
  Discover Your Arena
  </motion.div>
  <motion.h2

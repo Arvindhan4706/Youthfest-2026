@@ -35,6 +35,12 @@ const COMMUNITY_PARTNERS: Sponsor[] = [
  { id: 'cp-5', name: 'Student Code', logo: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?auto=format&fit=crop&w=120&q=80' },
  { id: 'cp-6', name: 'AI Society', logo: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?auto=format&fit=crop&w=120&q=80' },
 ];
+
+const PREVIOUS_SPONSORS: Sponsor[] = [
+  { id: 'ps-1', name: 'Rotary Club', logo: '/rotary.png' },
+  { id: 'ps-2', name: 'Red Bull', logo: '/redbull.jpg' },
+  { id: 'ps-3', name: 'Toni & Guy', logo: '/toni.png' },
+];
 function MarqueeRow({ sponsors, direction, speed, title, color }: { sponsors: Sponsor[], direction: 'left' | 'right', speed: number, title: string, color: string }) {
  // Duplicate array to ensure seamless looping
  const marqueeItems = [...sponsors, ...sponsors, ...sponsors];
@@ -45,7 +51,7 @@ function MarqueeRow({ sponsors, direction, speed, title, color }: { sponsors: Sp
  <h3 className="text-sm font-bold uppercase tracking-widest" style={{ color }}>{title}</h3>
  <div className="h-[1px] flex-grow bg-gradient-to-l from-transparent to-white/10" />
  </div>
- <div className="relative w-full overflow-hidden flex items-center h-28 group">
+ <div className="relative w-full overflow-hidden flex items-center h-28 sm:h-32 group">
  {/* Left/Right Fade Masks */}
  <div className="absolute top-0 bottom-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#010008] to-transparent z-10 pointer-events-none" />
  <div className="absolute top-0 bottom-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#010008] to-transparent z-10 pointer-events-none" />
@@ -66,12 +72,12 @@ function MarqueeRow({ sponsors, direction, speed, title, color }: { sponsors: Sp
  {marqueeItems.map((sponsor, index) => (
  <div 
  key={`${sponsor.id}-${index}`}
- className="inline-flex shrink-0 items-center justify-center w-36 sm:w-48 h-16 sm:h-20 rounded-xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:scale-105 group/card cursor-pointer"
+ className="inline-flex shrink-0 items-center justify-center w-44 sm:w-56 h-20 sm:h-24 rounded-xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:scale-105 group/card cursor-pointer"
  >
  <img 
  src={sponsor.logo} 
  alt={sponsor.name} 
- className="max-w-[90px] sm:max-w-[120px] max-h-[30px] sm:max-h-[40px] object-contain opacity-50 grayscale transition-all duration-300 group-hover/card:opacity-100 group-hover/card:grayscale-0"
+ className="w-full h-full p-1 sm:p-2 object-contain opacity-90 transition-all duration-300 group-hover/card:opacity-100 group-hover/card:scale-110"
  />
  </div>
  ))}
@@ -152,6 +158,33 @@ export default function SponsorsScene() {
  title="Community Partners" 
  color="#ff006e" 
  />
+ 
+ {/* Previous Sponsors Section */}
+ <div className="mt-32 pt-20 border-t border-white/10">
+   <div className="text-center mb-16 px-4">
+     <motion.h3
+       initial={{ opacity: 0, y: 20 }}
+       whileInView={{ opacity: 1, y: 0 }}
+       viewport={{ once: true }}
+       className="text-3xl sm:text-4xl font-[var(--font-heading-main)] font-bold text-white uppercase tracking-wider mb-4"
+     >
+       PREVIOUS{' '}
+       <span className="bg-gradient-to-r from-gray-400 to-gray-600 bg-clip-text text-transparent">
+         SPONSORS
+       </span>
+     </motion.h3>
+     <p className="text-gray-500 text-sm sm:text-base max-w-2xl mx-auto">
+       Honoring the partners who supported our journey in previous editions.
+     </p>
+   </div>
+   <MarqueeRow 
+     sponsors={PREVIOUS_SPONSORS} 
+     direction="right" 
+     speed={40} 
+     title="Past Partners" 
+     color="#888888" 
+   />
+ </div>
  </div>
  </div>
  </section>

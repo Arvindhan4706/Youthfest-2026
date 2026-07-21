@@ -33,7 +33,7 @@ const CHIEF_GUESTS: Guest[] = [
  industry: 'Tamil Cinema',
  bio: 'One of the highest-paid actors in India, known for his massive fan following and blockbuster hits. Making a very special appearance at Youthfest 2026.',
  color: '#00f0ff',
- image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', // Using generic placeholder
+ image: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Vijay_at_the_Nadigar_Sangam_Protest.jpg',
  socials: { twitter: '#', instagram: '#' }
  },
  {
@@ -43,7 +43,7 @@ const CHIEF_GUESTS: Guest[] = [
  industry: 'Guest of Honor',
  bio: 'Acclaimed actor and founder of Agaram Foundation. An inspiration to millions of students across Tamil Nadu.',
  color: '#fbbf24',
- image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80', // Using generic placeholder
+ image: 'https://upload.wikimedia.org/wikipedia/commons/6/60/Suriya_at_the_28th_Critics_Choice_Awards.jpg',
  socials: { twitter: '#', instagram: '#' }
  },
  {
@@ -53,7 +53,7 @@ const CHIEF_GUESTS: Guest[] = [
  industry: 'Youth Icon',
  bio: 'From television anchor to leading star, his journey is a testament to hard work. Join us as he shares his inspiring story.',
  color: '#ff006e',
- image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', // Using generic placeholder
+ image: 'https://upload.wikimedia.org/wikipedia/commons/b/b3/Sivakarthikeyan_at_Maan_Karate_Success_Meet_%28cropped%29.jpg',
  socials: { twitter: '#', instagram: '#' }
  },
 ];
@@ -140,7 +140,6 @@ export default function SpeakersScene() {
  viewport={{ once: true }}
  className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-xs text-gray-400 font-semibold uppercase tracking-widest mb-5"
  >
- <Star className="w-3 h-3 text-[var(--neon-gold)]" />
  Star-Studded Appearances
  </motion.div>
  <motion.h2
