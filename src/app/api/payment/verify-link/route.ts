@@ -46,7 +46,7 @@ export async function POST(req: Request) {
             await db.registerForEvent(email, eventTitle);
             
             // Get user details to send a personalized receipt
-            const user = await db.getUserProfile(email);
+            const user = await db.getByEmail(email);
             
             // Dispatch registration confirmation email
             const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
