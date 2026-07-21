@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Maximize2, X, ChevronLeft, ChevronRight, Play, Expand } from 'lucide-react';
 
@@ -49,7 +50,7 @@ function MemoryCard({ item, index, openLightbox }: { item: GalleryItem, index: n
       {item.type === 'video' ? (
         <video src={item.url} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" muted loop playsInline preload="none" />
       ) : (
-        <img src={item.url} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+        <Image src={item.url} alt={item.title} fill sizes="(max-width: 640px) 85vw, 450px" className="object-cover transition-transform duration-700 group-hover:scale-110" />
       )}
       
       {/* Play Button Overlay for Videos */}
@@ -246,11 +247,15 @@ export default function MemoriesScene() {
                   className="w-full max-h-[80vh] object-contain bg-black" 
                 />
               ) : (
-                <img
-                  src={GALLERY_IMAGES[lightboxIndex].url}
-                  alt={GALLERY_IMAGES[lightboxIndex].title}
-                  className="w-full max-h-[80vh] object-contain"
-                />
+                <div className="relative w-full h-[80vh]">
+                  <Image
+                    src={GALLERY_IMAGES[lightboxIndex].url}
+                    alt={GALLERY_IMAGES[lightboxIndex].title}
+                    fill
+                    sizes="100vw"
+                    className="object-contain"
+                  />
+                </div>
               )}
               
               <motion.div 

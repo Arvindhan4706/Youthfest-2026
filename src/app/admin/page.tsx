@@ -172,7 +172,7 @@ export default function AdminPortal() {
  fetchData();
  fetchSettings();
  }
- // eslint-disable-next-line react-hooks/exhaustive-deps
+  
  }, [isAuthenticated]);
  const filteredVisitors = visitors.filter(v => {
  const matchesSearch = v.name.toLowerCase().includes(searchTerm.toLowerCase()) || 

@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useRef, useMemo, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../../lib/useStore';
 import { db } from '../../lib/database';
@@ -133,7 +134,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  />
  {/* Image */}
  <div className="relative h-44 sm:h-48 w-full overflow-hidden">
- <img src={event.image} alt={event.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+ <Image src={event.image} alt={event.title} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#010008] via-black/20 to-transparent" />
  <span
  className={`absolute top-3 right-3 text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${difficultyColors[event.difficulty]} transition-all duration-300 group-hover:scale-105`}
@@ -197,7 +198,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  >
  {/* Header Image */}
  <div className="relative h-64 w-full shrink-0">
- <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
+ <Image src={event.image} alt={event.title} fill sizes="(max-width: 1024px) 100vw, 500px" className="object-cover" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#030014] via-[#030014]/50 to-transparent" />
  <button 
  onClick={onClose}

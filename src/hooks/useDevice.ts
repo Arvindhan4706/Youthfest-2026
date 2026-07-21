@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 export function useDevice() {
   const [isMobile, setIsMobile] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(true);
 
   useEffect(() => {
     const checkDevice = () => {
@@ -11,7 +11,7 @@ export function useDevice() {
 
     // Initial check
     checkDevice();
-    setIsInitialized(true);
+    
 
     // Add event listener for window resize
     window.addEventListener('resize', checkDevice);

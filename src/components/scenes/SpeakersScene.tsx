@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star } from 'lucide-react';
 const Twitter = ({ className }: { className?: string }) => (
@@ -78,13 +79,13 @@ function GuestCard({ guest, index }: { guest: Guest; index: number }) {
  {/* Avatar circle */}
  <div className="mx-auto mb-5 relative w-24 h-24 sm:w-28 sm:h-28">
  <div
- className="w-full h-full rounded-full overflow-hidden transition-all duration-300"
+ className="relative w-full h-full rounded-full overflow-hidden transition-all duration-300"
  style={{
  border: `2px solid ${guest.color}40`,
  boxShadow: hovered ? `0 0 30px ${guest.color}30` : `0 0 15px ${guest.color}10`,
  }}
  >
- <img src={guest.image} alt={guest.name} className="w-full h-full object-cover opacity-100 sm:opacity-80 group-hover:opacity-100 transition-opacity" />
+ <Image src={guest.image} alt={guest.name} fill sizes="(max-width: 640px) 96px, 112px" className="object-cover opacity-100 sm:opacity-80 group-hover:opacity-100 transition-opacity" />
  </div>
  {/* Online dot */}
  <div
@@ -103,17 +104,17 @@ function GuestCard({ guest, index }: { guest: Guest; index: number }) {
  </p>
  <div className="flex items-center justify-center gap-4">
  {guest.socials.twitter && (
- <a href={guest.socials.twitter} className="text-gray-500 hover:text-[var(--neon-cyan)] transition-colors">
+ <a href={guest.socials.twitter} aria-label={`${guest.name} on Twitter`} className="text-gray-500 hover:text-[var(--neon-cyan)] transition-colors">
  <Twitter className="w-5 h-5" />
  </a>
  )}
  {guest.socials.instagram && (
- <a href={guest.socials.instagram} className="text-gray-500 hover:text-[var(--neon-magenta)] transition-colors">
+ <a href={guest.socials.instagram} aria-label={`${guest.name} on Instagram`} className="text-gray-500 hover:text-[var(--neon-magenta)] transition-colors">
  <Instagram className="w-5 h-5" />
  </a>
  )}
  {guest.socials.linkedin && (
- <a href={guest.socials.linkedin} className="text-gray-500 hover:text-[var(--neon-violet)] transition-colors">
+ <a href={guest.socials.linkedin} aria-label={`${guest.name} on LinkedIn`} className="text-gray-500 hover:text-[var(--neon-violet)] transition-colors">
  <Linkedin className="w-5 h-5" />
  </a>
  )}
@@ -129,7 +130,7 @@ function GuestCard({ guest, index }: { guest: Guest; index: number }) {
 }
 export default function SpeakersScene() {
  return (
- <section id="speakers" className="relative py-24 overflow-hidden" >
+ <section id="speakers" className="relative py-24 overflow-hidden" aria-labelledby="speakers-heading">
  {/* Background */}
  <div className="relative z-10 max-w-6xl mx-auto px-4">
  {/* Header */}
@@ -143,6 +144,7 @@ export default function SpeakersScene() {
  Star-Studded Appearances
  </motion.div>
  <motion.h2
+ id="speakers-heading"
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true }}

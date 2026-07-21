@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 const FLASH_IMAGES = [
  '/flash-crowd-opt.webp',
@@ -202,11 +203,13 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  className="absolute inset-0"
  style={{ pointerEvents: isActive ? 'auto' : 'none', zIndex: isActive ? 10 : 1 }}
  >
- {/* eslint-disable-next-line @next/next/no-img-element */}
- <img
+ { }
+ <Image
  src={src}
  alt=""
- className="w-full h-full object-cover"
+ fill
+ sizes="100vw"
+ className="object-cover"
  style={{
  filter: `contrast(${phase === 'hold' ? 1.2 : 1.4}) saturate(${phase === 'hold' ? 0.8 : 1.3}) brightness(${phase === 'hold' ? 0.4 : 0.6})`,
  }}
@@ -220,11 +223,13 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  className="absolute inset-0 pointer-events-none mix-blend-screen transition-opacity duration-75"
  style={{ opacity: 0.15, zIndex: 20 }}
  >
- {/* eslint-disable-next-line @next/next/no-img-element */}
- <img
+ { }
+ <Image
  src={FLASH_IMAGES[currentImgIndex]}
  alt=""
- className="absolute inset-0 w-full h-full object-cover"
+ fill
+ sizes="100vw"
+ className="object-cover"
  style={{
  transform: `translate(${glitchOffset.x}px, ${glitchOffset.y}px)`,
  filter: 'hue-rotate(120deg)',

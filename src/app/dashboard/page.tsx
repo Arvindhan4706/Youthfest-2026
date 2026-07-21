@@ -5,125 +5,38 @@ import { useRouter } from 'next/navigation';
 import { useStore } from '../../lib/useStore';
 import { db } from '../../lib/database';
 import { motion } from 'framer-motion';
-import { ArrowLeft, User, Mail, Calendar, QrCode, Download, LogOut, MailOpen, Inbox, ChevronRight } from 'lucide-react';
+import { ArrowLeft, LogOut } from 'lucide-react';
 import ToastContainer from '../../components/ToastContainer';
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import VisitorProfile from '../../components/dashboard/VisitorProfile';
+import TicketSection from '../../components/dashboard/TicketSection';
+import InboxSection from '../../components/dashboard/InboxSection';
+
 export default function Dashboard() {
  const user = useStore((state) => state.user);
  const setUser = useStore((state) => state.setUser);
  const addToast = useStore((state) => state.addToast);
  const messages = useStore((state) => state.messages);
  const router = useRouter();
- const [profileName, setProfileName] = useState(user?.name || '');
- const [profileEmail, setProfileEmail] = useState(user?.email || '');
- const [profileCollege, setProfileCollege] = useState(user?.college || '');
- const [profileDepartment, setProfileDepartment] = useState(user?.department || '');
- const [profileYear, setProfileYear] = useState(user?.year || '1');
- const [profileGender, setProfileGender] = useState(user?.gender || 'Male');
- const [profileCity, setProfileCity] = useState(user?.city || '');
- const [selectedEventTicket, setSelectedEventTicket] = useState<string | null>(null);
  const [activeTab, setActiveTab] = useState<'tickets' | 'inbox'>('tickets');
- const [selectedMailId, setSelectedMailId] = useState<string | null>(null);
+
  useEffect(() => {
  if (!user) {
  router.push('/');
  }
  }, [user, router]);
+
  if (!user) return (
  <main className="min-h-screen bg-black flex items-center justify-center">
  <p className="text-gray-400 text-sm animate-pulse">Redirecting...</p>
  </main>
  );
- const handleSaveProfile = async (e: React.FormEvent) => {
- e.preventDefault();
- try {
- const updated = await db.updateProfile(user.email, {
- name: profileName,
- email: profileEmail,
- college: profileCollege,
- department: profileDepartment,
- year: profileYear,
- gender: profileGender,
- city: profileCity,
- });
- setUser({
- email: updated.email,
- name: updated.name,
- phone: updated.phone,
- college: updated.college,
- department: updated.department,
- year: updated.year,
- gender: updated.gender,
- city: updated.city,
- registeredEvents: updated.registered_events,
- });
- addToast('Profile information updated!', { points: 15 });
- } catch (err: any) {
- addToast(err.message || 'Failed to update profile.');
- console.error(err);
- }
- };
-  const handleDownloadTicket = async () => {
-    if (!selectedEventTicket) return;
-    
-    addToast('Generating digital ticket PDF...');
-    try {
-      const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage([600, 300]);
-      
-      const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-      const normalFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-      // Draw background
-      page.drawRectangle({ x: 0, y: 0, width: 600, height: 300, color: rgb(0.02, 0.0, 0.1) });
-      
-      // Draw Ticket Header
-      page.drawText("YOUTHFEST '26 VITALITY PASS", { x: 30, y: 250, size: 20, font, color: rgb(0.1, 0.9, 0.9) });
-      
-      // Draw Event Name
-      page.drawText(selectedEventTicket, { x: 30, y: 200, size: 24, font, color: rgb(1, 1, 1) });
-      
-      // Draw Visitor Details
-      page.drawText(`Visitor: ${user.name}`, { x: 30, y: 150, size: 14, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
-      page.drawText(`Email: ${user.email}`, { x: 30, y: 130, size: 12, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
-      const ticketId = btoa(user.email + '|' + selectedEventTicket).substring(0, 15);
-      page.drawText(`Ticket ID: ${ticketId}`, { x: 30, y: 110, size: 12, font: normalFont, color: rgb(0.6, 0.3, 0.9) });
-      
-      // Fetch QR Code and embed it using internal API to bypass CORS/Adblockers
-      const qrData = encodeURIComponent(user.email + '|' + selectedEventTicket);
-      const qrUrl = `/api/qr?data=${qrData}`;
-      
-      try {
-        const qrImageBytes = await fetch(qrUrl).then(res => res.arrayBuffer());
-        const qrImage = await pdfDoc.embedPng(qrImageBytes);
-        page.drawImage(qrImage, { x: 420, y: 75, width: 150, height: 150 });
-        page.drawText("SCAN AT ENTRANCE", { x: 435, y: 55, size: 12, font, color: rgb(1, 1, 1) });
-      } catch (qrErr) {
-        console.warn('Could not embed QR code in PDF', qrErr);
-      }
-      
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Yuvenza_Pass_${selectedEventTicket.replace(/\s+/g, '_')}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-      
-      addToast('Ticket PDF saved to downloads!', { points: 5 });
-    } catch (err: any) {
-      console.error(err);
-      addToast('Failed to download ticket.', { points: 0 });
-    }
-  };
  const handleLogout = () => {
  setUser(null);
  addToast('You have been logged out.');
  router.push('/');
  };
+
  return (
  <main className="min-h-screen bg-black text-white p-6 sm:p-12 relative overflow-hidden">
  {/* Background neon elements */}
@@ -154,286 +67,46 @@ export default function Dashboard() {
  </div>
  {/* Dashboard Grid */}
  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
- {/* Profile form */}
- <div className="lg:col-span-4 bg-white/5 border border-white/10 p-6 sm:p-8 rounded-3xl shadow-2xl">
- <h2 className="text-xl font-black text-white mb-6 uppercase tracking-wider flex items-center gap-2">
- <User className="w-5 h-5 text-purple-400" />
- <span>Visitor Profile</span>
- </h2>
- <form onSubmit={handleSaveProfile} className="flex flex-col gap-4">
- <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Full Name</label>
- <input
- type="text"
- value={profileName}
- onChange={(e) => setProfileName(e.target.value)}
- className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors"
- />
- </div>
- <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Email Address</label>
- <input
- type="email"
- value={profileEmail}
- onChange={(e) => setProfileEmail(e.target.value)}
- className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors"
- />
- </div>
- <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Contact Number</label>
- <input
- type="text"
- value={user.phone || 'Not provided'}
- disabled
- className="w-full bg-white/5 border border-white/5 opacity-50 rounded-xl px-4 py-3 text-xs text-gray-400 cursor-not-allowed"
- />
- </div>
- <div className="grid grid-cols-2 gap-4">
- <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">College</label>
- <input type="text" value={profileCollege} onChange={(e) => setProfileCollege(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors" />
- </div>
- <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Department</label>
- <input type="text" value={profileDepartment} onChange={(e) => setProfileDepartment(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors" />
- </div>
- <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Year</label>
- <select value={profileYear} onChange={(e) => setProfileYear(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors cursor-pointer">
- <option value="1">1st Year</option>
- <option value="2">2nd Year</option>
- <option value="3">3rd Year</option>
- <option value="4">4th Year</option>
- <option value="PG">Post Graduate</option>
- </select>
- </div>
- <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Gender</label>
- <select value={profileGender} onChange={(e) => setProfileGender(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors cursor-pointer">
- <option value="Male">Male</option>
- <option value="Female">Female</option>
- <option value="Other">Other</option>
- </select>
- </div>
- <div className="col-span-2">
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">City</label>
- <input type="text" value={profileCity} onChange={(e) => setProfileCity(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-colors" />
- </div>
- </div>
- <button
- type="submit"
- className="w-full py-3.5 bg-white hover:bg-gray-200 text-black font-semibold text-sm rounded-full transition-all"
- >
- Save Details
- </button>
- </form>
- </div>
- {/* Registered Events & Tickets Container */}
- <div className="lg:col-span-8 flex flex-col gap-6 h-full">
- {/* Tabs selector */}
- <div className="flex gap-2 p-1.5 bg-white/5 border border-white/10 rounded-2xl self-start ">
- <button
-              type="button"
-              onClick={() => setActiveTab('tickets')}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all uppercase tracking-wider ${
-                activeTab === 'tickets' 
-                ? 'bg-white text-black shadow-lg' 
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              Boarding Passes
-            </button>
- <button
- type="button"
- onClick={() => setActiveTab('inbox')}
- className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all uppercase tracking-wider flex items-center gap-2 ${
- activeTab === 'inbox' 
- ? 'bg-white text-black shadow-lg' 
- : 'text-gray-400 hover:text-white hover:bg-white/5'
- }`}
- >
- <span>Inbox & Mails</span>
- {messages.length > 0 && (
- <span className="bg-teal-400 text-black text-[9px] font-extrabold px-2 py-0.5 rounded-full">
- {messages.length}
- </span>
- )}
- </button>
- </div>
- {activeTab === 'tickets' ? (
- <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch w-full">
- {/* Event list */}
- <div className="md:col-span-7 bg-white/5 border border-white/10 p-6 sm:p-8 rounded-3xl shadow-2xl flex flex-col justify-between">
- <div>
- <h2 className="text-xl font-black text-white mb-6 uppercase tracking-wider flex items-center gap-2">
- <Calendar className="w-5 h-5 text-purple-400" />
- <span>My Registrations</span>
- </h2>
- <div className="flex flex-col gap-3 max-h-[300px] overflow-y-auto pr-1">
- {user.registeredEvents.length === 0 ? (
- <p className="text-xs text-gray-500 py-6 text-center leading-relaxed">
- You haven't registered for any events yet. <br />
- Return to the main page and join some events to unlock points!
- </p>
- ) : (
- user.registeredEvents.map((evt, idx) => (
- <div 
- key={idx}
- onClick={() => setSelectedEventTicket(evt)}
- className={`p-4 rounded-2xl border text-left cursor-pointer transition-all flex justify-between items-center ${
- selectedEventTicket === evt
- ? 'bg-purple-500/10 border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.1)]'
- : 'bg-black/20 border-white/5 hover:border-white/10'
- }`}
- >
- <div>
- <h4 className="text-xs font-bold text-white mb-1">{evt}</h4>
- <span className="text-[10px] text-gray-500 font-mono">Tap to show boarding ticket pass</span>
- </div>
- <QrCode className="w-5 h-5 text-purple-400" />
- </div>
- ))
- )}
- </div>
- </div>
- </div>
- {/* Neon Boarding Ticket Pass */}
- <div className="md:col-span-5 flex flex-col items-center justify-center">
- {selectedEventTicket ? (
-          <motion.div
-            id="ticket-pass"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full bg-gradient-to-b from-purple-900/40 to-[#070024] border border-purple-500/30 rounded-3xl p-6 shadow-2xl relative flex flex-col justify-between items-center text-center overflow-hidden"
-          >
-            {/* Boarding ticket accent lines */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500" />
-            <span className="text-[9px] uppercase font-mono tracking-widest text-teal-400 font-bold mb-4">
-              YOUTHFEST '26 VITALITY PASS
-            </span>
-            
-            {/* Real QR Image generated via internal proxy API */}
-            <div className="bg-white p-2 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)] pointer-events-none">
-              <img 
-                src={`/api/qr?data=${encodeURIComponent(user.email + '|' + selectedEventTicket)}`}
-                alt="Ticket QR Code"
-                className="w-28 h-28 object-contain"
-              />
+          {/* Profile form */}
+          <div className="lg:col-span-4">
+            <VisitorProfile />
+          </div>
+
+          {/* Registered Events & Tickets Container */}
+          <div className="lg:col-span-8 flex flex-col gap-6 h-full">
+            {/* Tabs selector */}
+            <div className="flex gap-2 p-1.5 bg-white/5 border border-white/10 rounded-2xl self-start ">
+              <button
+                type="button"
+                onClick={() => setActiveTab('tickets')}
+                className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all uppercase tracking-wider ${
+                  activeTab === 'tickets' 
+                    ? 'bg-white text-black shadow-lg' 
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                Boarding Passes
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('inbox')}
+                className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all uppercase tracking-wider flex items-center gap-2 ${
+                  activeTab === 'inbox' 
+                    ? 'bg-white text-black shadow-lg' 
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                <span>Inbox & Mails</span>
+                {messages.length > 0 && (
+                  <span className="bg-teal-400 text-black text-[9px] font-extrabold px-2 py-0.5 rounded-full">
+                    {messages.length}
+                  </span>
+                )}
+              </button>
             </div>
-            <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
-            <span className="text-[10px] text-gray-400 block mb-6 font-mono">Visitor: {user.name}</span>
-            <span className="text-[8px] text-purple-400/80 block -mt-5 mb-6 font-mono uppercase tracking-widest break-all">ID: {btoa(user.email + '|' + selectedEventTicket).substring(0, 15)}...</span>
-            <button
-              onClick={handleDownloadTicket}
-              className="w-full py-3 rounded-full bg-white text-black hover:bg-gray-200 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
-            >
-              <Download className="w-4 h-4" />
-              <span>Download ticket</span>
-            </button>
-  </motion.div>
- ) : (
- <div className="w-full h-full border border-dashed border-white/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center bg-black/10 min-h-[300px]">
- <QrCode className="w-8 h-8 text-gray-600 mb-3 animate-pulse" />
- <h4 className="text-sm font-bold text-gray-400">Generate Boarding Ticket</h4>
- <p className="text-[10px] text-gray-500 mt-1 max-w-[150px] leading-relaxed">
- Select one of your registered events on the left to output your entry QR pass.
- </p>
- </div>
- )}
- </div>
- </div>
- ) : activeTab === 'inbox' ? (
- /* Inbox & Email Messages tab view */
- <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch w-full">
- {/* Email list */}
- <div className="md:col-span-6 bg-white/5 border border-white/10 p-6 sm:p-8 rounded-3xl shadow-2xl flex flex-col justify-between">
- <div>
- <h2 className="text-xl font-black text-white mb-6 uppercase tracking-wider flex items-center gap-2">
- <Inbox className="w-5 h-5 text-purple-400" />
- <span>Registration Inbox</span>
- </h2>
- <div className="flex flex-col gap-3 max-h-[350px] overflow-y-auto pr-1">
- {messages.length === 0 ? (
- <p className="text-xs text-gray-500 py-10 text-center leading-relaxed">
- Your inbox is empty.<br />
- Complete event registrations to receive secure email receipts.
- </p>
- ) : (
- messages.map((msg) => (
- <div 
- key={msg.id}
- onClick={() => setSelectedMailId(msg.id)}
- className={`p-4 rounded-2xl border text-left cursor-pointer transition-all ${
- selectedMailId === msg.id
- ? 'bg-purple-500/10 border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.1)]'
- : 'bg-black/20 border-white/5 hover:border-white/10'
- }`}
- >
- <div className="flex justify-between items-start mb-1">
- <span className="text-[10px] text-teal-400 font-bold uppercase font-mono tracking-wider">
- {msg.amountPaid === '₹0 (Free Registration)' ? 'Free Spot' : 'Paid Receipt'}
- </span>
- <span className="text-[8px] text-gray-500 font-mono">
- {new Date(msg.timestamp).toLocaleDateString()}
- </span>
- </div>
- <h4 className="text-xs font-bold text-white mb-1 truncate">{msg.subject}</h4>
- <p className="text-[9px] text-gray-400 line-clamp-1">{msg.eventTitle} • Status: CONFIRMED</p>
- </div>
- ))
- )}
- </div>
- </div>
- </div>
- {/* Expanded mail content */}
- <div className="md:col-span-6">
- {selectedMailId && messages.find(m => m.id === selectedMailId) ? (() => {
- const mail = messages.find(m => m.id === selectedMailId)!;
- return (
- <motion.div
- initial={{ opacity: 0, scale: 0.95 }}
- animate={{ opacity: 1, scale: 1 }}
- className="w-full h-full bg-gradient-to-b from-purple-900/10 to-[#030712] border border-purple-500/20 rounded-3xl p-6 shadow-2xl flex flex-col justify-between overflow-hidden min-h-[350px]"
- >
- <div>
- <div className="border-b border-white/10 pb-4 mb-4">
- <div className="flex items-center gap-2 mb-2">
- <div className="w-8 h-8 rounded-full bg-purple-500/25 flex items-center justify-center text-purple-400">
- <MailOpen className="w-4 h-4" />
- </div>
- <div>
- <h4 className="text-xs font-extrabold text-white">Youthfest '26 Registrations</h4>
- <span className="text-[9px] text-gray-500">From: registrations@youthfest.org</span>
- </div>
- </div>
- <h3 className="text-sm font-black text-white uppercase mt-3">{mail.subject}</h3>
- <span className="text-[9px] text-gray-500 block mt-1 font-mono">To: {mail.recipientEmail}</span>
- </div>
- <div className="max-h-[220px] overflow-y-auto pr-1">
- <pre className="text-[10px] text-gray-300 font-mono whitespace-pre-wrap leading-relaxed select-text">
- {mail.body}
- </pre>
- </div>
- </div>
- <div className="border-t border-white/5 pt-4 mt-4 text-[9px] font-mono text-gray-600 flex justify-between items-center">
- <span>Secure mail digital signature: verified</span>
- <span>{mail.id}</span>
- </div>
- </motion.div>
- );
- })() : (
- <div className="w-full h-full border border-dashed border-white/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center bg-black/10 min-h-[350px]">
- <Mail className="w-8 h-8 text-gray-600 mb-3 animate-pulse" />
- <h4 className="text-sm font-bold text-gray-400">Read Confirmation Mails</h4>
- <p className="text-[10px] text-gray-500 mt-1 max-w-[170px] leading-relaxed">
- Select an email from your registration inbox on the left to read full receipts and details.
- </p>
- </div>
- )}
- </div>
- </div>
- ) : null}
- </div>
+
+            {activeTab === 'tickets' ? <TicketSection /> : <InboxSection />}
+          </div>
  </div>
  </div>
  </main>

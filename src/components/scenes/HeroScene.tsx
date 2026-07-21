@@ -168,6 +168,7 @@ export default function HeroScene() {
       onMouseMove={handleMouseMove}
       className="relative min-h-[100dvh] w-full flex flex-col items-center justify-center overflow-x-hidden px-4 py-20"
       style={{ background: 'radial-gradient(ellipse at 50% 0%, #0a0030 0%, #011213 50%, #010008 100%)' }}
+      aria-labelledby="hero-heading"
     >
       {/* WebGL Particle Universe */}
       <motion.div
@@ -186,7 +187,42 @@ export default function HeroScene() {
         className="absolute inset-0 pointer-events-none"
       >
         
-        {/* Grid overlay removed as requested */}
+        {/* Infinite scrolling background text - 3 Lines */}
+        <div className="absolute top-0 left-0 w-full h-[120%] flex flex-col justify-start pt-20 overflow-hidden opacity-10 pointer-events-none select-none z-0 space-y-4 sm:space-y-8 -translate-y-10">
+          {/* Line 1 - Scrolling Right (Left to Right) */}
+          <motion.div
+            animate={{ x: ["-50%", 0] }}
+            transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
+            className="flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
+          >
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+          </motion.div>
+          {/* Line 2 - Scrolling Left (Right to Left) */}
+          <motion.div
+            animate={{ x: [0, "-50%"] }}
+            transition={{ repeat: Infinity, duration: 45, ease: "linear" }}
+            className="flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
+          >
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
+          </motion.div>
+          {/* Line 3 - Scrolling Right (Left to Right) */}
+          <motion.div
+            animate={{ x: ["-50%", 0] }}
+            transition={{ repeat: Infinity, duration: 35, ease: "linear" }}
+            className="flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
+          >
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+          </motion.div>
+        </div>
 
         {/* Radial glow spots - Optimized (static scale/opacity, only parallax) */}
         <motion.div 
@@ -243,7 +279,7 @@ export default function HeroScene() {
           animate="visible"
           className="relative mb-4 perspective-1000"
         >
-          <h1 className="flex justify-center flex-wrap text-[11vw] sm:text-[10vw] md:text-8xl lg:text-9xl font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative">
+          <h1 id="hero-heading" className="flex justify-center flex-wrap text-[11vw] sm:text-[10vw] md:text-8xl lg:text-9xl font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative">
             {titleText.split('').map((char, index) => (
               <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>
                 {char}
@@ -330,6 +366,7 @@ export default function HeroScene() {
         >
           <button
             onClick={handleRegisterClick}
+            aria-label="Register Now"
             className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full font-semibold text-black bg-white hover:bg-gray-200 transition-all duration-300"
           >
             Register Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

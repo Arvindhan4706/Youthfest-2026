@@ -44,6 +44,23 @@ export async function POST(req: Request) {
         if (eventTitle) {
           try {
             await db.registerForEvent(email, eventTitle);
+            
+            // Get user details to send a personalized receipt
+            const user = await db.getUserProfile(email);
+            
+            // Dispatch registration confirmation email
+            const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+            fetch(`${baseUrl}/api/send-receipt`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email,
+                name: user?.name || '',
+                eventTitle,
+                amountPaid: 'Paid via Razorpay'
+              })
+            }).catch(err => console.error("Failed to send receipt email:", err));
+            
           } catch (e) {
             console.error("Failed to register for event, might already be registered:", e);
           }

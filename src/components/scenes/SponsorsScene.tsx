@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
 interface Sponsor {
@@ -72,12 +73,16 @@ function MarqueeRow({ sponsors, direction, speed, title, color }: { sponsors: Sp
  {marqueeItems.map((sponsor, index) => (
  <div 
  key={`${sponsor.id}-${index}`}
- className="inline-flex shrink-0 items-center justify-center w-44 sm:w-56 h-20 sm:h-24 rounded-xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:scale-105 group/card cursor-pointer"
+ className="inline-flex shrink-0 items-center justify-center w-44 sm:w-56 h-20 sm:h-24 rounded-xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:scale-105 group/card cursor-pointer relative"
+ aria-label={`Sponsor: ${sponsor.name}`}
+ role="img"
  >
- <img 
+ <Image 
  src={sponsor.logo} 
- alt={sponsor.name} 
- className="w-full h-full p-1 sm:p-2 object-contain opacity-90 transition-all duration-300 group-hover/card:opacity-100 group-hover/card:scale-110"
+ alt={sponsor.name}
+ fill
+ sizes="(max-width: 768px) 176px, 224px"
+ className="p-2 sm:p-4 object-contain opacity-90 transition-all duration-300 group-hover/card:opacity-100 group-hover/card:scale-110"
  />
  </div>
  ))}
@@ -88,7 +93,7 @@ function MarqueeRow({ sponsors, direction, speed, title, color }: { sponsors: Sp
 }
 export default function SponsorsScene() {
  return (
- <section id="sponsors" className="relative py-24 overflow-hidden" >
+ <section id="sponsors" className="relative py-24 overflow-hidden" aria-labelledby="sponsors-heading">
  {/* Background grid */}
  <div className="relative z-10 mx-auto w-full">
  {/* Header */}
@@ -103,6 +108,7 @@ export default function SponsorsScene() {
  Our Partners in Chaos
  </motion.div>
  <motion.h2
+ id="sponsors-heading"
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true }}
@@ -125,14 +131,18 @@ export default function SponsorsScene() {
  className="max-w-md mx-auto mb-20 px-4"
  >
  <h3 className="text-center text-sm font-bold uppercase tracking-widest text-white mb-6">Title Sponsor</h3>
- <div className="relative p-8 rounded-3xl border border-[var(--neon-cyan)]/30 bg-white/[0.02] group hover:border-[var(--neon-cyan)]/60 transition-colors duration-500 flex flex-col items-center">
+ <div className="relative p-8 rounded-3xl border border-[var(--neon-cyan)]/30 bg-white/[0.02] group hover:border-[var(--neon-cyan)]/60 transition-colors duration-500 flex flex-col items-center min-h-[200px] justify-center">
  {/* Glow effect */}
  <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-cyan)]/10 to-transparent rounded-3xl pointer-events-none" />
- <img 
- src={TITLE_SPONSOR.logo} 
- alt={TITLE_SPONSOR.name} 
- className="relative z-10 max-w-[200px] h-auto object-contain opacity-80 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-110"
- />
+ <div className="relative w-[200px] h-[100px]">
+   <Image 
+   src={TITLE_SPONSOR.logo} 
+   alt={TITLE_SPONSOR.name} 
+   fill
+   sizes="200px"
+   className="object-contain opacity-80 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-110"
+   />
+ </div>
  </div>
  </motion.div>
  {/* Marquee Rows */}

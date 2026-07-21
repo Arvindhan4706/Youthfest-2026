@@ -9,8 +9,8 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Generate QR using a highly reliable fast API
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(data)}&margin=1`;
+    // Generate QR using quickchart.io, which is highly reliable and fast
+    const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(data)}&size=300&margin=1`;
     const response = await fetch(qrUrl);
     
     if (!response.ok) {
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    console.error('QR API Error:', error);
+    console.error('QR Generation Error:', error);
     return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
