@@ -38,7 +38,7 @@ export default function Dashboard() {
  };
 
  return (
- <main className="min-h-screen bg-black text-white p-6 sm:p-12 relative overflow-hidden">
+ <main className="min-h-screen bg-black text-white p-6 sm:p-12 relative overflow-x-hidden overflow-y-auto">
  {/* Background neon elements */}
  <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-purple-900/10 rounded-full blur-[100px] pointer-events-none" />
  <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-900/10 rounded-full blur-[100px] pointer-events-none" />

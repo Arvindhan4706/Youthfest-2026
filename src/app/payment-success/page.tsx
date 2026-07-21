@@ -4,12 +4,16 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CheckCircle2, XCircle, Loader2, Home } from 'lucide-react';
 import Link from 'next/link';
+import { useStore } from '../../lib/useStore';
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [status, setStatus] = useState<'verifying' | 'success' | 'failed'>('verifying');
   const [errorMessage, setErrorMessage] = useState('');
+  
+  const user = useStore((state) => state.user);
+  const setUser = useStore((state) => state.setUser);
 
   useEffect(() => {
     const verifyPayment = async () => {
@@ -46,6 +50,21 @@ function PaymentSuccessContent() {
 
         if (data.success) {
           setStatus('success');
+          
+          // Update local state so it appears in the dashboard
+          if (eventTitle) {
+            useStore.setState((state) => {
+              if (state.user && !state.user.registeredEvents.includes(eventTitle)) {
+                return {
+                  user: {
+                    ...state.user,
+                    registeredEvents: [...state.user.registeredEvents, eventTitle]
+                  }
+                };
+              }
+              return state;
+            });
+          }
         } else {
           throw new Error(data.error || 'Payment verification failed.');
         }
