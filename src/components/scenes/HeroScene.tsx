@@ -224,19 +224,6 @@ export default function HeroScene() {
           </motion.div>
         </div>
 
-        {/* Radial glow spots - Optimized (static scale/opacity, only parallax) */}
-        <motion.div 
-          style={{ x: parallaxX1, y: parallaxY1 }}
-          className="absolute top-[10%] left-[20%] w-[500px] h-[500px] rounded-full bg-[var(--neon-cyan)]/[0.04] blur-[120px] pointer-events-none transform-gpu will-change-transform" 
-        />
-        <motion.div 
-          style={{ x: parallaxX2, y: parallaxY2 }}
-          className="absolute bottom-[10%] right-[15%] w-[400px] h-[400px] rounded-full bg-[var(--neon-violet)]/[0.05] blur-[100px] pointer-events-none transform-gpu will-change-transform" 
-        />
-        <motion.div 
-          style={{ x: parallaxX1, y: parallaxY2 }}
-          className="absolute top-[50%] left-[60%] w-[300px] h-[300px] rounded-full bg-[var(--neon-magenta)]/[0.03] blur-[80px] pointer-events-none transform-gpu will-change-transform" 
-        />
       </motion.div>
 
       {/* Main content */}
@@ -337,9 +324,9 @@ export default function HeroScene() {
           transition={{ duration: 0.8, delay: 2.2 }}
           className="text-base sm:text-lg text-gray-400 font-normal tracking-normal mb-10 max-w-2xl leading-relaxed"
         >
-          THE BIGGEST YOUTH FESTIVAL IS HERE — Technology. Creativity. Gaming. Culture.
+          Welcome to Youthfest 2026 — A day of technology, creativity, gaming, and culture.
           <br className="hidden sm:block" />
-          <span className="text-white font-medium">Presented by Yuvenza Club. One legendary stage. Infinite glory.</span>
+          <span className="text-white font-medium">Hosted by the Yuvenza Club. Join us for our biggest event of the year.</span>
         </motion.p>
 
         <motion.div

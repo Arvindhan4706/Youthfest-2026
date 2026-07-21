@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Orbitron, Poppins, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 const inter = Inter({
@@ -7,18 +7,7 @@ const inter = Inter({
  subsets: ["latin"],
  display: "swap",
 });
-const orbitron = Orbitron({
- variable: "--font-orbitron",
- subsets: ["latin"],
- display: "swap",
- weight: ["400", "500", "600", "700", "800", "900"],
-});
-const poppins = Poppins({
- variable: "--font-poppins",
- subsets: ["latin"],
- display: "swap",
- weight: ["400", "500", "600", "700"],
-});
+
 const spaceGrotesk = Space_Grotesk({
  variable: "--font-space-grotesk",
  subsets: ["latin"],
@@ -74,7 +63,7 @@ export default function RootLayout({
  return (
  <html
  lang="en"
- className={`${inter.variable} ${orbitron.variable} ${poppins.variable} ${spaceGrotesk.variable} antialiased`}
+ className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
  >
  <body className="min-h-screen font-sans">
  {children}

@@ -138,7 +138,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  <button type="button" onClick={onClose} className="absolute top-4 right-4 z-50 p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/10 cursor-pointer">
  <X className="w-5 h-5 pointer-events-none" />
  </button>
- <h2 className="text-3xl font-[var(--font-orbitron)] font-black text-white mb-6 text-center mt-2">
+ <h2 className="text-3xl font-[var(--font-heading-main)] font-black text-white mb-6 text-center mt-2">
  {activeTab === 'register' ? 'JOIN THE FESTIVAL' : 'VISITOR LOGIN'}
  </h2>
  {/* Tab Switcher */}

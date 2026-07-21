@@ -109,14 +109,14 @@ export default function StatsBarScene() {
  <span className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--neon-cyan)]">About The Event</span>
  </div>
  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black leading-tight text-white">
- THE ULTIMATE <br />
- <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">CONVERGENCE</span>
+ ABOUT <br />
+ <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">YOUTHFEST</span>
  </h2>
  <p className="text-lg text-gray-400 leading-relaxed max-w-lg">
  Yuvenza proudly conducts Youthfest 2026, the pinnacle of technology, culture, and innovation. We bring together the brightest minds across the nation for a single, action-packed day of intense competition, collaborative workshops, and unforgettable experiences.
  </p>
  <p className="text-lg text-gray-400 leading-relaxed max-w-lg">
- Step into the future, showcase your talent, and claim your glory on the most prestigious stage of the year.
+ Join thousands of students to showcase your talent, learn new skills, and compete across 50+ events.
  </p>
  </motion.div>
  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">

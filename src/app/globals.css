@@ -20,8 +20,8 @@
  --color-neon-lime: var(--neon-lime);
  --font-sans: var(--font-inter);
  --font-heading-main: var(--font-space-grotesk);
- --font-heading-sub: var(--font-poppins);
- --font-display: var(--font-orbitron);
+ --font-heading-sub: var(--font-sans);
+ --font-display: var(--font-heading-main);
 }
 /* ─── BASE ─── */
 html {
@@ -47,9 +47,9 @@ body {
 h1, h2 {
  font-family: var(--font-heading-main, 'Space Grotesk', sans-serif);
 }
-h3, h4, h5, h6 {
- font-family: var(--font-heading-sub, 'Poppins', sans-serif);
-}
+ h3, h4, h5, h6 {
+  font-family: var(--font-heading-sub, 'Inter', sans-serif);
+ }
 /* ─── KEYFRAME ANIMATIONS ─── */
 
 @keyframes float {

@@ -43,8 +43,8 @@ export default function TimelineScene() {
  viewport={{ once: true }}
  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-violet)]/30 bg-[var(--neon-violet)]/5 text-xs text-[var(--neon-violet)] font-semibold uppercase tracking-widest mb-6 shadow-[0_0_15px_rgba(139,92,246,0.2)]"
  >
- 1 Epic Day of Chaos
- </motion.div>
+   Schedule
+  </motion.div>
  <motion.h2
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
@@ -56,9 +56,9 @@ export default function TimelineScene() {
  TIMELINE
  </span>
  </motion.h2>
- <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
- Mark your calendars. This is the exact blueprint of when and where history will be made.
- </p>
+  <p className="text-gray-400 max-w-xl mx-auto text-sm sm:text-base mb-12">
+   Plan your day. Here's a breakdown of what's happening and when.
+  </p>
  </div>
  {/* Timeline Container */}
  <div className="relative pt-10 pb-20 max-w-4xl mx-auto">

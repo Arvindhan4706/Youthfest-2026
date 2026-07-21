@@ -380,14 +380,14 @@ export default function EventShowcaseScene() {
  <div className="relative z-10 max-w-7xl mx-auto px-4">
  {/* Header */}
  <div className="text-center mb-10">
- <motion.div
- initial={{ opacity: 0, y: 20 }}
- whileInView={{ opacity: 1, y: 0 }}
- viewport={{ once: true }}
- className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-xs text-[var(--neon-cyan)] font-semibold uppercase tracking-widest mb-6 shadow-[0_0_15px_rgba(0,240,255,0.2)]"
- >
- Discover Your Arena
- </motion.div>
+  <motion.div
+   initial={{ opacity: 0, y: 20 }}
+   whileInView={{ opacity: 1, y: 0 }}
+   viewport={{ once: true }}
+   className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-xs text-[var(--neon-cyan)] font-semibold uppercase tracking-widest mb-6 shadow-[0_0_15px_rgba(0,240,255,0.2)]"
+  >
+   Explore Events
+  </motion.div>
  <motion.h2
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
@@ -399,9 +399,9 @@ export default function EventShowcaseScene() {
  CATEGORIES
  </span>
  </motion.h2>
- <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
- Choose your path to glory. From intensive 24-hour hackathons to high-energy cultural showcases, we have something for everyone.
- </p>
+  <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
+   Browse through our technical, cultural, and gaming events to find the perfect fit for your team.
+  </p>
  </div>
  {/* Track tabs */}
  <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">

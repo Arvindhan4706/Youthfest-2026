@@ -117,7 +117,7 @@ export default function PaymentModal() {
  <CreditCard className="w-8 h-8 text-white" />
  </div>
  </div>
- <h2 className="text-2xl font-[var(--font-orbitron)] font-black text-white text-center mb-1">Secure Checkout</h2>
+ <h2 className="text-2xl font-[var(--font-heading-main)] font-black text-white text-center mb-1">Secure Checkout</h2>
  <p className="text-gray-400 text-xs text-center mb-6">Complete your payment to secure your spot.</p>
  <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
  <div className="flex justify-between items-center mb-3">
@@ -126,7 +126,7 @@ export default function PaymentModal() {
  </div>
  <div className="flex justify-between items-center pt-3 border-t border-white/10">
  <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Total Fee</span>
- <span className="text-xl font-[var(--font-orbitron)] font-black text-[var(--neon-cyan)]">
+ <span className="text-xl font-[var(--font-heading-main)] font-black text-[var(--neon-cyan)]">
  {checkoutEvent.fee}
  </span>
  </div>

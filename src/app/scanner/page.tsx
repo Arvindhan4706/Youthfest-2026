@@ -164,7 +164,7 @@ export default function ScannerPortal() {
  </div>
  <div className="w-full max-w-2xl text-center z-10 mt-12">
  <div className="mb-8">
- <h1 className="text-4xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-[0.2em] mb-2 drop-shadow-[0_0_15px_rgba(0,240,255,0.5)]">
+ <h1 className="text-4xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-[0.2em] mb-2 drop-shadow-[0_0_15px_rgba(0,240,255,0.5)]">
  Organizer Terminal
  </h1>
  <p className="text-[var(--neon-cyan)] font-mono text-xs tracking-widest uppercase font-bold">
@@ -251,7 +251,7 @@ export default function ScannerPortal() {
  key={scanState.message}
  initial={{ opacity: 0, y: 10 }}
  animate={{ opacity: 1, y: 0 }}
- className={`text-2xl font-bold uppercase tracking-wider mb-2 font-[var(--font-orbitron)] ${
+ className={`text-2xl font-bold uppercase tracking-wider mb-2 font-[var(--font-heading-main)] ${
  scanState.status === 'success' ? 'text-green-400' : 
  scanState.status === 'warning' ? 'text-yellow-400' : 
  scanState.status === 'error' ? 'text-red-400' : 

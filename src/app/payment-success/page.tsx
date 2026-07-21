@@ -67,7 +67,7 @@ function PaymentSuccessContent() {
         {status === 'verifying' && (
           <div className="flex flex-col items-center">
             <Loader2 className="w-16 h-16 text-[var(--neon-cyan)] animate-spin mb-6" />
-            <h1 className="text-2xl font-[var(--font-orbitron)] font-bold text-white mb-2">
+            <h1 className="text-2xl font-[var(--font-heading-main)] font-bold text-white mb-2">
               Verifying Payment
             </h1>
             <p className="text-gray-400">
@@ -79,7 +79,7 @@ function PaymentSuccessContent() {
         {status === 'success' && (
           <div className="flex flex-col items-center animate-in fade-in zoom-in duration-500">
             <CheckCircle2 className="w-20 h-20 text-green-500 mb-6 drop-shadow-[0_0_15px_rgba(34,197,94,0.5)]" />
-            <h1 className="text-3xl font-[var(--font-orbitron)] font-bold text-white mb-2">
+            <h1 className="text-3xl font-[var(--font-heading-main)] font-bold text-white mb-2">
               Payment Successful!
             </h1>
             <p className="text-gray-300 mb-8">
@@ -98,7 +98,7 @@ function PaymentSuccessContent() {
         {status === 'failed' && (
           <div className="flex flex-col items-center animate-in fade-in zoom-in duration-500">
             <XCircle className="w-20 h-20 text-red-500 mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
-            <h1 className="text-3xl font-[var(--font-orbitron)] font-bold text-white mb-2">
+            <h1 className="text-3xl font-[var(--font-heading-main)] font-bold text-white mb-2">
               Verification Failed
             </h1>
             <p className="text-gray-400 mb-8">

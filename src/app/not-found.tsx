@@ -9,7 +9,7 @@ export default function NotFound() {
  {/* Grid */}
  <div className="relative z-10 text-center glass-strong p-12 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,240,255,0.1)] max-w-lg w-full">
  <Zap className="w-16 h-16 text-[var(--neon-cyan)] mx-auto mb-6 drop-shadow-[0_0_15px_rgba(0,240,255,0.8)]" />
- <h1 className="text-8xl font-[var(--font-orbitron)] font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] mb-2">
+ <h1 className="text-8xl font-[var(--font-heading-main)] font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] mb-2">
  404
  </h1>
  <h2 className="text-2xl font-bold uppercase tracking-widest text-white mb-6">Sector Not Found</h2>

@@ -101,7 +101,7 @@ export default function Navbar() {
  </div>
  <div className="flex flex-col">
  <span className="text-[7px] uppercase tracking-[0.2em] text-gray-400 font-bold leading-none mb-0.5">Yuvenza Presents</span>
- <span className="font-[var(--font-orbitron)] font-extrabold text-lg leading-none tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
+ <span className="font-[var(--font-heading-main)] font-extrabold text-lg leading-none tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
  YOUTHFEST
  </span>
  </div>

@@ -20,7 +20,7 @@ export default function Error({
  {/* Grid */}
  <div className="relative z-10 text-center glass-strong p-12 rounded-3xl border border-red-500/30 shadow-[0_0_50px_rgba(239,68,68,0.1)] max-w-lg w-full">
  <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]" />
- <h1 className="text-4xl font-[var(--font-orbitron)] font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 mb-4 uppercase">
+ <h1 className="text-4xl font-[var(--font-heading-main)] font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 mb-4 uppercase">
  System Failure
  </h1>
  <p className="text-gray-400 text-sm leading-relaxed mb-8 font-mono">

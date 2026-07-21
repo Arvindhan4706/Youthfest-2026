@@ -264,7 +264,7 @@ export default function AdminPortal() {
  <div className="w-16 h-16 mx-auto bg-[var(--neon-cyan)]/10 rounded-full flex items-center justify-center mb-6">
  <Lock className="w-8 h-8 text-[var(--neon-cyan)]" />
  </div>
- <h1 className="text-2xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-wider mb-2">Restricted Access</h1>
+ <h1 className="text-2xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-2">Restricted Access</h1>
  <p className="text-xs text-gray-400 mb-8 font-mono">Enter Admin Credentials to continue</p>
  <form onSubmit={handleLogin} className="space-y-4">
  <div className="space-y-4">
@@ -313,7 +313,7 @@ export default function AdminPortal() {
  <Link href="/" className="inline-flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-white transition-colors uppercase font-mono mb-4">
  <ArrowLeft className="w-4 h-4 text-[var(--neon-cyan)]" /> Return to Main Site
  </Link>
- <h1 className="text-4xl font-[var(--font-orbitron)] font-black text-white uppercase tracking-wider drop-shadow-[0_0_15px_rgba(0,240,255,0.3)] flex items-center gap-3">
+ <h1 className="text-4xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider drop-shadow-[0_0_15px_rgba(0,240,255,0.3)] flex items-center gap-3">
  <ShieldCheck className="w-10 h-10 text-[var(--neon-cyan)]" /> Admin Core
  </h1>
  </div>
@@ -336,14 +336,14 @@ export default function AdminPortal() {
  <span className="text-xs font-bold uppercase tracking-wider">Total Users</span>
  <Users className="w-4 h-4 text-[var(--neon-cyan)]" />
  </div>
- <p className="text-3xl font-black font-[var(--font-orbitron)]">{isLoading ? '-' : visitors.length}</p>
+ <p className="text-3xl font-black font-[var(--font-heading-main)]">{isLoading ? '-' : visitors.length}</p>
  </div>
  <div className="p-4 rounded-2xl glass border border-white/10 flex flex-col justify-between">
  <div className="flex justify-between items-center text-gray-400 mb-2">
  <span className="text-xs font-bold uppercase tracking-wider">QR Check-ins</span>
  <ShieldCheck className="w-4 h-4 text-[var(--neon-violet)]" />
  </div>
- <p className="text-3xl font-black font-[var(--font-orbitron)] text-[var(--neon-violet)]">{isLoading ? '-' : attendanceCount}</p>
+ <p className="text-3xl font-black font-[var(--font-heading-main)] text-[var(--neon-violet)]">{isLoading ? '-' : attendanceCount}</p>
  </div>
  </div>
  {/* Tabs */}
@@ -391,7 +391,7 @@ export default function AdminPortal() {
  </div>
  {activeTab === 'settings' && siteSettings ? (
  <div className="glass rounded-3xl border border-white/10 p-8 max-w-4xl">
- <h2 className="text-2xl font-[var(--font-orbitron)] font-black mb-6 text-[var(--neon-violet)]">Edit Live Stats</h2>
+ <h2 className="text-2xl font-[var(--font-heading-main)] font-black mb-6 text-[var(--neon-violet)]">Edit Live Stats</h2>
  <form onSubmit={handleSaveSettings} className="grid grid-cols-1 md:grid-cols-2 gap-6">
  {[
  { key: 'participants', label: 'Participants (5000+)', type: 'number' },
@@ -418,7 +418,7 @@ export default function AdminPortal() {
  ))}
  
  <div className="md:col-span-2 mt-4 mb-2">
- <h3 className="text-xl font-[var(--font-orbitron)] font-black text-[var(--neon-cyan)] border-b border-white/10 pb-2">Event Coordinators (Contact Info)</h3>
+ <h3 className="text-xl font-[var(--font-heading-main)] font-black text-[var(--neon-cyan)] border-b border-white/10 pb-2">Event Coordinators (Contact Info)</h3>
  </div>
  
  {[
@@ -452,7 +452,7 @@ export default function AdminPortal() {
  </div>
  ) : activeTab === 'logs' ? (
  <div className="glass rounded-3xl border border-white/10 p-8 max-w-4xl">
- <h2 className="text-2xl font-[var(--font-orbitron)] font-black mb-6 text-red-400">Security Audit Logs</h2>
+ <h2 className="text-2xl font-[var(--font-heading-main)] font-black mb-6 text-red-400">Security Audit Logs</h2>
  <div className="overflow-x-auto">
  <table className="w-full text-left text-sm">
  <thead>
@@ -481,7 +481,7 @@ export default function AdminPortal() {
  </div>
  ) : activeTab === 'users' ? (
  <div className="glass rounded-3xl border border-white/10 p-8 max-w-4xl">
- <h2 className="text-2xl font-[var(--font-orbitron)] font-black mb-6 text-orange-400">Manage Roles</h2>
+ <h2 className="text-2xl font-[var(--font-heading-main)] font-black mb-6 text-orange-400">Manage Roles</h2>
  <form onSubmit={handleAddAdminUser} className="flex flex-col md:flex-row gap-4 mb-8 bg-white/5 p-4 rounded-xl border border-white/10">
  <input
  type="email"
@@ -618,7 +618,7 @@ export default function AdminPortal() {
  ) : activeTab === 'events' ? (
  <>
  <div className="flex justify-between items-center mb-6">
- <h2 className="text-2xl font-[var(--font-orbitron)] font-black text-[var(--neon-magenta)]">Event Management</h2>
+ <h2 className="text-2xl font-[var(--font-heading-main)] font-black text-[var(--neon-magenta)]">Event Management</h2>
  {['Super Admin', 'Editor'].includes(userRole) && (
  <button 
  onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }}
@@ -695,7 +695,7 @@ export default function AdminPortal() {
  <X className="w-5 h-5" />
  </button>
  <div className="p-6 md:p-8">
- <h2 className="text-2xl font-[var(--font-orbitron)] font-black text-white mb-6">
+ <h2 className="text-2xl font-[var(--font-heading-main)] font-black text-white mb-6">
  {editingEvent ? 'Edit Event' : 'Add New Event'}
  </h2>
  <form onSubmit={handleSaveEvent} className="space-y-4">

@@ -173,7 +173,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  className="fixed inset-0 z-[99999] h-[100dvh] bg-black flex items-center justify-center cursor-pointer"
  onClick={() => setPhase('chaos')}
  >
- <p className="text-white/70 text-sm sm:text-base md:text-xl tracking-[0.4em] uppercase animate-pulse font-light font-[var(--font-orbitron)]">
+ <p className="text-white/70 text-sm sm:text-base md:text-xl tracking-[0.4em] uppercase animate-pulse font-light font-[var(--font-heading-main)]">
  Click to Enter
  </p>
  </div>
@@ -424,7 +424,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  setRevealedLetters(YOUTHFEST_LETTERS.length);
  setPhase('hold');
  }}
- className="absolute bottom-8 right-8 z-[100000] flex items-center gap-2 text-white/60 hover:text-white uppercase tracking-[0.2em] text-[10px] font-bold font-[var(--font-orbitron)] px-5 py-2.5 rounded-full bg-black/20 hover:bg-black/50 border border-white/10 hover:border-white/30 transition-all duration-300 group cursor-pointer"
+ className="absolute bottom-8 right-8 z-[100000] flex items-center gap-2 text-white/60 hover:text-white uppercase tracking-[0.2em] text-[10px] font-bold font-[var(--font-heading-main)] px-5 py-2.5 rounded-full bg-black/20 hover:bg-black/50 border border-white/10 hover:border-white/30 transition-all duration-300 group cursor-pointer"
  >
  <span>Skip Intro</span>
  <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
