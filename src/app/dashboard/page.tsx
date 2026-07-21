@@ -7,6 +7,8 @@ import { db } from '../../lib/database';
 import { motion } from 'framer-motion';
 import { ArrowLeft, User, Mail, Calendar, QrCode, Download, LogOut, MailOpen, Inbox, ChevronRight, FileText, Upload } from 'lucide-react';
 import ToastContainer from '../../components/ToastContainer';
+import { QRCodeCanvas } from 'qrcode.react';
+import html2canvas from 'html2canvas';
 export default function Dashboard() {
  const user = useStore((state) => state.user);
  const setUser = useStore((state) => state.setUser);
@@ -62,9 +64,33 @@ export default function Dashboard() {
  console.error(err);
  }
  };
- const handleDownloadTicket = () => {
- addToast('Ticket download initiated. Saved to downloads!');
- };
+  const handleDownloadTicket = async () => {
+    const ticketElement = document.getElementById('ticket-pass');
+    if (!ticketElement) {
+      addToast('Error locating ticket element.');
+      return;
+    }
+    
+    addToast('Generating your digital ticket...');
+    try {
+      const canvas = await html2canvas(ticketElement, {
+        backgroundColor: '#070024',
+        scale: 2, // High resolution
+        useCORS: true,
+      });
+      const dataUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = `Yuvenza_Pass_${selectedEventTicket?.replace(/\s+/g, '_')}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      addToast('Ticket saved to downloads!', { points: 5 });
+    } catch (err: any) {
+      console.error(err);
+      addToast('Failed to download ticket.', { points: 0 });
+    }
+  };
  const handleLogout = () => {
  setUser(null);
  addToast('You have been logged out.');
@@ -246,24 +272,29 @@ export default function Dashboard() {
  {/* Neon Boarding Ticket Pass */}
  <div className="md:col-span-5 flex flex-col items-center justify-center">
  {selectedEventTicket ? (
- <motion.div
- initial={{ opacity: 0, scale: 0.95 }}
- animate={{ opacity: 1, scale: 1 }}
- className="w-full bg-gradient-to-b from-purple-900/40 to-[#070024] border border-purple-500/30 rounded-3xl p-6 shadow-2xl relative flex flex-col justify-between items-center text-center overflow-hidden"
- >
- {/* Boarding ticket accent lines */}
- <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500" />
- <span className="text-[9px] uppercase font-mono tracking-widest text-teal-400 font-bold mb-4">
- YOUTHFEST '26 VITALITY PASS
- </span>
- {/* Real QR Image generated via API */}
- <div className="bg-white p-2 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)] pointer-events-none">
- <img 
- src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(user.email + '|' + selectedEventTicket)}`} 
- alt="Ticket QR Code"
- className="w-28 h-28 object-contain"
- />
- </div>
+          <motion.div
+            id="ticket-pass"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full bg-gradient-to-b from-purple-900/40 to-[#070024] border border-purple-500/30 rounded-3xl p-6 shadow-2xl relative flex flex-col justify-between items-center text-center overflow-hidden"
+          >
+            {/* Boarding ticket accent lines */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500" />
+            <span className="text-[9px] uppercase font-mono tracking-widest text-teal-400 font-bold mb-4">
+              YOUTHFEST '26 VITALITY PASS
+            </span>
+            
+            {/* Real QR Image generated locally */}
+            <div className="bg-white p-2 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)] pointer-events-none">
+              <QRCodeCanvas 
+                value={user.email + '|' + selectedEventTicket} 
+                size={112} // 28 * 4 (Tailwind w-28 is 112px)
+                bgColor={"#ffffff"}
+                fgColor={"#000000"}
+                level={"M"}
+                includeMargin={false}
+              />
+            </div>
  <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
  <span className="text-[10px] text-gray-400 block mb-6 font-mono">Visitor: {user.name}</span>
  <span className="text-[8px] text-purple-400/80 block -mt-5 mb-6 font-mono uppercase tracking-widest break-all">ID: {btoa(user.email + '|' + selectedEventTicket).substring(0, 15)}...</span>
