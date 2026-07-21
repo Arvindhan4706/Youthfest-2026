@@ -89,9 +89,9 @@ export default function Dashboard() {
       const ticketId = btoa(user.email + '|' + selectedEventTicket).substring(0, 15);
       page.drawText(`Ticket ID: ${ticketId}`, { x: 30, y: 110, size: 12, font: normalFont, color: rgb(0.6, 0.3, 0.9) });
       
-      // Fetch QR Code and embed it using Google Charts (highly reliable CORS-friendly API)
+      // Fetch QR Code and embed it using internal API to bypass CORS/Adblockers
       const qrData = encodeURIComponent(user.email + '|' + selectedEventTicket);
-      const qrUrl = `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${qrData}`;
+      const qrUrl = `/api/qr?data=${qrData}`;
       
       try {
         const qrImageBytes = await fetch(qrUrl).then(res => res.arrayBuffer());
@@ -312,13 +312,12 @@ export default function Dashboard() {
               YOUTHFEST '26 VITALITY PASS
             </span>
             
-            {/* Real QR Image generated via Google Charts API */}
+            {/* Real QR Image generated via internal proxy API */}
             <div className="bg-white p-2 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)] pointer-events-none">
               <img 
-                src={`https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent(user.email + '|' + selectedEventTicket)}`}
+                src={`/api/qr?data=${encodeURIComponent(user.email + '|' + selectedEventTicket)}`}
                 alt="Ticket QR Code"
                 className="w-28 h-28 object-contain"
-                crossOrigin="anonymous"
               />
             </div>
  <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
