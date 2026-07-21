@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useStore } from '../../lib/useStore';
 import { db } from '../../lib/database';
 import { motion } from 'framer-motion';
-import { ArrowLeft, User, Mail, Calendar, QrCode, Download, LogOut, MailOpen, Inbox, ChevronRight, FileText, Upload } from 'lucide-react';
+import { ArrowLeft, User, Mail, Calendar, QrCode, Download, LogOut, MailOpen, Inbox, ChevronRight } from 'lucide-react';
 import ToastContainer from '../../components/ToastContainer';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 export default function Dashboard() {
@@ -103,7 +103,7 @@ export default function Dashboard() {
       }
       
       const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -320,17 +320,17 @@ export default function Dashboard() {
                 className="w-28 h-28 object-contain"
               />
             </div>
- <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
- <span className="text-[10px] text-gray-400 block mb-6 font-mono">Visitor: {user.name}</span>
- <span className="text-[8px] text-purple-400/80 block -mt-5 mb-6 font-mono uppercase tracking-widest break-all">ID: {btoa(user.email + '|' + selectedEventTicket).substring(0, 15)}...</span>
-                <button
-                  onClick={handleDownloadTicket}
-                  className="w-full py-3 rounded-full bg-white text-black hover:bg-gray-200 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download ticket</span>
-                </button>
- </motion.div>
+            <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
+            <span className="text-[10px] text-gray-400 block mb-6 font-mono">Visitor: {user.name}</span>
+            <span className="text-[8px] text-purple-400/80 block -mt-5 mb-6 font-mono uppercase tracking-widest break-all">ID: {btoa(user.email + '|' + selectedEventTicket).substring(0, 15)}...</span>
+            <button
+              onClick={handleDownloadTicket}
+              className="w-full py-3 rounded-full bg-white text-black hover:bg-gray-200 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download ticket</span>
+            </button>
+  </motion.div>
  ) : (
  <div className="w-full h-full border border-dashed border-white/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center bg-black/10 min-h-[300px]">
  <QrCode className="w-8 h-8 text-gray-600 mb-3 animate-pulse" />
