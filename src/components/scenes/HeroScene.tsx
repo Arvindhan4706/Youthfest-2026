@@ -71,8 +71,8 @@ function useCountUp(target: number, duration: number = 2000, startOnMount: boole
 function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-        <span className="relative text-2xl sm:text-3xl font-[var(--font-heading-main)] font-bold text-white tabular-nums">
+      <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+        <span className="relative text-xl sm:text-3xl font-[var(--font-heading-main)] font-bold text-white tabular-nums">
           {String(value).padStart(2, '0')}
         </span>
       </div>
@@ -175,6 +175,7 @@ export default function HeroScene() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 3, delay: 1.0 }}
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
       >
         <ParticleUniverse />
       </motion.div>
@@ -184,11 +185,10 @@ export default function HeroScene() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 2, delay: 1.5 }}
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
       >
-        
         {/* Infinite scrolling background text - 3 Lines */}
-        <div className="absolute top-0 left-0 w-full h-[120%] flex flex-col justify-start pt-20 overflow-hidden opacity-10 pointer-events-none select-none z-0 space-y-4 sm:space-y-8 -translate-y-10">
+        <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-between py-24 sm:py-32 overflow-hidden opacity-5 pointer-events-none select-none z-0">
           {/* Line 1 - Scrolling Right (Left to Right) */}
           <motion.div
             animate={{ x: ["-50%", 0] }}
@@ -240,7 +240,7 @@ export default function HeroScene() {
       </motion.div>
 
       {/* Main content */}
-      <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center mt-8 sm:mt-16">
+      <div className="relative z-20 max-w-5xl mx-auto text-center flex flex-col items-center mt-8 sm:mt-16 pointer-events-auto">
         {/* Event Logo */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -248,7 +248,7 @@ export default function HeroScene() {
           transition={{ duration: 0.8 }}
           className="mb-6 relative"
         >
-          <div className="relative z-10">
+          <div className="relative z-20">
             <Image src="/yuvenzalogo.png" alt="Youthfest Event Logo" width={300} height={112} className="w-[200px] sm:w-[250px] md:w-[300px] h-auto object-contain" />
           </div>
         </motion.div>
@@ -346,7 +346,7 @@ export default function HeroScene() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.4 }}
-          className="flex items-center justify-center gap-2 sm:gap-4 mb-10 mx-auto"
+          className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-4 mb-10 mx-auto px-2"
         >
           <CountdownUnit value={countdown.days} label="Days" />
           <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px]">:</span>
