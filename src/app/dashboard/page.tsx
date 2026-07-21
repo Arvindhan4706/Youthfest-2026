@@ -7,8 +7,7 @@ import { db } from '../../lib/database';
 import { motion } from 'framer-motion';
 import { ArrowLeft, User, Mail, Calendar, QrCode, Download, LogOut, MailOpen, Inbox, ChevronRight, FileText, Upload } from 'lucide-react';
 import ToastContainer from '../../components/ToastContainer';
-import { QRCodeCanvas } from 'qrcode.react';
-import html2canvas from 'html2canvas';
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 export default function Dashboard() {
  const user = useStore((state) => state.user);
  const setUser = useStore((state) => state.setUser);
@@ -65,27 +64,56 @@ export default function Dashboard() {
  }
  };
   const handleDownloadTicket = async () => {
-    const ticketElement = document.getElementById('ticket-pass');
-    if (!ticketElement) {
-      addToast('Error locating ticket element.');
-      return;
-    }
+    if (!selectedEventTicket) return;
     
-    addToast('Generating your digital ticket...');
+    addToast('Generating digital ticket PDF...');
     try {
-      const canvas = await html2canvas(ticketElement, {
-        backgroundColor: '#070024',
-        scale: 2, // High resolution
-        useCORS: true,
-      });
-      const dataUrl = canvas.toDataURL('image/png');
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage([600, 300]);
+      
+      const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+      const normalFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+      // Draw background
+      page.drawRectangle({ x: 0, y: 0, width: 600, height: 300, color: rgb(0.02, 0.0, 0.1) });
+      
+      // Draw Ticket Header
+      page.drawText("YOUTHFEST '26 VITALITY PASS", { x: 30, y: 250, size: 20, font, color: rgb(0.1, 0.9, 0.9) });
+      
+      // Draw Event Name
+      page.drawText(selectedEventTicket, { x: 30, y: 200, size: 24, font, color: rgb(1, 1, 1) });
+      
+      // Draw Visitor Details
+      page.drawText(`Visitor: ${user.name}`, { x: 30, y: 150, size: 14, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
+      page.drawText(`Email: ${user.email}`, { x: 30, y: 130, size: 12, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
+      const ticketId = btoa(user.email + '|' + selectedEventTicket).substring(0, 15);
+      page.drawText(`Ticket ID: ${ticketId}`, { x: 30, y: 110, size: 12, font: normalFont, color: rgb(0.6, 0.3, 0.9) });
+      
+      // Fetch QR Code and embed it using Google Charts (highly reliable CORS-friendly API)
+      const qrData = encodeURIComponent(user.email + '|' + selectedEventTicket);
+      const qrUrl = `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${qrData}`;
+      
+      try {
+        const qrImageBytes = await fetch(qrUrl).then(res => res.arrayBuffer());
+        const qrImage = await pdfDoc.embedPng(qrImageBytes);
+        page.drawImage(qrImage, { x: 420, y: 75, width: 150, height: 150 });
+        page.drawText("SCAN AT ENTRANCE", { x: 435, y: 55, size: 12, font, color: rgb(1, 1, 1) });
+      } catch (qrErr) {
+        console.warn('Could not embed QR code in PDF', qrErr);
+      }
+      
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = dataUrl;
-      link.download = `Yuvenza_Pass_${selectedEventTicket?.replace(/\s+/g, '_')}.png`;
+      link.href = url;
+      link.download = `Yuvenza_Pass_${selectedEventTicket.replace(/\s+/g, '_')}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      addToast('Ticket saved to downloads!', { points: 5 });
+      URL.revokeObjectURL(url);
+      
+      addToast('Ticket PDF saved to downloads!', { points: 5 });
     } catch (err: any) {
       console.error(err);
       addToast('Failed to download ticket.', { points: 0 });
@@ -284,15 +312,13 @@ export default function Dashboard() {
               YOUTHFEST '26 VITALITY PASS
             </span>
             
-            {/* Real QR Image generated locally */}
+            {/* Real QR Image generated via Google Charts API */}
             <div className="bg-white p-2 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)] pointer-events-none">
-              <QRCodeCanvas 
-                value={user.email + '|' + selectedEventTicket} 
-                size={112} // 28 * 4 (Tailwind w-28 is 112px)
-                bgColor={"#ffffff"}
-                fgColor={"#000000"}
-                level={"M"}
-                includeMargin={false}
+              <img 
+                src={`https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent(user.email + '|' + selectedEventTicket)}`}
+                alt="Ticket QR Code"
+                className="w-28 h-28 object-contain"
+                crossOrigin="anonymous"
               />
             </div>
  <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
