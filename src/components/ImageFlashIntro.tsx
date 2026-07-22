@@ -2,12 +2,21 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useDevice } from '../hooks/useDevice';
 const FLASH_IMAGES = [
  '/photos/DSC_0087-opt.webp',
  '/photos/DSC_0101-opt.webp',
  '/photos/DSC_0364-opt.webp',
  '/photos/DSC_0429-opt.webp',
  '/photos/IMG_6134-opt.webp',
+];
+
+const MOBILE_FLASH_IMAGES = [
+ '/photos/DSC_0087-mobile.webp',
+ '/photos/DSC_0101-mobile.webp',
+ '/photos/DSC_0364-mobile.webp',
+ '/photos/DSC_0429-mobile.webp',
+ '/photos/IMG_6134-mobile.webp',
 ];
 const YOUTHFEST_LETTERS = ['Y', 'O', 'U', 'T', 'H', 'F', 'E', 'S', 'T'];
 // Timeline phases
@@ -16,6 +25,7 @@ const YOUTHFEST_LETTERS = ['Y', 'O', 'U', 'T', 'H', 'F', 'E', 'S', 'T'];
 // Phase 3: Full name revealed with dramatic hold + zoom
 // Phase 4: Final cinematic fade out
 export default function ImageFlashIntro({ onComplete }: { onComplete: () => void }) {
+ const { isMobile } = useDevice();
  const [currentImgIndex, setCurrentImgIndex] = useState(0);
  const [flashCount, setFlashCount] = useState(0);
  const [revealedLetters, setRevealedLetters] = useState(0);
@@ -142,11 +152,12 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  }
  }
  // Cycle images
- setCurrentImgIndex((prev) => (prev + 1) % FLASH_IMAGES.length);
+ const targetImages = isMobile ? MOBILE_FLASH_IMAGES : FLASH_IMAGES;
+ setCurrentImgIndex((prev) => (prev + 1) % targetImages.length);
  setFlashCount((prev) => prev + 1);
  }, getInterval(flashCount, phase));
  return () => clearTimeout(timeout);
- }, [phase, flashCount, getInterval, CHAOS_FLASHES, REVEAL_FLASHES, FLASHES_PER_LETTER]);
+ }, [phase, flashCount, getInterval, CHAOS_FLASHES, REVEAL_FLASHES, FLASHES_PER_LETTER, isMobile]);
  // Hold phase: dramatic pause on full name then finale
  useEffect(() => {
  if (phase !== 'hold') return;
@@ -187,7 +198,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  return (
  <div className="fixed inset-0 z-[99999] bg-black overflow-hidden select-none">
  {/* === BACKGROUND IMAGE FLASHES — only active image rendered === */}
- {FLASH_IMAGES.map((src, index) => {
+ {(isMobile ? MOBILE_FLASH_IMAGES : FLASH_IMAGES).map((src, index) => {
  const isActive = index === currentImgIndex;
  if (!isActive && phase !== 'hold' && phase !== 'finale') return null;
  return (
@@ -231,7 +242,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  >
  { }
  <Image
- src={FLASH_IMAGES[currentImgIndex]}
+ src={isMobile ? MOBILE_FLASH_IMAGES[currentImgIndex] : FLASH_IMAGES[currentImgIndex]}
  alt=""
  fill
  sizes="100vw"
