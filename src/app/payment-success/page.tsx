@@ -67,7 +67,7 @@ function PaymentSuccessContent() {
           setStatus('success');
           
           // Generate QR code for gate verification
-          const qrData = encodeURIComponent(`${email}|${eventTitleParam || 'Youthfest 2026'}`);
+          const qrData = `${email}|${eventTitleParam || 'Youthfest 2026'}`;
           QRCode.toDataURL(qrData, { width: 300, margin: 1 })
             .then(url => setQrCodeDataUrl(url))
             .catch(err => console.error('Failed to generate QR code:', err));
@@ -128,7 +128,7 @@ function PaymentSuccessContent() {
       const ticketId = btoa(`${email}|${eventTitle}`).substring(0, 15);
       page.drawText(`Ticket ID: ${ticketId}`, { x: 30, y: 110, size: 12, font: normalFont, color: rgb(0.6, 0.3, 0.9) });
 
-      const qrData = encodeURIComponent(`${email}|${eventTitle}`);
+      const qrData = `${email}|${eventTitle}`;
       try {
         const localQrDataUrl = await QRCode.toDataURL(qrData, { width: 300, margin: 1 });
         const base64Data = localQrDataUrl.split(',')[1];

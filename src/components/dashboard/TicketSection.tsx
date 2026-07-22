@@ -14,7 +14,7 @@ export default function TicketSection() {
 
   React.useEffect(() => {
     if (selectedEventTicket && user) {
-      const qrData = encodeURIComponent(user.email + '|' + selectedEventTicket);
+      const qrData = user.email + '|' + selectedEventTicket;
       QRCode.toDataURL(qrData, { width: 300, margin: 1 })
         .then(url => setQrCodeDataUrl(url))
         .catch(err => console.error('Failed to generate local QR code', err));
@@ -50,7 +50,7 @@ export default function TicketSection() {
       page.drawText(`Ticket ID: ${ticketId}`, { x: 30, y: 110, size: 12, font: normalFont, color: rgb(0.6, 0.3, 0.9) });
       
       // Generate QR Code locally to avoid proxy SSL and CORS issues
-      const qrData = encodeURIComponent(user.email + '|' + selectedEventTicket);
+      const qrData = user.email + '|' + selectedEventTicket;
       
       try {
         const localQrDataUrl = await QRCode.toDataURL(qrData, { width: 300, margin: 1 });
