@@ -77,9 +77,10 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  const REVEAL_FLASHES = YOUTHFEST_LETTERS.length * FLASHES_PER_LETTER;
  const getInterval = useCallback((count: number, currentPhase: string) => {
  if (currentPhase === 'chaos') {
- // Start at 250ms, accelerate to 120ms
- const t = count / CHAOS_FLASHES;
- return 250 - t * 130;
+  // Start at 256ms, accelerate to 126ms.
+  // The math guarantees exactly ~3.5 seconds before the 'Y' reveals.
+  const t = count / CHAOS_FLASHES;
+  return 256 - t * 130;
  }
  if (currentPhase === 'reveal') {
  // Each letter reveal: fast flashes then longer pause
