@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
-import { User, Menu, X, Zap, ShieldCheck } from 'lucide-react';
+import { User, Menu, X, Zap, ShieldCheck, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthModal from './AuthModal';
 const navLinks = [
@@ -41,6 +41,8 @@ export default function Navbar() {
  const user = useStore((state) => state.user);
  const isAuthOpen = useStore((state) => state.isAuthOpen);
  const setAuthOpen = useStore((state) => state.setAuthOpen);
+ const isMuted = useStore((state) => state.isMuted);
+ const setMuted = useStore((state) => state.setMuted);
  const router = useRouter();
  const [scrolled, setScrolled] = useState(false);
  const [mobileOpen, setMobileOpen] = useState(false);
@@ -147,6 +149,14 @@ export default function Navbar() {
  </div>
  {/* Right Side: CTA + User */}
  <div className="flex items-center gap-2.5">
+ {/* Audio Toggle */}
+ <button
+   onClick={() => setMuted(!isMuted)}
+   className="flex p-2 rounded-xl text-white/40 hover:bg-white/5 hover:text-white transition-all duration-300"
+   title={isMuted ? "Unmute Music" : "Mute Music"}
+ >
+   {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-[var(--neon-cyan)]" />}
+ </button>
  {/* Admin Secret Portal */}
  <Link 
  href="/admin" 

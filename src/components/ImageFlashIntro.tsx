@@ -23,8 +23,8 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  const [showWhiteFlash, setShowWhiteFlash] = useState(false);
  const [glitchOffset, setGlitchOffset] = useState({ x: 0, y: 0 });
  const [isSkipping, setIsSkipping] = useState(false);
+ const setMuted = useStore((state) => state.setMuted);
  const hasCompleted = useRef(false);
- const audioRef = useRef<HTMLAudioElement | null>(null);
  // SAFETY: No matter what happens, call onComplete after 25 seconds from start
  // This prevents RESULT_CODE_HUNG if any phase gets stuck
  const safetyTimerStarted = useRef(false);
@@ -39,37 +39,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  }, 25000);
  return () => clearTimeout(safety);
  }, [phase, onComplete]);
- // Audio is now triggered directly on click to bypass iOS Safari autoplay restrictions
- // Pleasant audio fade-out during finale
- useEffect(() => {
- if (phase === 'finale' && audioRef.current) {
- const audio = audioRef.current;
- const startVolume = audio.volume;
- const fadeDuration = isSkipping ? 500 : 2500; // faster fade if skipping
- const steps = 25;
- const stepTime = fadeDuration / steps;
- const volumeStep = startVolume / steps;
- const fadeInterval = setInterval(() => {
- if (audio.volume - volumeStep > 0.01) {
- audio.volume -= volumeStep;
- } else {
- audio.volume = 0;
- audio.pause();
- clearInterval(fadeInterval);
- }
- }, stepTime);
- return () => clearInterval(fadeInterval);
- }
- }, [phase, isSkipping]);
- // Cleanup audio on unmount
- useEffect(() => {
- return () => {
- if (audioRef.current) {
- audioRef.current.pause();
- audioRef.current.currentTime = 0;
- }
- };
- }, []);
+ // Audio is now triggered globally via GlobalAudio.tsx when the user clicks to enter.
  // Phase 1: Chaos — rapid image flashes
  const CHAOS_FLASHES = 18;
  // Phase 2: Reveal — one letter per flash burst
@@ -164,13 +134,8 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  <div 
  className="fixed inset-0 z-[99999] h-[100dvh] bg-black flex items-center justify-center cursor-pointer"
  onClick={() => {
-    // Play audio synchronously inside the click handler to satisfy strict browser autoplay policies
-    if (!audioRef.current) {
-      const audio = new Audio('/intro-bgm.mp3');
-      audio.volume = 0.5;
-      audio.play().catch(err => console.log("Audio play failed:", err));
-      audioRef.current = audio;
-    }
+    // Unmute global audio. GlobalAudio.tsx will detect this and play the BGM instantly.
+    setMuted(false);
     setPhase('chaos');
   }}
  >

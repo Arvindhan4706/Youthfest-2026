@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import AutoLogoutProvider from "../components/AutoLogoutProvider";
+import GlobalAudio from "../components/GlobalAudio";
 import "./globals.css";
 const inter = Inter({
  variable: "--font-inter",
@@ -68,6 +69,7 @@ export default function RootLayout({
  >
  <body className="min-h-screen font-sans">
  <AutoLogoutProvider />
+ <GlobalAudio />
  {children}
  <Analytics />
  </body>
