@@ -52,22 +52,9 @@ export default function Home() {
         return;
       }
 
-      // Detect if user performed an explicit page refresh/reload (F5 / Reload button)
-      let isReload = false;
-      try {
-        const navEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
-        if (navEntries.length > 0) {
-          isReload = navEntries[0].type === 'reload';
-        } else if ((performance as any).navigation) {
-          isReload = (performance as any).navigation.type === 1;
-        }
-      } catch (e) {
-        // Fallback
-      }
-
-      // Skip ONLY if refreshed within the same active tab session.
-      // Opening a new tab or reopening the site after closing will have an empty sessionStorage and play the intro.
-      if (isReload && sessionStorage.getItem('hasSeenIntro') === 'true') {
+      // If user has already seen intro in current tab session (page refresh or navigation), skip it.
+      // Closing the browser/tab clears sessionStorage, so re-opening the site will always play the intro.
+      if (sessionStorage.getItem('hasSeenIntro') === 'true') {
         setShowFlashIntro(false);
       } else {
         setShowFlashIntro(true);
