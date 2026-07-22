@@ -39,15 +39,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  }, 25000);
  return () => clearTimeout(safety);
  }, [phase, onComplete]);
- // Play audio when phase changes to chaos
- useEffect(() => {
- if (phase === 'chaos') {
- const audio = new Audio('/intro-bgm.mp3');
- audio.volume = 0.5;
- audio.play().catch(err => console.log("Audio play failed:", err));
- audioRef.current = audio;
- }
- }, [phase]);
+  // Audio is triggered instantly on click to avoid delay and bypass iOS Safari autoplay restrictions
  // Pleasant audio fade-out during finale
  useEffect(() => {
  if (phase === 'finale' && audioRef.current) {
@@ -171,7 +163,16 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  return (
  <div 
  className="fixed inset-0 z-[99999] h-[100dvh] bg-black flex items-center justify-center cursor-pointer"
- onClick={() => setPhase('chaos')}
+ onClick={() => {
+    // Play audio synchronously inside the click handler to instantly start music with no React delay
+    if (!audioRef.current) {
+      const audio = new Audio('/intro-bgm.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(err => console.log("Audio play failed:", err));
+      audioRef.current = audio;
+    }
+    setPhase('chaos');
+  }}
  >
  <p className="text-white/70 text-sm sm:text-base md:text-xl tracking-[0.4em] uppercase animate-pulse font-light font-[var(--font-heading-main)]">
  Click to Enter
