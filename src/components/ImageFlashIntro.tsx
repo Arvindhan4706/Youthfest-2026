@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useStore } from '../lib/useStore';
 const FLASH_IMAGES = [
  '/flash-crowd-opt.webp',
  '/flash-wellness-opt.webp',
