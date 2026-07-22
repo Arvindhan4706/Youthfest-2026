@@ -164,12 +164,12 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  }, isSkipping ? 800 : 3500); // Faster exit if skipping
  return () => clearTimeout(timer);
  }, [phase, onComplete, isSkipping]);
- const getRandomTransform = () => ({
- scale: 1.05 + Math.random() * 0.5,
- rotate: (Math.random() - 0.5) * 12,
- x: `${(Math.random() - 0.5) * 8}%`,
- y: `${(Math.random() - 0.5) * 8}%`,
- });
+  const getRandomTransform = () => ({
+  scale: 1.35 + Math.random() * 0.3, // Increased base scale to ensure edges never show during rotation
+  rotate: (Math.random() - 0.5) * 8, // Slightly reduced max rotation for better framing
+  x: `${(Math.random() - 0.5) * 4}%`,
+  y: `${(Math.random() - 0.5) * 4}%`,
+  });
  const transform = getRandomTransform();
  const isFlashing = phase === 'chaos' || phase === 'reveal';
  if (phase === 'start') {
@@ -213,6 +213,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  src={src}
  alt=""
  fill
+ priority={true}
  sizes="100vw"
  className="object-cover"
  style={{
