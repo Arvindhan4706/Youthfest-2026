@@ -3,11 +3,11 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 const FLASH_IMAGES = [
- '/flash-crowd-opt.webp',
- '/flash-wellness-opt.webp',
- '/flash-colors-opt.webp',
- '/flash-stage-opt.webp',
- '/flash-energy-opt.webp',
+ '/photos/DSC_0087.JPG',
+ '/photos/DSC_0101.JPG',
+ '/photos/DSC_0364.JPG',
+ '/photos/DSC_0429.JPG',
+ '/photos/IMG_6134.JPG',
 ];
 const YOUTHFEST_LETTERS = ['Y', 'O', 'U', 'T', 'H', 'F', 'E', 'S', 'T'];
 // Timeline phases
