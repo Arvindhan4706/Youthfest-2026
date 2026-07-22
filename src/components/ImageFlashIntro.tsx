@@ -39,7 +39,20 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  }, 25000);
  return () => clearTimeout(safety);
  }, [phase, onComplete]);
-  // Audio is triggered instantly on click to avoid delay and bypass iOS Safari autoplay restrictions
+ // Play audio when phase changes to chaos with a 1 second delay
+ useEffect(() => {
+ if (phase === 'chaos') {
+ const audio = new Audio('/intro-bgm.mp3');
+ audio.volume = 0.5;
+ audioRef.current = audio;
+ 
+ const delayTimer = setTimeout(() => {
+   audio.play().catch(err => console.log("Audio play failed:", err));
+ }, 1000);
+ 
+ return () => clearTimeout(delayTimer);
+ }
+ }, [phase]);
  // Pleasant audio fade-out during finale
  useEffect(() => {
  if (phase === 'finale' && audioRef.current) {
@@ -77,10 +90,9 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  const REVEAL_FLASHES = YOUTHFEST_LETTERS.length * FLASHES_PER_LETTER;
  const getInterval = useCallback((count: number, currentPhase: string) => {
  if (currentPhase === 'chaos') {
-  // Start at 256ms, accelerate to 126ms.
-  // The math guarantees exactly ~3.5 seconds before the 'Y' reveals.
-  const t = count / CHAOS_FLASHES;
-  return 256 - t * 130;
+ // Start at 250ms, accelerate to 120ms
+ const t = count / CHAOS_FLASHES;
+ return 250 - t * 130;
  }
  if (currentPhase === 'reveal') {
  // Each letter reveal: fast flashes then longer pause
@@ -164,16 +176,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  return (
  <div 
  className="fixed inset-0 z-[99999] h-[100dvh] bg-black flex items-center justify-center cursor-pointer"
- onClick={() => {
-    // Play audio synchronously inside the click handler to instantly start music with no React delay
-    if (!audioRef.current) {
-      const audio = new Audio('/intro-bgm.mp3');
-      audio.volume = 0.5;
-      audio.play().catch(err => console.log("Audio play failed:", err));
-      audioRef.current = audio;
-    }
-    setPhase('chaos');
-  }}
+ onClick={() => setPhase('chaos')}
  >
  <p className="text-white/70 text-sm sm:text-base md:text-xl tracking-[0.4em] uppercase animate-pulse font-light font-[var(--font-heading-main)]">
  Click to Enter
