@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useStore } from '../lib/useStore';
 const FLASH_IMAGES = [
  '/flash-crowd-opt.webp',
  '/flash-wellness-opt.webp',
@@ -24,8 +23,8 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  const [showWhiteFlash, setShowWhiteFlash] = useState(false);
  const [glitchOffset, setGlitchOffset] = useState({ x: 0, y: 0 });
  const [isSkipping, setIsSkipping] = useState(false);
- const setMuted = useStore((state) => state.setMuted);
  const hasCompleted = useRef(false);
+ const audioRef = useRef<HTMLAudioElement | null>(null);
  // SAFETY: No matter what happens, call onComplete after 25 seconds from start
  // This prevents RESULT_CODE_HUNG if any phase gets stuck
  const safetyTimerStarted = useRef(false);
@@ -40,7 +39,45 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  }, 25000);
  return () => clearTimeout(safety);
  }, [phase, onComplete]);
- // Audio is now triggered globally via GlobalAudio.tsx when the user clicks to enter.
+ // Play audio when phase changes to chaos
+ useEffect(() => {
+ if (phase === 'chaos') {
+ const audio = new Audio('/intro-bgm.mp3');
+ audio.volume = 0.5;
+ audio.play().catch(err => console.log("Audio play failed:", err));
+ audioRef.current = audio;
+ }
+ }, [phase]);
+ // Pleasant audio fade-out during finale
+ useEffect(() => {
+ if (phase === 'finale' && audioRef.current) {
+ const audio = audioRef.current;
+ const startVolume = audio.volume;
+ const fadeDuration = isSkipping ? 500 : 2500; // faster fade if skipping
+ const steps = 25;
+ const stepTime = fadeDuration / steps;
+ const volumeStep = startVolume / steps;
+ const fadeInterval = setInterval(() => {
+ if (audio.volume - volumeStep > 0.01) {
+ audio.volume -= volumeStep;
+ } else {
+ audio.volume = 0;
+ audio.pause();
+ clearInterval(fadeInterval);
+ }
+ }, stepTime);
+ return () => clearInterval(fadeInterval);
+ }
+ }, [phase, isSkipping]);
+ // Cleanup audio on unmount
+ useEffect(() => {
+ return () => {
+ if (audioRef.current) {
+ audioRef.current.pause();
+ audioRef.current.currentTime = 0;
+ }
+ };
+ }, []);
  // Phase 1: Chaos — rapid image flashes
  const CHAOS_FLASHES = 18;
  // Phase 2: Reveal — one letter per flash burst
@@ -134,11 +171,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  return (
  <div 
  className="fixed inset-0 z-[99999] h-[100dvh] bg-black flex items-center justify-center cursor-pointer"
- onClick={() => {
-    // Unmute global audio. GlobalAudio.tsx will detect this and play the BGM instantly.
-    setMuted(false);
-    setPhase('chaos');
-  }}
+ onClick={() => setPhase('chaos')}
  >
  <p className="text-white/70 text-sm sm:text-base md:text-xl tracking-[0.4em] uppercase animate-pulse font-light font-[var(--font-heading-main)]">
  Click to Enter
