@@ -226,7 +226,7 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  fill
  priority={true}
  sizes="100vw"
- className="object-cover"
+ className={isMobile ? "object-contain" : "object-cover"}
  style={{
  filter: `contrast(${phase === 'hold' ? 1.2 : 1.4}) saturate(${phase === 'hold' ? 0.8 : 1.3}) brightness(${phase === 'hold' ? 0.4 : 0.6})`,
  }}
