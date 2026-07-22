@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { CheckCircle2, XCircle, Loader2, Home, Download, QrCode } from 'lucide-react';
 import Link from 'next/link';
 import { useStore } from '../../lib/useStore';
+import { getTicketId } from '../../lib/utils';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import QRCode from 'qrcode';
 
@@ -125,7 +126,7 @@ function PaymentSuccessContent() {
       page.drawText(eventTitle, { x: 30, y: 200, size: 24, font, color: rgb(1, 1, 1) });
       page.drawText(`Visitor: ${attendeeName}`, { x: 30, y: 150, size: 14, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
       page.drawText(`Email: ${email}`, { x: 30, y: 130, size: 12, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
-      const ticketId = btoa(`${email}|${eventTitle}`).substring(0, 15);
+      const ticketId = getTicketId(email, eventTitle);
       page.drawText(`Ticket ID: ${ticketId}`, { x: 30, y: 110, size: 12, font: normalFont, color: rgb(0.6, 0.3, 0.9) });
 
       const qrData = `${email}|${eventTitle}`;
@@ -207,8 +208,8 @@ function PaymentSuccessContent() {
 
               <h3 className="text-sm font-black text-white uppercase mb-0.5">{eventTitle}</h3>
               <span className="text-[10px] text-gray-400 block font-mono">{attendeeName} • {email}</span>
-              <span className="text-[8px] text-purple-400/80 block mt-1 font-mono uppercase tracking-widest">
-                ID: {btoa(`${email}|${eventTitle}`).substring(0, 15)}
+              <span className="text-[10px] text-purple-400/90 block mt-1 font-mono uppercase tracking-widest font-semibold">
+                ID: {getTicketId(email, eventTitle)}
               </span>
             </div>
 

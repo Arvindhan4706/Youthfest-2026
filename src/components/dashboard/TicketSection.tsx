@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, QrCode, Download } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
+import { getTicketId } from '../../lib/utils';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import QRCode from 'qrcode';
 
@@ -46,7 +47,7 @@ export default function TicketSection() {
       // Draw Visitor Details
       page.drawText(`Visitor: ${user.name}`, { x: 30, y: 150, size: 14, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
       page.drawText(`Email: ${user.email}`, { x: 30, y: 130, size: 12, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
-      const ticketId = btoa(user.email + '|' + selectedEventTicket).substring(0, 15);
+      const ticketId = getTicketId(user.email, selectedEventTicket);
       page.drawText(`Ticket ID: ${ticketId}`, { x: 30, y: 110, size: 12, font: normalFont, color: rgb(0.6, 0.3, 0.9) });
       
       // Generate QR Code locally to avoid proxy SSL and CORS issues
@@ -176,7 +177,7 @@ export default function TicketSection() {
             
             <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
             <span className="text-[10px] text-gray-400 block mb-6 font-mono">Visitor: {user.name}</span>
-            <span className="text-[8px] text-purple-400/80 block -mt-5 mb-6 font-mono uppercase tracking-widest break-all">ID: {btoa(user.email + '|' + selectedEventTicket).substring(0, 15)}...</span>
+            <span className="text-[10px] text-purple-400/90 block -mt-5 mb-6 font-mono uppercase tracking-widest font-semibold">ID: {getTicketId(user.email, selectedEventTicket)}</span>
             
             <button
               onClick={handleDownloadTicket}
