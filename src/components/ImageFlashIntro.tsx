@@ -8,7 +8,6 @@ const FLASH_IMAGES = [
  '/photos/DSC_0101-opt.webp',
  '/photos/DSC_0364-opt.webp',
  '/photos/DSC_0429-opt.webp',
- '/photos/IMG_6134-opt.webp',
 ];
 
 const MOBILE_FLASH_IMAGES = [
@@ -16,7 +15,6 @@ const MOBILE_FLASH_IMAGES = [
  '/photos/DSC_0101-mobile.webp',
  '/photos/DSC_0364-mobile.webp',
  '/photos/DSC_0429-mobile.webp',
- '/photos/IMG_6134-mobile.webp',
 ];
 const YOUTHFEST_LETTERS = ['Y', 'O', 'U', 'T', 'H', 'F', 'E', 'S', 'T'];
 // Timeline phases
