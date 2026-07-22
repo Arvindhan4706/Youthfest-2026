@@ -136,11 +136,6 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  <div className="relative h-44 sm:h-48 w-full overflow-hidden">
  <Image src={event.image} alt={event.title} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#010008] via-black/20 to-transparent" />
- <span
- className={`absolute top-3 right-3 text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${difficultyColors[event.difficulty]} transition-all duration-300 group-hover:scale-105`}
- >
- {event.difficulty}
- </span>
  </div>
  {/* Content */}
  <div className="p-5 flex-grow flex flex-col justify-between relative z-10">
@@ -206,15 +201,9 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  >
  <X className="w-5 h-5" />
  </button>
- <div className="absolute bottom-4 left-6 right-6">
- <span 
- className="inline-block text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full mb-2"
- style={{ backgroundColor: `${trackColor}20`, color: trackColor, border: `1px solid ${trackColor}40` }}
- >
- {event.difficulty} Difficulty
- </span>
- <h2 className="text-3xl font-[var(--font-heading-main)] font-black text-white">{event.title}</h2>
- </div>
+  <div className="absolute bottom-4 left-6 right-6">
+    <h2 className="text-3xl font-[var(--font-heading-main)] font-black text-white">{event.title}</h2>
+  </div>
  </div>
  {/* Scrollable Content */}
  <div className="flex-grow overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
@@ -368,15 +357,14 @@ export default function EventShowcaseScene() {
  TRACKS.forEach(t => t.events.forEach(e => sizes.add(e.team)));
  return ['All', ...Array.from(sizes)];
  }, []);
- const filteredEvents = useMemo(() => {
- return track.events.filter((event) => {
- const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
- event.desc.toLowerCase().includes(searchQuery.toLowerCase());
- const matchesDifficulty = difficultyFilter === 'All' || event.difficulty === difficultyFilter;
- const matchesTeamSize = teamSizeFilter === 'All' || event.team === teamSizeFilter;
- return matchesSearch && matchesDifficulty && matchesTeamSize;
- });
- }, [track, searchQuery, difficultyFilter, teamSizeFilter]);
+  const filteredEvents = useMemo(() => {
+    return track.events.filter((event) => {
+      const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        event.desc.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesTeamSize = teamSizeFilter === 'All' || event.team === teamSizeFilter;
+      return matchesSearch && matchesTeamSize;
+    });
+  }, [track, searchQuery, teamSizeFilter]);
  // Handle ESC key to close modal
  useEffect(() => {
  const handleKeyDown = (e: KeyboardEvent) => {
@@ -467,32 +455,19 @@ export default function EventShowcaseScene() {
  />
  </div>
  <div className="flex gap-3 w-full md:w-auto">
- <div className="relative w-1/2 md:w-auto">
- <select 
- value={difficultyFilter}
- onChange={(e) => setDifficultyFilter(e.target.value)}
- className="w-full md:w-40 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-gray-300 appearance-none focus:outline-none focus:border-[var(--neon-magenta)]/50 transition-all cursor-pointer"
- >
- <option value="All">All Difficulties</option>
- <option value="Easy">Easy</option>
- <option value="Medium">Medium</option>
- <option value="Hard">Hard</option>
- </select>
- <Filter className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500 pointer-events-none" />
- </div>
- <div className="relative w-1/2 md:w-auto">
- <select 
- value={teamSizeFilter}
- onChange={(e) => setTeamSizeFilter(e.target.value)}
- className="w-full md:w-40 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-gray-300 appearance-none focus:outline-none focus:border-[var(--neon-violet)]/50 transition-all cursor-pointer"
- >
- {uniqueTeamSizes.map(size => (
- <option key={size} value={size}>{size === 'All' ? 'All Team Sizes' : size}</option>
- ))}
- </select>
- <Filter className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500 pointer-events-none" />
- </div>
- </div>
+    <div className="relative w-full md:w-auto">
+      <select 
+        value={teamSizeFilter}
+        onChange={(e) => setTeamSizeFilter(e.target.value)}
+        className="w-full md:w-48 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-gray-300 appearance-none focus:outline-none focus:border-[var(--neon-violet)]/50 transition-all cursor-pointer"
+      >
+        {uniqueTeamSizes.map(size => (
+          <option key={size} value={size}>{size === 'All' ? 'All Team Sizes' : size}</option>
+        ))}
+      </select>
+      <Filter className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500 pointer-events-none" />
+    </div>
+  </div>
  </motion.div>
  {/* Track tagline */}
  <AnimatePresence mode="wait">
