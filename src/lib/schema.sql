@@ -100,9 +100,9 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
     total_spots NUMERIC DEFAULT 5000,
     contact_institute TEXT DEFAULT 'Chennai Institute of Technology',
     contact_address TEXT DEFAULT 'Sarathy Nagar, Kundrathur, Chennai - 600069, Tamil Nadu',
-    contact_email TEXT DEFAULT 'support@youthfest2026.com',
-    contact_phone TEXT DEFAULT '+91 98765 43210',
-    contact_whatsapp TEXT DEFAULT '+919876543210',
+    contact_email TEXT DEFAULT 'yuvenza@citchennai.net',
+    contact_phone TEXT DEFAULT '+91 7339524706',
+    contact_whatsapp TEXT DEFAULT '+917339524706',
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

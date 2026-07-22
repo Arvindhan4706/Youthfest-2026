@@ -157,20 +157,20 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  return () => clearTimeout(timeout);
  }, [phase, flashCount, getInterval, CHAOS_FLASHES, REVEAL_FLASHES, FLASHES_PER_LETTER, isMobile]);
  // Hold phase: dramatic pause on full name then finale
- useEffect(() => {
- if (phase !== 'hold') return;
- const timer = setTimeout(() => {
- setPhase('finale');
- }, isSkipping ? 400 : 3000);
- return () => clearTimeout(timer);
- }, [phase, isSkipping]);
+  useEffect(() => {
+    if (phase !== 'hold') return;
+    const timer = setTimeout(() => {
+      setPhase('finale');
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [phase]);
  // Finale: fade out and complete
  useEffect(() => {
  if (phase !== 'finale' || hasCompleted.current) return;
  hasCompleted.current = true;
  const timer = setTimeout(() => {
  onComplete();
- }, isSkipping ? 800 : 3500); // Faster exit if skipping
+ }, isSkipping ? 800 : 1500); // Faster exit if skipping
  return () => clearTimeout(timer);
  }, [phase, onComplete, isSkipping]);
   const getRandomTransform = () => ({
@@ -205,13 +205,13 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  initial={false}
  animate={{
  opacity: phase === 'finale' ? 0 : phase === 'hold' ? (isActive ? 0.2 : 0) : (isActive ? 0.4 : 0),
- scale: phase === 'hold' ? 1.2 : (isActive ? transform.scale : 1.05),
+ scale: phase === 'hold' ? 1.1 : (isActive ? transform.scale : 1.05),
  rotate: phase === 'hold' ? 0 : (isActive ? transform.rotate : 0),
  x: phase === 'hold' ? '0%' : (isActive ? transform.x : '0%'),
  y: phase === 'hold' ? '0%' : (isActive ? transform.y : '0%'),
  }}
  transition={{
- duration: phase === 'hold' ? (isSkipping ? 0.4 : 3.0) : phase === 'finale' ? (isSkipping ? 0.8 : 2.5) : 0.15,
+ duration: phase === 'hold' ? 2.0 : phase === 'finale' ? (isSkipping ? 0.8 : 1.5) : 0.15,
  ease: phase === 'hold' ? 'easeOut' : 'easeInOut',
  }}
  className="absolute inset-0"
@@ -427,8 +427,8 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  <motion.div
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}
- transition={{ duration: isSkipping ? 0.8 : 2.5, ease: 'easeIn' }}
- className="absolute inset-0 pointer-events-none"
+ transition={{ duration: isSkipping ? 0.8 : 1.5, ease: 'easeIn' }}
+ className="absolute inset-0 bg-black pointer-events-none"
  />
  )}
  {/* === SKIP BUTTON === */}

@@ -2,21 +2,27 @@ import { useState, useEffect } from 'react';
 
 export function useDevice() {
   const [isMobile, setIsMobile] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(true);
+  const [isLowPerformance, setIsLowPerformance] = useState(false);
+  const [dpr, setDpr] = useState(1);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const checkDevice = () => {
-      setIsMobile(window.innerWidth < 768);
+      const mobile = window.innerWidth < 768 || ('ontouchstart' in window);
+      const lowCores = typeof navigator !== 'undefined' && (navigator.hardwareConcurrency || 4) <= 4;
+      const pixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+      const reducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      setIsMobile(mobile);
+      setDpr(pixelRatio);
+      setIsLowPerformance(mobile || lowCores || reducedMotion);
+      setIsInitialized(true);
     };
 
-    // Initial check
     checkDevice();
-    
-
-    // Add event listener for window resize
     window.addEventListener('resize', checkDevice);
     return () => window.removeEventListener('resize', checkDevice);
   }, []);
 
-  return { isMobile, isInitialized };
+  return { isMobile, isLowPerformance, dpr, isInitialized };
 }

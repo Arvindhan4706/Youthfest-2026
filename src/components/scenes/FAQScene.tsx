@@ -21,10 +21,8 @@ const FAQ_DATA: FAQItem[] = [
 export default function FAQScene() {
  const [search, setSearch] = useState('');
  const [openIndex, setOpenIndex] = useState<number | null>(null);
- const addPoints = useStore((state) => state.addPoints);
  const toggleFAQ = (index: number) => {
  setOpenIndex(openIndex === index ? null : index);
- addPoints(2, 'Reading FAQ details');
  };
  const filteredFAQs = FAQ_DATA.filter((faq) => {
  const query = search.toLowerCase();

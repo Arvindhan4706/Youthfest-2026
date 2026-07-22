@@ -5,7 +5,6 @@ export interface ToastMessage {
   id: string;
   message: string;
   badge?: string;
-  points?: number;
 }
 export interface UserProfile {
   email: string;
@@ -52,11 +51,10 @@ interface AppState {
   messages: EmailMessage[];
   addMessage: (msg: EmailMessage) => void;
   toasts: ToastMessage[];
-  addToast: (message: string, options?: { badge?: string; points?: number }) => void;
+  addToast: (message: string, options?: { badge?: string }) => void;
   removeToast: (id: string) => void;
   registerForEvent: (eventId: string) => Promise<void>;
   initiateRegistration: (event: EventDetails) => void;
-  addPoints: (points: number, reason: string) => void;
 }
 import { persist } from 'zustand/middleware';
 export const useStore = create<AppState>()(
@@ -86,7 +84,13 @@ export const useStore = create<AppState>()(
       }
     },
     user: null,
-    setUser: (user) => set({ user }),
+    setUser: (user) => {
+      set({ user });
+      if (user && typeof window !== 'undefined') {
+        localStorage.setItem('y26_last_active', Date.now().toString());
+        sessionStorage.setItem('hasSeenIntro', 'true');
+      }
+    },
     isAuthOpen: false,
     authModalTab: 'login',
     setAuthOpen: (open, tab) => set({ isAuthOpen: open, authModalTab: tab || 'login' }),
@@ -107,7 +111,6 @@ export const useStore = create<AppState>()(
         id,
         message,
         badge: options?.badge,
-        points: options?.points,
       };
       set((state) => ({ toasts: [...state.toasts, newToast] }));
       // Auto-remove toast after 4s
@@ -153,9 +156,6 @@ export const useStore = create<AppState>()(
       }
       // Open checkout modal
       get().setCheckoutEvent(event);
-    },
-    addPoints: (points, reason) => {
-      get().addToast(`+${points} Points: ${reason}`, { points });
     },
     };
   },

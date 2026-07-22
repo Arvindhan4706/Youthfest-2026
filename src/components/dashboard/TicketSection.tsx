@@ -76,7 +76,7 @@ export default function TicketSection() {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       
-      addToast('Ticket PDF saved to downloads!', { points: 5 });
+      addToast('Ticket PDF saved to downloads!');
       
       // Email the ticket in the background
       try {
@@ -95,7 +95,7 @@ export default function TicketSection() {
         if (emailRes.ok) {
           const emailData = await emailRes.json();
           if (emailData.success) {
-            addToast('A copy has been emailed to you!', { points: 5 });
+            addToast('A copy has been emailed to you!');
           }
         }
       } catch (emailErr) {
@@ -103,7 +103,7 @@ export default function TicketSection() {
       }
     } catch (err: unknown) {
       console.error(err);
-      addToast('Failed to download ticket.', { points: 0 });
+      addToast('Failed to download ticket.');
     }
   };
 
@@ -121,7 +121,7 @@ export default function TicketSection() {
             {user.registeredEvents.length === 0 ? (
               <p className="text-xs text-gray-500 py-6 text-center leading-relaxed">
                 You haven't registered for any events yet. <br />
-                Return to the main page and join some events to unlock points!
+                Return to the main page to register for events!
               </p>
             ) : (
               user.registeredEvents.map((evt) => (

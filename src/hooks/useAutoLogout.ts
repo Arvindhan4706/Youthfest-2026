@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useStore } from '../lib/useStore';
 
 const TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
@@ -8,25 +8,41 @@ export function useAutoLogout() {
   const user = useStore((state) => state.user);
   const setUser = useStore((state) => state.setUser);
   const addToast = useStore((state) => state.addToast);
+  const userEmailRef = useRef<string | null>(null);
 
   useEffect(() => {
-    // If no user is logged in, do nothing
-    if (!user) return;
+    // If no user is logged in, reset tracker
+    if (!user) {
+      userEmailRef.current = null;
+      return;
+    }
 
-    // Check if the user was already inactive for >10 mins before opening the tab/reloading
-    const lastActiveStr = localStorage.getItem('y26_last_active');
-    if (lastActiveStr) {
-      const lastActiveTime = parseInt(lastActiveStr, 10);
-      if (Date.now() - lastActiveTime > TIMEOUT_MS) {
-        setUser(null);
-        addToast('You have been logged out due to inactivity.');
-        return; 
+    const isNewLogin = userEmailRef.current !== user.email;
+    userEmailRef.current = user.email;
+
+    if (isNewLogin) {
+      // Refresh active timestamp on new login session
+      localStorage.setItem('y26_last_active', Date.now().toString());
+    } else {
+      // Check if user was inactive for >10 mins
+      const lastActiveStr = localStorage.getItem('y26_last_active');
+      if (lastActiveStr) {
+        const lastActiveTime = parseInt(lastActiveStr, 10);
+        if (Date.now() - lastActiveTime > TIMEOUT_MS) {
+          localStorage.removeItem('y26_last_active');
+          setUser(null);
+          addToast('You have been logged out due to inactivity.');
+          return; 
+        }
+      } else {
+        localStorage.setItem('y26_last_active', Date.now().toString());
       }
     }
 
     let timeoutId: NodeJS.Timeout;
 
     const logout = () => {
+      localStorage.removeItem('y26_last_active');
       setUser(null);
       addToast('You have been logged out due to inactivity.');
     };
@@ -45,7 +61,6 @@ export function useAutoLogout() {
     // Setup event listeners for user activity
     const events = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'];
     
-    // Throttle the local storage update so we don't spam it on every single mousemove
     let throttleTimer: boolean = false;
     const handleActivity = () => {
       if (throttleTimer) return;

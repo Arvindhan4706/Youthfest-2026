@@ -20,9 +20,12 @@ export default function Dashboard() {
  const [activeTab, setActiveTab] = useState<'tickets' | 'inbox'>('tickets');
 
  useEffect(() => {
- if (!user) {
- router.push('/');
- }
+   if (typeof window !== 'undefined') {
+     sessionStorage.setItem('hasSeenIntro', 'true');
+   }
+   if (!user) {
+     router.push('/');
+   }
  }, [user, router]);
 
  if (!user) return (

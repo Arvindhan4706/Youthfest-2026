@@ -134,6 +134,17 @@ export const db = {
     return visitor;
   },
   /**
+   * Fetch visitor profile by email.
+   */
+  async getVisitorByEmail(email: string): Promise<Visitor | null> {
+    const { data: visitor } = await supabase
+      .from('visitors')
+      .select('*')
+      .eq('email', email.toLowerCase().trim())
+      .maybeSingle();
+    return visitor || null;
+  },
+  /**
    * Update a visitor's profile by email.
    */
   async updateProfile(email: string, updates: { name?: string; email?: string; college?: string; department?: string; year?: string; gender?: string; city?: string }): Promise<Visitor> {
@@ -344,9 +355,9 @@ export const db = {
       total_spots: 5000,
       contact_institute: 'Chennai Institute of Technology',
       contact_address: 'Sarathy Nagar, Kundrathur, Chennai - 600069, Tamil Nadu',
-      contact_email: 'support@youthfest2026.com',
-      contact_phone: '+91 98765 43210',
-      contact_whatsapp: '+919876543210',
+      contact_email: 'yuvenza@citchennai.net',
+      contact_phone: '+91 7339524706',
+      contact_whatsapp: '+917339524706',
       updated_at: new Date().toISOString()
     };
     try {

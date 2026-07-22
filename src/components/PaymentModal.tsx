@@ -59,7 +59,7 @@ export default function PaymentModal() {
     }
  } catch (err: unknown) {
  console.error(err);
- addToast('Payment initialization failed.', { points: 0 });
+ addToast('Payment initialization failed.');
  setIsLoading(false);
  }
  };
@@ -92,12 +92,12 @@ export default function PaymentModal() {
  eventTitle: checkoutEvent.title,
  })
  });
- addToast('OD Letter dispatched to your Email & Phone!', { points: 50 });
+ addToast('OD Letter dispatched to your Email & Phone!');
  } catch (err) {
  console.error('Failed to send OD:', err);
  }
  }
- addToast('Payment Successful! Registration complete.', { points: 100 });
+ addToast('Payment Successful! Registration complete.');
  setIsLoading(false);
  setCheckoutEvent(null); // Close modal
  // Route to dashboard to show QR Code / Email Confirmation

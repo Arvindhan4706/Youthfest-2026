@@ -43,7 +43,7 @@ export default function VisitorProfile() {
         city: updated.city,
       });
 
-      addToast('Profile information updated!', { points: 15 });
+      addToast('Profile information updated!');
     } catch (err: unknown) {
       addToast(err instanceof Error ? err.message : 'Failed to update profile.');
       console.error(err);

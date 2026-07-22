@@ -39,7 +39,7 @@ export default function Home() {
 
   useEffect(() => {
     setHasMounted(true);
-    if (sessionStorage.getItem('hasSeenIntro')) {
+    if (sessionStorage.getItem('hasSeenIntro') || localStorage.getItem('y26_has_seen_intro')) {
       setShowFlashIntro(false);
     }
   }, []);
@@ -73,7 +73,8 @@ export default function Home() {
         <ImageFlashIntro onComplete={() => {
           setShowFlashIntro(false);
           sessionStorage.setItem('hasSeenIntro', 'true');
-          addToast('Welcome to YOUTHFEST 2026!', { points: 50 });
+          localStorage.setItem('y26_has_seen_intro', 'true');
+          addToast('Welcome to YOUTHFEST 2026!');
         }} />
       )}
 
