@@ -47,41 +47,41 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  }, 25000);
  return () => clearTimeout(safety);
  }, [phase, onComplete]);
- // Play audio when phase changes to chaos with a 1 second delay
- useEffect(() => {
- if (phase === 'chaos') {
- const audio = new Audio('/intro-bgm.mp3');
- audio.volume = 0.5;
- audioRef.current = audio;
- 
- const delayTimer = setTimeout(() => {
-   audio.play().catch(err => console.log("Audio play failed:", err));
- }, 1000);
- 
- return () => clearTimeout(delayTimer);
- }
- }, [phase]);
- // Pleasant audio fade-out during finale
- useEffect(() => {
- if (phase === 'finale' && audioRef.current) {
- const audio = audioRef.current;
- const startVolume = audio.volume;
- const fadeDuration = isSkipping ? 500 : 2500; // faster fade if skipping
- const steps = 25;
- const stepTime = fadeDuration / steps;
- const volumeStep = startVolume / steps;
- const fadeInterval = setInterval(() => {
- if (audio.volume - volumeStep > 0.01) {
- audio.volume -= volumeStep;
- } else {
- audio.volume = 0;
- audio.pause();
- clearInterval(fadeInterval);
- }
- }, stepTime);
- return () => clearInterval(fadeInterval);
- }
- }, [phase, isSkipping]);
+  // Play audio immediately when phase changes to chaos (no delay)
+  useEffect(() => {
+    if (phase === 'chaos') {
+      const audio = new Audio('/intro-bgm.mp3');
+      audio.volume = 0.5;
+      audioRef.current = audio;
+      audio.play().catch(err => console.log("Audio play failed:", err));
+    }
+  }, [phase]);
+
+  // Gentle audio fade-out during end phases (hold & finale)
+  useEffect(() => {
+    if ((phase === 'hold' || phase === 'finale') && audioRef.current) {
+      const audio = audioRef.current;
+      const startVolume = audio.volume;
+      if (startVolume <= 0) return;
+
+      const fadeDuration = isSkipping ? 600 : phase === 'hold' ? 3200 : 1300;
+      const steps = 25;
+      const stepTime = fadeDuration / steps;
+      const volumeStep = startVolume / steps;
+
+      const fadeInterval = setInterval(() => {
+        if (audio.volume - volumeStep > 0.01) {
+          audio.volume -= volumeStep;
+        } else {
+          audio.volume = 0;
+          audio.pause();
+          clearInterval(fadeInterval);
+        }
+      }, stepTime);
+
+      return () => clearInterval(fadeInterval);
+    }
+  }, [phase, isSkipping]);
  // Cleanup audio on unmount
  useEffect(() => {
  return () => {
