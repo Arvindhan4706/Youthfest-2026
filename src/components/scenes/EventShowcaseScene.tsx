@@ -286,8 +286,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  </motion.div>
  </div>
  );
-}
-const STATIC_EVENTS: EventItem[] = [
+}const STATIC_EVENTS: EventItem[] = [
   // Main Events
   { id: 'main-1', track_id: 'main-events', title: 'Squid Game', desc: 'Survive the ultimate challenge. Do you have what it takes?', team: '1', fee: '₹150', difficulty: 'Hard', image: '/events/squid_game.png', date: 'August 12 - 10:00 AM', venue: 'Main Arena', rules: defaultRules },
   { id: 'main-2', track_id: 'main-events', title: 'Case Closed', desc: 'A murder mystery where you act as the detective to find the culprit.', team: '2-4', fee: '₹200', difficulty: 'Medium', image: '/events/case_closed.png', date: 'August 12 - 02:00 PM', venue: 'Seminar Hall 1', rules: defaultRules },
@@ -298,53 +297,70 @@ const STATIC_EVENTS: EventItem[] = [
   { id: 'pre-2', track_id: 'pre-events', title: 'Charity Match', desc: 'A football match for a good cause. Show your sportsmanship!', team: '11', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1574629810360-7efbb1b379e0?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 04:00 PM', venue: 'Football Ground', rules: defaultRules },
   { id: 'pre-3', track_id: 'pre-events', title: 'Chess', desc: 'Intense chess tournament. Outsmart your opponents.', team: '1', fee: '₹100', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 09:00 AM', venue: 'Indoor Stadium', rules: defaultRules },
   { id: 'pre-4', track_id: 'pre-events', title: 'Pickle Ball', desc: 'Fast-paced pickleball action. Grab your paddles!', team: '2', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1622279457486-69d73ad5e4d2?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 02:00 PM', venue: 'Tennis Court', rules: defaultRules },
+  // Workshops
+  { id: 'ws-1', track_id: 'workshops', title: 'Calistro', desc: 'Hands-on workshop on Calistro creative design, UI/UX aesthetics & digital arts.', team: '1', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1542744094-3a3172720189?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 10:00 AM', venue: 'Seminar Hall A', rules: defaultRules },
+  { id: 'ws-2', track_id: 'workshops', title: 'AIDS', desc: 'Artificial Intelligence & Data Science hands-on masterclass on machine learning models.', team: '1-2', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 02:00 PM', venue: 'AI Super Lab', rules: defaultRules },
+  { id: 'ws-3', track_id: 'workshops', title: 'Resolution', desc: 'Mastering high-resolution media processing, 3D visualization, and digital content creation.', team: '1', fee: '₹200', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 11:30 AM', venue: 'Media Studio', rules: defaultRules },
+  { id: 'ws-4', track_id: 'workshops', title: 'Asymmetric', desc: 'Advanced cybersecurity, asymmetric cryptography, and ethical hacking intensive workshop.', team: '1-2', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 01:30 PM', venue: 'Cyber Security Lab', rules: defaultRules },
+  { id: 'ws-5', track_id: 'workshops', title: 'Celestius', desc: 'Interactive astronomy, space technology, and satellite systems engineering workshop.', team: '1', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 03:30 PM', venue: 'Space Research Centre', rules: defaultRules },
 ];
 
 export default function EventShowcaseScene() {
- const [activeTrack, setActiveTrack] = useState(0);
- const [searchQuery, setSearchQuery] = useState('');
- const [difficultyFilter, setDifficultyFilter] = useState('All');
- const [teamSizeFilter, setTeamSizeFilter] = useState('All');
- const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
- const [dbEvents, setDbEvents] = useState<EventItem[]>([]);
- const [isFetchingEvents, setIsFetchingEvents] = useState(true);
- useEffect(() => {
- const fetchEvents = async () => {
- try {
- const events = await db.getAllEvents();
- if (events && events.length > 0) {
- const mappedEvents: EventItem[] = events.map(e => ({
- id: e.id,
- title: e.title,
- desc: e.description,
- team: e.team_size,
- fee: e.fee,
- difficulty: e.difficulty,
- image: e.image_url,
- date: e.event_date,
- venue: e.venue,
- rules: e.rules,
- track_id: e.track_id
- }));
- setDbEvents(mappedEvents);
- } else {
- setDbEvents(STATIC_EVENTS);
- }
- } catch (err) {
- console.error('Failed to fetch events', err);
- setDbEvents(STATIC_EVENTS);
- } finally {
- setIsFetchingEvents(false);
- }
- };
- fetchEvents();
- }, []);
- const TRACKS = useMemo(() => {
- return TRACKS_TEMPLATE.map(t => ({
- ...t,
- events: dbEvents.filter(e => e.track_id === t.id)
- }));
- }, [dbEvents]);
+  const [activeTrack, setActiveTrack] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [difficultyFilter, setDifficultyFilter] = useState('All');
+  const [teamSizeFilter, setTeamSizeFilter] = useState('All');
+  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+  const [dbEvents, setDbEvents] = useState<EventItem[]>([]);
+  const [isFetchingEvents, setIsFetchingEvents] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const events = await db.getAllEvents();
+        if (events && events.length > 0) {
+          const mappedEvents: EventItem[] = events.map(e => ({
+            id: e.id,
+            title: e.title,
+            desc: e.description,
+            team: e.team_size,
+            fee: e.fee,
+            difficulty: e.difficulty,
+            image: e.image_url,
+            date: e.event_date,
+            venue: e.venue,
+            rules: e.rules,
+            track_id: e.track_id
+          }));
+          setDbEvents(mappedEvents);
+        } else {
+          setDbEvents(STATIC_EVENTS);
+        }
+      } catch (err) {
+        console.error('Failed to fetch events', err);
+        setDbEvents(STATIC_EVENTS);
+      } finally {
+        setIsFetchingEvents(false);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  const TRACKS = useMemo(() => {
+    return TRACKS_TEMPLATE.map(t => {
+      const trackDbEvents = dbEvents.filter(e => e.track_id === t.id);
+      const staticTrackEvents = STATIC_EVENTS.filter(e => e.track_id === t.id);
+      
+      const eventsMap = new Map<string, EventItem>();
+      staticTrackEvents.forEach(e => eventsMap.set(e.title.toLowerCase(), e));
+      trackDbEvents.forEach(e => eventsMap.set(e.title.toLowerCase(), e));
+
+      return {
+        ...t,
+        events: Array.from(eventsMap.values())
+      };
+    });
+  }, [dbEvents]);
  const track = TRACKS[activeTrack];
  // Derive Team Sizes based on data
  const uniqueTeamSizes = useMemo(() => {
