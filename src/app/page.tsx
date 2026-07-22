@@ -7,7 +7,7 @@ import ToastContainer from '../components/ToastContainer';
 import LazyScene from '../components/LazyScene';
 
 // Dynamic imports of scenes for performance optimization and SSR safety
-// The flashy ImageFlashIntro has been removed to ground the UX
+const ImageFlashIntro = dynamic(() => import('../components/ImageFlashIntro'), { ssr: false });
 const AuthModal = dynamic(() => import('../components/AuthModal'), { ssr: false });
 const PaymentModal = dynamic(() => import('../components/PaymentModal'), { ssr: false });
 const HeroScene = dynamic(() => import('../components/scenes/HeroScene'), { ssr: false });
@@ -26,6 +26,7 @@ import { useStore } from '../lib/useStore';
 import { useDevice } from '../hooks/useDevice';
 
 export default function Home() {
+  const [showFlashIntro, setShowFlashIntro] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
   
   const isSecretMode = useStore((state) => state.isSecretMode);
@@ -38,10 +39,13 @@ export default function Home() {
 
   useEffect(() => {
     setHasMounted(true);
+    if (sessionStorage.getItem('hasSeenIntro')) {
+      setShowFlashIntro(false);
+    }
   }, []);
 
   useEffect(() => {
-    if (!hasMounted) return;
+    if (!hasMounted || showFlashIntro) return;
     
     // Initialise Lenis smooth scroll — wrapped in try/catch for iOS Safari safety
     let lenis: any = null;
@@ -58,12 +62,21 @@ export default function Home() {
     return () => {
       try { lenis?.destroy(); } catch (_) {}
     };
-  }, [hasMounted]);
+  }, [showFlashIntro, hasMounted]);
 
   if (!hasMounted) return null;
 
   return (
     <>
+      {/* Image Flash Intro overlay - rendered on top, unmounts when complete */}
+      {showFlashIntro && (
+        <ImageFlashIntro onComplete={() => {
+          setShowFlashIntro(false);
+          sessionStorage.setItem('hasSeenIntro', 'true');
+          addToast('Welcome to YOUTHFEST 2026!', { points: 50 });
+        }} />
+      )}
+
       {/* Main content renders in the background to initialize WebGL without transition lag */}
       <main className={`relative w-full min-h-screen pb-16 md:pb-0 transition-colors duration-1000 ${
         isSecretMode ? 'bg-black text-[var(--neon-cyan)] font-[var(--font-heading-main)] ' : 'bg-black text-white'
