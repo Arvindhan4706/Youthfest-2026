@@ -147,6 +147,19 @@ export default function Navbar() {
  </div>
  {/* Right Side: CTA + User */}
  <div className="flex items-center gap-2.5">
+ {/* Replay Intro Button */}
+ <button 
+ onClick={() => {
+   sessionStorage.removeItem('hasSeenIntro');
+   localStorage.removeItem('y26_has_seen_intro');
+   window.location.href = '/?replay=true';
+ }}
+ className="flex items-center gap-1 p-2 rounded-xl text-white/40 hover:bg-white/5 hover:text-[var(--neon-cyan)] transition-all duration-300 text-xs font-mono"
+ title="Replay Image Flash Intro"
+ >
+ <Zap className="w-4 h-4 text-[var(--neon-cyan)] animate-pulse" />
+ <span className="hidden lg:inline text-[10px] uppercase font-bold tracking-wider">Replay Intro</span>
+ </button>
  {/* Admin Secret Portal */}
  <Link 
  href="/admin" 

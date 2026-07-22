@@ -4,17 +4,19 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDevice } from '../hooks/useDevice';
 const FLASH_IMAGES = [
- '/photos/DSC_0087-opt.webp',
- '/photos/DSC_0101-opt.webp',
- '/photos/DSC_0364-opt.webp',
- '/photos/DSC_0429-opt.webp',
+  '/photos/DSC_0087-opt.webp',
+  '/photos/DSC_0101-opt.webp',
+  '/photos/DSC_0364-opt.webp',
+  '/photos/DSC_0429-opt.webp',
+  '/photos/IMG_6134-opt.webp',
 ];
 
 const MOBILE_FLASH_IMAGES = [
- '/photos/DSC_0087-mobile.webp',
- '/photos/DSC_0101-mobile.webp',
- '/photos/DSC_0364-mobile.webp',
- '/photos/DSC_0429-mobile.webp',
+  '/photos/DSC_0087-mobile.webp',
+  '/photos/DSC_0101-mobile.webp',
+  '/photos/DSC_0364-mobile.webp',
+  '/photos/DSC_0429-mobile.webp',
+  '/photos/IMG_6134-mobile.webp',
 ];
 const YOUTHFEST_LETTERS = ['Y', 'O', 'U', 'T', 'H', 'F', 'E', 'S', 'T'];
 // Timeline phases
@@ -23,39 +25,43 @@ const YOUTHFEST_LETTERS = ['Y', 'O', 'U', 'T', 'H', 'F', 'E', 'S', 'T'];
 // Phase 3: Full name revealed with dramatic hold + zoom
 // Phase 4: Final cinematic fade out
 export default function ImageFlashIntro({ onComplete }: { onComplete: () => void }) {
- const { isMobile } = useDevice();
- const [currentImgIndex, setCurrentImgIndex] = useState(0);
- const [flashCount, setFlashCount] = useState(0);
- const [revealedLetters, setRevealedLetters] = useState(0);
- const [phase, setPhase] = useState<'start' | 'chaos' | 'reveal' | 'hold' | 'finale'>('start');
- const [showWhiteFlash, setShowWhiteFlash] = useState(false);
- const [glitchOffset, setGlitchOffset] = useState({ x: 0, y: 0 });
- const [isSkipping, setIsSkipping] = useState(false);
- const hasCompleted = useRef(false);
- const audioRef = useRef<HTMLAudioElement | null>(null);
- // SAFETY: No matter what happens, call onComplete after 25 seconds from start
- // This prevents RESULT_CODE_HUNG if any phase gets stuck
- const safetyTimerStarted = useRef(false);
- useEffect(() => {
- if (phase === 'start' || safetyTimerStarted.current) return;
- safetyTimerStarted.current = true;
- const safety = setTimeout(() => {
- if (!hasCompleted.current) {
- hasCompleted.current = true;
- onComplete();
- }
- }, 25000);
- return () => clearTimeout(safety);
- }, [phase, onComplete]);
-  // Play audio immediately when phase changes to chaos (no delay)
+  const { isMobile } = useDevice();
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [flashCount, setFlashCount] = useState(0);
+  const [revealedLetters, setRevealedLetters] = useState(0);
+  const [phase, setPhase] = useState<'start' | 'chaos' | 'reveal' | 'hold' | 'finale'>('start');
+  const [showWhiteFlash, setShowWhiteFlash] = useState(false);
+  const [glitchOffset, setGlitchOffset] = useState({ x: 0, y: 0 });
+  const [isSkipping, setIsSkipping] = useState(false);
+  const hasCompleted = useRef(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // Preload audio and images immediately on mount
   useEffect(() => {
-    if (phase === 'chaos') {
-      const audio = new Audio('/intro-bgm.mp3');
-      audio.volume = 0.5;
-      audioRef.current = audio;
-      audio.play().catch(err => console.log("Audio play failed:", err));
-    }
-  }, [phase]);
+    const audio = new Audio('/intro-bgm.mp3');
+    audio.preload = 'auto';
+    audioRef.current = audio;
+
+    const imagesToPreload = [...FLASH_IMAGES, ...MOBILE_FLASH_IMAGES];
+    imagesToPreload.forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, []);
+
+  // SAFETY: No matter what happens, call onComplete after 25 seconds from start
+  // This prevents RESULT_CODE_HUNG if any phase gets stuck
+  const safetyTimerStarted = useRef(false);
+  useEffect(() => {
+    if (phase === 'start' || safetyTimerStarted.current) return;
+    safetyTimerStarted.current = true;
+    const safety = setTimeout(() => {
+      if (!hasCompleted.current) {
+        hasCompleted.current = true;
+        onComplete();
+      }
+    }, 25000);
+    return () => clearTimeout(safety);
+  }, [phase, onComplete]);
 
   // Gentle audio fade-out during end phases (hold & finale)
   useEffect(() => {
@@ -82,15 +88,16 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
       return () => clearInterval(fadeInterval);
     }
   }, [phase, isSkipping]);
- // Cleanup audio on unmount
- useEffect(() => {
- return () => {
- if (audioRef.current) {
- audioRef.current.pause();
- audioRef.current.currentTime = 0;
- }
- };
- }, []);
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
+  }, []);
  // Phase 1: Chaos — rapid image flashes
  const CHAOS_FLASHES = 18;
  // Phase 2: Reveal — one letter per flash burst
@@ -181,78 +188,88 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
   });
  const transform = getRandomTransform();
  const isFlashing = phase === 'chaos' || phase === 'reveal';
- if (phase === 'start') {
- return (
- <div 
- className="fixed inset-0 z-[99999] h-[100dvh] bg-black flex items-center justify-center cursor-pointer"
- onClick={() => setPhase('chaos')}
- >
- <p className="text-white/70 text-sm sm:text-base md:text-xl tracking-[0.4em] uppercase animate-pulse font-light font-[var(--font-heading-main)]">
- Click to Enter
- </p>
- </div>
- );
- }
- return (
- <div className="fixed inset-0 z-[99999] bg-black overflow-hidden select-none">
- {/* === BACKGROUND IMAGE FLASHES — only active image rendered === */}
- {(isMobile ? MOBILE_FLASH_IMAGES : FLASH_IMAGES).map((src, index) => {
- const isActive = index === currentImgIndex;
- if (!isActive && phase !== 'hold' && phase !== 'finale') return null;
- return (
- <motion.div
- key={`img-${index}`}
- initial={false}
- animate={{
- opacity: phase === 'finale' ? 0 : phase === 'hold' ? (isActive ? 0.2 : 0) : (isActive ? 0.4 : 0),
- scale: phase === 'hold' ? 1.1 : (isActive ? transform.scale : 1.05),
- rotate: phase === 'hold' ? 0 : (isActive ? transform.rotate : 0),
- x: phase === 'hold' ? '0%' : (isActive ? transform.x : '0%'),
- y: phase === 'hold' ? '0%' : (isActive ? transform.y : '0%'),
- }}
- transition={{
- duration: phase === 'hold' ? 2.0 : phase === 'finale' ? (isSkipping ? 0.8 : 1.5) : 0.15,
- ease: phase === 'hold' ? 'easeOut' : 'easeInOut',
- }}
- className="absolute inset-0"
- style={{ pointerEvents: isActive ? 'auto' : 'none', zIndex: isActive ? 10 : 1 }}
- >
- { }
- <Image
- src={src}
- alt=""
- fill
- priority={true}
- sizes="100vw"
- className={isMobile ? "object-contain" : "object-cover"}
- style={{
- filter: `contrast(${phase === 'hold' ? 1.2 : 1.4}) saturate(${phase === 'hold' ? 0.8 : 1.3}) brightness(${phase === 'hold' ? 0.4 : 0.6})`,
- }}
- />
- </motion.div>
- );
- })}
- {/* === GLITCH RGB SPLIT OVERLAY — only for active image === */}
- {isFlashing && (
- <div
- className="absolute inset-0 pointer-events-none mix-blend-screen transition-opacity duration-75"
- style={{ opacity: 0.15, zIndex: 20 }}
- >
- { }
- <Image
- src={isMobile ? MOBILE_FLASH_IMAGES[currentImgIndex] : FLASH_IMAGES[currentImgIndex]}
- alt=""
- fill
- sizes="100vw"
- className="object-cover"
- style={{
- transform: `translate(${glitchOffset.x}px, ${glitchOffset.y}px)`,
- filter: 'hue-rotate(120deg)',
- opacity: 0.6,
- }}
- />
- </div>
- )}
+  if (phase === 'start') {
+    return (
+      <div 
+        className="fixed inset-0 z-[99999] h-[100dvh] bg-black flex items-center justify-center cursor-pointer"
+        onClick={() => {
+          if (!audioRef.current) {
+            const audio = new Audio('/intro-bgm.mp3');
+            audio.volume = 0.5;
+            audioRef.current = audio;
+          } else {
+            audioRef.current.volume = 0.5;
+          }
+          audioRef.current.play().catch((err) => console.log('Audio play failed:', err));
+          setPhase('chaos');
+        }}
+      >
+        <p className="text-white/70 text-sm sm:text-base md:text-xl tracking-[0.4em] uppercase animate-pulse font-light font-[var(--font-heading-main)]">
+          Click to Enter
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 z-[99999] bg-black overflow-hidden select-none">
+      {/* === BACKGROUND IMAGE FLASHES — only active image rendered for crisp fast strobe === */}
+      {(isMobile ? MOBILE_FLASH_IMAGES : FLASH_IMAGES).map((src, index) => {
+        const isActive = index === currentImgIndex;
+        if (!isActive && phase !== 'hold' && phase !== 'finale') return null;
+
+        return (
+          <motion.div
+            key={`img-${index}`}
+            initial={false}
+            animate={{
+              opacity: phase === 'finale' ? 0 : phase === 'hold' ? (isActive ? 0.2 : 0) : (isActive ? 0.4 : 0),
+              scale: phase === 'hold' ? 1.1 : (isActive ? transform.scale : 1.05),
+              rotate: phase === 'hold' ? 0 : (isActive ? transform.rotate : 0),
+              x: phase === 'hold' ? '0%' : (isActive ? transform.x : '0%'),
+              y: phase === 'hold' ? '0%' : (isActive ? transform.y : '0%'),
+            }}
+            transition={{
+              duration: phase === 'hold' ? 2.0 : phase === 'finale' ? (isSkipping ? 0.8 : 1.5) : 0.15,
+              ease: phase === 'hold' ? 'easeOut' : 'easeInOut',
+            }}
+            className="absolute inset-0"
+            style={{ pointerEvents: isActive ? 'auto' : 'none', zIndex: isActive ? 10 : 1 }}
+          >
+            <Image
+              src={src}
+              alt=""
+              fill
+              priority={true}
+              sizes="100vw"
+              className={isMobile ? "object-contain" : "object-cover"}
+              style={{
+                filter: `contrast(${phase === 'hold' ? 1.2 : 1.4}) saturate(${phase === 'hold' ? 0.8 : 1.3}) brightness(${phase === 'hold' ? 0.4 : 0.6})`,
+              }}
+            />
+          </motion.div>
+        );
+      })}
+      {/* === GLITCH RGB SPLIT OVERLAY — only for active image === */}
+      {isFlashing && (
+        <div
+          className="absolute inset-0 pointer-events-none mix-blend-screen transition-opacity duration-75"
+          style={{ opacity: 0.15, zIndex: 20 }}
+        >
+          <Image
+            src={(isMobile ? MOBILE_FLASH_IMAGES : FLASH_IMAGES)[currentImgIndex]}
+            alt=""
+            fill
+            sizes="100vw"
+            className={isMobile ? "object-contain" : "object-cover"}
+            style={{
+              transform: `translate(${glitchOffset.x}px, ${glitchOffset.y}px)`,
+              filter: 'hue-rotate(120deg)',
+              opacity: 0.6,
+            }}
+          />
+        </div>
+      )} 
  {/* === SCAN LINES === */}
  <div
  className="absolute inset-0 pointer-events-none"

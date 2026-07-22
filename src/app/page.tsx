@@ -39,8 +39,39 @@ export default function Home() {
 
   useEffect(() => {
     setHasMounted(true);
-    if (sessionStorage.getItem('hasSeenIntro') || localStorage.getItem('y26_has_seen_intro')) {
-      setShowFlashIntro(false);
+    if (typeof window !== 'undefined') {
+      // Clear any legacy permanent localStorage flag so closing & reopening the site always plays intro
+      localStorage.removeItem('y26_has_seen_intro');
+
+      const searchParams = new URLSearchParams(window.location.search);
+      const isReplay = searchParams.get('replay') === 'true' || searchParams.get('intro') === 'true';
+
+      if (isReplay) {
+        sessionStorage.removeItem('hasSeenIntro');
+        setShowFlashIntro(true);
+        return;
+      }
+
+      // Detect if user performed an explicit page refresh/reload (F5 / Reload button)
+      let isReload = false;
+      try {
+        const navEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+        if (navEntries.length > 0) {
+          isReload = navEntries[0].type === 'reload';
+        } else if ((performance as any).navigation) {
+          isReload = (performance as any).navigation.type === 1;
+        }
+      } catch (e) {
+        // Fallback
+      }
+
+      // Skip ONLY if refreshed within the same active tab session.
+      // Opening a new tab or reopening the site after closing will have an empty sessionStorage and play the intro.
+      if (isReload && sessionStorage.getItem('hasSeenIntro') === 'true') {
+        setShowFlashIntro(false);
+      } else {
+        setShowFlashIntro(true);
+      }
     }
   }, []);
 
@@ -73,7 +104,6 @@ export default function Home() {
         <ImageFlashIntro onComplete={() => {
           setShowFlashIntro(false);
           sessionStorage.setItem('hasSeenIntro', 'true');
-          localStorage.setItem('y26_has_seen_intro', 'true');
           addToast('Welcome to YOUTHFEST 2026!');
         }} />
       )}
