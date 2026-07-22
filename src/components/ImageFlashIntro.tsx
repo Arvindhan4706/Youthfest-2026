@@ -3,11 +3,11 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 const FLASH_IMAGES = [
- '/photos/DSC_0087.JPG',
- '/photos/DSC_0101.JPG',
- '/photos/DSC_0364.JPG',
- '/photos/DSC_0429.JPG',
- '/photos/IMG_6134.JPG',
+ '/photos/DSC_0087-opt.webp',
+ '/photos/DSC_0101-opt.webp',
+ '/photos/DSC_0364-opt.webp',
+ '/photos/DSC_0429-opt.webp',
+ '/photos/IMG_6134-opt.webp',
 ];
 const YOUTHFEST_LETTERS = ['Y', 'O', 'U', 'T', 'H', 'F', 'E', 'S', 'T'];
 // Timeline phases
@@ -165,10 +165,10 @@ export default function ImageFlashIntro({ onComplete }: { onComplete: () => void
  return () => clearTimeout(timer);
  }, [phase, onComplete, isSkipping]);
   const getRandomTransform = () => ({
-  scale: 1.35 + Math.random() * 0.3, // Increased base scale to ensure edges never show during rotation
-  rotate: (Math.random() - 0.5) * 8, // Slightly reduced max rotation for better framing
-  x: `${(Math.random() - 0.5) * 4}%`,
-  y: `${(Math.random() - 0.5) * 4}%`,
+  scale: 1.05 + Math.random() * 0.1, // Minimal scale for a subtle pulse
+  rotate: 0, // Removed rotation to keep images perfectly framed
+  x: '0%', // Removed translation to keep images perfectly framed
+  y: '0%',
   });
  const transform = getRandomTransform();
  const isFlashing = phase === 'chaos' || phase === 'reveal';
