@@ -4,11 +4,22 @@ import { motion } from 'framer-motion';
 import { Calendar, QrCode, Download } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import QRCode from 'qrcode';
 
 export default function TicketSection() {
   const user = useStore((state) => state.user);
   const addToast = useStore((state) => state.addToast);
   const [selectedEventTicket, setSelectedEventTicket] = useState<string | null>(null);
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
+
+  React.useEffect(() => {
+    if (selectedEventTicket && user) {
+      const qrData = encodeURIComponent(user.email + '|' + selectedEventTicket);
+      QRCode.toDataURL(qrData, { width: 300, margin: 1 })
+        .then(url => setQrCodeDataUrl(url))
+        .catch(err => console.error('Failed to generate local QR code', err));
+    }
+  }, [selectedEventTicket, user]);
 
   if (!user) return null;
 
@@ -38,12 +49,15 @@ export default function TicketSection() {
       const ticketId = btoa(user.email + '|' + selectedEventTicket).substring(0, 15);
       page.drawText(`Ticket ID: ${ticketId}`, { x: 30, y: 110, size: 12, font: normalFont, color: rgb(0.6, 0.3, 0.9) });
       
-      // Fetch QR Code and embed it directly using QuickChart to bypass proxy SSL issues
+      // Generate QR Code locally to avoid proxy SSL and CORS issues
       const qrData = encodeURIComponent(user.email + '|' + selectedEventTicket);
-      const qrUrl = `https://quickchart.io/qr?text=${qrData}&size=300&margin=1`;
       
       try {
-        const qrImageBytes = await fetch(qrUrl).then(res => res.arrayBuffer());
+        const localQrDataUrl = await QRCode.toDataURL(qrData, { width: 300, margin: 1 });
+        // The data URL is base64 encoded, e.g., data:image/png;base64,...
+        const base64Data = localQrDataUrl.split(',')[1];
+        const qrImageBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+        
         const qrImage = await pdfDoc.embedPng(qrImageBytes);
         page.drawImage(qrImage, { x: 420, y: 75, width: 150, height: 150 });
         page.drawText("SCAN AT ENTRANCE", { x: 435, y: 55, size: 12, font, color: rgb(1, 1, 1) });
@@ -147,13 +161,17 @@ export default function TicketSection() {
               YOUTHFEST &apos;26 VITALITY PASS
             </span>
             
-            {/* Real QR Image generated via quickchart */}
+            {/* Real QR Image generated locally */}
             <div className="bg-white p-2 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)] pointer-events-none">
-              <img 
-                src={`https://quickchart.io/qr?text=${encodeURIComponent(user.email + '|' + selectedEventTicket)}&size=300&margin=1`}
-                alt="Ticket QR Code"
-                className="w-28 h-28 object-contain"
-              />
+              {qrCodeDataUrl ? (
+                <img 
+                  src={qrCodeDataUrl}
+                  alt="Ticket QR Code"
+                  className="w-28 h-28 object-contain"
+                />
+              ) : (
+                <div className="w-28 h-28 bg-gray-200 animate-pulse rounded-lg" />
+              )}
             </div>
             
             <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
