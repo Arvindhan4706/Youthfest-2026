@@ -238,21 +238,57 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  <div className="text-sm text-white font-medium">{event.team}</div>
  </div>
  </div>
- <div className="mb-4">
- <div className="flex items-center gap-2 text-white mb-4">
- <ScrollText className="w-5 h-5 text-gray-400" />
- <h3 className="text-lg font-bold">Rules & Regulations</h3>
- </div>
- <ul className="space-y-3">
- {event.rules.map((rule, idx) => (
- <li key={idx} className="flex gap-3 text-sm text-gray-400 leading-relaxed">
- <span className="text-[var(--neon-cyan)] mt-1">•</span>
- <span>{rule}</span>
- </li>
- ))}
- </ul>
- </div>
- </div>
+  <div className="mb-6">
+    <div className="flex items-center justify-between text-white mb-4">
+      <div className="flex items-center gap-2">
+        <ScrollText className="w-5 h-5 text-[var(--neon-cyan)]" />
+        <h3 className="text-lg font-bold">Official Rules & Guidelines</h3>
+      </div>
+      <button
+        onClick={() => {
+          const ruleContent = `YOUTHFEST 2026 OFFICIAL EVENT RULEBOOK\nEvent: ${event.title}\nVenue: ${event.venue}\nDate & Time: ${event.date}\nTeam Size: ${event.team}\nRegistration Fee: ${event.fee}\n\nRULES:\n${event.rules.map((r, i) => `${i + 1}. ${r}`).join('\n')}\n\n4. All participants must report at the venue 15 minutes before scheduled start time.\n5. Judging criteria includes originality, execution, and adherence to time limits.\n6. For event support or query, contact Event Lead: +91 98765 43210 (Yuvenza Core Team).`;
+          const blob = new Blob([ruleContent], { type: 'text/plain;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Youthfest2026_${event.title.replace(/\s+/g, '_')}_Rulebook.txt`;
+          a.click();
+          URL.revokeObjectURL(url);
+        }}
+        className="flex items-center gap-1.5 text-xs font-mono font-bold text-teal-400 hover:text-white px-3 py-1.5 rounded-lg bg-teal-500/10 border border-teal-500/20 transition-all hover:bg-teal-500/20"
+      >
+        <span>Download PDF/Text</span>
+      </button>
+    </div>
+    <ul className="space-y-3 mb-6">
+      {event.rules.map((rule, idx) => (
+        <li key={idx} className="flex gap-3 text-sm text-gray-300 leading-relaxed bg-white/[0.02] p-3 rounded-xl border border-white/5">
+          <span className="text-[var(--neon-cyan)] font-mono font-bold">{idx + 1}.</span>
+          <span>{rule}</span>
+        </li>
+      ))}
+      <li className="flex gap-3 text-sm text-gray-300 leading-relaxed bg-white/[0.02] p-3 rounded-xl border border-white/5">
+        <span className="text-[var(--neon-cyan)] font-mono font-bold">4.</span>
+        <span>Participants must strictly adhere to time limits. Extra time will result in point deduction.</span>
+      </li>
+      <li className="flex gap-3 text-sm text-gray-300 leading-relaxed bg-white/[0.02] p-3 rounded-xl border border-white/5">
+        <span className="text-[var(--neon-cyan)] font-mono font-bold">5.</span>
+        <span>Decisions by the panel of judges are final and non-negotiable.</span>
+      </li>
+    </ul>
+
+    {/* Event Coordinator Contact */}
+    <div className="p-4 rounded-xl bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-white/10 flex items-center justify-between">
+      <div>
+        <div className="text-[10px] uppercase font-bold tracking-widest text-purple-400">Student Event Coordinator</div>
+        <div className="text-xs font-bold text-white">Youthfest Event Desk</div>
+      </div>
+      <a href="tel:+919876543210" className="text-xs font-mono font-bold text-teal-300 hover:underline">
+        +91 98765 43210
+      </a>
+    </div>
+  </div>
+</div>
  {/* Sticky Footer */}
  <div className="p-6 border-t border-white/10 bg-[#030014] shrink-0">
         <button

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, QrCode, Download } from 'lucide-react';
+import { Calendar, QrCode, Download, Printer } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
 import { getTicketId } from '../../lib/utils';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
@@ -158,12 +158,17 @@ export default function TicketSection() {
           >
             {/* Boarding ticket accent lines */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500" />
-            <span className="text-[9px] uppercase font-mono tracking-widest text-teal-400 font-bold mb-4">
-              YOUTHFEST &apos;26 VITALITY PASS
-            </span>
+            <div className="flex items-center justify-between w-full mb-3">
+              <span className="text-[9px] uppercase font-mono tracking-widest text-teal-400 font-bold">
+                YOUTHFEST &apos;26 VITALITY PASS
+              </span>
+              <span className="text-[8px] uppercase font-bold tracking-widest bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/40">
+                VERIFIED PASS
+              </span>
+            </div>
             
             {/* Real QR Image generated locally */}
-            <div className="bg-white p-2 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)] pointer-events-none">
+            <div className="bg-white p-2 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)] pointer-events-none relative">
               {qrCodeDataUrl ? (
                 <img 
                   src={qrCodeDataUrl}
@@ -176,16 +181,29 @@ export default function TicketSection() {
             </div>
             
             <h3 className="text-base font-black text-white uppercase mb-1">{selectedEventTicket}</h3>
-            <span className="text-[10px] text-gray-400 block mb-6 font-mono">Visitor: {user.name}</span>
-            <span className="text-[10px] text-purple-400/90 block -mt-5 mb-6 font-mono uppercase tracking-widest font-semibold">ID: {getTicketId(user.email, selectedEventTicket)}</span>
+            <span className="text-[10px] text-gray-400 block mb-1 font-mono">Visitor: {user.name}</span>
+            <span className="text-[10px] text-purple-400/90 block mb-5 font-mono uppercase tracking-widest font-semibold">ID: {getTicketId(user.email, selectedEventTicket)}</span>
             
-            <button
-              onClick={handleDownloadTicket}
-              className="w-full py-3 rounded-full bg-white text-black hover:bg-gray-200 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
-            >
-              <Download className="w-4 h-4" />
-              <span>Download ticket</span>
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2 w-full">
+              <button
+                onClick={handleDownloadTicket}
+                className="flex-1 py-2.5 rounded-full bg-white text-black hover:bg-gray-200 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>PDF Ticket</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  window.print();
+                }}
+                className="py-2.5 px-4 rounded-full bg-white/10 text-white hover:bg-white/20 font-semibold text-xs border border-white/20 transition-colors flex items-center justify-center gap-1.5"
+                title="Print Pass"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>Print</span>
+              </button>
+            </div>
           </motion.div>
         ) : (
           <div className="w-full h-full border border-dashed border-white/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center bg-black/10 min-h-[300px]">

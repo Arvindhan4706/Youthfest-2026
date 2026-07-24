@@ -17,7 +17,9 @@ const TimelineScene = dynamic(() => import('../components/scenes/TimelineScene')
 const PrizePoolScene = dynamic(() => import('../components/scenes/PrizePoolScene'), { ssr: false });
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
 const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
+const CommitteeScene = dynamic(() => import('../components/scenes/CommitteeScene'), { ssr: false });
 const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
+const FAQScene = dynamic(() => import('../components/scenes/FAQScene'), { ssr: false });
 const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
 const FooterScene = dynamic(() => import('../components/scenes/FooterScene'), { ssr: false });
 
@@ -139,8 +141,16 @@ export default function Home() {
           <SpeakersScene />
         </LazyScene>
 
+        <LazyScene placeholderHeight={600}>
+          <CommitteeScene />
+        </LazyScene>
+
         <LazyScene placeholderHeight={400}>
           <SponsorsScene />
+        </LazyScene>
+
+        <LazyScene placeholderHeight={600}>
+          <FAQScene />
         </LazyScene>
 
         <LazyScene placeholderHeight={500}>

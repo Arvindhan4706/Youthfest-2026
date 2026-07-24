@@ -4,15 +4,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
-import { User, Menu, X, Zap, ShieldCheck } from 'lucide-react';
+import { User, Menu, X, Zap, ShieldCheck, Megaphone, PhoneCall } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthModal from './AuthModal';
 const navLinks = [
- { href: '#hero', label: 'Home' },
- { href: '#events', label: 'Events' },
- { href: '#schedule', label: 'Schedule' },
- { href: '#sponsors', label: 'Sponsors' },
- { href: '#contact', label: 'Contact' },
+  { href: '#hero', label: 'Home' },
+  { href: '#events', label: 'Events' },
+  { href: '#schedule', label: 'Schedule' },
+  { href: '#committee', label: 'Team' },
+  { href: '#sponsors', label: 'Sponsors' },
+  { href: '#faq', label: 'FAQ' },
 ];
 function useActiveSection(sectionIds: string[]) {
  const [activeId, setActiveId] = useState('#hero');
@@ -78,22 +79,23 @@ export default function Navbar() {
  setMobileOpen(false);
  };
  return (
- <>
- {/* Invisible hover area at top of screen to reveal navbar */}
- <div 
- className="fixed top-0 left-0 w-full h-12 z-[60]" 
- onMouseEnter={() => setHidden(false)} 
- />
- <nav
-  className={`fixed left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 rounded-2xl transition-all duration-500 backdrop-blur-xl ${
-  hidden ? '-top-32 opacity-0' : 'top-4 opacity-100'
-  } ${
-  scrolled || mobileOpen
-  ? 'bg-[#030014]/80 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]'
-  : 'bg-white/[0.02] border border-white/[0.05]'
-  }`}
- >
- <div className="px-5 py-3 flex items-center justify-between">
+    <>
+      {/* Invisible hover area at top of screen to reveal navbar */}
+      <div 
+        className="fixed top-0 left-0 w-full h-12 z-[60]" 
+        onMouseEnter={() => setHidden(false)} 
+      />
+
+      <nav
+        className={`fixed left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 rounded-2xl transition-all duration-500 backdrop-blur-xl ${
+          hidden ? '-top-32 opacity-0' : 'top-4 opacity-100'
+        } ${
+          scrolled || mobileOpen
+            ? 'bg-[#030014]/80 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]'
+            : 'bg-white/[0.02] border border-white/[0.05]'
+        }`}
+      >
+        <div className="px-5 py-3 flex items-center justify-between">
  {/* Brand Logo */}
  <Link href="/" className="group flex items-center gap-2.5" onClick={(e) => handleSmoothScroll(e, '#hero')}>
  <div className="relative flex items-center justify-center">
