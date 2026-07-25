@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Calendar, QrCode, Download, Printer } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
@@ -170,9 +171,11 @@ export default function TicketSection() {
             {/* Real QR Image generated locally */}
             <div className="bg-white p-2 rounded-2xl mb-4 shadow-[0_0_25px_rgba(168,85,247,0.3)] pointer-events-none relative">
               {qrCodeDataUrl ? (
-                <img 
+                <Image 
                   src={qrCodeDataUrl}
                   alt="Ticket QR Code"
+                  width={112}
+                  height={112}
                   className="w-28 h-28 object-contain"
                 />
               ) : (

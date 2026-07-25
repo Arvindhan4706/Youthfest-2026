@@ -58,21 +58,25 @@ export const viewport: Viewport = {
   themeColor: '#050816',
 };
 
+import GlobalClientProviders from "../components/GlobalClientProviders";
+
 export default function RootLayout({
- children,
+  children,
 }: Readonly<{
- children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
- return (
- <html
- lang="en"
- className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
- >
- <body className="min-h-screen font-sans">
- <AutoLogoutProvider />
- {children}
- <Analytics />
- </body>
- </html>
- );
+  return (
+    <html
+      lang="en"
+      className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
+    >
+      <body className="min-h-screen font-sans">
+        <AutoLogoutProvider />
+        <GlobalClientProviders>
+          {children}
+        </GlobalClientProviders>
+        <Analytics />
+      </body>
+    </html>
+  );
 }

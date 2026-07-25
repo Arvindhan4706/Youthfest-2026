@@ -12,7 +12,6 @@ const navLinks = [
   { href: '/events', label: 'Events' },
   { href: '/#committee', label: 'Team', sectionId: '#committee' },
   { href: '/#sponsors', label: 'Sponsors', sectionId: '#sponsors' },
-  { href: '/#faq', label: 'FAQ', sectionId: '#faq' },
 ];
 
 function useActiveSection(sectionIds: string[]) {
@@ -172,16 +171,16 @@ export default function Navbar() {
             {!user ? (
               <div className="hidden sm:flex items-center gap-2">
                 <button
-                  onClick={() => setAuthOpen(true, 'login')}
-                  className="px-5 py-2.5 rounded-full text-sm font-semibold border border-white/20 text-white hover:bg-white/10 transition-all duration-300 min-h-[44px] flex items-center justify-center"
+                  onClick={() => setAuthOpen(true, 'register')}
+                  className="px-5 py-2.5 rounded-full text-sm font-semibold bg-[var(--neon-cyan)] text-black hover:opacity-80 transition-all duration-300 min-h-[44px] flex items-center justify-center"
                 >
-                  Log In
+                  Sign Up
                 </button>
                 <button
-                  onClick={() => setAuthOpen(true, 'register')}
+                  onClick={() => setAuthOpen(true, 'login')}
                   className="px-5 py-2.5 rounded-full text-sm font-semibold bg-white text-black hover:bg-gray-200 transition-all duration-300 min-h-[44px] flex items-center justify-center"
                 >
-                  Sign In
+                  Log In
                 </button>
               </div>
             ) : (
@@ -251,11 +250,11 @@ export default function Navbar() {
                       onClick={() => { setAuthOpen(true, 'register'); setMobileOpen(false); }}
                       className="w-full py-4 rounded-full text-base font-semibold bg-[var(--neon-cyan)] text-black min-h-[44px]"
                     >
-                      Sign In
+                      Sign Up
                     </button>
                     <button
                       onClick={() => { setAuthOpen(true, 'login'); setMobileOpen(false); }}
-                      className="w-full py-4 rounded-full text-base font-semibold bg-white/10 text-white min-h-[44px]"
+                      className="w-full py-4 rounded-full text-base font-semibold bg-[var(--neon-cyan)] text-black min-h-[44px]"
                     >
                       Log In
                     </button>

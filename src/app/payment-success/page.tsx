@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CheckCircle2, XCircle, Loader2, Home, Download, QrCode } from 'lucide-react';
 import Link from 'next/link';
@@ -198,7 +199,7 @@ function PaymentSuccessContent() {
 
               <div className="bg-white p-2 rounded-xl mb-3 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
                 {qrCodeDataUrl ? (
-                  <img src={qrCodeDataUrl} alt="Gate Pass QR" className="w-24 h-24 object-contain" />
+                  <Image src={qrCodeDataUrl} alt="Gate Pass QR" width={96} height={96} className="w-24 h-24 object-contain" />
                 ) : (
                   <div className="w-24 h-24 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
                     <QrCode className="w-8 h-8 text-gray-400" />

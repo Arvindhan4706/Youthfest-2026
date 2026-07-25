@@ -1,13 +1,9 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
-import Navbar from '../components/Navbar';
-import ToastContainer from '../components/ToastContainer';
 import LazyScene from '../components/LazyScene';
 
 // Dynamic imports of scenes for performance optimization and SSR safety
-const AuthModal = dynamic(() => import('../components/AuthModal'), { ssr: false });
-const PaymentModal = dynamic(() => import('../components/PaymentModal'), { ssr: false });
 const HeroScene = dynamic(() => import('../components/scenes/HeroScene'), { ssr: false });
 const StatsBarScene = dynamic(() => import('../components/scenes/StatsBarScene'), { ssr: false });
 const PrizePoolScene = dynamic(() => import('../components/scenes/PrizePoolScene'), { ssr: false });
@@ -15,68 +11,14 @@ const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene')
 const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
 const CommitteeScene = dynamic(() => import('../components/scenes/CommitteeScene'), { ssr: false });
 const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
-const FAQScene = dynamic(() => import('../components/scenes/FAQScene'), { ssr: false });
 const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
 const FooterScene = dynamic(() => import('../components/scenes/FooterScene'), { ssr: false });
 const BackToTop = dynamic(() => import('../components/BackToTop'), { ssr: false });
 
-import { useKonamiCode } from '../hooks/useKonamiCode';
-import { useStore } from '../lib/useStore';
-import { useDevice } from '../hooks/useDevice';
-
 export default function Home() {
-  const [hasMounted, setHasMounted] = useState(false);
-  
-  const isSecretMode = useStore((state) => state.isSecretMode);
-  const addToast = useStore((state) => state.addToast);
-  const isAuthOpen = useStore((state) => state.isAuthOpen);
-  const setAuthOpen = useStore((state) => state.setAuthOpen);
-  
-  // Register Konami Easter Egg Code listener
-  useKonamiCode();
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hasMounted) return;
-    
-    // Initialise Lenis smooth scroll — wrapped in try/catch for iOS Safari safety
-    let lenis: any = null;
-    const initLenis = async () => {
-      try {
-        const { default: Lenis } = await import('lenis');
-        lenis = new Lenis({ autoRaf: true });
-      } catch (err) {
-        console.warn('Lenis failed to initialise (likely iOS):', err);
-      }
-    };
-    initLenis();
-    
-    return () => {
-      try { lenis?.destroy(); } catch (_) {}
-    };
-  }, [hasMounted]);
-
-  if (!hasMounted) return null;
-
   return (
     <>
-      {/* Main content renders in the background to initialize WebGL without transition lag */}
-      <main className={`relative w-full min-h-screen pb-16 md:pb-0 transition-colors duration-1000 ${
-        isSecretMode ? 'bg-black text-[var(--neon-cyan)] font-[var(--font-heading-main)] ' : 'bg-black text-white'
-      }`}>
-        {/* Global Navigation Header */}
-        <Navbar />
-
-        {/* Dynamic Toast notifications overlay */}
-        <ToastContainer />
-
-        {/* Modals */}
-        <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
-        <PaymentModal />
-        
+      <main className="relative w-full min-h-screen pb-16 md:pb-0 transition-colors duration-1000 bg-black text-white">
         {/* Hero loads immediately — it's above the fold */}
         <HeroScene />
         
@@ -84,7 +26,6 @@ export default function Home() {
         <LazyScene placeholderHeight={600}>
           <StatsBarScene />
         </LazyScene>
-
 
         <LazyScene placeholderHeight={600}>
           <PrizePoolScene />
@@ -105,10 +46,6 @@ export default function Home() {
 
         <LazyScene placeholderHeight={400}>
           <SponsorsScene />
-        </LazyScene>
-
-        <LazyScene placeholderHeight={600}>
-          <FAQScene />
         </LazyScene>
 
         <LazyScene placeholderHeight={500}>

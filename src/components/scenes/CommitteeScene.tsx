@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ShieldCheck, PhoneCall, Mail, MapPin, ExternalLink, MessageSquare, Sparkles, Navigation } from 'lucide-react';
 import { db, SiteSettings } from '@/lib/database';
@@ -130,9 +131,11 @@ export default function CommitteeScene() {
               {/* Profile Card Header */}
               <div className="flex flex-col items-start gap-4 mb-6">
                 <div className="relative">
-                  <img
+                  <Image
                     src={member.avatar}
                     alt={member.name}
+                    width={64}
+                    height={64}
                     className="w-16 h-16 rounded-2xl object-cover border border-white/20 shadow-lg group-hover:scale-105 group-hover:border-[var(--neon-cyan)]/50 transition-all duration-300"
                   />
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-[#030014] rounded-full" title="Active Lead" />

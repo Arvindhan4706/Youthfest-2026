@@ -134,7 +134,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  />
  {/* Image */}
  <div className="relative h-44 sm:h-48 w-full overflow-hidden">
- <Image src={event.image} alt={event.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
+ <Image src={(event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80').replace('/events/', '/event-images/')} alt={event.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#010008] via-black/20 to-transparent" />
  </div>
  {/* Content */}
@@ -193,7 +193,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  >
  {/* Header Image */}
  <div className="relative h-64 w-full shrink-0">
- <Image src={event.image} alt={event.title} fill sizes="(max-width: 1024px) 100vw, 500px" className="object-cover" />
+ <Image src={(event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80').replace('/events/', '/event-images/')} alt={event.title} fill sizes="(max-width: 1024px) 100vw, 500px" className="object-cover" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#030014] via-[#030014]/50 to-transparent" />
  <button 
  onClick={onClose}
@@ -313,10 +313,10 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  );
 }const STATIC_EVENTS: EventItem[] = [
   // Main Events
-  { id: 'main-1', track_id: 'main-events', title: 'Squid Game', desc: 'Survive the ultimate challenge. Do you have what it takes?', team: '1', fee: '₹150', difficulty: 'Hard', image: '/events/squid_game.png', date: 'August 12 - 10:00 AM', venue: 'Main Arena', rules: defaultRules },
-  { id: 'main-2', track_id: 'main-events', title: 'Case Closed', desc: 'A murder mystery where you act as the detective to find the culprit.', team: '2-4', fee: '₹200', difficulty: 'Medium', image: '/events/case_closed.png', date: 'August 12 - 02:00 PM', venue: 'Seminar Hall 1', rules: defaultRules },
-  { id: 'main-3', track_id: 'main-events', title: '7 Keys', desc: 'An escape room style treasure hunt. Find the 7 glowing magical keys.', team: '3-5', fee: '₹250', difficulty: 'Hard', image: '/events/seven_keys.png', date: 'August 12 - 01:00 PM', venue: 'Campus Ground', rules: defaultRules },
-  { id: 'main-4', track_id: 'main-events', title: 'Cypher', desc: 'The ultimate 24-hour hackathon. Code your way to victory.', team: '2-4', fee: '₹300', difficulty: 'Hard', image: '/events/cypher.png', date: 'August 12 - 09:00 AM', venue: 'Tech Lab 4', rules: defaultRules },
+  { id: 'main-1', track_id: 'main-events', title: 'Squid Game', desc: 'Survive the ultimate challenge. Do you have what it takes?', team: '1', fee: '₹150', difficulty: 'Hard', image: '/event-images/squid_game.png', date: 'August 12 - 10:00 AM', venue: 'Main Arena', rules: defaultRules },
+  { id: 'main-2', track_id: 'main-events', title: 'Case Closed', desc: 'A murder mystery where you act as the detective to find the culprit.', team: '2-4', fee: '₹200', difficulty: 'Medium', image: '/event-images/case_closed.png', date: 'August 12 - 02:00 PM', venue: 'Seminar Hall 1', rules: defaultRules },
+  { id: 'main-3', track_id: 'main-events', title: '7 Keys', desc: 'An escape room style treasure hunt. Find the 7 glowing magical keys.', team: '3-5', fee: '₹250', difficulty: 'Hard', image: '/event-images/seven_keys.png', date: 'August 12 - 01:00 PM', venue: 'Campus Ground', rules: defaultRules },
+  { id: 'main-4', track_id: 'main-events', title: 'Cypher', desc: 'The ultimate 24-hour hackathon. Code your way to victory.', team: '2-4', fee: '₹300', difficulty: 'Hard', image: '/event-images/cypher.png', date: 'August 12 - 09:00 AM', venue: 'Tech Lab 4', rules: defaultRules },
   // Pre Events
   { id: 'pre-1', track_id: 'pre-events', title: 'Mock Parliament', desc: 'Debate on national issues in this intense mock parliament.', team: '1', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1577563908411-5079b6a66019?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 10:00 AM', venue: 'Auditorium', rules: defaultRules },
   { id: 'pre-2', track_id: 'pre-events', title: 'Charity Match', desc: 'A football match for a good cause. Show your sportsmanship!', team: '11', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1574629810360-7efbb1b379e0?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 04:00 PM', venue: 'Football Ground', rules: defaultRules },
