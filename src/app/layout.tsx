@@ -56,8 +56,6 @@ import { Viewport } from 'next';
 
 export const viewport: Viewport = {
   themeColor: '#050816',
-  width: 1280,
-  initialScale: 0.1,
 };
 
 export default function RootLayout({
