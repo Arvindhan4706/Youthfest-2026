@@ -54,7 +54,7 @@ export default function FooterScene() {
  return (
  <footer id="contact" className="relative pt-24 pb-12 px-4 border-t border-white/[0.06] overflow-hidden" >
  {/* Background */}
- <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:justify-between gap-12 lg:gap-8 items-start mb-20 relative z-10 px-4 lg:px-0">
+ <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 items-start mb-20 relative z-10 px-4 sm:px-6 lg:px-8">
 
  {/* Explore (formerly Quick Links) */}
  <motion.div 

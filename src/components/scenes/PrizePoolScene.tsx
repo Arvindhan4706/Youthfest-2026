@@ -78,7 +78,7 @@ export default function PrizePoolScene() {
   ];
 
   return (
-    <section id="prizes" className="relative py-24 sm:py-32 overflow-hidden bg-black">
+    <section id="prizes" className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-black">
       {/* Subtle Background Elements */}
       <div className="absolute inset-0 z-0 flex justify-center items-center pointer-events-none">
         <div className="w-[600px] h-[600px] bg-[var(--neon-violet)]/10 rounded-full blur-[120px]" />

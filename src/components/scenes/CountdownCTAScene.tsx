@@ -117,7 +117,7 @@ export default function CountdownCTAScene() {
  onClick={(e) => { 
  e.preventDefault(); 
  if (user) {
- router.push('/dashboard');
+ router.push('/profile');
  } else {
  setAuthOpen(true, 'register'); 
  }

@@ -142,7 +142,7 @@ export default function HeroScene() {
   const handleRegisterClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (user) {
-      router.push('/dashboard');
+      router.push('/profile');
     } else {
       setAuthOpen(true, 'register');
     }
@@ -266,7 +266,7 @@ export default function HeroScene() {
           animate="visible"
           className="relative mb-4 perspective-1000"
         >
-          <h1 id="hero-heading" className="flex justify-center flex-wrap text-[11vw] sm:text-[10vw] md:text-8xl lg:text-9xl font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative">
+          <h1 id="hero-heading" className="flex justify-center flex-wrap text-[clamp(2.5rem,11vw,6rem)] md:text-8xl lg:text-9xl font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative px-2 text-center">
             {titleText.split('').map((char, index) => (
               <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>
                 {char}
@@ -333,14 +333,14 @@ export default function HeroScene() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.4 }}
-          className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-4 mb-10 mx-auto px-2"
+          className="flex flex-wrap items-center justify-center gap-1 sm:gap-4 mb-10 mx-auto px-2"
         >
           <CountdownUnit value={countdown.days} label="Days" />
-          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px]">:</span>
+          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px] hidden sm:block">:</span>
           <CountdownUnit value={countdown.hours} label="Hours" />
-          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px]">:</span>
+          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px] hidden sm:block">:</span>
           <CountdownUnit value={countdown.minutes} label="Mins" />
-          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px]">:</span>
+          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px] hidden sm:block">:</span>
           <CountdownUnit value={countdown.seconds} label="Secs" />
         </motion.div>
 
@@ -354,7 +354,7 @@ export default function HeroScene() {
           <button
             onClick={handleRegisterClick}
             aria-label="Register Now"
-            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-full font-semibold text-black bg-white hover:bg-gray-200 transition-all duration-300"
+            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 min-h-[44px] rounded-full font-semibold text-black bg-white hover:bg-gray-200 transition-all duration-300"
           >
             Register Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>

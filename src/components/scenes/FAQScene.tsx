@@ -35,9 +35,9 @@ export default function FAQScene() {
  Logistics: 'text-[var(--neon-gold)] bg-[var(--neon-gold)]/10 border-[var(--neon-gold)]/20',
  };
  return (
- <section id="faq" className="relative py-24 overflow-hidden" >
+ <section id="faq" className="relative py-16 md:py-24 lg:py-32 overflow-hidden" >
  {/* Background */}
- <div className="max-w-4xl mx-auto px-4">
+ <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
  {/* Header */}
  <div className="text-center mb-14">
  <motion.h2

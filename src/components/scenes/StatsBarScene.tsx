@@ -94,8 +94,8 @@ export default function StatsBarScene() {
  { value: 10, suffix: '+', prefix: '', label: 'Workshops', icon: Briefcase, color: 'var(--neon-magenta)' },
  ];
  return (
- <section id="about" className="relative py-24 overflow-hidden" >
- <div className="relative z-10 max-w-7xl mx-auto px-6">
+ <section id="about" className="relative py-16 md:py-24 lg:py-32 overflow-hidden" >
+ <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 items-center">
  <motion.div
  initial={{ opacity: 0, x: -40 }}

@@ -133,7 +133,7 @@ export default function MemoriesScene() {
   };
 
   return (
-    <section id="memories" className="relative py-24 bg-[#010008] overflow-hidden">
+    <section id="memories" className="relative py-16 md:py-24 lg:py-32 bg-[#010008] overflow-hidden">
       {/* Background styling */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[var(--neon-cyan)]/5 rounded-full blur-[120px] pointer-events-none" />
       

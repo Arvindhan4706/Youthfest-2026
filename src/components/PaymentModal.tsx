@@ -102,15 +102,15 @@ export default function PaymentModal() {
  setIsLoading(false);
  setCheckoutEvent(null); // Close modal
  // Route to dashboard to show QR Code / Email Confirmation
- router.push('/dashboard');
+ router.push('/profile');
  };
  const handleClose = () => {
  if (!isLoading) setCheckoutEvent(null);
  };
  return (
  <div ref={overlayRef} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 opacity-0 p-4">
- <div ref={modalRef} className="relative w-full max-w-md p-8 bg-black border border-[var(--neon-cyan)]/30 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.1)] opacity-0">
- <button onClick={handleClose} disabled={isLoading} className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/10 disabled:opacity-50">
+ <div ref={modalRef} className="relative w-full max-w-md p-8 bg-black border border-[var(--neon-cyan)]/30 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.1)] opacity-0 max-h-[90dvh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+ <button onClick={handleClose} disabled={isLoading} className="absolute top-4 right-4 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/10 disabled:opacity-50">
  <X className="w-5 h-5" />
  </button>
  <div className="flex justify-center mb-6">
@@ -135,7 +135,7 @@ export default function PaymentModal() {
  <button 
           onClick={handlePayment} 
           disabled={isLoading || !user}
-          className="w-full py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full min-h-[44px] py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
  {isLoading ? (
  <>

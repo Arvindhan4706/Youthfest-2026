@@ -115,7 +115,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  onMouseMove={handleMouseMove}
  onMouseLeave={handleMouseLeave}
  onClick={onClick}
- className="relative w-full rounded-3xl border border-white/[0.08] bg-[#05001a]/40 overflow-hidden transition-all duration-300 ease-out shadow-2xl flex flex-col group cursor-pointer hover:border-transparent hover:scale-[1.02] hover:z-10 shadow-[0_0_20px_rgba(255,255,255,0.02)] sm:shadow-2xl"
+ className="relative w-full h-full rounded-3xl border border-white/[0.08] bg-[#05001a]/40 overflow-hidden transition-all duration-300 ease-out flex flex-col group cursor-pointer hover:border-transparent hover:scale-[1.02] hover:z-10 shadow-[0_0_20px_rgba(255,255,255,0.02)] sm:shadow-2xl"
  style={{
  transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
  }}
@@ -134,7 +134,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  />
  {/* Image */}
  <div className="relative h-44 sm:h-48 w-full overflow-hidden">
- <Image src={event.image} alt={event.title} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
+ <Image src={event.image} alt={event.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#010008] via-black/20 to-transparent" />
  </div>
  {/* Content */}
@@ -157,7 +157,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  </div>
         {/* View Details Button */}
         <button
-          className="w-full py-3 rounded-full font-semibold text-sm text-black bg-white hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 group/btn"
+          className="w-full min-h-[44px] py-3 rounded-full font-semibold text-sm text-black bg-white hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 group/btn"
         >
           <span>View Details</span>
           <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
@@ -197,7 +197,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  <div className="absolute inset-0 bg-gradient-to-t from-[#030014] via-[#030014]/50 to-transparent" />
  <button 
  onClick={onClose}
- className="absolute top-4 right-4 p-2 rounded-full bg-black/40 border border-white/10 text-white hover:bg-white/10 transition-colors"
+ className="absolute top-4 right-4 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-black/40 border border-white/10 text-white hover:bg-white/10 transition-colors"
  >
  <X className="w-5 h-5" />
  </button>
@@ -302,7 +302,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
               desc: event.desc,
             });
           }}
-          className="w-full py-3.5 rounded-full font-semibold text-base text-black bg-white hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 group/btn"
+          className="w-full py-4 min-h-[44px] rounded-full font-semibold text-base text-black bg-white hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 group/btn"
         >
           <span>Register Now</span>
           <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />

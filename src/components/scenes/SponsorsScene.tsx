@@ -93,9 +93,9 @@ function MarqueeRow({ sponsors, direction, speed, title, color }: { sponsors: Sp
 }
 export default function SponsorsScene() {
  return (
- <section id="sponsors" className="relative py-24 overflow-hidden" aria-labelledby="sponsors-heading">
+ <section id="sponsors" className="relative py-16 md:py-24 lg:py-32 overflow-hidden" aria-labelledby="sponsors-heading">
  {/* Background grid */}
- <div className="relative z-10 mx-auto w-full">
+ <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
  {/* Header */}
  <div className="text-center mb-16 px-4">
  <motion.div

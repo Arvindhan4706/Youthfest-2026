@@ -2,18 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '../components/Navbar';
-import MobileBottomNav from '../components/MobileBottomNav';
 import ToastContainer from '../components/ToastContainer';
 import LazyScene from '../components/LazyScene';
 
 // Dynamic imports of scenes for performance optimization and SSR safety
-const ImageFlashIntro = dynamic(() => import('../components/ImageFlashIntro'), { ssr: false });
 const AuthModal = dynamic(() => import('../components/AuthModal'), { ssr: false });
 const PaymentModal = dynamic(() => import('../components/PaymentModal'), { ssr: false });
 const HeroScene = dynamic(() => import('../components/scenes/HeroScene'), { ssr: false });
 const StatsBarScene = dynamic(() => import('../components/scenes/StatsBarScene'), { ssr: false });
-const EventShowcaseScene = dynamic(() => import('../components/scenes/EventShowcaseScene'), { ssr: false });
-const TimelineScene = dynamic(() => import('../components/scenes/TimelineScene'), { ssr: false });
 const PrizePoolScene = dynamic(() => import('../components/scenes/PrizePoolScene'), { ssr: false });
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
 const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
@@ -22,13 +18,13 @@ const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene')
 const FAQScene = dynamic(() => import('../components/scenes/FAQScene'), { ssr: false });
 const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
 const FooterScene = dynamic(() => import('../components/scenes/FooterScene'), { ssr: false });
+const BackToTop = dynamic(() => import('../components/BackToTop'), { ssr: false });
 
 import { useKonamiCode } from '../hooks/useKonamiCode';
 import { useStore } from '../lib/useStore';
 import { useDevice } from '../hooks/useDevice';
 
 export default function Home() {
-  const [showFlashIntro, setShowFlashIntro] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
   
   const isSecretMode = useStore((state) => state.isSecretMode);
@@ -41,31 +37,10 @@ export default function Home() {
 
   useEffect(() => {
     setHasMounted(true);
-    if (typeof window !== 'undefined') {
-      // Clear any legacy permanent localStorage flag so closing & reopening the site always plays intro
-      localStorage.removeItem('y26_has_seen_intro');
-
-      const searchParams = new URLSearchParams(window.location.search);
-      const isReplay = searchParams.get('replay') === 'true' || searchParams.get('intro') === 'true';
-
-      if (isReplay) {
-        sessionStorage.removeItem('hasSeenIntro');
-        setShowFlashIntro(true);
-        return;
-      }
-
-      // If user has already seen intro in current tab session (page refresh or navigation), skip it.
-      // Closing the browser/tab clears sessionStorage, so re-opening the site will always play the intro.
-      if (sessionStorage.getItem('hasSeenIntro') === 'true') {
-        setShowFlashIntro(false);
-      } else {
-        setShowFlashIntro(true);
-      }
-    }
   }, []);
 
   useEffect(() => {
-    if (!hasMounted || showFlashIntro) return;
+    if (!hasMounted) return;
     
     // Initialise Lenis smooth scroll — wrapped in try/catch for iOS Safari safety
     let lenis: any = null;
@@ -82,28 +57,18 @@ export default function Home() {
     return () => {
       try { lenis?.destroy(); } catch (_) {}
     };
-  }, [showFlashIntro, hasMounted]);
+  }, [hasMounted]);
 
   if (!hasMounted) return null;
 
   return (
     <>
-      {/* Image Flash Intro overlay - rendered on top, unmounts when complete */}
-      {showFlashIntro && (
-        <ImageFlashIntro onComplete={() => {
-          setShowFlashIntro(false);
-          sessionStorage.setItem('hasSeenIntro', 'true');
-          addToast('Welcome to YOUTHFEST 2026!');
-        }} />
-      )}
-
       {/* Main content renders in the background to initialize WebGL without transition lag */}
       <main className={`relative w-full min-h-screen pb-16 md:pb-0 transition-colors duration-1000 ${
         isSecretMode ? 'bg-black text-[var(--neon-cyan)] font-[var(--font-heading-main)] ' : 'bg-black text-white'
       }`}>
         {/* Global Navigation Header */}
         <Navbar />
-        <MobileBottomNav />
 
         {/* Dynamic Toast notifications overlay */}
         <ToastContainer />
@@ -120,13 +85,6 @@ export default function Home() {
           <StatsBarScene />
         </LazyScene>
 
-        <LazyScene placeholderHeight={700}>
-          <EventShowcaseScene />
-        </LazyScene>
-
-        <LazyScene placeholderHeight={600}>
-          <TimelineScene />
-        </LazyScene>
 
         <LazyScene placeholderHeight={600}>
           <PrizePoolScene />
@@ -160,6 +118,8 @@ export default function Home() {
         <LazyScene placeholderHeight={500}>
           <FooterScene />
         </LazyScene>
+
+        <BackToTop />
       </main>
     </>
   );

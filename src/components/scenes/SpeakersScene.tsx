@@ -130,9 +130,9 @@ function GuestCard({ guest, index }: { guest: Guest; index: number }) {
 }
 export default function SpeakersScene() {
  return (
- <section id="speakers" className="relative py-24 overflow-hidden" aria-labelledby="speakers-heading">
+ <section id="speakers" className="relative py-16 md:py-24 lg:py-32 overflow-hidden" aria-labelledby="speakers-heading">
  {/* Background */}
- <div className="relative z-10 max-w-6xl mx-auto px-4">
+ <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
  {/* Header */}
  <div className="text-center mb-14">
  <motion.div

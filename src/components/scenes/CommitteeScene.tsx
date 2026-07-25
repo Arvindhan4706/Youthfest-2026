@@ -73,7 +73,7 @@ export default function CommitteeScene() {
   const contactEmail = settings?.contact_email || 'yuvenza@citchennai.net';
 
   return (
-    <section id="committee" className="relative py-24 overflow-hidden">
+    <section id="committee" className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
       {/* Background ambient lighting */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[var(--neon-cyan)]/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-[var(--neon-violet)]/5 rounded-full blur-[120px] pointer-events-none" />

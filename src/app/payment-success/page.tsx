@@ -224,7 +224,7 @@ function PaymentSuccessContent() {
               </button>
 
               <Link 
-                href="/dashboard"
+                href="/profile"
                 className="w-full py-3 px-4 border border-white/20 text-white font-semibold text-xs rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
               >
                 <Home className="w-4 h-4" />
