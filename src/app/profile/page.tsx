@@ -25,13 +25,16 @@ const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
 ];
 
-function ComingSoon({ label }: { label: string }) {
+function ComingSoon({ label, description }: { label: string; description?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center h-64 gap-4 rounded-2xl border border-white/10 bg-white/[0.02]">
+    <div className="flex flex-col items-center justify-center h-64 gap-4 rounded-3xl border border-dashed border-white/10 bg-white/[0.01]">
       <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-gray-500">
         <Award className="w-8 h-8" />
       </div>
-      <p className="text-gray-400 text-sm font-semibold">{label} — Coming Soon</p>
+      <div className="text-center">
+        <p className="text-gray-300 text-sm font-bold mb-1">{label}</p>
+        <p className="text-gray-500 text-xs max-w-xs">{description || 'This feature is coming soon. Check back after the fest!'}</p>
+      </div>
     </div>
   );
 }
@@ -40,7 +43,17 @@ function PaymentHistory() {
   const user = useStore(s => s.user);
   const events = user?.registeredEvents ?? [];
   if (events.length === 0) {
-    return <ComingSoon label="Payment History" />;
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4 rounded-3xl border border-dashed border-white/10 bg-white/[0.01]">
+        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-gray-500">
+          <CreditCard className="w-8 h-8" />
+        </div>
+        <div className="text-center">
+          <p className="text-gray-300 text-sm font-bold mb-1">No Payments Yet</p>
+          <p className="text-gray-500 text-xs max-w-xs">Your payment receipts will appear here once you register for events.</p>
+        </div>
+      </div>
+    );
   }
   return (
     <div className="flex flex-col gap-3">
@@ -61,7 +74,17 @@ function MyRegistrations() {
   const user = useStore(s => s.user);
   const events = user?.registeredEvents ?? [];
   if (events.length === 0) {
-    return <ComingSoon label="My Registrations" />;
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4 rounded-3xl border border-dashed border-white/10 bg-white/[0.01]">
+        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-gray-500">
+          <CalendarCheck className="w-8 h-8" />
+        </div>
+        <div className="text-center">
+          <p className="text-gray-300 text-sm font-bold mb-1">No Registrations Yet</p>
+          <p className="text-gray-500 text-xs max-w-xs">You haven't registered for any events. Explore the events page and secure your spot!</p>
+        </div>
+      </div>
+    );
   }
   return (
     <div className="flex flex-col gap-3">

@@ -426,7 +426,7 @@ export default function EventShowcaseScene() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-xs text-[var(--neon-cyan)] font-semibold uppercase tracking-widest mb-6 shadow-[0_0_15px_rgba(0,240,255,0.2)]"
           >
-            What's On
+            Discover the Experience
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -434,12 +434,13 @@ export default function EventShowcaseScene() {
             viewport={{ once: true }}
             className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
           >
+            Explore{' '}
             <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">
-              EVENTS
+              YouthFest 2026
             </span>
           </motion.h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
-            Explore our exciting lineup of competitions, workshops, performances, and experiences. Register with ease and become part of something meaningful.
+            From coding challenges and hackathons to music, dance, photography, gaming, workshops, and fun activities, every event is carefully curated to inspire creativity, collaboration, and unforgettable memories.
           </p>
         </div>
  {/* Track tabs */}

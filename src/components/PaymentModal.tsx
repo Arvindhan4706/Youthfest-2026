@@ -33,37 +33,101 @@ export default function PaymentModal() {
  }
  }, [checkoutEvent, shouldRender]);
  if (!shouldRender || !checkoutEvent) return null;
- const handlePayment = async () => {
- setIsLoading(true);
+  const handlePayment = async () => {
+    setIsLoading(true);
 
-  try {
-    const orderResponse = await fetch('/api/payment/create-order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        amount: parseInt(checkoutEvent.fee.replace(/\D/g, '')) || 0,
-        email: user?.email,
-        eventTitle: checkoutEvent.title
-      })
-    });
-    if (!orderResponse.ok) {
-      const errText = await orderResponse.text();
-      console.error('Server returned error:', errText);
-      throw new Error(`Server error: ${orderResponse.status}`);
+    try {
+      const orderResponse = await fetch('/api/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          amount: parseInt(checkoutEvent.fee.replace(/\D/g, '')) || 0,
+          email: user?.email,
+          eventTitle: checkoutEvent.title
+        })
+      });
+      
+      if (!orderResponse.ok) {
+        const errText = await orderResponse.text();
+        console.error('Server returned error:', errText);
+        throw new Error(`Server error: ${orderResponse.status}`);
+      }
+      
+      const orderData = await orderResponse.json();
+      
+      // Load Razorpay SDK
+      if (!(window as any).Razorpay) {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        document.body.appendChild(script);
+        await new Promise((resolve, reject) => {
+          script.onload = resolve;
+          script.onerror = () => reject(new Error('Razorpay SDK failed to load'));
+        });
+      }
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Yuvenza YouthFest",
+        description: `Registration for ${checkoutEvent.title}`,
+        order_id: orderData.order_id,
+        handler: async function (response: any) {
+          try {
+            const verifyRes = await fetch('/api/payment/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                email: user?.email
+              })
+            });
+            const verifyData = await verifyRes.json();
+            
+            if (verifyData.success) {
+              await completeRegistration();
+            } else {
+              addToast('Payment verification failed.');
+              setIsLoading(false);
+            }
+          } catch (err) {
+            console.error('Verification error:', err);
+            addToast('Error verifying payment.');
+            setIsLoading(false);
+          }
+        },
+        prefill: {
+          name: user?.name || "",
+          email: user?.email || "",
+          contact: user?.phone || ""
+        },
+        theme: {
+          color: "#00f0ff"
+        },
+        modal: {
+          ondismiss: function() {
+            setIsLoading(false);
+          }
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', function (response: any){
+        addToast('Payment failed: ' + response.error.description);
+        setIsLoading(false);
+      });
+      rzp.open();
+
+    } catch (err: unknown) {
+      console.error(err);
+      addToast('Payment initialization failed.');
+      setIsLoading(false);
     }
-    const orderData = await orderResponse.json();
-    if (orderData.paymentLinkUrl) {
-      window.location.href = orderData.paymentLinkUrl;
-      return;
-    } else {
-      throw new Error('Payment Link creation failed');
-    }
- } catch (err: unknown) {
- console.error(err);
- addToast('Payment initialization failed.');
- setIsLoading(false);
- }
- };
+  };
  const completeRegistration = async () => {
  // Perform registration (saves to supabase + zustand state)
  await registerForEvent(checkoutEvent.title);

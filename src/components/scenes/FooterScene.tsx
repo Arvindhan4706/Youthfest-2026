@@ -2,215 +2,230 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { db, SiteSettings } from '@/lib/database';
-import { Mail, Phone, MapPin, Zap, ChevronRight, Home, Calendar, Flag, Users, HelpCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, ChevronRight, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-function GithubIcon() {
- return (
- <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
- <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/>
- </svg>
- );
-}
-
-function TwitterIcon() {
- return (
- <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
- <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
- </svg>
- );
-}
-
 function InstagramIcon() {
- return (
- <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
- <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
- </svg>
- );
+  return (
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+    </svg>
+  );
+}
+function LinkedinIcon() {
+  return (
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </svg>
+  );
+}
+function FacebookIcon() {
+  return (
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+    </svg>
+  );
+}
+function YoutubeIcon() {
+  return (
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+    </svg>
+  );
+}
+function TwitterXIcon() {
+  return (
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    </svg>
+  );
 }
 
 export default function FooterScene() {
- const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
 
- useEffect(() => {
-   const fetchSettings = async () => {
-     try {
-       const data = await db.getSiteSettings();
-       setSettings(data);
-     } catch (err) {
-       console.error('Failed to fetch settings for footer', err);
-     }
-   };
-   fetchSettings();
- }, []);
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const data = await db.getSiteSettings();
+        setSettings(data);
+      } catch (err) {
+        console.error('Failed to fetch settings for footer', err);
+      }
+    };
+    fetchSettings();
+  }, []);
 
- const links = [
-   { label: 'Home', href: '#hero', icon: Home },
-   { label: 'Schedule', href: '#schedule', icon: Calendar },
-   { label: 'Events', href: '#events', icon: Flag },
-   { label: 'Speakers', href: '#speakers', icon: Users },
- ];
+  const quickLinks = [
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/#about' },
+    { label: 'Events', href: '/events' },
+    { label: 'Schedule', href: '/#schedule' },
+    { label: 'Register', href: '/#register' },
+    { label: 'Gallery', href: '/#gallery' },
+    { label: 'Sponsors', href: '/#sponsors' },
+    { label: 'Contact', href: '#contact' },
+  ];
 
- return (
- <footer id="contact" className="relative pt-24 pb-12 px-4 border-t border-white/[0.06] overflow-hidden" >
- {/* Background */}
- <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 items-start mb-20 relative z-10 px-4 sm:px-6 lg:px-8">
+  const eventLinks = [
+    { label: 'Technical Events', href: '/events' },
+    { label: 'Cultural Events', href: '/events' },
+    { label: 'Hackathon', href: '/events' },
+    { label: 'Workshops', href: '/events' },
+    { label: 'Gaming Arena', href: '/events' },
+    { label: 'Photography', href: '/events' },
+    { label: 'Music & Dance', href: '/events' },
+    { label: 'Fun Events', href: '/events' },
+  ];
 
- {/* Explore (formerly Quick Links) */}
- <motion.div 
-  initial={{ opacity: 0, y: 30 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true }}
-  transition={{ duration: 0.6 }}
-  className="flex flex-col gap-6"
- >
- <div>
- <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-6 flex items-center gap-2 pb-4 border-b border-white/10">
-  <Zap className="w-4 h-4 text-[var(--neon-violet)]" />
-  Explore
- </h4>
- <div className="flex flex-col gap-3 text-sm text-gray-300 mt-2">
-  {links.map((link) => (
-    <Link 
-      key={link.label}
-      href={link.href} 
-      className="flex items-center gap-3 py-2 text-gray-400 hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all group/link"
-    >
-      <link.icon className="w-4 h-4 opacity-70 group-hover/link:opacity-100 transition-opacity" />
-      <span className="font-medium">{link.label}</span>
-      <ChevronRight className="w-4 h-4 ml-auto opacity-0 -translate-x-2 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all duration-300" />
-    </Link>
-  ))}
- </div>
- </div>
- </motion.div>
- 
- {/* Address */}
- <motion.div 
-  initial={{ opacity: 0, y: 30 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true }}
-  transition={{ duration: 0.6, delay: 0.1 }}
-  className="flex flex-col gap-6 lg:max-w-[300px]"
- >
- <div>
- <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-6 flex items-center gap-2 pb-4 border-b border-white/10">
-  <MapPin className="w-4 h-4 text-[var(--neon-magenta)]" />
-  Address
- </h4>
- <div className="flex flex-col gap-5 text-sm text-gray-300 mt-2">
-  
-  <div className="flex items-start gap-4 transition-all duration-300 group/item cursor-default">
-  <div className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full group-hover/item:bg-[var(--neon-magenta)]/20 transition-colors shrink-0">
-    <MapPin className="w-4 h-4 text-gray-400 group-hover/item:text-[var(--neon-magenta)] transition-colors" /> 
-  </div>
-  <span className="mt-0.5">
-  <strong className="block text-white mb-1 font-bold text-base group-hover/item:text-[var(--neon-cyan)] transition-colors">{settings?.contact_institute || 'Chennai Institute of Technology'}</strong>
-  <span className="text-gray-400 leading-relaxed block pr-4">{settings?.contact_address || 'Sarathy Nagar, Kundrathur, Chennai - 600069, Tamil Nadu'}</span>
-  </span>
-  </div>
-  
-  </div>
-  </div>
-  </motion.div>
+  const participantServices = [
+    { label: 'My Profile', href: '/profile' },
+    { label: 'Dashboard', href: '/profile' },
+    { label: 'My Registrations', href: '/profile' },
+    { label: 'My Tickets', href: '/profile' },
+    { label: 'Certificates', href: '/profile' },
+    { label: 'Payment History', href: '/profile' },
+    { label: 'Help Center', href: '/profile' },
+  ];
 
- {/* Contact */}
- <motion.div 
-  initial={{ opacity: 0, y: 30 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true }}
-  transition={{ duration: 0.6, delay: 0.2 }}
-  className="flex flex-col gap-6"
- >
- <div>
- <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-6 flex items-center gap-2 pb-4 border-b border-white/10">
-  <Phone className="w-4 h-4 text-[var(--neon-lime)]" />
-  Contact
- </h4>
- <div className="flex flex-col gap-5 text-sm text-gray-300 mt-2">
-  
-  <a href={`mailto:${settings?.contact_email || 'yuvenza@citchennai.net'}`} className="flex items-center gap-4 transition-all duration-300 group/item hover:translate-x-1">
-  <div className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full group-hover/item:bg-[var(--neon-cyan)]/20 transition-colors shrink-0">
-    <Mail className="w-4 h-4 text-gray-400 group-hover/item:text-[var(--neon-cyan)] transition-colors" /> 
-  </div>
-  <span className="font-medium text-gray-400 group-hover/item:text-white transition-colors">{settings?.contact_email || 'yuvenza@citchennai.net'}</span>
-  </a>
+  return (
+    <footer id="contact" className="relative pt-24 pb-12 px-4 border-t border-white/[0.06] overflow-hidden bg-[#050010]">
+      {/* Background glow */}
+      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-cyan-900/10 rounded-full blur-[100px] pointer-events-none" />
 
-  <div className="flex items-center gap-4 transition-all duration-300 group/item hover:translate-x-1">
-  <div className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full group-hover/item:bg-[var(--neon-lime)]/20 transition-colors shrink-0">
-    <Phone className="w-4 h-4 text-gray-400 group-hover/item:text-[var(--neon-lime)] transition-colors" /> 
-  </div>
-  <div className="flex flex-col gap-0.5">
-    <a href={`tel:${settings?.contact_phone || '+917339524706'}`} className="font-medium text-gray-400 group-hover/item:text-white transition-colors hover:underline">
-      {settings?.contact_phone || '+91 7339524706'}
-    </a>
-    <a href="tel:+919500129400" className="font-medium text-gray-400 group-hover/item:text-white transition-colors hover:underline">
-      +91 9500129400
-    </a>
-  </div>
-  </div>
+      <div className="max-w-7xl mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
+        
+        {/* TOP CTA / NEWSLETTER */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8 pb-16 border-b border-white/10 mb-16">
+          <div className="text-center md:text-left">
+            <h3 className="text-3xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-2">See You at YouthFest 2026!</h3>
+            <p className="text-gray-400 max-w-lg text-sm">Join thousands of students for an unforgettable celebration of innovation, creativity, culture, and community.</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/events" className="px-6 py-3 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold transition-all">Explore Events</Link>
+            <Link href="/profile" className="px-6 py-3 rounded-full bg-white text-black hover:bg-gray-200 font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]">Register Now</Link>
+          </div>
+        </div>
 
-  <a href={`https://wa.me/${(settings?.contact_whatsapp || '+917339524706').replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="flex items-center gap-4 transition-all duration-300 group/item hover:translate-x-1">
-  <div className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full group-hover/item:bg-[#25D366]/20 transition-colors shrink-0">
-    <svg className="w-4 h-4 text-gray-400 group-hover/item:text-[#25D366] transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-  </div>
-  <div className="flex flex-col">
-    <span className="font-medium text-gray-400 group-hover/item:text-white transition-colors">WhatsApp Coordinator</span>
-    <span className="text-xs text-gray-500 font-mono">+91 7339524706</span>
-  </div>
-  </a>
-  </div>
-  </div>
-  </motion.div>
+        {/* MAIN FOOTER GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-20">
+          
+          {/* Brand Info */}
+          <div className="lg:col-span-1 flex flex-col gap-6">
+            <div>
+              <Link href="/" className="inline-block text-2xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-widest mb-2">
+                YouthFest 2026
+              </Link>
+              <p className="text-[var(--neon-cyan)] text-xs font-bold uppercase tracking-widest mb-4">Celebrate Talent • Inspire Innovation • Create Memories</p>
+              <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                YouthFest 2026 is the flagship annual festival celebrating innovation, creativity, culture, and collaboration. Bringing together students from across colleges to compete, learn, perform, and create unforgettable experiences.
+              </p>
+            </div>
+            {/* Socials */}
+            <div>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Follow Us</h4>
+              <div className="flex gap-3">
+                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[var(--neon-magenta)] hover:shadow-[0_0_15px_rgba(255,0,127,0.5)] transition-all"><InstagramIcon /></a>
+                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#0077B5] hover:shadow-[0_0_15px_rgba(0,119,181,0.5)] transition-all"><LinkedinIcon /></a>
+                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1877F2] hover:shadow-[0_0_15px_rgba(24,119,242,0.5)] transition-all"><FacebookIcon /></a>
+                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#FF0000] hover:shadow-[0_0_15px_rgba(255,0,0,0.5)] transition-all"><YoutubeIcon /></a>
+                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-black hover:border-white/50 border border-transparent transition-all"><TwitterXIcon /></a>
+              </div>
+            </div>
+          </div>
 
- {/* Connect With Us */}
- <motion.div 
-  initial={{ opacity: 0, y: 30 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true }}
-  transition={{ duration: 0.6, delay: 0.3 }}
-  className="flex flex-col gap-6"
- >
- <div>
- <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-6 flex items-center gap-2 pb-4 border-b border-white/10">
-  <Users className="w-4 h-4 text-[var(--neon-cyan)]" />
-  Connect With Us
- </h4>
-  <div className="flex flex-wrap gap-4 mt-2">
-    <a href={`mailto:${settings?.contact_email || 'yuvenza@citchennai.net'}`} title="Send Email" className="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 text-gray-400 hover:text-black hover:bg-[var(--neon-cyan)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:-translate-y-1 transition-all duration-300">
-      <Mail className="w-5 h-5" />
-    </a>
-    <a href={`tel:${settings?.contact_phone || '+917339524706'}`} title="Call Us" className="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 text-gray-400 hover:text-black hover:bg-[var(--neon-lime)] hover:shadow-[0_0_20px_rgba(163,230,53,0.4)] hover:-translate-y-1 transition-all duration-300">
-      <Phone className="w-5 h-5" />
-    </a>
-    <a href="https://instagram.com" target="_blank" rel="noreferrer" title="Instagram" className="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 text-gray-400 hover:text-black hover:bg-[var(--neon-magenta)] hover:shadow-[0_0_20px_rgba(255,0,127,0.4)] hover:-translate-y-1 transition-all duration-300">
-      <InstagramIcon />
-    </a>
-  </div>
- </div>
- </motion.div>
- 
-  </div>
+          {/* Quick Links */}
+          <div className="flex flex-col gap-6">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10">Quick Links</h4>
+            <div className="flex flex-col gap-3">
+              {quickLinks.map(link => (
+                <Link key={link.label} href={link.href} className="text-sm text-gray-400 hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all flex items-center gap-2 group">
+                  <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
 
- {/* Copyright */}
- <div className="max-w-5xl mx-auto border-t border-white/5 pt-8 text-center flex flex-col items-center justify-center gap-4 text-xs text-gray-500 select-none relative z-10">
-  {/* Festival Details */}
-  <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mb-2">
-    <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-cyan)]" />The Flagship Fest</span>
-    <span className="text-white/20">&bull;</span>
-    <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-violet)]" />August 2026</span>
-    <span className="text-white/20">&bull;</span>
-    <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-magenta)]" />CIT Campus, Chennai</span>
-  </div>
-  <p className="flex items-center justify-center gap-2">
-   <Zap className="w-3 h-3 text-[var(--neon-cyan)]" />
-   © 2026 Yuvenza &mdash; The Youth Club of Chennai Institute of Technology. All rights reserved.
-  </p>
-  <div className="flex gap-4 justify-center">
-   <a href="#" className="hover:text-gray-400 hover:text-[var(--neon-cyan)] transition-colors">Terms of Use</a>
-   <a href="#" className="hover:text-gray-400 hover:text-[var(--neon-cyan)] transition-colors">Privacy Policy</a>
-  </div>
- </div>
- </footer>
- );
+          {/* Events */}
+          <div className="flex flex-col gap-6">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10">Events</h4>
+            <div className="flex flex-col gap-3">
+              {eventLinks.map(link => (
+                <Link key={link.label} href={link.href} className="text-sm text-gray-400 hover:text-[var(--neon-violet)] hover:translate-x-1 transition-all flex items-center gap-2 group">
+                  <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Participant Services */}
+          <div className="flex flex-col gap-6">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10">Participant Services</h4>
+            <div className="flex flex-col gap-3">
+              {participantServices.map(link => (
+                <Link key={link.label} href={link.href} className="text-sm text-gray-400 hover:text-[var(--neon-magenta)] hover:translate-x-1 transition-all flex items-center gap-2 group">
+                  <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact & Newsletter */}
+          <div className="flex flex-col gap-8">
+            <div>
+              <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10 mb-6">Contact Us</h4>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-[var(--neon-cyan)] shrink-0 mt-0.5" />
+                  <p className="text-sm text-gray-400 leading-relaxed">
+                    <strong className="text-white block">YouthFest Organizing Committee</strong>
+                    Chennai Institute of Technology<br/>
+                    Sarathy Nagar, Kundrathur, Chennai
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-[var(--neon-violet)] shrink-0" />
+                  <a href="mailto:support@youthfest.in" className="text-sm text-gray-400 hover:text-white transition-colors">support@youthfest.in</a>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-[var(--neon-magenta)] shrink-0" />
+                  <a href="tel:+917339524706" className="text-sm text-gray-400 hover:text-white transition-colors">+91 73395 24706</a>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10 mb-4">Stay Updated</h4>
+              <p className="text-xs text-gray-400 mb-4">Subscribe to receive the latest announcements and event updates.</p>
+              <form className="relative flex items-center" onSubmit={(e) => e.preventDefault()}>
+                <input 
+                  type="email" 
+                  placeholder="Enter your email address" 
+                  className="w-full bg-white/5 border border-white/10 rounded-full py-2.5 pl-4 pr-12 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors"
+                />
+                <button type="submit" className="absolute right-1 w-8 h-8 rounded-full bg-[var(--neon-cyan)] text-black flex items-center justify-center hover:scale-105 transition-transform">
+                  <Send className="w-4 h-4 ml-0.5" />
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        {/* BOTTOM LEGAL BAR */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-white/10 text-xs text-gray-500">
+          <p>© 2026 YouthFest. All Rights Reserved.</p>
+          <div className="flex gap-4">
+            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-white transition-colors">Terms & Conditions</Link>
+            <Link href="#" className="hover:text-white transition-colors">Refund Policy</Link>
+          </div>
+          <p>Designed and Developed by the <span className="text-[var(--neon-cyan)] font-medium">YouthFest Technical Team</span>.</p>
+        </div>
+      </div>
+    </footer>
+  );
 }

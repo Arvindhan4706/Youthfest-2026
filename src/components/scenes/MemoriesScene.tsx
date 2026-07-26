@@ -2,8 +2,9 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, Play, Expand } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Play, Expand, ArrowRight } from 'lucide-react';
 
 interface GalleryItem {
   id: number;
@@ -135,7 +136,7 @@ export default function MemoriesScene() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-xs text-[var(--neon-cyan)] font-semibold uppercase tracking-widest mb-5 shadow-[0_0_15px_rgba(0,240,255,0.1)]"
           >
-            Selected Work
+            Behind the Festival
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -143,14 +144,21 @@ export default function MemoriesScene() {
             viewport={{ once: true }}
             className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
           >
-            OUR{' '}
+            The Journey{' '}
             <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">
-              WORK
+              Behind YouthFest
             </span>
           </motion.h2>
-          <p className="text-gray-400 text-sm sm:text-base max-w-2xl">
-            Discover the events, campaigns, and community initiatives that define our journey and impact.
+          <p className="text-gray-400 text-sm sm:text-base max-w-2xl mb-8">
+            Every unforgettable experience begins with months of planning, creativity, collaboration, and dedication. From brainstorming ideas to managing thousands of participants — this is our story.
           </p>
+          <Link
+            href="/work"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 bg-white/5 text-white text-sm font-semibold hover:bg-white/10 hover:border-white/40 transition-all group"
+          >
+            View Full Journey
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </div>
       </div>
 
