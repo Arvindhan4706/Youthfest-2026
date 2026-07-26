@@ -126,11 +126,11 @@ export default function FooterScene() {
             <div>
               <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Follow Us</h4>
               <div className="flex gap-3">
-                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[var(--neon-magenta)] hover:shadow-[0_0_15px_rgba(255,0,127,0.5)] transition-all"><InstagramIcon /></a>
-                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#0077B5] hover:shadow-[0_0_15px_rgba(0,119,181,0.5)] transition-all"><LinkedinIcon /></a>
-                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1877F2] hover:shadow-[0_0_15px_rgba(24,119,242,0.5)] transition-all"><FacebookIcon /></a>
-                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#FF0000] hover:shadow-[0_0_15px_rgba(255,0,0,0.5)] transition-all"><YoutubeIcon /></a>
-                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-black hover:border-white/50 border border-transparent transition-all"><TwitterXIcon /></a>
+                <a href="#" aria-label="Instagram" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[var(--neon-magenta)] hover:shadow-[0_0_15px_rgba(255,0,127,0.5)] transition-all"><InstagramIcon /></a>
+                <a href="#" aria-label="LinkedIn" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#0077B5] hover:shadow-[0_0_15px_rgba(0,119,181,0.5)] transition-all"><LinkedinIcon /></a>
+                <a href="#" aria-label="Facebook" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1877F2] hover:shadow-[0_0_15px_rgba(24,119,242,0.5)] transition-all"><FacebookIcon /></a>
+                <a href="#" aria-label="YouTube" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#FF0000] hover:shadow-[0_0_15px_rgba(255,0,0,0.5)] transition-all"><YoutubeIcon /></a>
+                <a href="#" aria-label="Twitter/X" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-black hover:border-white/50 border border-transparent transition-all"><TwitterXIcon /></a>
               </div>
             </div>
           </div>
@@ -207,7 +207,7 @@ export default function FooterScene() {
                   placeholder="Enter your email address" 
                   className="w-full bg-white/5 border border-white/10 rounded-full py-2.5 pl-4 pr-12 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors"
                 />
-                <button type="submit" className="absolute right-1 w-8 h-8 rounded-full bg-[var(--neon-cyan)] text-black flex items-center justify-center hover:scale-105 transition-transform">
+                <button type="submit" aria-label="Subscribe to newsletter" className="absolute right-1 w-8 h-8 rounded-full bg-[var(--neon-cyan)] text-black flex items-center justify-center hover:scale-105 transition-transform">
                   <Send className="w-4 h-4 ml-0.5" />
                 </button>
               </form>

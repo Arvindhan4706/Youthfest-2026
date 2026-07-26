@@ -5,15 +5,17 @@ import { useStore } from '../../lib/useStore';
 import { db } from '../../lib/database';
 
 function Field({
-  label, value, onChange, type = 'text', disabled = false, placeholder = '',
+  label, value, onChange, type = 'text', disabled = false, placeholder = '', id
 }: {
   label: string; value: string; onChange?: (v: string) => void;
-  type?: string; disabled?: boolean; placeholder?: string;
+  type?: string; disabled?: boolean; placeholder?: string; id?: string;
 }) {
+  const inputId = id || label.replace(/\s+/g, '-').toLowerCase();
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{label}</label>
+      <label htmlFor={inputId} className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{label}</label>
       <input
+        id={inputId}
         type={type}
         value={value}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
@@ -129,8 +131,9 @@ export default function VisitorProfile() {
               placeholder="Phone (locked)"
             />
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Gender</label>
+              <label htmlFor="gender" className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Gender</label>
               <select
+                id="gender"
                 value={profileGender}
                 onChange={(e) => setProfileGender(e.target.value)}
                 className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)]/60 transition-colors cursor-pointer"
@@ -149,8 +152,9 @@ export default function VisitorProfile() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Year of Study</label>
+              <label htmlFor="year-of-study" className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Year of Study</label>
               <select
+                id="year-of-study"
                 value={profileYear}
                 onChange={(e) => setProfileYear(e.target.value)}
                 className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)]/60 transition-colors cursor-pointer"
