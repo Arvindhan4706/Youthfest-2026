@@ -135,7 +135,7 @@ export default function MemoriesScene() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-xs text-[var(--neon-cyan)] font-semibold uppercase tracking-widest mb-5 shadow-[0_0_15px_rgba(0,240,255,0.1)]"
           >
-            The Pile
+            Selected Work
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -145,11 +145,11 @@ export default function MemoriesScene() {
           >
             OUR{' '}
             <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">
-              MEMORIES
+              WORK
             </span>
           </motion.h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-2xl">
-            From our debut in 2023 to our latest tech and cultural milestones. Explore our scattered journey, polaroid by polaroid.
+            Discover the events, campaigns, and community initiatives that define our journey and impact.
           </p>
         </div>
       </div>

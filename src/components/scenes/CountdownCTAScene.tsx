@@ -61,36 +61,36 @@ export default function CountdownCTAScene() {
  {/* Grid */}
  {/* Ambient glows */}
  <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
- {/* Urgency badge */}
- <motion.div
- initial={{ opacity: 0, y: 20 }}
- whileInView={{ opacity: 1, y: 0 }}
- viewport={{ once: true }}
- className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--neon-magenta)]/30 bg-[var(--neon-magenta)]/[0.08] text-[var(--neon-magenta)] text-xs font-bold uppercase tracking-widest mb-8"
- >
- <span>Registration Closing Soon</span>
- <span className="w-2 h-2 rounded-full bg-[var(--neon-magenta)]" style={{ animation: 'pulse-dot 1.5s ease-in-out infinite' }} />
- </motion.div>
- {/* Heading */}
- <motion.h2
- initial={{ opacity: 0, y: 20 }}
- whileInView={{ opacity: 1, y: 0 }}
- viewport={{ once: true }}
- className="text-3xl sm:text-5xl md:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-5"
- >
- DON&apos;T MISS{' '}
- <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent animate-gradient">
- OUT
- </span>
- </motion.h2>
- <motion.p
- initial={{ opacity: 0 }}
- whileInView={{ opacity: 1 }}
- viewport={{ once: true }}
- className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto mb-12"
- >
- The biggest youth festival of the year is just days away. Secure your spot now — once they&apos;re gone, they&apos;re gone.
- </motion.p>
+        {/* Urgency badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--neon-magenta)]/30 bg-[var(--neon-magenta)]/[0.08] text-[var(--neon-magenta)] text-xs font-bold uppercase tracking-widest mb-8"
+        >
+          <span>Let's Create Change Together</span>
+          <span className="w-2 h-2 rounded-full bg-[var(--neon-magenta)]" style={{ animation: 'pulse-dot 1.5s ease-in-out infinite' }} />
+        </motion.div>
+        {/* Heading */}
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-3xl sm:text-5xl md:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-5"
+        >
+          JOIN THE{' '}
+          <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent animate-gradient">
+            MOVEMENT
+          </span>
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto mb-12"
+        >
+          Be part of something bigger. Join Yuvenza and help us channel every event into a meaningful social cause.
+        </motion.p>
  {/* Countdown */}
  <motion.div
  initial={{ opacity: 0, y: 20 }}
@@ -124,7 +124,7 @@ export default function CountdownCTAScene() {
  }}
  className="group flex items-center justify-center gap-2 w-full sm:w-auto px-10 py-5 rounded-full font-semibold text-black bg-white hover:bg-gray-200 transition-all duration-300 text-lg mx-auto"
  >
- {user ? 'Go To Dashboard' : 'Claim Your Ticket Now'}
+          {user ? 'Go To Dashboard' : 'Register for the Fest'}
  <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
  </button>
  </motion.div>

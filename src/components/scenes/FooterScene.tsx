@@ -194,14 +194,22 @@ export default function FooterScene() {
 
  {/* Copyright */}
  <div className="max-w-5xl mx-auto border-t border-white/5 pt-8 text-center flex flex-col items-center justify-center gap-4 text-xs text-gray-500 select-none relative z-10">
- <p className="flex items-center justify-center gap-2">
- <Zap className="w-3 h-3 text-[var(--neon-cyan)]" />
- © 2026 Yuvenza Club. All rights reserved.
- </p>
- <div className="flex gap-4 justify-center">
- <a href="#" className="hover:text-gray-400 hover:text-[var(--neon-cyan)] transition-colors">Terms of Use</a>
- <a href="#" className="hover:text-gray-400 hover:text-[var(--neon-cyan)] transition-colors">Privacy Policy</a>
- </div>
+  {/* Festival Details */}
+  <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400 mb-2">
+    <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-cyan)]" />The Flagship Fest</span>
+    <span className="text-white/20">&bull;</span>
+    <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-violet)]" />August 2026</span>
+    <span className="text-white/20">&bull;</span>
+    <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-magenta)]" />CIT Campus, Chennai</span>
+  </div>
+  <p className="flex items-center justify-center gap-2">
+   <Zap className="w-3 h-3 text-[var(--neon-cyan)]" />
+   © 2026 Yuvenza &mdash; The Youth Club of Chennai Institute of Technology. All rights reserved.
+  </p>
+  <div className="flex gap-4 justify-center">
+   <a href="#" className="hover:text-gray-400 hover:text-[var(--neon-cyan)] transition-colors">Terms of Use</a>
+   <a href="#" className="hover:text-gray-400 hover:text-[var(--neon-cyan)] transition-colors">Privacy Policy</a>
+  </div>
  </div>
  </footer>
  );

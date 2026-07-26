@@ -15,9 +15,9 @@ const spaceGrotesk = Space_Grotesk({
  display: "swap",
 });
 export const metadata: Metadata = {
- title: "YUVENZA'S YOUTHFEST 2026 | The Biggest Youth Festival of the Year",
+ title: "Yuvenza | The Youth Club of CIT",
  description:
- "5000+ students, 50+ events across Technology, Creativity, Gaming & Culture. August 12, 2026. Register now before spots run out!",
+ "Yuvenza is the official youth club of Chennai Institute of Technology, dedicated to igniting passion, creativity, and unity while transforming every event into an opportunity to create meaningful social impact.",
  keywords: [
  "youth festival 2026",
  "youthfest",

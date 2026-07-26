@@ -418,31 +418,30 @@ export default function EventShowcaseScene() {
  className="absolute top-0 left-0 w-full h-[1px] transition-colors duration-500"
  />
  <div className="relative z-10 max-w-7xl mx-auto px-4">
- {/* Header */}
- <div className="text-center mb-10">
-  <motion.div
-   initial={{ opacity: 0, y: 20 }}
-   whileInView={{ opacity: 1, y: 0 }}
-   viewport={{ once: true }}
-   className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-xs text-[var(--neon-cyan)] font-semibold uppercase tracking-widest mb-6 shadow-[0_0_15px_rgba(0,240,255,0.2)]"
-  >
-   Explore Events
-  </motion.div>
- <motion.h2
- initial={{ opacity: 0, y: 20 }}
- whileInView={{ opacity: 1, y: 0 }}
- viewport={{ once: true }}
- className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
- >
- EVENT{' '}
- <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">
- CATEGORIES
- </span>
- </motion.h2>
-  <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
-   Browse through our technical, cultural, and gaming events to find the perfect fit for your team.
-  </p>
- </div>
+        {/* Header */}
+        <div className="text-center mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-xs text-[var(--neon-cyan)] font-semibold uppercase tracking-widest mb-6 shadow-[0_0_15px_rgba(0,240,255,0.2)]"
+          >
+            What's On
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
+          >
+            <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">
+              EVENTS
+            </span>
+          </motion.h2>
+          <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
+            Explore our exciting lineup of competitions, workshops, performances, and experiences. Register with ease and become part of something meaningful.
+          </p>
+        </div>
  {/* Track tabs */}
  <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">
  {TRACKS.map((t, idx) => {

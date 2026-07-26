@@ -1,16 +1,34 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Trophy, School, Mic, BookOpen, Zap, Music } from 'lucide-react';
+import { Users, Heart, Lightbulb, Zap, Rocket, HandHeart, Trophy } from 'lucide-react';
 
-const highlights = [
-  { icon: <Trophy className="w-6 h-6" />, value: '100+', label: 'Events', color: '#fbbf24' },
-  { icon: <Users className="w-6 h-6" />, value: '5000+', label: 'Participants', color: '#00E5FF' },
-  { icon: <School className="w-6 h-6" />, value: '100+', label: 'Colleges', color: '#a78bfa' },
-  { icon: <Mic className="w-6 h-6" />, value: '20+', label: 'Industry Speakers', color: '#f472b6' },
-  { icon: <BookOpen className="w-6 h-6" />, value: '15+', label: 'Workshops', color: '#4ade80' },
-  { icon: <Zap className="w-6 h-6" />, value: '50+', label: 'Competitions', color: '#fb923c' },
-  { icon: <Music className="w-6 h-6" />, value: '10+', label: 'Cultural Shows', color: '#38bdf8' },
+const statistics = [
+  { icon: <Trophy className="w-6 h-6" />, value: '2023', label: 'Founded in', color: '#fbbf24' },
+  { icon: <Users className="w-6 h-6" />, value: '2.1K+', label: 'Community Members', color: '#00E5FF' },
+  { icon: <HandHeart className="w-6 h-6" />, value: '9', label: 'Social Initiatives', color: '#f472b6' },
+  { icon: <Rocket className="w-6 h-6" />, value: '100%', label: 'Student Driven', color: '#4ade80' },
+];
+
+const pillars = [
+  {
+    title: 'Passion',
+    icon: <Heart className="w-5 h-5" />,
+    color: 'var(--neon-magenta)',
+    desc: 'Everything begins with students who care. We transform passion into impactful events, campaigns, and initiatives that inspire change.'
+  },
+  {
+    title: 'Creativity',
+    icon: <Lightbulb className="w-5 h-5" />,
+    color: 'var(--neon-cyan)',
+    desc: 'We approach every challenge with fresh ideas, combining innovation and teamwork to create experiences that leave a lasting impression.'
+  },
+  {
+    title: 'Unity',
+    icon: <Users className="w-5 h-5" />,
+    color: 'var(--neon-violet)',
+    desc: 'Real change happens when people work together. We build a community that collaborates, supports one another, and grows together.'
+  }
 ];
 
 const fadeUp = {
@@ -53,15 +71,15 @@ export default function AboutScene() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white text-center uppercase tracking-wider mb-16"
         >
-          Who We{' '}
+          The Youth Powered{' '}
           <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">
-            Are
+            Club
           </span>
         </motion.h2>
 
-        {/* Two column content */}
+        {/* Two column content (Introduction & Manifesto) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
-          {/* Who We Are */}
+          {/* Introduction */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -73,53 +91,76 @@ export default function AboutScene() {
               <div className="w-10 h-10 rounded-xl bg-[var(--neon-cyan)]/10 flex items-center justify-center text-[var(--neon-cyan)]">
                 <Users className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-[var(--font-heading-main)] font-bold text-white">Who We Are</h3>
+              <h3 className="text-xl font-[var(--font-heading-main)] font-bold text-white">The Youth Powered Club</h3>
             </div>
             <p className="text-gray-400 leading-relaxed">
-              YouthFest is the flagship annual festival celebrating innovation, creativity, culture, and collaboration.
-              Students from various colleges come together to participate in competitions, performances, workshops,
-              and networking opportunities. Organized by the <span className="text-white font-medium">Yuvenza Club</span>,
-              YouthFest 2026 is set to be our grandest celebration yet.
+              Since 2023, we&apos;ve brought together students of Chennai Institute of Technology to create meaningful social impact through events, awareness campaigns, and community initiatives. From educational outreach and environmental drives to inclusive programs and volunteer activities, every initiative reflects our commitment to giving back.
             </p>
           </motion.div>
 
-          {/* Our Mission */}
+          {/* Manifesto */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-8"
+            className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-8 relative overflow-hidden"
           >
-            <div className="flex items-center gap-3 mb-4">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--neon-violet)]/10 rounded-full blur-3xl" />
+            <div className="flex items-center gap-3 mb-4 relative z-10">
               <div className="w-10 h-10 rounded-xl bg-[var(--neon-violet)]/10 flex items-center justify-center text-[var(--neon-violet)]">
                 <Zap className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-[var(--font-heading-main)] font-bold text-white">Our Mission</h3>
+              <h3 className="text-xl font-[var(--font-heading-main)] font-bold text-white">Manifesto</h3>
             </div>
-            <p className="text-gray-400 leading-relaxed">
-              To create an inspiring platform where students showcase their talents, develop new skills, and build
-              lasting connections through technology, arts, culture, and innovation. We believe every student has a
-              unique spark — <span className="text-white font-medium">YouthFest is where it ignites.</span>
+            <p className="text-gray-400 leading-relaxed relative z-10 mb-4">
+              We believe in the power of youth to create meaningful change. Every event and initiative we organize channels energy, creativity, and resources directly into social causes that make a lasting impact. Small acts of kindness create extraordinary change.
             </p>
+            <div className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 relative z-10">
+              <span className="text-sm font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Motto: Create & Contribute</span>
+            </div>
           </motion.div>
         </div>
 
-        {/* Highlights grid */}
-        <motion.h3
+        {/* What We Stand For */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-2xl font-[var(--font-heading-main)] font-bold text-white text-center mb-10"
+          className="text-center mb-10"
         >
-          Event Highlights
-        </motion.h3>
+          <h3 className="text-2xl font-[var(--font-heading-main)] font-bold text-white uppercase tracking-wider">What We Stand For</h3>
+        </motion.div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {highlights.map((h, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
+          {pillars.map((pillar, i) => (
             <motion.div
-              key={h.label}
+              key={pillar.title}
+              custom={i}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              className="p-8 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300"
+            >
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+                style={{ background: `color-mix(in srgb, ${pillar.color} 15%, transparent)`, color: pillar.color, boxShadow: `0 0 20px color-mix(in srgb, ${pillar.color} 30%, transparent)` }}
+              >
+                {pillar.icon}
+              </div>
+              <h4 className="text-lg font-bold text-white mb-3">{pillar.title}</h4>
+              <p className="text-gray-400 text-sm leading-relaxed">{pillar.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Statistics grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {statistics.map((stat, i) => (
+            <motion.div
+              key={stat.label}
               custom={i}
               initial="hidden"
               whileInView="visible"
@@ -129,17 +170,17 @@ export default function AboutScene() {
             >
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
-                style={{ background: `${h.color}15`, color: h.color, boxShadow: `0 0 20px ${h.color}30` }}
+                style={{ background: `${stat.color}15`, color: stat.color, boxShadow: `0 0 20px ${stat.color}30` }}
               >
-                {h.icon}
+                {stat.icon}
               </div>
               <span
                 className="text-3xl font-[var(--font-heading-main)] font-black"
-                style={{ color: h.color }}
+                style={{ color: stat.color }}
               >
-                {h.value}
+                {stat.value}
               </span>
-              <span className="text-xs uppercase tracking-widest text-gray-400 font-semibold text-center">{h.label}</span>
+              <span className="text-xs uppercase tracking-widest text-gray-400 font-semibold text-center">{stat.label}</span>
             </motion.div>
           ))}
         </div>

@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Trophy, IndianRupee, School, Briefcase } from 'lucide-react';
+import { Users, Trophy, School, Briefcase } from 'lucide-react';
 function useCountUp(target: number, duration: number = 2200) {
  const [count, setCount] = useState(0);
  const [started, setStarted] = useState(false);
@@ -81,18 +81,16 @@ export default function StatsBarScene() {
  loadStats();
  }, []);
  const STATS = statsData ? [
- { value: statsData.participants, suffix: '+', prefix: '', label: 'Participants', icon: Users, color: 'var(--neon-cyan)' },
- { value: statsData.events, suffix: '+', prefix: '', label: 'Events', icon: Trophy, color: 'var(--neon-magenta)' },
- { value: statsData.prize_pool, suffix: 'L+', prefix: '₹', label: 'Prize Pool', icon: IndianRupee, color: 'var(--neon-violet)' },
- { value: statsData.colleges, suffix: '+', prefix: '', label: 'Colleges', icon: School, color: 'var(--neon-cyan)' },
- { value: statsData.workshops, suffix: '+', prefix: '', label: 'Workshops', icon: Briefcase, color: 'var(--neon-magenta)' },
- ] : [
- { value: 5000, suffix: '+', prefix: '', label: 'Participants', icon: Users, color: 'var(--neon-cyan)' },
- { value: 50, suffix: '+', prefix: '', label: 'Events', icon: Trophy, color: 'var(--neon-magenta)' },
- { value: 2, suffix: 'L+', prefix: '₹', label: 'Prize Pool', icon: IndianRupee, color: 'var(--neon-violet)' },
- { value: 100, suffix: '+', prefix: '', label: 'Colleges', icon: School, color: 'var(--neon-cyan)' },
- { value: 10, suffix: '+', prefix: '', label: 'Workshops', icon: Briefcase, color: 'var(--neon-magenta)' },
- ];
+  { value: statsData.participants, suffix: '+', prefix: '', label: 'Community Members', icon: Users, color: 'var(--neon-cyan)' },
+  { value: statsData.events, suffix: '', prefix: '', label: 'Social Initiatives', icon: Trophy, color: 'var(--neon-magenta)' },
+  { value: statsData.colleges, suffix: '+', prefix: '', label: 'Colleges', icon: School, color: 'var(--neon-violet)' },
+  { value: statsData.workshops, suffix: '', prefix: '', label: 'Events This Fest', icon: Briefcase, color: 'var(--neon-cyan)' },
+  ] : [
+  { value: 2100, suffix: '+', prefix: '', label: 'Community Members', icon: Users, color: 'var(--neon-cyan)' },
+  { value: 9, suffix: '', prefix: '', label: 'Social Initiatives', icon: Trophy, color: 'var(--neon-magenta)' },
+  { value: 50, suffix: '+', prefix: '', label: 'Colleges Represented', icon: School, color: 'var(--neon-violet)' },
+  { value: 8, suffix: '', prefix: '', label: 'Events This Fest', icon: Briefcase, color: 'var(--neon-cyan)' },
+  ];
  return (
  <section id="about" className="relative py-16 md:py-24 lg:py-32 overflow-hidden" >
  <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -105,18 +103,18 @@ export default function StatsBarScene() {
  className="flex flex-col gap-6"
  >
  <div className="inline-flex items-center gap-3">
- <div className="h-[2px] w-12 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)]" />
- <span className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--neon-cyan)]">About The Event</span>
+  <div className="h-[2px] w-12 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)]" />
+  <span className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--neon-cyan)]">About Yuvenza</span>
  </div>
  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black leading-tight text-white">
- ABOUT <br />
- <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">YOUTHFEST</span>
+ THE YOUTH <br />
+ <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">POWERED CLUB</span>
  </h2>
  <p className="text-lg text-gray-400 leading-relaxed max-w-lg">
- Yuvenza proudly conducts Youthfest 2026, the pinnacle of technology, culture, and innovation. We bring together the brightest minds across the nation for a single, action-packed day of intense competition, collaborative workshops, and unforgettable experiences.
+ Since 2023, we&apos;ve brought together students of Chennai Institute of Technology to create meaningful social impact through events, awareness campaigns, and community initiatives.
  </p>
  <p className="text-lg text-gray-400 leading-relaxed max-w-lg">
- Join thousands of students to showcase your talent, learn new skills, and compete across 50+ events.
+ <span className="text-white font-semibold">What we create, we contribute.</span> Every fee channels real support back to the community around us.
  </p>
  </motion.div>
  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">

@@ -131,7 +131,7 @@ export default function HeroScene() {
     }
   };
 
-  const titleText = "YOUTHFEST";
+  const titleText = "YUVENZA";
   const titleVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -176,30 +176,33 @@ export default function HeroScene() {
             style={{ animationDuration: '40s' }}
             className="animate-marquee-reverse flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
           >
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YUVENZA</span>
+            <span className="pr-16">YUVENZA</span>
+            <span className="pr-16">YUVENZA</span>
+            <span className="pr-16">YUVENZA</span>
+            <span className="pr-16">YUVENZA</span>
           </div>
           {/* Line 2 - Scrolling Left (Right to Left) */}
           <div
             style={{ animationDuration: '45s' }}
             className="animate-marquee flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
           >
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YUVENZA</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YUVENZA</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YUVENZA</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YUVENZA</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YUVENZA</span>
           </div>
           {/* Line 3 - Scrolling Right (Left to Right) */}
           <div
             style={{ animationDuration: '35s' }}
             className="animate-marquee-reverse flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
           >
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YUVENZA</span>
+            <span className="pr-16">YUVENZA</span>
+            <span className="pr-16">YUVENZA</span>
+            <span className="pr-16">YUVENZA</span>
+            <span className="pr-16">YUVENZA</span>
           </div>
         </div>
 
@@ -219,18 +222,22 @@ export default function HeroScene() {
           </div>
         </motion.div>
 
-        {/* 'Presents' Label */}
+        {/* Tags */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.5 }}
-          className="mb-6 flex items-center justify-center gap-4 w-full max-w-md"
+          className="mb-6 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 w-full max-w-2xl"
         >
-          <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/40" />
-          <span className="text-sm sm:text-base md:text-lg font-extrabold uppercase tracking-[0.5em] text-gray-300 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
-            Presents
+          <div className="hidden sm:block h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/40" />
+          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-gray-300 whitespace-nowrap">
+            The Youth Club · Chennai Institute of Technology
           </span>
-          <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/40" />
+          <span className="hidden sm:inline-block text-white/40 font-black text-lg leading-none mt-[-2px]">•</span>
+          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">
+            Est. 2023
+          </span>
+          <div className="hidden sm:block h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/40" />
         </motion.div>
         <motion.div
           variants={{
@@ -244,13 +251,12 @@ export default function HeroScene() {
           animate="visible"
           className="relative mb-4 perspective-1000"
         >
-          <h1 id="hero-heading" className="flex justify-center flex-wrap text-[clamp(2.5rem,11vw,6rem)] md:text-8xl lg:text-9xl font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative px-2 text-center">
+          <h1 id="hero-heading" className="flex justify-center flex-wrap text-[clamp(3.5rem,15vw,8rem)] md:text-8xl lg:text-9xl font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative px-2 text-center uppercase">
             {titleText.split('').map((char, index) => (
               <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
                 {char}
               </motion.span>
             ))}
-            <span className="ml-4 text-[clamp(2.5rem,11vw,6rem)] md:text-8xl lg:text-9xl font-bold text-gray-300">2026</span>
           </h1>
         </motion.div>
 
@@ -259,9 +265,9 @@ export default function HeroScene() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-lg sm:text-2xl md:text-3xl font-[var(--font-heading-main)] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-white to-[var(--neon-magenta)] mb-4 text-center"
+          className="text-lg sm:text-2xl md:text-3xl font-[var(--font-heading-main)] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-white to-[var(--neon-magenta)] mb-6 text-center"
         >
-          Ignite Your Passion. Celebrate Your Talent.
+          Igniting Passion, Creativity & Unity.
         </motion.p>
 
         {/* Date badge */}
@@ -272,54 +278,49 @@ export default function HeroScene() {
           transition={{ duration: 0.8, delay: 2.0 }}
           className="group relative inline-flex items-center gap-3 px-8 py-3 rounded-full overflow-hidden backdrop-blur-md bg-white/5 border border-white/10 mb-8 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-white/20"
         >
-          {/* Animated Sweep / Shine effect on hover */}
           <motion.div 
-            variants={{
-              hover: { x: ["-100%", "200%"] }
-            }}
+            variants={{ hover: { x: ["-100%", "200%"] } }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
             className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12"
           />
-          
-          
           <Calendar className="relative z-10 w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
           <span className="relative z-10 text-sm sm:text-base font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300">
-            August 12, 2026
+            Aug 11–13 · CIT Campus, Chennai
           </span>
-          
-          {/* Status Dot */}
           <div className="relative z-10 flex items-center justify-center w-2 h-2 ml-2">
             <span className="absolute w-full h-full rounded-full bg-blue-500 opacity-70 animate-ping" />
             <span className="relative w-1.5 h-1.5 rounded-full bg-blue-500" />
           </div>
         </motion.a>
 
-        {/* Tagline */}
+        {/* Hero Description */}
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2 }}
-          className="text-base sm:text-lg text-gray-400 font-normal tracking-normal mb-8 max-w-2xl leading-relaxed text-center px-4"
+          className="text-base sm:text-lg text-gray-400 font-normal tracking-normal mb-8 max-w-3xl leading-relaxed text-center px-4"
         >
-          Join one of the biggest inter-college cultural festivals featuring competitions, workshops, performances, and unforgettable experiences.
+          Yuvenza is the student-driven youth club of Chennai Institute of Technology. <span className="text-white font-medium">What we create, we contribute.</span> Every event and campaign we organize channels real support back to the community around us.
         </motion.p>
 
+        {/* HERO FACTS */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.8 }}
-          className="flex flex-wrap items-center justify-center gap-1 sm:gap-4 mb-10 mx-auto px-2"
+          className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 mb-10 mx-auto px-4"
         >
-          <CountdownUnit value={countdown.days} label="Days" />
-          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px] hidden sm:block">:</span>
-          <CountdownUnit value={countdown.hours} label="Hours" />
-          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px] hidden sm:block">:</span>
-          <CountdownUnit value={countdown.minutes} label="Mins" />
-          <span className="text-xl sm:text-2xl text-gray-500 font-bold mt-[-20px] hidden sm:block">:</span>
-          <CountdownUnit value={countdown.seconds} label="Secs" />
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.02]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-cyan)]" />
+            <span className="text-sm font-medium text-gray-300">8 Events · Open to All Colleges</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.02]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-violet)]" />
+            <span className="text-sm font-medium text-gray-300">Every Registration Supports Our Social Causes</span>
+          </div>
         </motion.div>
 
-        {/* Dual CTA Buttons */}
+        {/* Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -327,18 +328,25 @@ export default function HeroScene() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 w-full px-4 sm:px-0"
         >
           <button
-            onClick={() => router.push('/events')}
-            aria-label="Explore Events"
-            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 min-h-[44px] rounded-full font-semibold text-white border border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+            onClick={handleRegisterClick}
+            aria-label="Register for the Fest"
+            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 min-h-[44px] rounded-full font-bold text-black bg-white hover:bg-gray-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)]"
           >
-            Explore Events <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            Register for the Fest <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
           <button
-            onClick={handleRegisterClick}
-            aria-label="Register Now"
-            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 min-h-[44px] rounded-full font-semibold text-black bg-white hover:bg-gray-200 transition-all duration-300"
+            onClick={() => router.push('/events')}
+            aria-label="Our Work"
+            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 min-h-[44px] rounded-full font-semibold text-white border border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
           >
-            Register Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            Our Work
+          </button>
+          <button
+            onClick={() => router.push('/#about')}
+            aria-label="Join the Club"
+            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 min-h-[44px] rounded-full font-semibold text-gray-300 hover:text-white transition-all duration-300"
+          >
+            Join the Club
           </button>
         </motion.div>
 
