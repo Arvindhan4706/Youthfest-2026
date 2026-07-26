@@ -250,20 +250,19 @@ export default function HeroScene() {
                 {char}
               </motion.span>
             ))}
+            <span className="ml-4 text-[clamp(2.5rem,11vw,6rem)] md:text-8xl lg:text-9xl font-bold text-gray-300">2026</span>
           </h1>
         </motion.div>
 
-        {/* Year */}
-        <motion.div
+        {/* Subtitle */}
+        <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.5 }}
-          className="mb-6"
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="text-lg sm:text-2xl md:text-3xl font-[var(--font-heading-main)] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-white to-[var(--neon-magenta)] mb-4 text-center"
         >
-          <span className="text-4xl sm:text-5xl md:text-6xl font-[var(--font-heading-main)] font-bold text-gray-200">
-            2026
-          </span>
-        </motion.div>
+          Ignite Your Passion. Celebrate Your Talent.
+        </motion.p>
 
         {/* Date badge */}
         <motion.a
@@ -299,18 +298,16 @@ export default function HeroScene() {
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.2 }}
-          className="text-base sm:text-lg text-gray-400 font-normal tracking-normal mb-10 max-w-2xl leading-relaxed"
+          transition={{ duration: 0.8, delay: 1.2 }}
+          className="text-base sm:text-lg text-gray-400 font-normal tracking-normal mb-8 max-w-2xl leading-relaxed text-center px-4"
         >
-          Welcome to Youthfest 2026 — A day of technology, creativity, gaming, and culture.
-          <br className="hidden sm:block" />
-          <span className="text-white font-medium">Hosted by the Yuvenza Club. Join us for our biggest event of the year.</span>
+          Join one of the biggest inter-college cultural festivals featuring competitions, workshops, performances, and unforgettable experiences.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.4 }}
+          transition={{ duration: 0.8, delay: 1.8 }}
           className="flex flex-wrap items-center justify-center gap-1 sm:gap-4 mb-10 mx-auto px-2"
         >
           <CountdownUnit value={countdown.days} label="Days" />
@@ -322,13 +319,20 @@ export default function HeroScene() {
           <CountdownUnit value={countdown.seconds} label="Secs" />
         </motion.div>
 
-        {/* CTA Buttons */}
+        {/* Dual CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 5.0 }}
+          transition={{ duration: 0.8, delay: 2.2 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 w-full px-4 sm:px-0"
         >
+          <button
+            onClick={() => router.push('/events')}
+            aria-label="Explore Events"
+            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 min-h-[44px] rounded-full font-semibold text-white border border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+          >
+            Explore Events <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </button>
           <button
             onClick={handleRegisterClick}
             aria-label="Register Now"
@@ -336,8 +340,6 @@ export default function HeroScene() {
           >
             Register Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
-
-
         </motion.div>
 
 

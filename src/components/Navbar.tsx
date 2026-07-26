@@ -8,13 +8,12 @@ import { User, Menu, X, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
-  { href: '/', label: 'Index', sectionId: '#hero' },
-  { href: '/#work', label: 'Work', sectionId: '#work' },
+  { href: '/', label: 'Home', sectionId: '#hero' },
   { href: '/events', label: 'Events' },
   { href: '#', label: 'Register', action: 'register' },
-  { href: '/profile', label: 'Profile' },
   { href: '/#about', label: 'About', sectionId: '#about' },
 ];
+
 
 function useActiveSection(sectionIds: string[]) {
   const [activeId, setActiveId] = useState('#hero');
@@ -181,16 +180,16 @@ export default function Navbar() {
             {!user ? (
               <div className="hidden sm:flex items-center gap-2">
                 <button
+                  onClick={() => setAuthOpen(true, 'login')}
+                  className="px-5 py-2.5 rounded-full text-sm font-semibold border border-white/20 text-white hover:bg-white/10 transition-all duration-300 min-h-[44px] flex items-center justify-center"
+                >
+                  Login
+                </button>
+                <button
                   onClick={() => setAuthOpen(true, 'register')}
                   className="px-5 py-2.5 rounded-full text-sm font-semibold bg-[var(--neon-cyan)] text-black hover:opacity-80 transition-all duration-300 min-h-[44px] flex items-center justify-center"
                 >
                   Sign Up
-                </button>
-                <button
-                  onClick={() => setAuthOpen(true, 'login')}
-                  className="px-5 py-2.5 rounded-full text-sm font-semibold bg-white text-black hover:bg-gray-200 transition-all duration-300 min-h-[44px] flex items-center justify-center"
-                >
-                  Log In
                 </button>
               </div>
             ) : (
@@ -198,17 +197,10 @@ export default function Navbar() {
                 <button
                   onClick={() => router.push('/profile')}
                   className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-white text-black hover:bg-gray-200 transition-all duration-300 min-h-[44px]"
-                  title="User Dashboard"
+                  title="Dashboard"
                 >
                   <User className="w-4 h-4" />
-                  Profile
-                </button>
-                <button
-                  onClick={() => setUser(null)}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold border border-white/20 text-white hover:bg-white/10 transition-all duration-300 min-h-[44px]"
-                  title="Logout"
-                >
-                  Logout
+                  Dashboard
                 </button>
               </div>
             )}

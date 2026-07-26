@@ -12,6 +12,7 @@ const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene')
 const CommitteeScene = dynamic(() => import('../components/scenes/CommitteeScene'), { ssr: false });
 const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
 const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
+const AboutScene = dynamic(() => import('../components/scenes/AboutScene'), { ssr: false });
 const FooterScene = dynamic(() => import('../components/scenes/FooterScene'), { ssr: false });
 const BackToTop = dynamic(() => import('../components/BackToTop'), { ssr: false });
 
@@ -50,6 +51,10 @@ export default function Home() {
 
         <LazyScene placeholderHeight={500}>
           <CountdownCTAScene />
+        </LazyScene>
+
+        <LazyScene placeholderHeight={600}>
+          <AboutScene />
         </LazyScene>
 
         <LazyScene placeholderHeight={500}>
