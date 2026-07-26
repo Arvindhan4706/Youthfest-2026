@@ -172,41 +172,35 @@ export default function HeroScene() {
         {/* Infinite scrolling background text - 3 Lines */}
         <div className="absolute top-0 left-0 w-full flex flex-col overflow-hidden pointer-events-none select-none z-0 h-full sm:h-[120%] justify-between sm:justify-start py-24 sm:py-0 sm:pt-20 opacity-5 sm:opacity-10 space-y-0 sm:space-y-8 translate-y-0 sm:-translate-y-10">
           {/* Line 1 - Scrolling Right (Left to Right) */}
-          <motion.div
-            style={{ willChange: "transform" }}
-            animate={{ x: ["-50%", 0] }}
-            transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
-            className="flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
+          <div
+            style={{ animationDuration: '40s' }}
+            className="animate-marquee-reverse flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
           >
             <span className="pr-16">YOUTHFEST 2026</span>
             <span className="pr-16">YOUTHFEST 2026</span>
             <span className="pr-16">YOUTHFEST 2026</span>
             <span className="pr-16">YOUTHFEST 2026</span>
-          </motion.div>
+          </div>
           {/* Line 2 - Scrolling Left (Right to Left) */}
-          <motion.div
-            style={{ willChange: "transform" }}
-            animate={{ x: [0, "-50%"] }}
-            transition={{ repeat: Infinity, duration: 45, ease: "linear" }}
-            className="flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
+          <div
+            style={{ animationDuration: '45s' }}
+            className="animate-marquee flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
           >
             <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
             <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
             <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
             <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
-          </motion.div>
+          </div>
           {/* Line 3 - Scrolling Right (Left to Right) */}
-          <motion.div
-            style={{ willChange: "transform" }}
-            animate={{ x: ["-50%", 0] }}
-            transition={{ repeat: Infinity, duration: 35, ease: "linear" }}
-            className="flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
+          <div
+            style={{ animationDuration: '35s' }}
+            className="animate-marquee-reverse flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
           >
             <span className="pr-16">YOUTHFEST 2026</span>
             <span className="pr-16">YOUTHFEST 2026</span>
             <span className="pr-16">YOUTHFEST 2026</span>
             <span className="pr-16">YOUTHFEST 2026</span>
-          </motion.div>
+          </div>
         </div>
 
       </motion.div>
@@ -238,13 +232,12 @@ export default function HeroScene() {
           </span>
           <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/40" />
         </motion.div>
-        {/* Main title with letter-by-letter reveal */}
         <motion.div
           variants={{
             hidden: { opacity: 0 },
             visible: { 
               opacity: 1, 
-              transition: { staggerChildren: 0.1, delayChildren: 1.0 }
+              transition: { staggerChildren: 0.05, delayChildren: 0.2 }
             }
           }}
           initial="hidden"
