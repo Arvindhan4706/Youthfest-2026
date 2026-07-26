@@ -135,7 +135,7 @@ export default function Navbar() {
             : 'bg-white/[0.02] border border-white/[0.05] backdrop-blur-xl'
         }`}
       >
-        <div className="px-5 py-3 flex items-center justify-between gap-4">
+        <div className="px-5 h-[64px] md:h-[72px] flex items-center justify-between gap-4">
 
           {/* ── Logo ── */}
           <Link

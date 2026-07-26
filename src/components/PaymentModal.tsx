@@ -199,7 +199,7 @@ export default function PaymentModal() {
  <button 
           onClick={handlePayment} 
           disabled={isLoading || !user}
-          className="w-full min-h-[44px] py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full min-h-[44px] h-[48px] bg-white text-black font-semibold rounded-[12px] hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
  {isLoading ? (
  <>

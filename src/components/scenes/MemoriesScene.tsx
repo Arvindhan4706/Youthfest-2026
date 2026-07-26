@@ -122,7 +122,7 @@ export default function MemoriesScene() {
   }, [lightboxIndex]);
 
   return (
-    <section id="memories" className="relative py-16 md:py-24 lg:py-32 bg-[#010008] overflow-hidden">
+    <section id="memories" className="relative section-padding md:section-padding lg:section-padding bg-[#010008] overflow-hidden">
       {/* Background styling - corkboard or dark texture vibe */}
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-700 via-gray-900 to-black pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[var(--neon-cyan)]/5 rounded-full blur-[120px] pointer-events-none" />
@@ -215,7 +215,7 @@ export default function MemoriesScene() {
             
             <motion.div
               layoutId={`memories-container-${GALLERY_IMAGES[lightboxIndex].id}`}
-              className="relative max-w-6xl w-full z-10 flex flex-col gap-4 bg-[#050505] rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10"
+              className="relative max-w-6xl w-full z-10 flex flex-col gap-4 bg-[#050505] rounded-[20px] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10"
             >
               {GALLERY_IMAGES[lightboxIndex].type === 'video' ? (
                 <video 

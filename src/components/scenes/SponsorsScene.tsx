@@ -73,7 +73,7 @@ function MarqueeRow({ sponsors, direction, speed, title, color }: { sponsors: Sp
  {marqueeItems.map((sponsor, index) => (
  <div 
  key={`${sponsor.id}-${index}`}
- className="inline-flex shrink-0 items-center justify-center w-44 sm:w-56 h-20 sm:h-24 rounded-xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:scale-105 group/card cursor-pointer relative"
+ className="inline-flex shrink-0 items-center justify-center w-44 sm:w-56 h-20 sm:h-24 rounded-[20px] bg-white/[0.02] border border-white/5 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:scale-105 group/card cursor-pointer relative"
  aria-label={`Sponsor: ${sponsor.name}`}
  role="img"
  >
@@ -93,7 +93,7 @@ function MarqueeRow({ sponsors, direction, speed, title, color }: { sponsors: Sp
 }
 export default function SponsorsScene() {
  return (
- <section id="sponsors" className="relative py-16 md:py-24 lg:py-32 overflow-hidden" aria-labelledby="sponsors-heading">
+ <section id="sponsors" className="relative section-padding md:section-padding lg:section-padding overflow-hidden" aria-labelledby="sponsors-heading">
  {/* Background grid */}
  <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
  {/* Header */}
@@ -131,9 +131,9 @@ export default function SponsorsScene() {
  className="max-w-md mx-auto mb-20 px-4"
  >
  <h3 className="text-center text-sm font-bold uppercase tracking-widest text-white mb-6">Title Sponsor</h3>
- <div className="relative p-8 rounded-3xl border border-[var(--neon-cyan)]/30 bg-white/[0.02] group hover:border-[var(--neon-cyan)]/60 transition-colors duration-500 flex flex-col items-center min-h-[200px] justify-center">
+ <div className="relative p-8 rounded-[20px] border border-[var(--neon-cyan)]/30 bg-white/[0.02] group hover:border-[var(--neon-cyan)]/60 transition-colors duration-500 flex flex-col items-center min-h-[200px] justify-center">
  {/* Glow effect */}
- <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-cyan)]/10 to-transparent rounded-3xl pointer-events-none" />
+ <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-cyan)]/10 to-transparent rounded-[20px] pointer-events-none" />
  <div className="relative w-[200px] h-[100px]">
    <Image 
    src={TITLE_SPONSOR.logo} 

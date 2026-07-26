@@ -21,7 +21,7 @@ function Field({
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
         disabled={disabled}
         placeholder={placeholder}
-        className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none transition-colors ${
+        className={`w-full bg-white/5 border rounded-[12px] px-4 h-[48px] text-sm text-white placeholder-gray-600 focus:outline-none transition-colors ${
           disabled
             ? 'border-white/5 opacity-50 cursor-not-allowed'
             : 'border-white/10 focus:border-[var(--neon-cyan)]/60 hover:border-white/20'
@@ -81,10 +81,10 @@ export default function VisitorProfile() {
       {/* Profile Header Card */}
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 sm:p-8 rounded-3xl border border-white/10 bg-white/[0.02]">
         <div className="relative shrink-0">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[var(--neon-cyan)] to-[var(--neon-violet)] flex items-center justify-center text-black font-black text-2xl shadow-[0_0_30px_rgba(0,240,255,0.3)]">
+          <div className="w-20 h-20 rounded-[12px] bg-gradient-to-br from-[var(--neon-cyan)] to-[var(--neon-violet)] flex items-center justify-center text-black font-black text-2xl shadow-[0_0_30px_rgba(0,240,255,0.3)]">
             {initials}
           </div>
-          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center border-2 border-black">
+          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-[12px] bg-green-500 flex items-center justify-center border-2 border-black">
             <CheckCircle className="w-3 h-3 text-white" />
           </div>
         </div>
@@ -93,17 +93,17 @@ export default function VisitorProfile() {
           <p className="text-gray-400 text-sm mt-1">{user.email}</p>
           <div className="flex flex-wrap gap-2 mt-3">
             {user.college && (
-              <span className="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-300">
+              <span className="text-xs px-3 py-1 rounded-[12px] bg-white/5 border border-white/10 text-gray-300">
                 🎓 {user.college}
               </span>
             )}
             {user.year && (
-              <span className="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-300">
+              <span className="text-xs px-3 py-1 rounded-[12px] bg-white/5 border border-white/10 text-gray-300">
                 📅 {user.year === 'PG' ? 'Post Graduate' : `Year ${user.year}`}
               </span>
             )}
             {user.city && (
-              <span className="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-300">
+              <span className="text-xs px-3 py-1 rounded-[12px] bg-white/5 border border-white/10 text-gray-300">
                 📍 {user.city}
               </span>
             )}
@@ -136,7 +136,7 @@ export default function VisitorProfile() {
                 id="gender"
                 value={profileGender}
                 onChange={(e) => setProfileGender(e.target.value)}
-                className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)]/60 transition-colors cursor-pointer"
+                className="w-full bg-black border border-white/10 rounded-[12px] px-4 h-[48px] text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)]/60 transition-colors cursor-pointer"
               >
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -157,7 +157,7 @@ export default function VisitorProfile() {
                 id="year-of-study"
                 value={profileYear}
                 onChange={(e) => setProfileYear(e.target.value)}
-                className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)]/60 transition-colors cursor-pointer"
+                className="w-full bg-black border border-white/10 rounded-[12px] px-4 h-[48px] text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)]/60 transition-colors cursor-pointer"
               >
                 <option value="1">1st Year</option>
                 <option value="2">2nd Year</option>
@@ -172,11 +172,11 @@ export default function VisitorProfile() {
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full py-3.5 bg-white hover:bg-gray-200 disabled:opacity-60 text-black font-bold text-sm rounded-full transition-all mt-2 flex items-center justify-center gap-2"
+            className="w-full h-[48px] bg-white hover:bg-gray-200 disabled:opacity-60 text-black font-bold text-sm rounded-[12px] transition-all mt-2 flex items-center justify-center gap-2"
           >
             {isSaving ? (
               <>
-                <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-[12px] animate-spin" />
                 Saving...
               </>
             ) : (

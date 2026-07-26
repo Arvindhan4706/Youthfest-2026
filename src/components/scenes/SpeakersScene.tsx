@@ -35,7 +35,7 @@ export default function SpeakersScene() {
   const [active, setActive] = useState(0);
 
   return (
-    <section id="testimonials" className="relative py-16 md:py-24 lg:py-32 overflow-hidden" aria-labelledby="testimonials-heading">
+    <section id="testimonials" className="relative section-padding md:section-padding lg:section-padding overflow-hidden" aria-labelledby="testimonials-heading">
       {/* Background */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-purple-900/10 blur-[120px] pointer-events-none" />
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,7 +72,7 @@ export default function SpeakersScene() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-10 md:p-14 relative overflow-hidden"
+              className="rounded-[20px] border border-white/10 bg-white/[0.03] backdrop-blur-sm p-10 md:p-14 relative overflow-hidden"
               style={{ boxShadow: `0 0 40px ${TESTIMONIALS[active].color}10` }}
             >
               {/* Top colour bar */}

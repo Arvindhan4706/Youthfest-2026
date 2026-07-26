@@ -71,7 +71,7 @@ function useCountUp(target: number, duration: number = 2000, startOnMount: boole
 function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+      <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-[20px] bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
         <span className="relative text-xl sm:text-3xl font-[var(--font-heading-main)] font-bold text-white tabular-nums">
           {String(value).padStart(2, '0')}
         </span>
@@ -102,7 +102,7 @@ function StatBadge({
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay }}
-      className="flex flex-col items-center gap-1 p-4 rounded-2xl glass hover:bg-white/[0.06] transition-all duration-300 group cursor-default min-w-[120px]"
+      className="flex flex-col items-center gap-1 p-4 rounded-[20px] glass hover:bg-white/[0.06] transition-all duration-300 group cursor-default min-w-[120px]"
     >
       <div className="text-[var(--neon-cyan)] mb-1 group-hover:scale-110 transition-transform">{icon}</div>
       <span className="text-2xl sm:text-3xl font-[var(--font-heading-main)] font-black text-white tabular-nums">
@@ -148,7 +148,7 @@ export default function HeroScene() {
   return (
     <section
       id="hero"
-      className="relative min-h-[100dvh] w-full flex flex-col items-center justify-center overflow-x-hidden px-4 py-20"
+      className="relative min-h-[100dvh] w-full flex flex-col items-center justify-center overflow-x-hidden px-4 section-padding"
       style={{ background: 'radial-gradient(ellipse at 50% 0%, #0a0030 0%, #011213 50%, #010008 100%)' }}
       aria-labelledby="hero-heading"
     >
@@ -170,7 +170,7 @@ export default function HeroScene() {
         className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
       >
         {/* Infinite scrolling background text - 3 Lines */}
-        <div className="absolute top-0 left-0 w-full flex flex-col overflow-hidden pointer-events-none select-none z-0 h-full sm:h-[120%] justify-between sm:justify-start py-24 sm:py-0 sm:pt-20 opacity-5 sm:opacity-10 space-y-0 sm:space-y-8 translate-y-0 sm:-translate-y-10">
+        <div className="absolute top-0 left-0 w-full flex flex-col overflow-hidden pointer-events-none select-none z-0 h-full sm:h-[120%] justify-between sm:justify-start section-padding sm:py-0 sm:pt-20 opacity-5 sm:opacity-10 space-y-0 sm:space-y-8 translate-y-0 sm:-translate-y-10">
           {/* Line 1 - Scrolling Right (Left to Right) */}
           <div
             style={{ animationDuration: '40s' }}
@@ -325,26 +325,26 @@ export default function HeroScene() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 w-full px-4 sm:px-0"
+          className="flex flex-col md:flex-row items-center justify-center gap-4 mb-12 w-full px-4 md:px-0"
         >
           <button
             onClick={handleRegisterClick}
             aria-label="Register for the Fest"
-            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 min-h-[44px] rounded-full font-bold text-black bg-white hover:bg-gray-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+            className="group flex items-center justify-center gap-2 w-full md:w-auto px-8 h-[48px] rounded-[12px] font-bold text-black bg-white hover:bg-gray-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)]"
           >
             Register for the Fest <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
           <button
             onClick={() => router.push('/events')}
             aria-label="Our Work"
-            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 min-h-[44px] rounded-full font-semibold text-white border border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+            className="group flex items-center justify-center gap-2 w-full md:w-auto px-8 h-[48px] rounded-[12px] font-semibold text-white border border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
           >
             Our Work
           </button>
           <button
             onClick={() => router.push('/#about')}
             aria-label="Join the Club"
-            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 min-h-[44px] rounded-full font-semibold text-gray-300 hover:text-white transition-all duration-300"
+            className="group flex items-center justify-center gap-2 w-full md:w-auto px-8 h-[48px] rounded-[12px] font-semibold text-gray-300 hover:text-white transition-all duration-300"
           >
             Join the Club
           </button>

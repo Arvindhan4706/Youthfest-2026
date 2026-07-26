@@ -63,7 +63,7 @@ export default function PrizePoolScene() {
   const podiumOrder = [prizes[0], prizes[1], prizes[2]];
 
   return (
-    <section id="prizes" className="relative py-24 overflow-hidden bg-[#010008]">
+    <section id="prizes" className="relative section-padding overflow-hidden bg-[#010008]">
       {/* Background */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[var(--neon-violet)]/8 rounded-full blur-[130px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[var(--neon-cyan)]/5 rounded-full blur-[100px] pointer-events-none" />
@@ -107,7 +107,7 @@ export default function PrizePoolScene() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: prize.delay, duration: 0.55 }}
-              className={`group relative rounded-2xl border ${prize.border} ${prize.bg} backdrop-blur-sm overflow-hidden flex flex-col w-full md:w-72 transition-all duration-300`}
+              className={`group relative rounded-[20px] border ${prize.border} ${prize.bg} backdrop-blur-sm overflow-hidden flex flex-col w-full md:w-72 transition-all duration-300`}
               style={prize.featured ? { boxShadow: `0 0 40px ${prize.glow}` } : undefined}
             >
               {/* Top color bar — same as EventCard difficulty badge */}
@@ -132,7 +132,7 @@ export default function PrizePoolScene() {
 
                 {/* Icon */}
                 <div
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110"
+                  className="w-16 h-16 rounded-[20px] flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110"
                   style={{ background: `${prize.color}15`, color: prize.color, boxShadow: `0 0 20px ${prize.glow}` }}
                 >
                   {prize.icon}
@@ -140,7 +140,7 @@ export default function PrizePoolScene() {
 
                 {/* Rank label — same as track name tabs */}
                 <div
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold uppercase tracking-widest mb-4 border"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[20px] text-xs font-bold uppercase tracking-widest mb-4 border"
                   style={{
                     background: `${prize.color}10`,
                     color: prize.color,
@@ -190,7 +190,7 @@ export default function PrizePoolScene() {
           transition={{ delay: 0.4 }}
           className="mt-14 flex items-center justify-center gap-3 flex-wrap"
         >
-          <div className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.02] text-sm text-gray-400">
+          <div className="flex items-center gap-2 px-5 py-2.5 rounded-[20px] border border-white/10 bg-white/[0.02] text-sm text-gray-400">
             <Trophy className="w-4 h-4 text-yellow-400" />
             Total Prize Pool: <span className="text-white font-bold ml-1">₹{statsData ? (statsData.first_prize + statsData.second_prize + statsData.third_prize).toLocaleString('en-IN') : '85,000'}+</span>
           </div>

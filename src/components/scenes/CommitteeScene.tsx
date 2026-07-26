@@ -74,7 +74,7 @@ export default function CommitteeScene() {
   const contactEmail = settings?.contact_email || 'yuvenza@citchennai.net';
 
   return (
-    <section id="committee" className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
+    <section id="committee" className="relative section-padding md:section-padding lg:section-padding overflow-hidden">
       {/* Background ambient lighting */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[var(--neon-cyan)]/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-[var(--neon-violet)]/5 rounded-full blur-[120px] pointer-events-none" />
@@ -118,7 +118,7 @@ export default function CommitteeScene() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1, duration: 0.5 }}
-              className="h-full flex flex-col justify-between p-6 rounded-3xl bg-white/[0.02] border border-white/10 backdrop-blur-xl hover:border-[var(--neon-cyan)]/40 hover:bg-white/[0.04] transition-all duration-500 hover:-translate-y-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.4)] group relative overflow-hidden"
+              className="h-full flex flex-col justify-between p-6 rounded-[20px] bg-white/[0.02] border border-white/10 backdrop-blur-xl hover:border-[var(--neon-cyan)]/40 hover:bg-white/[0.04] transition-all duration-500 hover:-translate-y-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.4)] group relative overflow-hidden"
             >
               {/* Corner Tag */}
               <div className="flex justify-between items-start mb-5">
@@ -136,7 +136,7 @@ export default function CommitteeScene() {
                     alt={member.name}
                     width={64}
                     height={64}
-                    className="w-16 h-16 rounded-2xl object-cover border border-white/20 shadow-lg group-hover:scale-105 group-hover:border-[var(--neon-cyan)]/50 transition-all duration-300"
+                    className="w-16 h-16 rounded-[20px] object-cover border border-white/20 shadow-lg group-hover:scale-105 group-hover:border-[var(--neon-cyan)]/50 transition-all duration-300"
                   />
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-[#030014] rounded-full" title="Active Lead" />
                 </div>
@@ -154,7 +154,7 @@ export default function CommitteeScene() {
               <div className="space-y-3 pt-4 border-t border-white/10">
                 <a
                   href={`tel:${member.contact}`}
-                  className="flex items-center gap-2.5 text-xs text-gray-300 hover:text-white font-mono transition-colors p-2 rounded-xl hover:bg-white/5"
+                  className="flex items-center gap-2.5 text-xs text-gray-300 hover:text-white font-mono transition-colors p-2 rounded-[20px] hover:bg-white/5"
                 >
                   <div className="w-7 h-7 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 shrink-0">
                     <PhoneCall className="w-3.5 h-3.5" />
@@ -166,7 +166,7 @@ export default function CommitteeScene() {
                   href={member.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-all duration-300 group/btn"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-[20px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-all duration-300 group/btn"
                 >
                   <MessageSquare className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" />
                   <span>Chat on WhatsApp</span>
@@ -183,9 +183,9 @@ export default function CommitteeScene() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="p-8 rounded-3xl bg-white/[0.02] border border-white/10 backdrop-blur-xl hover:border-teal-500/40 transition-all duration-500 hover:-translate-y-1 flex flex-col sm:flex-row items-start gap-6 group"
+            className="p-8 rounded-[20px] bg-white/[0.02] border border-white/10 backdrop-blur-xl hover:border-teal-500/40 transition-all duration-500 hover:-translate-y-1 flex flex-col sm:flex-row items-start gap-6 group"
           >
-            <div className="w-14 h-14 rounded-2xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0 group-hover:scale-110 group-hover:bg-teal-500/20 transition-all duration-300">
+            <div className="w-14 h-14 rounded-[20px] bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0 group-hover:scale-110 group-hover:bg-teal-500/20 transition-all duration-300">
               <MapPin className="w-7 h-7" />
             </div>
 
@@ -217,9 +217,9 @@ export default function CommitteeScene() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="p-8 rounded-3xl bg-white/[0.02] border border-white/10 backdrop-blur-xl hover:border-purple-500/40 transition-all duration-500 hover:-translate-y-1 flex flex-col sm:flex-row items-start gap-6 group"
+            className="p-8 rounded-[20px] bg-white/[0.02] border border-white/10 backdrop-blur-xl hover:border-purple-500/40 transition-all duration-500 hover:-translate-y-1 flex flex-col sm:flex-row items-start gap-6 group"
           >
-            <div className="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0 group-hover:scale-110 group-hover:bg-purple-500/20 transition-all duration-300">
+            <div className="w-14 h-14 rounded-[20px] bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0 group-hover:scale-110 group-hover:bg-purple-500/20 transition-all duration-300">
               <Mail className="w-7 h-7" />
             </div>
 

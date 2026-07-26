@@ -115,14 +115,14 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  onMouseMove={handleMouseMove}
  onMouseLeave={handleMouseLeave}
  onClick={onClick}
- className="relative w-full h-full rounded-3xl border border-white/[0.08] bg-[#05001a]/40 overflow-hidden transition-all duration-300 ease-out flex flex-col group cursor-pointer hover:border-transparent hover:scale-[1.02] hover:z-10 shadow-[0_0_20px_rgba(255,255,255,0.02)] sm:shadow-2xl"
+ className="relative w-full h-full rounded-[20px] border border-white/[0.08] bg-[#05001a]/40 overflow-hidden transition-all duration-300 ease-out flex flex-col group cursor-pointer hover:border-transparent hover:scale-[1.02] hover:z-10 shadow-[0_0_20px_rgba(255,255,255,0.02)] sm:shadow-2xl"
  style={{
  transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
  }}
  >
  {/* Animated Glowing Border via pseudo-element */}
  <div 
- className="absolute inset-0 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-3xl"
+ className="absolute inset-0 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-[20px]"
  style={{ 
  boxShadow: `0 0 20px ${trackColor}40, inset 0 0 20px ${trackColor}20`,
  border: `1px solid ${trackColor}50`
@@ -209,28 +209,28 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  <div className="flex-grow overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
  <p className="text-gray-300 text-sm leading-relaxed mb-8">{event.desc}</p>
  <div className="grid grid-cols-2 gap-4 mb-8">
- <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+ <div className="p-4 rounded-[20px] bg-white/[0.02] border border-white/5">
  <div className="flex items-center gap-2 text-[var(--neon-cyan)] mb-1">
  <Calendar className="w-4 h-4" />
  <span className="text-xs font-bold uppercase tracking-wider">Date & Time</span>
  </div>
  <div className="text-sm text-white font-medium">{event.date}</div>
  </div>
- <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+ <div className="p-4 rounded-[20px] bg-white/[0.02] border border-white/5">
  <div className="flex items-center gap-2 text-[var(--neon-magenta)] mb-1">
  <MapPin className="w-4 h-4" />
  <span className="text-xs font-bold uppercase tracking-wider">Venue</span>
  </div>
  <div className="text-sm text-white font-medium">{event.venue}</div>
  </div>
- <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+ <div className="p-4 rounded-[20px] bg-white/[0.02] border border-white/5">
  <div className="flex items-center gap-2 text-[var(--neon-lime)] mb-1">
  <Layers className="w-4 h-4" />
  <span className="text-xs font-bold uppercase tracking-wider">Registration Fee</span>
  </div>
  <div className="text-sm text-white font-medium">{event.fee}</div>
  </div>
- <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+ <div className="p-4 rounded-[20px] bg-white/[0.02] border border-white/5">
  <div className="flex items-center gap-2 text-[var(--neon-violet)] mb-1">
  <Users className="w-4 h-4" />
  <span className="text-xs font-bold uppercase tracking-wider">Team Size</span>
@@ -262,23 +262,23 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
     </div>
     <ul className="space-y-3 mb-6">
       {event.rules.map((rule, idx) => (
-        <li key={idx} className="flex gap-3 text-sm text-gray-300 leading-relaxed bg-white/[0.02] p-3 rounded-xl border border-white/5">
+        <li key={idx} className="flex gap-3 text-sm text-gray-300 leading-relaxed bg-white/[0.02] p-3 rounded-[20px] border border-white/5">
           <span className="text-[var(--neon-cyan)] font-mono font-bold">{idx + 1}.</span>
           <span>{rule}</span>
         </li>
       ))}
-      <li className="flex gap-3 text-sm text-gray-300 leading-relaxed bg-white/[0.02] p-3 rounded-xl border border-white/5">
+      <li className="flex gap-3 text-sm text-gray-300 leading-relaxed bg-white/[0.02] p-3 rounded-[20px] border border-white/5">
         <span className="text-[var(--neon-cyan)] font-mono font-bold">4.</span>
         <span>Participants must strictly adhere to time limits. Extra time will result in point deduction.</span>
       </li>
-      <li className="flex gap-3 text-sm text-gray-300 leading-relaxed bg-white/[0.02] p-3 rounded-xl border border-white/5">
+      <li className="flex gap-3 text-sm text-gray-300 leading-relaxed bg-white/[0.02] p-3 rounded-[20px] border border-white/5">
         <span className="text-[var(--neon-cyan)] font-mono font-bold">5.</span>
         <span>Decisions by the panel of judges are final and non-negotiable.</span>
       </li>
     </ul>
 
     {/* Event Coordinator Contact */}
-    <div className="p-4 rounded-xl bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-white/10 flex items-center justify-between">
+    <div className="p-4 rounded-[20px] bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-white/10 flex items-center justify-between">
       <div>
         <div className="text-[10px] uppercase font-bold tracking-widest text-purple-400">Student Event Coordinator</div>
         <div className="text-xs font-bold text-white">Youthfest Event Desk</div>
@@ -412,7 +412,7 @@ export default function EventShowcaseScene() {
  return () => window.removeEventListener('keydown', handleKeyDown);
  }, [selectedEvent]);
  return (
- <section id="events" className="relative py-24 overflow-hidden" >
+ <section id="events" className="relative section-padding overflow-hidden" >
  {/* Background */}
  <div
  className="absolute top-0 left-0 w-full h-[1px] transition-colors duration-500"
@@ -453,7 +453,7 @@ export default function EventShowcaseScene() {
  onClick={() => {
  setActiveTrack(idx);
  }}
- className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 border ${
+ className={`flex items-center gap-2 px-5 py-2.5 rounded-[20px] text-sm font-bold transition-all duration-300 border ${
  isActive
  ? 'text-white shadow-[0_0_20px_rgba(255,255,255,0.1)] scale-105 z-10'
  : 'text-gray-400 border-white/10 bg-white/[0.02] hover:bg-white/[0.08] hover:text-white hover:scale-105'
@@ -478,7 +478,7 @@ export default function EventShowcaseScene() {
  <motion.div 
  initial={{ opacity: 0, y: 10 }}
  animate={{ opacity: 1, y: 0 }}
- className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white/[0.02] border border-white/10 rounded-2xl p-4 mb-10 "
+ className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white/[0.02] border border-white/10 rounded-[20px] p-4 mb-10 "
  >
  <div className="relative w-full md:w-96">
  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -487,7 +487,7 @@ export default function EventShowcaseScene() {
  placeholder="Search events..."
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-[var(--neon-cyan)]/50 focus:ring-1 focus:ring-[var(--neon-cyan)]/50 transition-all"
+ className="w-full bg-black/40 border border-white/10 rounded-[20px] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-[var(--neon-cyan)]/50 focus:ring-1 focus:ring-[var(--neon-cyan)]/50 transition-all"
  />
  </div>
  <div className="flex gap-3 w-full md:w-auto">
@@ -495,7 +495,7 @@ export default function EventShowcaseScene() {
       <select 
         value={teamSizeFilter}
         onChange={(e) => setTeamSizeFilter(e.target.value)}
-        className="w-full md:w-48 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-gray-300 appearance-none focus:outline-none focus:border-[var(--neon-violet)]/50 transition-all cursor-pointer"
+        className="w-full md:w-48 bg-black/40 border border-white/10 rounded-[20px] py-2.5 px-4 text-sm text-gray-300 appearance-none focus:outline-none focus:border-[var(--neon-violet)]/50 transition-all cursor-pointer"
       >
         {uniqueTeamSizes.map(size => (
           <option key={size} value={size}>{size === 'All' ? 'All Team Sizes' : size}</option>
@@ -549,7 +549,7 @@ export default function EventShowcaseScene() {
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}
  exit={{ opacity: 0 }}
- className="py-20 text-center flex flex-col items-center"
+ className="section-padding text-center flex flex-col items-center"
  >
  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
  <Search className="w-6 h-6 text-gray-500" />

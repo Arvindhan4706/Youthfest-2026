@@ -89,7 +89,7 @@ export default function FooterScene() {
   ];
 
   return (
-    <footer id="contact" className="relative pt-24 pb-12 px-4 border-t border-white/[0.06] overflow-hidden bg-[#050010]">
+    <footer id="contact" className="relative py-[64px] lg:py-[100px] px-4 border-t border-white/[0.06] overflow-hidden bg-[#050010]">
       {/* Background glow */}
       <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-cyan-900/10 rounded-full blur-[100px] pointer-events-none" />
@@ -103,8 +103,8 @@ export default function FooterScene() {
             <p className="text-gray-400 max-w-lg text-sm">Join thousands of students for an unforgettable celebration of innovation, creativity, culture, and community.</p>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/events" className="px-6 py-3 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold transition-all">Explore Events</Link>
-            <Link href="/profile" className="px-6 py-3 rounded-full bg-white text-black hover:bg-gray-200 font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]">Register Now</Link>
+            <Link href="/events" className="flex items-center justify-center px-6 h-[48px] rounded-[12px] border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold transition-all">Explore Events</Link>
+            <Link href="/profile" className="flex items-center justify-center px-6 h-[48px] rounded-[12px] bg-white text-black hover:bg-gray-200 font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]">Register Now</Link>
           </div>
         </div>
 
@@ -205,9 +205,9 @@ export default function FooterScene() {
                 <input 
                   type="email" 
                   placeholder="Enter your email address" 
-                  className="w-full bg-white/5 border border-white/10 rounded-full py-2.5 pl-4 pr-12 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors"
+                  className="w-full h-[48px] bg-white/5 border border-white/10 rounded-[12px] pl-4 pr-12 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors"
                 />
-                <button type="submit" aria-label="Subscribe to newsletter" className="absolute right-1 w-8 h-8 rounded-full bg-[var(--neon-cyan)] text-black flex items-center justify-center hover:scale-105 transition-transform">
+                <button type="submit" aria-label="Subscribe to newsletter" className="absolute right-2 w-10 h-10 rounded-[12px] bg-[var(--neon-cyan)] text-black flex items-center justify-center hover:scale-105 transition-transform">
                   <Send className="w-4 h-4 ml-0.5" />
                 </button>
               </form>

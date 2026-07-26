@@ -27,7 +27,7 @@ function useCountdown() {
 function FlipUnit({ value, label }: { value: number; label: string }) {
  return (
  <div className="flex flex-col items-center">
- <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl overflow-hidden" style={{ perspective: '400px' }}>
+ <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-[20px] sm:rounded-[20px] overflow-hidden" style={{ perspective: '400px' }}>
  <div className="absolute inset-0 glass-strong" style={{ boxShadow: '0 0 30px rgba(0,240,255,0.08)' }} />
  <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/[0.03] border-b border-white/[0.06] flex items-end justify-center pb-0">
  <span className="text-xl sm:text-3xl md:text-5xl font-[var(--font-heading-main)] font-black text-white leading-none translate-y-[55%]">
