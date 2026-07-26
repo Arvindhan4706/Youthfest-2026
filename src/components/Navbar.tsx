@@ -8,10 +8,12 @@ import { User, Menu, X, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
-  { href: '/', label: 'Home', sectionId: '#hero' },
+  { href: '/', label: 'Index', sectionId: '#hero' },
+  { href: '/#work', label: 'Work', sectionId: '#work' },
   { href: '/events', label: 'Events' },
-  { href: '/#committee', label: 'Team', sectionId: '#committee' },
-  { href: '/#sponsors', label: 'Sponsors', sectionId: '#sponsors' },
+  { href: '#', label: 'Register', action: 'register' },
+  { href: '/profile', label: 'Profile' },
+  { href: '/#about', label: 'About', sectionId: '#about' },
 ];
 
 function useActiveSection(sectionIds: string[]) {
@@ -127,12 +129,19 @@ export default function Navbar() {
             {navLinks.map((link) => {
               const isActive = link.sectionId 
                 ? activeSection === link.sectionId && pathname === '/'
-                : pathname === link.href;
+                : pathname === link.href && link.href !== '#';
               return (
                 <Link
-                  key={link.href}
+                  key={link.label}
                   href={link.href}
-                  onClick={(e) => handleSmoothScroll(e, link.href)}
+                  onClick={(e) => {
+                    if ((link as any).action === 'register') {
+                      e.preventDefault();
+                      setAuthOpen(true, 'register');
+                    } else {
+                      handleSmoothScroll(e, link.href);
+                    }
+                  }}
                   className={`relative px-4 py-2 rounded-full transition-colors duration-200 text-sm font-semibold ${
                     isActive ? 'text-white' : 'text-gray-400 hover:text-white'
                   }`}
@@ -229,27 +238,27 @@ export default function Navbar() {
               {navLinks.map((link, i) => {
                 const isActive = link.sectionId 
                   ? activeSection === link.sectionId && pathname === '/'
-                  : pathname === link.href;
+                  : pathname === link.href && link.href !== '#';
                 return (
                 <motion.div
-                  key={link.href}
+                  key={link.label}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="relative"
                 >
                   <Link
                     href={link.href}
-                    onClick={(e) => handleSmoothScroll(e, link.href)}
-                    className={`block py-3 text-4xl sm:text-5xl font-[var(--font-heading-main)] font-black uppercase tracking-widest transition-all duration-300 ${
-                      isActive 
-                        ? 'text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] translate-x-4' 
-                        : 'text-gray-500 hover:text-white hover:translate-x-2'
-                    }`}
+                    onClick={(e) => {
+                      if ((link as any).action === 'register') {
+                        e.preventDefault();
+                        setAuthOpen(true, 'register');
+                        setMobileOpen(false);
+                      } else {
+                        handleSmoothScroll(e, link.href);
+                      }
+                    }}
+                    className={`block text-2xl font-bold transition-colors ${isActive ? 'text-white' : 'text-gray-400 hover:text-white'}`}
                   >
-                    {isActive && (
-                      <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-gradient-to-b from-[var(--neon-cyan)] to-[var(--neon-magenta)] rounded-full shadow-[0_0_15px_var(--neon-cyan)]" />
-                    )}
                     {link.label}
                   </Link>
                 </motion.div>
