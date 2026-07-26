@@ -218,7 +218,7 @@ export default function HeroScene() {
           className="mb-6 relative"
         >
           <div className="relative z-20">
-            <Image src="/yuvenzalogo.png" alt="Youthfest Event Logo" width={300} height={112} priority style={{ height: "auto" }} className="w-[25px] sm:w-[32px] md:w-[40px] object-contain" />
+            <Image src="/yuvenzalogo.png" alt="Youthfest Event Logo" width={300} height={112} priority style={{ height: "auto" }} className="w-[38px] sm:w-[48px] md:w-[60px] object-contain" />
           </div>
         </motion.div>
 
