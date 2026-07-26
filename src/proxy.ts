@@ -41,7 +41,7 @@ export default async function proxy(request: NextRequest) {
   // Basic CSP - Adjust if external scripts/iframes are blocked
   response.headers.set(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.vercel-insights.com https://checkout.razorpay.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://images.unsplash.com https://i.postimg.cc https://v0.blob.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://api.razorpay.com; frame-src 'self' https://checkout.razorpay.com;"
+    "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.vercel-insights.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://images.unsplash.com https://i.postimg.cc https://v0.blob.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://*.razorpay.com; frame-src 'self' https://*.razorpay.com;"
   );
   return response;
 }
