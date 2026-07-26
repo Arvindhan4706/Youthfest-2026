@@ -59,6 +59,8 @@ export default function ParticleUniverse() {
             background: p.color,
             boxShadow: isLowPerformance ? 'none' : `0 0 ${p.size * 3}px ${p.color}`,
             animation: `particle-twinkle ${p.dur}s ${p.delay}s ease-in-out infinite, particle-float ${p.dur * 1.3}s ${p.delay}s ease-in-out infinite`,
+            willChange: 'transform, opacity',
+            transform: 'translateZ(0)',
           }}
         />
       ))}

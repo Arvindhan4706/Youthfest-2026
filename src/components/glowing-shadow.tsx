@@ -164,8 +164,9 @@ export function GlowingShadow({ children }: GlowingShadowButtonProps) {
  animation: hue-animation var(--animation-speed) linear infinite;
  transform: scaleY(calc(var(--glow-scale) * var(--scale-factor) / 1.1))
  scaleX(calc(var(--glow-scale) * var(--scale-factor) * 1.2))
- translateY(calc(var(--glow-translate-y) * 1%));
+ translateY(calc(var(--glow-translate-y) * 1%)) translateZ(0);
  opacity: var(--glow-opacity);
+ will-change: filter, transform, opacity;
  }
  .glow-container:hover .glow-content {
  mix-blend-mode: darken;

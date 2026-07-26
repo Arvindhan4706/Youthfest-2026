@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { ArrowRight, Zap, Calendar, ChevronDown, Sparkles } from 'lucide-react';
+import { ArrowRight, Calendar, ChevronDown } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
 import { useRouter } from 'next/navigation';
 
@@ -122,23 +122,6 @@ export default function HeroScene() {
   const router = useRouter();
   const countdown = useCountdown();
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    // Skip parallax on touch/mobile devices to save CPU
-    if (window.matchMedia('(hover: none)').matches) return;
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-    mouseX.set((clientX / innerWidth) * 2 - 1);
-    mouseY.set((clientY / innerHeight) * 2 - 1);
-  };
-
-  const parallaxX1 = useTransform(mouseX, [-1, 1], [-20, 20]);
-  const parallaxY1 = useTransform(mouseY, [-1, 1], [-20, 20]);
-  const parallaxX2 = useTransform(mouseX, [-1, 1], [30, -30]);
-  const parallaxY2 = useTransform(mouseY, [-1, 1], [30, -30]);
-
   const handleRegisterClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (user) {
@@ -165,7 +148,6 @@ export default function HeroScene() {
   return (
     <section
       id="hero"
-      onMouseMove={handleMouseMove}
       className="relative min-h-[100dvh] w-full flex flex-col items-center justify-center overflow-x-hidden px-4 py-20"
       style={{ background: 'radial-gradient(ellipse at 50% 0%, #0a0030 0%, #011213 50%, #010008 100%)' }}
       aria-labelledby="hero-heading"
@@ -191,6 +173,7 @@ export default function HeroScene() {
         <div className="absolute top-0 left-0 w-full flex flex-col overflow-hidden pointer-events-none select-none z-0 h-full sm:h-[120%] justify-between sm:justify-start py-24 sm:py-0 sm:pt-20 opacity-5 sm:opacity-10 space-y-0 sm:space-y-8 translate-y-0 sm:-translate-y-10">
           {/* Line 1 - Scrolling Right (Left to Right) */}
           <motion.div
+            style={{ willChange: "transform" }}
             animate={{ x: ["-50%", 0] }}
             transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
             className="flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
@@ -202,6 +185,7 @@ export default function HeroScene() {
           </motion.div>
           {/* Line 2 - Scrolling Left (Right to Left) */}
           <motion.div
+            style={{ willChange: "transform" }}
             animate={{ x: [0, "-50%"] }}
             transition={{ repeat: Infinity, duration: 45, ease: "linear" }}
             className="flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
@@ -213,6 +197,7 @@ export default function HeroScene() {
           </motion.div>
           {/* Line 3 - Scrolling Right (Left to Right) */}
           <motion.div
+            style={{ willChange: "transform" }}
             animate={{ x: ["-50%", 0] }}
             transition={{ repeat: Infinity, duration: 35, ease: "linear" }}
             className="flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
@@ -268,7 +253,7 @@ export default function HeroScene() {
         >
           <h1 id="hero-heading" className="flex justify-center flex-wrap text-[clamp(2.5rem,11vw,6rem)] md:text-8xl lg:text-9xl font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative px-2 text-center">
             {titleText.split('').map((char, index) => (
-              <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>
+              <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
                 {char}
               </motion.span>
             ))}

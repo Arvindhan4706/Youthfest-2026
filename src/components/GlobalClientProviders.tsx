@@ -6,12 +6,16 @@ import ToastContainer from './ToastContainer';
 import dynamic from 'next/dynamic';
 import { useKonamiCode } from '../hooks/useKonamiCode';
 import { useStore } from '../lib/useStore';
+import { usePathname } from 'next/navigation';
 
 const AuthModal = dynamic(() => import('./AuthModal'), { ssr: false });
 const PaymentModal = dynamic(() => import('./PaymentModal'), { ssr: false });
 
 export default function GlobalClientProviders({ children }: { children: React.ReactNode }) {
   const [hasMounted, setHasMounted] = useState(false);
+  const pathname = usePathname();
+  const hideNavbarRoutes = ['/profile', '/admin', '/scanner'];
+  const shouldShowNavbar = !hideNavbarRoutes.some(route => pathname?.startsWith(route));
   
   const isAuthOpen = useStore((state) => state.isAuthOpen);
   const setAuthOpen = useStore((state) => state.setAuthOpen);
@@ -47,7 +51,7 @@ export default function GlobalClientProviders({ children }: { children: React.Re
 
   return (
     <div className={`transition-colors duration-1000 ${isSecretMode ? 'bg-black text-[var(--neon-cyan)] font-[var(--font-heading-main)]' : ''}`}>
-      <Navbar />
+      {shouldShowNavbar && <Navbar />}
       <ToastContainer />
       {hasMounted && <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />}
       {hasMounted && <PaymentModal />}
