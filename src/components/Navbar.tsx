@@ -236,12 +236,20 @@ export default function Navbar() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
+                  className="relative"
                 >
                   <Link
                     href={link.href}
                     onClick={(e) => handleSmoothScroll(e, link.href)}
-                    className={`block text-2xl font-bold transition-colors ${isActive ? 'text-white' : 'text-gray-400 hover:text-white'}`}
+                    className={`block py-3 text-4xl sm:text-5xl font-[var(--font-heading-main)] font-black uppercase tracking-widest transition-all duration-300 ${
+                      isActive 
+                        ? 'text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] translate-x-4' 
+                        : 'text-gray-500 hover:text-white hover:translate-x-2'
+                    }`}
                   >
+                    {isActive && (
+                      <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-gradient-to-b from-[var(--neon-cyan)] to-[var(--neon-magenta)] rounded-full shadow-[0_0_15px_var(--neon-cyan)]" />
+                    )}
                     {link.label}
                   </Link>
                 </motion.div>
