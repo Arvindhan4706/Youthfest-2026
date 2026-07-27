@@ -173,7 +173,7 @@ export default function PaymentModal() {
  };
  return (
  <div ref={overlayRef} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 opacity-0 p-4">
- <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="payment-modal-title" className="relative w-full max-w-md p-8 bg-black border border-[var(--neon-cyan)]/30 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.1)] opacity-0 max-h-[90dvh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+ <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="payment-modal-title" className="relative w-full max-w-md bg-black border border-[var(--neon-cyan)]/30 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.1)] opacity-0 max-h-[90dvh] flex flex-col overflow-hidden">
  <button onClick={handleClose} disabled={isLoading} aria-label="Close payment modal" className="absolute top-4 right-4 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/10 disabled:opacity-50">
  <X className="w-5 h-5" />
  </button>

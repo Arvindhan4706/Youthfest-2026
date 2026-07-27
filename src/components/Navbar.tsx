@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useStore } from '../lib/useStore';
+import { db } from '../lib/database';
 import { useRouter, usePathname } from 'next/navigation';
 import { User, Menu, X, Bell, LogOut, ShieldCheck, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

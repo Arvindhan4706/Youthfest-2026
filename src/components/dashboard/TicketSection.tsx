@@ -16,7 +16,14 @@ export default function TicketSection() {
 
   React.useEffect(() => {
     if (selectedEventTicket && user) {
-      const qrData = user.email + '|' + selectedEventTicket;
+      const qrData = JSON.stringify({
+        email: user.email,
+        name: user.name || 'Attendee',
+        event: selectedEventTicket,
+        regId: getTicketId(user.email, selectedEventTicket),
+        qrId: crypto.randomUUID(),
+        time: Date.now()
+      });
       QRCode.toDataURL(qrData, { width: 300, margin: 1 })
         .then(url => setQrCodeDataUrl(url))
         .catch(err => console.error('Failed to generate local QR code', err));
@@ -119,7 +126,7 @@ export default function TicketSection() {
             <span>My Registrations</span>
           </h2>
           
-          <div className="flex flex-col gap-3 max-h-[300px] overflow-y-auto pr-1">
+          <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
             {user.registeredEvents.length === 0 ? (
               <p className="text-xs text-gray-500 py-6 text-center leading-relaxed">
                 You haven't registered for any events yet. <br />

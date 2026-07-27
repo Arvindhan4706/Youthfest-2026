@@ -5,6 +5,7 @@ import { db, SiteSettings } from '@/lib/database';
 import { Mail, Phone, MapPin, ChevronRight, Send } from 'lucide-react';
 import { motion, Variants } from 'framer-motion';
 
+
 function InstagramIcon() {
   return (
     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -42,6 +43,7 @@ function TwitterXIcon() {
 }
 
 export default function FooterScene() {
+
   const [settings, setSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {

@@ -11,6 +11,7 @@ import ToastContainer from '../../components/ToastContainer';
 import VisitorProfile from '../../components/dashboard/VisitorProfile';
 import TicketSection from '../../components/dashboard/TicketSection';
 import InboxSection from '../../components/dashboard/InboxSection';
+import CertificatesSection from '../../components/dashboard/CertificatesSection';
 import Navbar from '../../components/Navbar';
 
 type TabId = 'profile' | 'registrations' | 'tickets' | 'payments' | 'certificates' | 'notifications' | 'settings';
@@ -142,7 +143,7 @@ export default function Dashboard() {
       case 'registrations': return <MyRegistrations />;
       case 'tickets': return <TicketSection />;
       case 'payments': return <PaymentHistory />;
-      case 'certificates': return <ComingSoon label="Certificates" />;
+      case 'certificates': return <CertificatesSection />;
       case 'notifications': return <InboxSection />;
       case 'settings': return <ComingSoon label="Settings" />;
       default: return null;
@@ -244,7 +245,7 @@ export default function Dashboard() {
             <motion.div
               initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed top-0 left-0 h-full w-72 bg-[#030014] border-r border-white/10 z-50 lg:hidden flex flex-col p-6 gap-2"
+              className="fixed top-0 left-0 h-full w-72 bg-[#030014] border-r border-white/10 z-50 lg:hidden flex flex-col px-6 pb-6 pt-16 gap-2"
             >
               <div className="flex items-center justify-between mb-4">
                 <span className="text-white font-bold font-[var(--font-heading-main)]">Dashboard</span>

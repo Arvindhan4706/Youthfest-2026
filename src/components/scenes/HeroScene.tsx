@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { ArrowRight, Calendar, ChevronDown } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
+import { db } from '../../lib/database';
 import { useRouter } from 'next/navigation';
 
 // Target date: August 12, 2026
@@ -325,7 +326,7 @@ export default function HeroScene() {
             Register for the Fest <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
           <button
-            onClick={() => router.push('/events')}
+            onClick={() => router.push('/work')}
             aria-label="Our Work"
             className="group flex items-center justify-center gap-2 w-full md:w-auto px-8 h-[48px] rounded-[12px] font-semibold text-white border border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
           >

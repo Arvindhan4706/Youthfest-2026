@@ -262,6 +262,24 @@ export const db = {
   /**
    * Get total registered count.
    */
+  
+  /**
+   * Get all event IDs a visitor has successfully attended.
+   */
+  async getVisitorAttendance(visitorEmail: string): Promise<string[]> {
+    try {
+      const { data, error } = await supabase
+        .from('attendance')
+        .select('event_id')
+        .eq('visitor_email', visitorEmail.toLowerCase().trim());
+      if (error) throw new Error(error.message);
+      return (data || []).map(record => record.event_id);
+    } catch (e) {
+      console.error('Failed to fetch attendance', e);
+      return [];
+    }
+  },
+  
   async getVisitorCount(): Promise<number> {
     const { count, error } = await supabase
       .from('visitors')

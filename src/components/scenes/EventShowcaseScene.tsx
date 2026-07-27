@@ -134,7 +134,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  />
  {/* Image */}
  <div className="relative h-44 sm:h-48 w-full overflow-hidden">
- <Image src={(event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80').replace('/events/', '/event-images/')} alt={event.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
+ <Image src={event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'} alt={event.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#010008] via-black/20 to-transparent" />
  </div>
  {/* Content */}
@@ -168,6 +168,8 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
 }
 function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; trackColor: string; onClose: () => void }) {
  const initiateRegistration = useStore((state) => state.initiateRegistration);
+  const user = useStore((state) => state.user);
+  const isRegistered = user?.registeredEvents?.includes(event.title);
  // Prevent scroll when drawer is open
  useEffect(() => {
  document.body.style.overflow = 'hidden';
@@ -193,7 +195,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  >
  {/* Header Image */}
  <div className="relative h-64 w-full shrink-0">
- <Image src={(event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80').replace('/events/', '/event-images/')} alt={event.title} fill sizes="(max-width: 1024px) 100vw, 500px" className="object-cover" />
+ <Image src={event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'} alt={event.title} fill sizes="(max-width: 1024px) 100vw, 500px" className="object-cover" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#030014] via-[#030014]/50 to-transparent" />
  <button 
  onClick={onClose}
