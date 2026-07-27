@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X, LogOut, RefreshCw, CreditCard } from 'lucide-react';
+import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X, LogOut, RefreshCw, CreditCard, Send } from 'lucide-react';
 import { db, Visitor, EventItem, AdminUser, Role, Payment } from '@/lib/database';
 import { supabase } from '@/lib/supabase';
 export default function AdminPortal() {
@@ -20,7 +20,7 @@ export default function AdminPortal() {
  // Advanced Filters
  const [filterTrack, setFilterTrack] = useState('');
  // Settings State
- const [activeTab, setActiveTab] = useState<'visitors' | 'settings' | 'logs' | 'events' | 'users' | 'payments'>('visitors');
+ const [activeTab, setActiveTab] = useState<'visitors' | 'settings' | 'logs' | 'events' | 'users' | 'payments' | 'broadcast'>('visitors');
  const [siteSettings, setSiteSettings] = useState<any>(null);
  const [isSavingSettings, setIsSavingSettings] = useState(false);
  // Events State
@@ -36,6 +36,10 @@ export default function AdminPortal() {
  // Payments State
  const [payments, setPayments] = useState<Payment[]>([]);
  const [isRefunding, setIsRefunding] = useState<string | null>(null);
+ const [broadcastAudience, setBroadcastAudience] = useState<'all' | 'paid'>('all');
+ const [broadcastSubject, setBroadcastSubject] = useState('');
+ const [broadcastMessage, setBroadcastMessage] = useState('');
+ const [isBroadcasting, setIsBroadcasting] = useState(false);
 
  useEffect(() => {
  if (activeTab === 'logs' && userRole === 'Super Admin') {
@@ -48,6 +52,29 @@ export default function AdminPortal() {
  fetchPayments();
  }
  }, [activeTab, userRole]);
+
+ const downloadCSV = (data: any[], filename: string) => {
+   if (!data || !data.length) return alert('No data to export');
+   const headers = Object.keys(data[0]);
+   const csvRows = [];
+   csvRows.push(headers.join(','));
+   for (const row of data) {
+     const values = headers.map(header => {
+       const escape = ('' + row[header]).replace(/"/g, '\"');
+       return '"' + escape + '"';
+     });
+     csvRows.push(values.join(','));
+   }
+   const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+   const url = window.URL.createObjectURL(blob);
+   const a = document.createElement('a');
+   a.setAttribute('hidden', '');
+   a.setAttribute('href', url);
+   a.setAttribute('download', filename + '.csv');
+   document.body.appendChild(a);
+   a.click();
+   document.body.removeChild(a);
+ };
 
  const fetchPayments = async () => {
  try {

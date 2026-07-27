@@ -45,6 +45,7 @@ export default function VisitorProfile() {
   const [profileCity, setProfileCity] = useState(user?.city || '');
   const [isSaving, setIsSaving] = useState(false);
   const [isRetryingPayment, setIsRetryingPayment] = useState(false);
+  const [isRequestingOD, setIsRequestingOD] = useState(false);
 
   if (!user) return null;
 
@@ -98,6 +99,31 @@ export default function VisitorProfile() {
     }
   };
 
+  const handleRequestOD = async () => {
+    setIsRequestingOD(true);
+    try {
+      const res = await fetch('/api/send-od', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          college: user.college,
+          department: user.department,
+          eventTitle: 'General Registration'
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to request OD letter');
+      addToast('📧 OD Letter has been sent to your email!');
+    } catch (err: any) {
+      addToast('❌ ' + (err.message || 'Failed to request OD'));
+    } finally {
+      setIsRequestingOD(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       {/* Profile Header Card */}
@@ -145,6 +171,22 @@ export default function VisitorProfile() {
             className="px-6 py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-sm transition-colors whitespace-nowrap"
           >
             {isRetryingPayment ? 'Loading...' : 'Complete Payment'}
+          </button>
+        </div>
+      )}
+
+      {user.payment_status === 'successful' && (
+        <div className="p-5 rounded-2xl bg-[var(--neon-cyan)]/10 border border-[var(--neon-cyan)]/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h3 className="text-[var(--neon-cyan)] font-bold text-sm">Official On Duty (OD) Letter</h3>
+            <p className="text-[var(--neon-cyan)]/80 text-xs mt-1">Get an official digital OD letter sent to your email to submit to your college.</p>
+          </div>
+          <button 
+            onClick={handleRequestOD}
+            disabled={isRequestingOD}
+            className="px-6 py-2.5 bg-[var(--neon-cyan)] hover:bg-cyan-400 text-black font-bold rounded-xl text-sm transition-colors whitespace-nowrap"
+          >
+            {isRequestingOD ? 'Sending...' : 'Email My OD Letter'}
           </button>
         </div>
       )}

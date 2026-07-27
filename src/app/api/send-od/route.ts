@@ -22,8 +22,8 @@ export async function POST(request: Request) {
     if (!name || !email || !phone) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
-    // Hardcoded recipient as requested by user
-    const recipientEmail = 'arvindhan476@gmail.com';
+    // Recipient email from request body
+    const recipientEmail = email;
     const emailSubject = `On Duty (OD) Approval for Yuvenza Youthfest 2026 - ${eventTitle || 'General Registration'}`;
     const emailBody = `
 Dear ${name},
