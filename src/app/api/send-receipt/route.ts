@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
+
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+const isEmailMockMode = !RESEND_API_KEY;
+const resend = !isEmailMockMode ? new Resend(RESEND_API_KEY) : null;
 
 export async function POST(req: Request) {
   try {
@@ -9,23 +13,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: Number(process.env.SMTP_PORT) || 587,
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      console.warn("SMTP_USER and SMTP_PASS are not configured. Email will be mocked.");
+    if (isEmailMockMode) {
+      console.warn("RESEND_API_KEY is not configured. Email will be mocked.");
       return NextResponse.json({ success: true, mocked: true });
     }
 
     const mailOptions = {
-      from: `"Youthfest 2026" <${process.env.SMTP_USER}>`,
+      from: 'Yuvenza Youthfest <noreply@yuvenza.com>',
       to: email,
       subject: `Registration Confirmed: ${eventTitle}`,
       html: `
@@ -54,8 +48,8 @@ export async function POST(req: Request) {
       `,
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Receipt email sent: %s', info.messageId);
+    await resend?.emails.send(mailOptions);
+    console.log('Receipt email sent to:', email);
 
     return NextResponse.json({ success: true });
   } catch (error) {

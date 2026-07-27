@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
+
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+const isEmailMockMode = !RESEND_API_KEY;
+const resend = !isEmailMockMode ? new Resend(RESEND_API_KEY) : null;
 
 export async function POST(req: Request) {
   try {
@@ -9,21 +13,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Configure the transporter with environment variables
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: Number(process.env.SMTP_PORT) || 587,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    // Check if credentials are set (if not, we can't send the email in production)
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      console.warn("SMTP_USER and SMTP_PASS are not configured. Email will be mocked.");
-      // For local development when env vars aren't set, just pretend it worked
+    if (isEmailMockMode) {
+      console.warn("RESEND_API_KEY is not configured. Email will be mocked.");
       return NextResponse.json({ success: true, mocked: true });
     }
 
@@ -32,7 +23,7 @@ export async function POST(req: Request) {
     const pdfBuffer = Buffer.from(base64Data, 'base64');
 
     const mailOptions = {
-      from: `"Youthfest 2026" <${process.env.SMTP_USER}>`,
+      from: 'Yuvenza Youthfest <noreply@yuvenza.com>',
       to: email,
       subject: `Your Youthfest '26 Vitality Pass: ${event}`,
       html: `
@@ -56,13 +47,12 @@ export async function POST(req: Request) {
         {
           filename: `Yuvenza_Pass_${event.replace(/\s+/g, '_')}.pdf`,
           content: pdfBuffer,
-          contentType: 'application/pdf',
         },
       ],
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Message sent: %s', info.messageId);
+    await resend?.emails.send(mailOptions);
+    console.log('Ticket email sent to:', email);
 
     return NextResponse.json({ success: true });
   } catch (error) {
