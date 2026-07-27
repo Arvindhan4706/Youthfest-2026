@@ -1,20 +1,11 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { db } from '@/lib/database';
 
-const SMTP_USER = process.env.SMTP_USER || '';
-const SMTP_PASS = process.env.SMTP_PASS || '';
-const isEmailMockMode = !SMTP_USER || !SMTP_PASS;
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+const isEmailMockMode = !RESEND_API_KEY;
 
-const transporter = !isEmailMockMode 
-  ? nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: SMTP_USER,
-        pass: SMTP_PASS,
-      },
-    })
-  : null;
+const resend = !isEmailMockMode ? new Resend(RESEND_API_KEY) : null;
 
 export async function POST(request: Request) {
   try {
@@ -67,8 +58,8 @@ export async function POST(request: Request) {
       const batchSize = 50;
       for (let i = 0; i < targetEmails.length; i += batchSize) {
         const batch = targetEmails.slice(i, i + batchSize);
-        await transporter?.sendMail({
-          from: `"Yuvenza Youthfest" <${SMTP_USER}>`,
+        await resend?.emails.send({
+          from: 'Yuvenza Youthfest <noreply@yuvenza.com>',
           bcc: batch,
           subject: subject,
           text: message,

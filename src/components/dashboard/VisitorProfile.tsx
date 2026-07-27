@@ -175,7 +175,7 @@ export default function VisitorProfile() {
         </div>
       )}
 
-      {user.payment_status === 'successful' && (
+      {user.payment_status === 'paid' && (
         <div className="p-5 rounded-2xl bg-[var(--neon-cyan)]/10 border border-[var(--neon-cyan)]/20 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <h3 className="text-[var(--neon-cyan)] font-bold text-sm">Official On Duty (OD) Letter</h3>

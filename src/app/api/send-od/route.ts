@@ -1,20 +1,11 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 // Email Credentials
-const SMTP_USER = process.env.SMTP_USER || '';
-const SMTP_PASS = process.env.SMTP_PASS || '';
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 // Mock Mode
-const isEmailMockMode = !SMTP_USER || !SMTP_PASS;
-const transporter = !isEmailMockMode 
-  ? nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: SMTP_USER,
-        pass: SMTP_PASS,
-      },
-    })
-  : null;
+const isEmailMockMode = !RESEND_API_KEY;
+const resend = !isEmailMockMode ? new Resend(RESEND_API_KEY) : null;
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -105,26 +96,25 @@ Youthfest 2026
     page.drawText('Youthfest 2026', { x: margin, y: boxY - 120, size: 12, font: timesRomanFont });
     // Save PDF
     const pdfBytes = await pdfDoc.save();
-    // 2. Send Email (Nodemailer)
+    // 2. Send Email (Resend)
     if (isEmailMockMode) {
       console.log('\n=================================================================');
-      console.log('📧 MOCK EMAIL DISPATCHED (No SMTP_USER / SMTP_PASS in .env.local)');
+      console.log('📧 MOCK EMAIL DISPATCHED (No RESEND_API_KEY in .env.local)');
       console.log(`To: ${recipientEmail}`);
       console.log(`Subject: ${emailSubject}`);
       console.log(`Body:\n${emailBody}`);
       console.log(`Attachment: OD_Letter_${name.replace(/\s+/g, '_')}.pdf (Size: ${pdfBytes.length} bytes)`);
       console.log('=================================================================\n');
     } else {
-      await transporter?.sendMail({
-        from: `"Yuvenza Youthfest 2026" <yuvenza@citchennai.net>`,
-        to: recipientEmail, // Hardcoded as requested
+      await resend?.emails.send({
+        from: 'Yuvenza Youthfest <noreply@yuvenza.com>',
+        to: recipientEmail,
         subject: emailSubject,
         text: emailBody,
         attachments: [
           {
             filename: `OD_Letter_${name.replace(/\s+/g, '_')}.pdf`,
             content: Buffer.from(pdfBytes),
-            contentType: 'application/pdf',
           }
         ]
       });
