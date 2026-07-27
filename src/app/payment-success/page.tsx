@@ -94,6 +94,7 @@ function PaymentSuccessContent() {
                   gender: visitor.gender,
                   city: visitor.city,
                   registeredEvents: regEvents,
+                  payment_status: visitor.payment_status,
                 });
               }
             } catch (visitorErr) {

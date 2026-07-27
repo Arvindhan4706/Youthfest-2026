@@ -82,6 +82,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
     >
       <body className="min-h-screen font-sans">

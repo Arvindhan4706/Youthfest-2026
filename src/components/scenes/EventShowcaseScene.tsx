@@ -138,7 +138,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  <div className="absolute inset-0 bg-gradient-to-t from-[#010008] via-black/20 to-transparent" />
  </div>
  {/* Content */}
- <div className="p-5 flex-grow flex flex-col justify-between relative z-10">
+ <div className="p-6 flex-grow flex flex-col justify-between relative z-10">
  <div>
  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[var(--neon-cyan)] transition-colors duration-300">
  {event.title}

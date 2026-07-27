@@ -51,6 +51,18 @@ export async function POST(request: Request) {
     // Call the database logic only if link creation succeeds
     const newVisitor = await db.register(validatedData);
 
+    try {
+      await db.logPayment({
+        visitor_id: newVisitor.id,
+        event_id: 'general-entry',
+        razorpay_order_id: paymentLink.id,
+        amount: amountInPaise / 100,
+        status: 'pending'
+      });
+    } catch (err) {
+      console.error('Failed to log payment ledger during registration:', err);
+    }
+
     return NextResponse.json({ 
       success: true, 
       visitor: newVisitor,
@@ -62,8 +74,10 @@ export async function POST(request: Request) {
       }
     });
   } catch (error: any) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ success: false, message: (error as any).errors[0].message }, { status: 400 });
+    console.error("REGISTER ROUTE ERROR:", error);
+    if (error?.name === 'ZodError' || error instanceof z.ZodError) {
+      const firstError = error.errors?.[0]?.message || 'Validation failed';
+      return NextResponse.json({ success: false, message: firstError }, { status: 400 });
     }
     const errorMsg = error?.error?.description || error?.message || 'Failed to create Razorpay order';
     return NextResponse.json({ success: false, message: errorMsg }, { status: 400 });

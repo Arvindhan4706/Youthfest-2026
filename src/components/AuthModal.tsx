@@ -91,12 +91,15 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  e.preventDefault();
  setError('');
  setIsLoading(true);
+
+ const cleanedPhone = phone.replace(/\D/g, '').slice(-10);
+
  try {
  if (activeTab === 'register') {
  const res = await fetch('/api/auth/register', {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ name, email, phone, college, department, year, gender, city })
+ body: JSON.stringify({ name, email, phone: cleanedPhone, college, department, year, gender, city })
  });
  const data = await res.json();
  if (!res.ok) throw new Error(data.message || 'Registration failed');
@@ -105,7 +108,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  email: visitor.email, name: visitor.name, phone: visitor.phone, 
  college: visitor.college, department: visitor.department, 
  year: visitor.year, gender: visitor.gender, city: visitor.city,
- registeredEvents: visitor.registered_events 
+ registeredEvents: visitor.registered_events,
+ payment_status: visitor.payment_status 
  });
  // Send OD via our new API route
  try {
@@ -128,14 +132,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   onClose();
  }
  } else {
- if (!email || !phone) {
+ if (!email || !cleanedPhone) {
  setIsLoading(false);
  throw new Error('Please fill in email and phone to login.');
  }
  const res = await fetch('/api/auth/login', {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ email, phone })
+ body: JSON.stringify({ email, phone: cleanedPhone })
  });
  const data = await res.json();
  if (!res.ok) {
@@ -147,7 +151,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  email: visitor.email, name: visitor.name, phone: visitor.phone, 
  college: visitor.college, department: visitor.department, 
  year: visitor.year, gender: visitor.gender, city: visitor.city,
- registeredEvents: visitor.registered_events 
+ registeredEvents: visitor.registered_events,
+ payment_status: visitor.payment_status 
  });
  addToast(`Welcome back, ${visitor.name}!`);
  setIsLoading(false);

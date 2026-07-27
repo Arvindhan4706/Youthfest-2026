@@ -10,10 +10,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 // ── Center navigation links ───────────────────────────────────────────────────
 const navLinks = [
   { href: '/',        label: 'Home',     sectionId: '#hero',  desc: 'Discover YouthFest 2026' },
-  { href: '/#work',   label: 'Work',     sectionId: '#work',  desc: 'Explore our initiatives and achievements' },
+  { href: '/work',    label: 'Work',     desc: 'Explore our initiatives and achievements' },
   { href: '/events',  label: 'Events',   desc: 'Browse competitions, workshops, and performances' },
   { href: '#',        label: 'Register', action: 'register',  desc: 'Sign up for your favorite events' },
-  { href: '/#about',  label: 'About',    sectionId: '#about', desc: 'Learn about YouthFest and our mission' },
+  { href: '/about',   label: 'About',    desc: 'Learn about YouthFest and our mission' },
 ];
 
 // ── Active section tracker ────────────────────────────────────────────────────
@@ -84,9 +84,13 @@ export default function Navbar() {
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 50);
-      setHidden(y > lastScrollY.current && y > 100);
-      if (y < lastScrollY.current || y <= 100) setHidden(false);
-      lastScrollY.current = y;
+      
+      // Prevent small pixel jitters (like iOS scroll bounce) from rapidly toggling the navbar
+      if (Math.abs(y - lastScrollY.current) > 10) {
+        setHidden(y > lastScrollY.current && y > 100);
+        if (y < lastScrollY.current || y <= 100) setHidden(false);
+        lastScrollY.current = y;
+      }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -165,7 +169,7 @@ export default function Navbar() {
           </Link>
 
           {/* ── Desktop Center Nav ── */}
-          <div className="hidden md:flex items-center gap-1 flex-1 justify-center" role="menubar">
+          <div className="hidden md:flex items-center gap-6 flex-1 justify-center" role="menubar">
             {navLinks.map((link) => {
               const active = isLinkActive(link);
               return (

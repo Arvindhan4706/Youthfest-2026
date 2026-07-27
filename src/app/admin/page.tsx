@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X, LogOut, RefreshCw } from 'lucide-react';
-import { db, Visitor, EventItem, AdminUser, Role } from '@/lib/database';
+import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X, LogOut, RefreshCw, CreditCard } from 'lucide-react';
+import { db, Visitor, EventItem, AdminUser, Role, Payment } from '@/lib/database';
 import { supabase } from '@/lib/supabase';
 export default function AdminPortal() {
  const [visitors, setVisitors] = useState<Visitor[]>([]);
@@ -20,7 +20,7 @@ export default function AdminPortal() {
  // Advanced Filters
  const [filterTrack, setFilterTrack] = useState('');
  // Settings State
- const [activeTab, setActiveTab] = useState<'visitors' | 'settings' | 'logs' | 'events' | 'users'>('visitors');
+ const [activeTab, setActiveTab] = useState<'visitors' | 'settings' | 'logs' | 'events' | 'users' | 'payments'>('visitors');
  const [siteSettings, setSiteSettings] = useState<any>(null);
  const [isSavingSettings, setIsSavingSettings] = useState(false);
  // Events State
@@ -31,8 +31,11 @@ export default function AdminPortal() {
  const [adminLogs, setAdminLogs] = useState<any[]>([]);
  // Users State
  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
- const [newUserEmail, setNewUserEmail] = useState('');
  const [newUserRole, setNewUserRole] = useState<Role>('Viewer');
+ // Payments State
+ const [payments, setPayments] = useState<Payment[]>([]);
+ const [isRefunding, setIsRefunding] = useState<string | null>(null);
+
  useEffect(() => {
  if (activeTab === 'logs' && userRole === 'Super Admin') {
  fetchLogs();
@@ -40,7 +43,52 @@ export default function AdminPortal() {
  if (activeTab === 'users' && userRole === 'Super Admin') {
  fetchAdminUsers();
  }
+ if (activeTab === 'payments' && (userRole === 'Super Admin' || userRole === 'Editor')) {
+ fetchPayments();
+ }
  }, [activeTab, userRole]);
+
+ const fetchPayments = async () => {
+ try {
+ const data = await db.getAllPayments();
+ setPayments(data);
+ } catch (err) {
+ console.error('Failed to fetch payments', err);
+ }
+ };
+
+ const handleRefund = async (paymentId: string, razorpayPaymentId: string | undefined, amount: number) => {
+ if (!razorpayPaymentId) {
+ alert('Cannot refund: Missing Razorpay Payment ID. This transaction may not have been completed properly.');
+ return;
+ }
+ if (!confirm(`Are you sure you want to refund ₹${amount}? This action cannot be undone.`)) return;
+
+ setIsRefunding(paymentId);
+ try {
+ const res = await fetch('/api/admin/refund', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ payment_id: paymentId,
+ razorpay_payment_id: razorpayPaymentId,
+ amount,
+ adminPasskey: passkeyInput // The logged-in admin's passkey
+ })
+ });
+ const data = await res.json();
+ if (!res.ok) throw new Error(data.message || 'Refund failed');
+
+ alert('Refund processed successfully!');
+ fetchPayments(); // Refresh the list
+ await db.logAdminAction(loggedInEmail, 'Processed Refund', { paymentId, amount });
+ } catch (err: any) {
+ alert(err.message || 'Failed to process refund');
+ } finally {
+ setIsRefunding(null);
+ }
+ };
+
  const fetchAdminUsers = async () => {
  try {
  const users = await db.getAllAdminUsers();
@@ -380,6 +428,14 @@ export default function AdminPortal() {
  <ShieldCheck className="w-4 h-4" /> Audit Logs
  </button>
  )}
+ {(userRole === 'Super Admin' || userRole === 'Editor') && (
+ <button
+ onClick={() => setActiveTab('payments')}
+ className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'payments' ? 'bg-white/10 text-white border border-white/30' : 'text-gray-400 hover:text-white'}`}
+ >
+ <CreditCard className="w-4 h-4" /> Payments
+ </button>
+ )}
  {['Super Admin', 'Editor', 'Viewer'].includes(userRole) && (
  <button 
  onClick={() => setActiveTab('events')}
@@ -541,6 +597,52 @@ export default function AdminPortal() {
  <tr>
  <td colSpan={3} className="py-8 text-center text-gray-500 font-mono">No users found</td>
  </tr>
+ )}
+ </tbody>
+ </table>
+ </div>
+ </div>
+ ) : activeTab === 'payments' ? (
+ <div className="glass rounded-3xl border border-white/10 p-8 max-w-4xl">
+ <div className="flex justify-between items-center mb-6">
+ <h2 className="text-xl font-black text-white flex items-center gap-2">
+ <CreditCard className="w-5 h-5 text-[var(--neon-cyan)]" />
+ Payments & Refunds
+ </h2>
+ <button onClick={fetchPayments} className="text-xs font-bold text-gray-400 hover:text-white uppercase">Refresh</button>
+ </div>
+ <div className="overflow-x-auto">
+ <table className="w-full text-left text-sm text-gray-300">
+ <thead className="bg-white/5 text-gray-400 uppercase text-xs font-semibold">
+ <tr>
+ <th className="px-6 py-4">Visitor</th>
+ <th className="px-6 py-4">Event</th>
+ <th className="px-6 py-4">Amount</th>
+ <th className="px-6 py-4">Status</th>
+ <th className="px-6 py-4 text-right">Actions</th>
+ </tr>
+ </thead>
+ <tbody className="divide-y divide-white/5">
+ {payments.length === 0 ? (
+ <tr><td colSpan={5} className="px-6 py-8 text-center">No payments found.</td></tr>
+ ) : (
+ payments.map((p) => (
+ <tr key={p.id}>
+ <td className="px-6 py-4">{p.visitor_id}</td>
+ <td className="px-6 py-4">{p.event_id}</td>
+ <td className="px-6 py-4">₹{p.amount}</td>
+ <td className="px-6 py-4">
+ <span className={`px-2 py-1 rounded-full text-[10px] font-bold ${p.status === 'successful' ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20'}`}>
+ {p.status}
+ </span>
+ </td>
+ <td className="px-6 py-4 text-right">
+ {p.status === 'successful' && (
+ <button onClick={() => handleRefund(p.id, p.razorpay_payment_id, p.amount)} className="text-red-400 hover:underline">Refund</button>
+ )}
+ </td>
+ </tr>
+ ))
  )}
  </tbody>
  </table>

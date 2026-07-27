@@ -72,9 +72,13 @@ CREATE TABLE IF NOT EXISTS public.payments (
     razorpay_order_id TEXT NOT NULL,
     razorpay_payment_id TEXT,
     amount NUMERIC NOT NULL,
-    status TEXT DEFAULT 'pending' NOT NULL CHECK (status IN ('pending', 'successful', 'failed')),
+    status TEXT DEFAULT 'pending' NOT NULL CHECK (status IN ('pending', 'successful', 'failed', 'refunded')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- TO UPGRADE EXISTING DATABASE, RUN THIS IN SUPABASE SQL EDITOR:
+-- ALTER TABLE public.payments DROP CONSTRAINT IF EXISTS payments_status_check;
+-- ALTER TABLE public.payments ADD CONSTRAINT payments_status_check CHECK (status IN ('pending', 'successful', 'failed', 'refunded'));
 
 ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Enable read access for all users" ON public.payments;

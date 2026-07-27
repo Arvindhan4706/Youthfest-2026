@@ -20,7 +20,7 @@ export interface Payment {
   razorpay_order_id: string;
   razorpay_payment_id?: string;
   amount: number;
-  status: 'pending' | 'successful' | 'failed';
+  status: 'pending' | 'successful' | 'failed' | 'refunded';
   created_at: string;
 }
 export interface SiteSettings {
@@ -114,6 +114,41 @@ export const db = {
       throw new Error(insertError.message);
     }
     return newVisitor;
+  },
+  /**
+   * Log a payment attempt in the payments table
+   */
+  async logPayment(data: Omit<Payment, 'id' | 'created_at'>): Promise<Payment> {
+    const { data: newPayment, error } = await supabase
+      .from('payments')
+      .insert(data)
+      .select()
+      .single();
+    if (error) {
+      throw new Error(error.message);
+    }
+    return newPayment;
+  },
+  /**
+   * Fetch all payments for admin panel
+   */
+  async getAllPayments(): Promise<Payment[]> {
+    const { data, error } = await supabase
+      .from('payments')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+  /**
+   * Mark a payment as refunded
+   */
+  async updatePaymentRefunded(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('payments')
+      .update({ status: 'refunded' })
+      .eq('id', id);
+    if (error) throw new Error(error.message);
   },
   /**
    * Login by email + phone. Returns the visitor or throws if not found.
