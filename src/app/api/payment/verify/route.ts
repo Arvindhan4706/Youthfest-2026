@@ -16,9 +16,39 @@ export async function POST(req: Request) {
       .digest('hex');
     const isAuthentic = expectedSignature === razorpay_signature;
     if (isAuthentic) {
-      // Actually update the database status here
       if (email) {
-        await db.updatePaymentStatus(email, 'paid');
+        // Use Service Role Key to bypass RLS policies
+        const { createClient } = require('@supabase/supabase-js');
+        const supabaseAdmin = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.SUPABASE_SERVICE_ROLE_KEY!
+        );
+
+        const emailLower = email.toLowerCase().trim();
+        await supabaseAdmin
+          .from('visitors')
+          .update({ payment_status: 'paid' })
+          .eq('email', emailLower);
+
+        const eventTitle = body.eventTitle;
+        if (eventTitle) {
+          const { data: visitor } = await supabaseAdmin
+            .from('visitors')
+            .select('registered_events')
+            .eq('email', emailLower)
+            .single();
+
+          if (visitor) {
+            const events = visitor.registered_events || [];
+            if (!events.includes(eventTitle)) {
+              events.push(eventTitle);
+              await supabaseAdmin
+                .from('visitors')
+                .update({ registered_events: events })
+                .eq('email', emailLower);
+            }
+          }
+        }
       }
       return NextResponse.json(
         { success: true, message: 'Payment successfully verified', isAuthentic: true },

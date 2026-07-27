@@ -129,20 +129,16 @@ export const useStore = create<AppState>()(
         get().addToast('You are already registered for this event!');
         return;
       }
-      try {
-        // Persist to Supabase database
-        const updated = await db.registerForEvent(user.email, eventId);
-        set({
-          user: {
-            ...user,
-            registeredEvents: updated.registered_events,
-          },
-        });
-        get().addToast(`Successfully registered for ${eventId}!`);
-      } catch (err: unknown) {
-        const errorMsg = err instanceof Error ? err.message : 'Failed to register for event.';
-        get().addToast(errorMsg);
-      }
+      // The database is now updated securely by the server during payment verification.
+      // We only need to update the local state here.
+      const updatedEvents = [...user.registeredEvents, eventId];
+      set({
+        user: {
+          ...user,
+          registeredEvents: updatedEvents,
+        },
+      });
+      get().addToast(`Successfully registered for ${eventId}!`);
     },
     initiateRegistration: (event) => {
       const user = get().user;
