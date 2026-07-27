@@ -44,6 +44,7 @@ export default function VisitorProfile() {
   const [profileGender, setProfileGender] = useState(user?.gender || 'Male');
   const [profileCity, setProfileCity] = useState(user?.city || '');
   const [isSaving, setIsSaving] = useState(false);
+  const [isRetryingPayment, setIsRetryingPayment] = useState(false);
 
   if (!user) return null;
 
@@ -73,6 +74,27 @@ export default function VisitorProfile() {
       addToast(err instanceof Error ? err.message : '❌ Failed to update profile. Please try again.');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleRetryPayment = async () => {
+    setIsRetryingPayment(true);
+    try {
+      const res = await fetch('/api/payment/retry-entry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user.email, name: user.name, phone: user.phone })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to generate payment link');
+      
+      if (data.paymentLinkUrl) {
+        window.location.href = data.paymentLinkUrl;
+      }
+    } catch (err: any) {
+      addToast(err.message || 'Payment retry failed');
+    } finally {
+      setIsRetryingPayment(false);
     }
   };
 
@@ -110,6 +132,22 @@ export default function VisitorProfile() {
           </div>
         </div>
       </div>
+
+      {user.payment_status === 'pending' && (
+        <div className="p-5 rounded-2xl bg-red-500/10 border border-red-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h3 className="text-red-400 font-bold text-sm">General Registration Pending</h3>
+            <p className="text-red-400/80 text-xs mt-1">Your general entry fee (₹500) has not been paid yet. You must complete this payment to attend the fest.</p>
+          </div>
+          <button 
+            onClick={handleRetryPayment}
+            disabled={isRetryingPayment}
+            className="px-6 py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-sm transition-colors whitespace-nowrap"
+          >
+            {isRetryingPayment ? 'Loading...' : 'Complete Payment'}
+          </button>
+        </div>
+      )}
 
       {/* Edit Form */}
       <div className="p-6 sm:p-8 rounded-3xl border border-white/10 bg-white/[0.02]">
@@ -214,7 +252,7 @@ export default function VisitorProfile() {
             <Calendar className="w-4 h-4 text-[var(--neon-magenta)] shrink-0" />
             <div>
               <p className="text-[10px] text-gray-500 uppercase tracking-wider">YouthFest</p>
-              <p className="text-white text-xs">Aug 11–13, 2026</p>
+              <p className="text-white text-xs">Aug 12, 2026</p>
             </div>
           </div>
         </div>

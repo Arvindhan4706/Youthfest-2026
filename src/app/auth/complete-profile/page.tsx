@@ -38,11 +38,13 @@ function ProfileForm() {
     setIsLoading(true);
     setError('');
 
+    const cleanedPhone = phone.replace(/\D/g, '').slice(-10);
+
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone, college, department, year, gender, city })
+        body: JSON.stringify({ name, email, phone: cleanedPhone, college, department, year, gender, city })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Registration failed');
@@ -52,7 +54,8 @@ function ProfileForm() {
         email: visitor.email, name: visitor.name, phone: visitor.phone, 
         college: visitor.college, department: visitor.department, 
         year: visitor.year, gender: visitor.gender, city: visitor.city,
-        registeredEvents: visitor.registered_events 
+        registeredEvents: visitor.registered_events,
+        payment_status: visitor.payment_status 
       });
 
       // Send OD via our new API route
@@ -176,7 +179,7 @@ function ProfileForm() {
 
 export default function CompleteProfilePage() {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 pt-24 md:pt-32">
       <Suspense fallback={
         <div className="text-center space-y-4 flex flex-col items-center">
           <Loader2 className="w-10 h-10 text-[var(--neon-cyan)] animate-spin" />

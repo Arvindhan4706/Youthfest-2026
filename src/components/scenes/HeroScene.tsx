@@ -131,7 +131,7 @@ export default function HeroScene() {
     }
   };
 
-  const titleText = "YUVENZA";
+  const titleText = "YOUTHFEST 2026";
   const titleVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -148,7 +148,7 @@ export default function HeroScene() {
   return (
     <section
       id="hero"
-      className="relative min-h-[100dvh] w-full flex flex-col items-center justify-center overflow-x-hidden px-4 section-padding"
+      className="relative min-h-[100vh] md:min-h-0 md:h-auto lg:min-h-[90vh] xl:min-h-[100vh] w-full flex flex-col items-center justify-center overflow-x-hidden px-4 section-padding"
       style={{ background: 'radial-gradient(ellipse at 50% 0%, #0a0030 0%, #011213 50%, #010008 100%)' }}
       aria-labelledby="hero-heading"
     >
@@ -176,33 +176,33 @@ export default function HeroScene() {
             style={{ animationDuration: '40s' }}
             className="animate-marquee-reverse flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
           >
-            <span className="pr-16">YUVENZA</span>
-            <span className="pr-16">YUVENZA</span>
-            <span className="pr-16">YUVENZA</span>
-            <span className="pr-16">YUVENZA</span>
-            <span className="pr-16">YUVENZA</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
           </div>
           {/* Line 2 - Scrolling Left (Right to Left) */}
           <div
             style={{ animationDuration: '45s' }}
             className="animate-marquee flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
           >
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YUVENZA</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YUVENZA</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YUVENZA</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YUVENZA</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YUVENZA</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
+            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
           </div>
           {/* Line 3 - Scrolling Right (Left to Right) */}
           <div
             style={{ animationDuration: '35s' }}
             className="animate-marquee-reverse flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
           >
-            <span className="pr-16">YUVENZA</span>
-            <span className="pr-16">YUVENZA</span>
-            <span className="pr-16">YUVENZA</span>
-            <span className="pr-16">YUVENZA</span>
-            <span className="pr-16">YUVENZA</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
+            <span className="pr-16">YOUTHFEST 2026</span>
           </div>
         </div>
 
@@ -218,7 +218,7 @@ export default function HeroScene() {
           className="mb-6 relative"
         >
           <div className="relative z-20">
-            <Image src="/yuvenzalogo.png" alt="Youthfest Event Logo" width={300} height={112} priority style={{ width: "auto", height: "auto" }} className="w-[200px] sm:w-[250px] md:w-[300px] object-contain" />
+            <Image src="/yuvenzalogo.png" alt="Yuvenza Logo" width={180} height={60} priority style={{ width: "auto", height: "auto" }} className="w-[180px] object-contain" />
           </div>
         </motion.div>
 
@@ -252,11 +252,16 @@ export default function HeroScene() {
           className="relative mb-4 perspective-1000"
         >
           <h1 id="hero-heading" className="flex justify-center flex-wrap text-[clamp(3.5rem,15vw,8rem)] md:text-8xl lg:text-9xl font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative px-2 text-center uppercase">
-            {titleText.split('').map((char, index) => (
-              <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
-                {char}
-              </motion.span>
-            ))}
+            {titleText.split('').map((char, index) => {
+              if (char === ' ') {
+                return <div key={index} className="w-full basis-full h-0" aria-hidden="true" />;
+              }
+              return (
+                <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
+                  {char}
+                </motion.span>
+              );
+            })}
           </h1>
         </motion.div>
 
@@ -285,7 +290,7 @@ export default function HeroScene() {
           />
           <Calendar className="relative z-10 w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
           <span className="relative z-10 text-sm sm:text-base font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300">
-            Aug 11–13 · CIT Campus, Chennai
+            Aug 12 · CIT Campus, Chennai
           </span>
           <div className="relative z-10 flex items-center justify-center w-2 h-2 ml-2">
             <span className="absolute w-full h-full rounded-full bg-blue-500 opacity-70 animate-ping" />
@@ -303,22 +308,6 @@ export default function HeroScene() {
           Yuvenza is the student-driven youth club of Chennai Institute of Technology. <span className="text-white font-medium">What we create, we contribute.</span> Every event and campaign we organize channels real support back to the community around us.
         </motion.p>
 
-        {/* HERO FACTS */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.8 }}
-          className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 mb-10 mx-auto px-4"
-        >
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.02]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-cyan)]" />
-            <span className="text-sm font-medium text-gray-300">8 Events · Open to All Colleges</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.02]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--neon-violet)]" />
-            <span className="text-sm font-medium text-gray-300">Every Registration Supports Our Social Causes</span>
-          </div>
-        </motion.div>
 
         {/* Buttons */}
         <motion.div
@@ -341,13 +330,7 @@ export default function HeroScene() {
           >
             Our Work
           </button>
-          <button
-            onClick={() => router.push('/#about')}
-            aria-label="Join the Club"
-            className="group flex items-center justify-center gap-2 w-full md:w-auto px-8 h-[48px] rounded-[12px] font-semibold text-gray-300 hover:text-white transition-all duration-300"
-          >
-            Join the Club
-          </button>
+
         </motion.div>
 
 

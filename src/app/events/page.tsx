@@ -27,21 +27,7 @@ export default function EventsPage() {
   useEffect(() => {
     if (!hasMounted) return;
     
-    // Initialise Lenis smooth scroll
-    let lenis: any = null;
-    const initLenis = async () => {
-      try {
-        const { default: Lenis } = await import('lenis');
-        lenis = new Lenis({ autoRaf: true });
-      } catch (err) {
-        console.warn('Lenis failed to initialise:', err);
-      }
-    };
-    initLenis();
-    
-    return () => {
-      try { lenis?.destroy(); } catch (_) {}
-    };
+    // Smooth scrolling is already handled globally by GlobalClientProviders
   }, [hasMounted]);
 
   if (!hasMounted) return null;
@@ -61,38 +47,7 @@ export default function EventsPage() {
         <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
         <PaymentModal />
 
-        {/* Add top padding for fixed navbar */}
-        <div className="pt-24 sm:pt-32" />
 
-        {/* Introduction */}
-        <div className="max-w-7xl mx-auto px-4 mb-16 text-center">
-          <h1 className="text-5xl font-black font-[var(--font-heading-main)] text-white uppercase tracking-wider mb-6">Discover the Experience</h1>
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            YouthFest 2026 brings together the brightest minds and most creative talents for three days of intense competition, learning, and celebration.
-          </p>
-        </div>
-
-        {/* Highlights */}
-        <div className="max-w-5xl mx-auto px-4 mb-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-              <h3 className="text-3xl font-black text-[var(--neon-cyan)] mb-1">8+</h3>
-              <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Categories</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-              <h3 className="text-3xl font-black text-[var(--neon-violet)] mb-1">50+</h3>
-              <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Events</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-              <h3 className="text-3xl font-black text-[var(--neon-magenta)] mb-1">₹5L+</h3>
-              <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Prize Pool</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-              <h3 className="text-3xl font-black text-[var(--neon-lime)] mb-1">10k+</h3>
-              <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Participants</p>
-            </div>
-          </div>
-        </div>
 
         {/* Event Showcase */}
         <EventShowcaseScene />

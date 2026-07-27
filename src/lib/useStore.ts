@@ -16,6 +16,7 @@ export interface UserProfile {
   gender?: string;
   city?: string;
   registeredEvents: string[];
+  payment_status?: 'pending' | 'paid';
 }
 export interface EventDetails {
   id: string;

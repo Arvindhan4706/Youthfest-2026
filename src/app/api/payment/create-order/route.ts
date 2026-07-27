@@ -15,6 +15,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Amount is required' }, { status: 400 });
     }
 
+    const { db } = await import('@/lib/database');
+    const { email, eventTitle } = body;
+    
+    if (email && eventTitle) {
+      const visitor = await db.getVisitorByEmail(email);
+      if (visitor && visitor.registered_events?.includes(eventTitle)) {
+        return NextResponse.json({ error: `You have already paid and registered for ${eventTitle}.` }, { status: 400 });
+      }
+    }
+
     const amountInPaise = parseInt(amount) * 100;
     if (amountInPaise < 100) {
       return NextResponse.json({ error: 'Minimum amount must be 1 INR' }, { status: 400 });

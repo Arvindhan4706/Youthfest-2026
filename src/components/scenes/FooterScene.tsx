@@ -58,7 +58,7 @@ export default function FooterScene() {
 
   const quickLinks = [
     { label: 'Home', href: '/' },
-    { label: 'About', href: '/#about' },
+    { label: 'About', href: '/about' },
     { label: 'Events', href: '/events' },
     { label: 'Schedule', href: '/#schedule' },
     { label: 'Register', href: '/#register' },
@@ -67,165 +67,156 @@ export default function FooterScene() {
     { label: 'Contact', href: '#contact' },
   ];
 
-  const eventLinks = [
-    { label: 'Technical Events', href: '/events' },
-    { label: 'Cultural Events', href: '/events' },
-    { label: 'Hackathon', href: '/events' },
-    { label: 'Workshops', href: '/events' },
-    { label: 'Gaming Arena', href: '/events' },
-    { label: 'Photography', href: '/events' },
-    { label: 'Music & Dance', href: '/events' },
-    { label: 'Fun Events', href: '/events' },
-  ];
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
 
-  const participantServices = [
-    { label: 'My Profile', href: '/profile' },
-    { label: 'Dashboard', href: '/profile' },
-    { label: 'My Registrations', href: '/profile' },
-    { label: 'My Tickets', href: '/profile' },
-    { label: 'Certificates', href: '/profile' },
-    { label: 'Payment History', href: '/profile' },
-    { label: 'Help Center', href: '/profile' },
-  ];
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+  };
 
   return (
-    <footer id="contact" className="relative py-[64px] lg:py-[100px] px-4 border-t border-white/[0.06] overflow-hidden bg-[#050010]">
-      {/* Background glow */}
-      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-cyan-900/10 rounded-full blur-[100px] pointer-events-none" />
+    <footer id="contact" className="relative pt-[64px] pb-[64px] lg:pt-[100px] lg:pb-[80px] border-t border-white/[0.08] overflow-hidden bg-[#030008]">
+      {/* Dynamic Background glows */}
+      <motion.div 
+        animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }} 
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-[var(--neon-violet)]/10 rounded-full blur-[150px] pointer-events-none" 
+      />
+      <motion.div 
+        animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.15, 0.1] }} 
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-[var(--neon-cyan)]/10 rounded-full blur-[120px] pointer-events-none" 
+      />
 
       <div className="max-w-7xl mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
         
-        {/* TOP CTA / NEWSLETTER */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8 pb-16 border-b border-white/10 mb-16">
+        {/* TOP CTA */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-col md:flex-row justify-between items-center gap-8 pb-12 mb-16 border-b border-white/10 relative"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent blur-3xl -z-10" />
           <div className="text-center md:text-left">
-            <h3 className="text-3xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-2">See You at YouthFest 2026!</h3>
-            <p className="text-gray-400 max-w-lg text-sm">Join thousands of students for an unforgettable celebration of innovation, creativity, culture, and community.</p>
+            <h3 className="text-4xl font-[var(--font-heading-main)] font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-[var(--neon-cyan)] to-[var(--neon-violet)] uppercase tracking-wider mb-3 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+              See You at YouthFest 2026!
+            </h3>
+            <p className="text-gray-400 max-w-lg text-sm leading-relaxed">Join thousands of students for an unforgettable celebration of innovation, creativity, culture, and community.</p>
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="/events" className="flex items-center justify-center px-6 h-[48px] rounded-[12px] border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold transition-all">Explore Events</Link>
-            <Link href="/profile" className="flex items-center justify-center px-6 h-[48px] rounded-[12px] bg-white text-black hover:bg-gray-200 font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]">Register Now</Link>
+          <div className="flex flex-wrap justify-center md:justify-end items-center gap-4">
+            <Link href="/events" className="group flex items-center justify-center px-8 h-[52px] rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold transition-all overflow-hidden relative">
+              <span className="relative z-10">Explore Events</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)]/20 to-[var(--neon-violet)]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </Link>
+            <Link href="/profile" className="flex items-center justify-center px-8 h-[52px] rounded-full bg-white text-black hover:scale-105 font-bold transition-transform shadow-[0_0_30px_rgba(255,255,255,0.4)]">
+              Register Now
+            </Link>
           </div>
-        </div>
+        </motion.div>
 
         {/* MAIN FOOTER GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-20">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-8 mb-20"
+        >
           
           {/* Brand Info */}
-          <div className="lg:col-span-1 flex flex-col gap-6">
+          <motion.div variants={itemVariants} className="lg:col-span-1 flex flex-col gap-6">
             <div>
-              <Link href="/" className="inline-block text-2xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-widest mb-2">
+              <Link href="/" className="inline-block text-3xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-widest mb-1 hover:text-[var(--neon-cyan)] transition-colors">
                 YouthFest 2026
               </Link>
+              <div className="h-1 w-20 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-magenta)] rounded-full mb-4" />
               <p className="text-[var(--neon-cyan)] text-xs font-bold uppercase tracking-widest mb-4">Celebrate Talent • Inspire Innovation • Create Memories</p>
               <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                YouthFest 2026 is the flagship annual festival celebrating innovation, creativity, culture, and collaboration. Bringing together students from across colleges to compete, learn, perform, and create unforgettable experiences.
+                YouthFest 2026 is the flagship annual festival celebrating innovation, creativity, culture, and collaboration. Bringing together students from across colleges to create unforgettable experiences.
               </p>
             </div>
             {/* Socials */}
             <div>
               <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Follow Us</h4>
-              <div className="flex gap-3">
-                <a href="#" aria-label="Instagram" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[var(--neon-magenta)] hover:shadow-[0_0_15px_rgba(255,0,127,0.5)] transition-all"><InstagramIcon /></a>
-                <a href="#" aria-label="LinkedIn" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#0077B5] hover:shadow-[0_0_15px_rgba(0,119,181,0.5)] transition-all"><LinkedinIcon /></a>
-                <a href="#" aria-label="Facebook" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1877F2] hover:shadow-[0_0_15px_rgba(24,119,242,0.5)] transition-all"><FacebookIcon /></a>
-                <a href="#" aria-label="YouTube" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#FF0000] hover:shadow-[0_0_15px_rgba(255,0,0,0.5)] transition-all"><YoutubeIcon /></a>
-                <a href="#" aria-label="Twitter/X" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-black hover:border-white/50 border border-transparent transition-all"><TwitterXIcon /></a>
+              <div className="flex gap-4">
+                <a href="#" aria-label="Instagram" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[var(--neon-magenta)] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,0,127,0.3)] transition-all duration-300"><InstagramIcon /></a>
+                <a href="#" aria-label="LinkedIn" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#0077B5] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,119,181,0.3)] transition-all duration-300"><LinkedinIcon /></a>
+                <a href="#" aria-label="Facebook" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1877F2] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(24,119,242,0.3)] transition-all duration-300"><FacebookIcon /></a>
+                <a href="#" aria-label="YouTube" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#FF0000] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,0,0,0.3)] transition-all duration-300"><YoutubeIcon /></a>
+                <a href="#" aria-label="Twitter/X" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-black hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,255,255,0.2)] border border-transparent hover:border-white/20 transition-all duration-300"><TwitterXIcon /></a>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div className="flex flex-col gap-6">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10">Quick Links</h4>
+          <motion.div variants={itemVariants} className="flex flex-col gap-6">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[var(--neon-cyan)] animate-pulse" />
+              Quick Links
+            </h4>
             <div className="flex flex-col gap-3">
               {quickLinks.map(link => (
-                <Link key={link.label} href={link.href} className="text-sm text-gray-400 hover:text-[var(--neon-cyan)] hover:translate-x-1 transition-all flex items-center gap-2 group">
-                  <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                <Link key={link.label} href={link.href} className="text-sm text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center gap-3 group">
+                  <ChevronRight className="w-4 h-4 text-[var(--neon-cyan)] opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   {link.label}
                 </Link>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Events */}
-          <div className="flex flex-col gap-6">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10">Events</h4>
-            <div className="flex flex-col gap-3">
-              {eventLinks.map(link => (
-                <Link key={link.label} href={link.href} className="text-sm text-gray-400 hover:text-[var(--neon-violet)] hover:translate-x-1 transition-all flex items-center gap-2 group">
-                  <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Participant Services */}
-          <div className="flex flex-col gap-6">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10">Participant Services</h4>
-            <div className="flex flex-col gap-3">
-              {participantServices.map(link => (
-                <Link key={link.label} href={link.href} className="text-sm text-gray-400 hover:text-[var(--neon-magenta)] hover:translate-x-1 transition-all flex items-center gap-2 group">
-                  <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Contact & Newsletter */}
-          <div className="flex flex-col gap-8">
+          {/* Contact */}
+          <motion.div variants={itemVariants} className="flex flex-col gap-8">
             <div>
-              <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10 mb-6">Contact Us</h4>
-              <div className="flex flex-col gap-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[var(--neon-cyan)] shrink-0 mt-0.5" />
-                  <p className="text-sm text-gray-400 leading-relaxed">
-                    <strong className="text-white block">YouthFest Organizing Committee</strong>
+              <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10 mb-6 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[var(--neon-violet)] animate-pulse" />
+                Contact Us
+              </h4>
+              <div className="flex flex-col gap-5">
+                <div className="flex items-start gap-4 group">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[var(--neon-cyan)]/20 transition-colors">
+                    <MapPin className="w-5 h-5 text-[var(--neon-cyan)]" />
+                  </div>
+                  <p className="text-sm text-gray-400 leading-relaxed pt-1">
+                    <strong className="text-white block mb-1">YouthFest Organizing Committee</strong>
                     Chennai Institute of Technology<br/>
                     Sarathy Nagar, Kundrathur, Chennai
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-[var(--neon-violet)] shrink-0" />
+                <div className="flex items-center gap-4 group">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[var(--neon-violet)]/20 transition-colors">
+                    <Mail className="w-5 h-5 text-[var(--neon-violet)]" />
+                  </div>
                   <a href="mailto:support@youthfest.in" className="text-sm text-gray-400 hover:text-white transition-colors">support@youthfest.in</a>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-[var(--neon-magenta)] shrink-0" />
+                <div className="flex items-center gap-4 group">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[var(--neon-magenta)]/20 transition-colors">
+                    <Phone className="w-5 h-5 text-[var(--neon-magenta)]" />
+                  </div>
                   <a href="tel:+917339524706" className="text-sm text-gray-400 hover:text-white transition-colors">+91 73395 24706</a>
                 </div>
               </div>
             </div>
-
-            <div>
-              <h4 className="text-sm font-bold text-white uppercase tracking-wider pb-4 border-b border-white/10 mb-4">Stay Updated</h4>
-              <p className="text-xs text-gray-400 mb-4">Subscribe to receive the latest announcements and event updates.</p>
-              <form className="relative flex items-center" onSubmit={(e) => e.preventDefault()}>
-                <input 
-                  type="email" 
-                  placeholder="Enter your email address" 
-                  className="w-full h-[48px] bg-white/5 border border-white/10 rounded-[12px] pl-4 pr-12 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors"
-                />
-                <button type="submit" aria-label="Subscribe to newsletter" className="absolute right-2 w-10 h-10 rounded-[12px] bg-[var(--neon-cyan)] text-black flex items-center justify-center hover:scale-105 transition-transform">
-                  <Send className="w-4 h-4 ml-0.5" />
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* BOTTOM LEGAL BAR */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-white/10 text-xs text-gray-500">
-          <p>© 2026 YouthFest. All Rights Reserved.</p>
-          <div className="flex gap-4">
-            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white transition-colors">Terms & Conditions</Link>
-            <Link href="#" className="hover:text-white transition-colors">Refund Policy</Link>
-          </div>
-          <p>Designed and Developed by the <span className="text-[var(--neon-cyan)] font-medium">YouthFest Technical Team</span>.</p>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="flex justify-center items-center pt-6 border-t border-white/10"
+        >
+          <p className="text-[10px] text-gray-500 uppercase tracking-widest">© 2026 YouthFest. All Rights Reserved.</p>
+        </motion.div>
       </div>
     </footer>
   );
 }
+
