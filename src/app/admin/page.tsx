@@ -31,6 +31,7 @@ export default function AdminPortal() {
  const [adminLogs, setAdminLogs] = useState<any[]>([]);
  // Users State
  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+ const [newUserEmail, setNewUserEmail] = useState('');
  const [newUserRole, setNewUserRole] = useState<Role>('Viewer');
  // Payments State
  const [payments, setPayments] = useState<Payment[]>([]);
