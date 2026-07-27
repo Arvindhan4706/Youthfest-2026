@@ -21,7 +21,7 @@ const WHAT_WE_DO = [
   },
   {
     title: 'Creative Production',
-    desc: 'Building immersive stage experiences, branding, decorations, digital content, and promotional campaigns that define the YouthFest identity.',
+    desc: 'Building immersive stage experiences, branding, decorations, digital content, and promotional campaigns that define the Yuvenza identity.',
     color: 'var(--neon-violet)',
   },
   {
@@ -40,7 +40,7 @@ const PROCESS_STEPS = [
   {
     number: '01',
     title: 'Vision & Planning',
-    desc: 'Every YouthFest begins months in advance. The core committee comes together to set the theme, goals, and structure for the upcoming edition.',
+    desc: 'Every Yuvenza begins months in advance. The core committee comes together to set the theme, goals, and structure for the upcoming edition.',
     color: 'var(--neon-cyan)',
   },
   {
@@ -86,7 +86,7 @@ export default function WorkPage() {
         <div className="pt-28 sm:pt-36" />
 
         {/* ── HERO ── */}
-        <section className="relative max-w-7xl mx-auto px-4 pb-24 text-center overflow-hidden">
+        <section className="relative container-responsive pb-24 text-center overflow-hidden">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-[var(--neon-cyan)]/5 rounded-full blur-[120px] pointer-events-none" />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -103,7 +103,7 @@ export default function WorkPage() {
           >
             The Journey{' '}
             <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">
-              Behind YouthFest
+              Behind Yuvenza
             </span>
           </motion.h1>
           <motion.p
@@ -112,7 +112,7 @@ export default function WorkPage() {
             transition={{ delay: 0.2 }}
             className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed mb-10"
           >
-            Every unforgettable experience begins with months of planning, creativity, collaboration, and dedication. YouthFest is more than a festival — it's a celebration built by passionate students working together to create memories that last a lifetime.
+            Every unforgettable experience begins with months of planning, creativity, collaboration, and dedication. Yuvenza is more than a festival — it's a celebration built by passionate students working together to create memories that last a lifetime.
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -120,13 +120,13 @@ export default function WorkPage() {
             transition={{ delay: 0.3 }}
             className="text-base text-gray-500 max-w-2xl mx-auto leading-relaxed"
           >
-            From brainstorming ideas and designing experiences to organizing competitions and managing thousands of participants, every aspect of YouthFest reflects innovation, teamwork, and excellence. Our work is driven by students who transform ideas into reality.
+            From brainstorming ideas and designing experiences to organizing competitions and managing thousands of participants, every aspect of Yuvenza reflects innovation, teamwork, and excellence. Our work is driven by students who transform ideas into reality.
           </motion.p>
         </section>
 
         {/* ── WHAT WE DO ── */}
         <section className="relative py-24 bg-[#030010]">
-          <div className="max-w-7xl mx-auto px-4">
+          <div className="container-responsive">
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-violet)]/30 bg-[var(--neon-violet)]/5 text-xs text-[var(--neon-violet)] font-semibold uppercase tracking-widest mb-4">
                 Our Core Work
@@ -154,7 +154,7 @@ export default function WorkPage() {
 
         {/* ── IMPACT STATS ── */}
         <section className="py-24">
-          <div className="max-w-7xl mx-auto px-4">
+          <div className="container-responsive">
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-magenta)]/30 bg-[var(--neon-magenta)]/5 text-xs text-[var(--neon-magenta)] font-semibold uppercase tracking-widest mb-4">
                 Our Impact
@@ -184,7 +184,7 @@ export default function WorkPage() {
 
         {/* ── OUR PROCESS ── */}
         <section className="py-24 bg-[#030010]">
-          <div className="max-w-7xl mx-auto px-4">
+          <div className="container-responsive">
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-lime)]/30 bg-[var(--neon-lime)]/5 text-xs text-[var(--neon-lime)] font-semibold uppercase tracking-widest mb-4">
                 How We Work
@@ -227,7 +227,7 @@ export default function WorkPage() {
         <section className="py-24 text-center px-4">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-4xl font-[var(--font-heading-main)] font-black text-white uppercase mb-6">Be Part of the Story</h2>
-            <p className="text-gray-400 mb-10">YouthFest 2026 is your chance to be in the room where it happens. Compete, create, connect, and leave your mark on something that matters.</p>
+            <p className="text-gray-400 mb-10">Yuvenza is your chance to be in the room where it happens. Compete, create, connect, and leave your mark on something that matters.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/events" className="px-8 py-4 rounded-full bg-white text-black font-bold hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]">
                 Explore Events

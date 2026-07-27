@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     }
 
     const mailOptions = {
-      from: 'Yuvenza Youthfest <noreply@yuvenza.com>',
+      from: 'Yuvenza Yuvenza <noreply@yuvenza.com>',
       to: email,
       subject: `Registration Confirmed: ${eventTitle}`,
       html: `
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
           <div style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-top: 25px;">
             <h3 style="color: #fff; margin-top: 0;">What's Next?</h3>
             <p style="color: #bbb; font-size: 14px; margin-bottom: 0;">
-              Head over to your <strong>Dashboard</strong> on the Youthfest 2026 platform. From there, you can view your digital Vitality Pass and download your PDF ticket with your unique QR code!
+              Head over to your <strong>Dashboard</strong> on the Yuvenza platform. From there, you can view your digital Vitality Pass and download your PDF ticket with your unique QR code!
             </p>
           </div>
           <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">

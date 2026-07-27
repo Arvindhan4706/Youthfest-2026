@@ -11,7 +11,7 @@ export default function Error({
 }) {
  useEffect(() => {
  // Log the error to an error reporting service like Sentry here
- console.error('Youthfest 2026 App Error:', error);
+ console.error('Yuvenza App Error:', error);
  }, [error]);
  return (
  <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden p-6">

@@ -14,7 +14,7 @@ export default function NotFound() {
  </h1>
  <h2 className="text-2xl font-bold uppercase tracking-widest text-white mb-6">Sector Not Found</h2>
  <p className="text-gray-400 text-sm leading-relaxed mb-8 font-mono">
- The requested trajectory leads to an uncharted sector of the Youthfest 2026 mainframe. Please return to established coordinates.
+ The requested trajectory leads to an uncharted sector of the Yuvenza mainframe. Please return to established coordinates.
  </p>
  <Link 
  href="/"

@@ -69,8 +69,8 @@ export default function InboxSection() {
                       <MailOpen className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-extrabold text-white">Youthfest &apos;26 Registrations</h4>
-                      <span className="text-[9px] text-gray-500">From: registrations@youthfest.org</span>
+                      <h4 className="text-xs font-extrabold text-white">Yuvenza &apos;26 Registrations</h4>
+                      <span className="text-[9px] text-gray-500">From: registrations@yuvenza.org</span>
                     </div>
                   </div>
                   

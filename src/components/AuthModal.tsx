@@ -135,7 +135,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   window.location.href = data.paymentLinkUrl;
   return;
  } else {
-  addToast('Registration successful! Welcome to Youthfest.');
+  addToast('Registration successful! Welcome to Yuvenza.');
   setIsLoading(false);
   onClose();
  }

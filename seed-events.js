@@ -1,0 +1,36 @@
+require('dotenv').config({ path: '.env.local' });
+const { createClient } = require('@supabase/supabase-js');
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
+const STATIC_EVENTS = [
+  { id: 'main-1', track_id: 'main-events', title: 'Squid Game', description: 'Red light, green light... do you have what it takes? Survive the insane challenges and outlast everyone else to win!', team_size: '1', fee: '₹150', difficulty: 'Hard', image_url: '/event-images/squid_game.png', event_date: 'August 12 - 10:00 AM', venue: 'Main Arena', rules: ["All participants must carry their valid college ID cards.", "Decisions made by the judges will be final and binding.", "Any form of indiscipline or rule violation will lead to immediate disqualification."] },
+  { id: 'main-2', track_id: 'main-events', title: 'Case Closed', description: 'Channel your inner Sherlock! Follow the clues, interrogate the suspects, and piece together the murder mystery.', team_size: '2-4', fee: '₹200', difficulty: 'Medium', image_url: '/event-images/case_closed.png', event_date: 'August 12 - 02:00 PM', venue: 'Seminar Hall 1', rules: ["All participants must carry their valid college ID cards.", "Decisions made by the judges will be final and binding."] },
+  { id: 'main-3', track_id: 'main-events', title: '7 Keys', description: 'Think fast and run faster! Solve the riddles and hunt down the 7 magical keys hidden across campus before time runs out.', team_size: '3-5', fee: '₹250', difficulty: 'Hard', image_url: '/event-images/seven_keys.png', event_date: 'August 12 - 01:00 PM', venue: 'Campus Ground', rules: ["All participants must carry their valid college ID cards.", "Decisions made by the judges will be final and binding."] },
+  { id: 'main-4', track_id: 'main-events', title: 'Cypher', description: '24 hours of caffeine, code, and crazy ideas. Build something epic, flex your dev skills, and take home the grand prize.', team_size: '2-4', fee: '₹300', difficulty: 'Hard', image_url: '/event-images/cypher.png', event_date: 'August 12 - 09:00 AM', venue: 'Tech Lab 4', rules: ["All participants must carry their valid college ID cards.", "Decisions made by the judges will be final and binding."] },
+  { id: 'pre-1', track_id: 'pre-events', title: 'Mock Parliament', description: 'Got strong opinions? Step into the shoes of a parliamentarian and debate the real issues that actually matter.', team_size: '1', fee: '₹100', difficulty: 'Medium', image_url: '/event-images/mock_parliament.png', event_date: 'August 12 - 10:00 AM', venue: 'Auditorium', rules: ["All participants must carry their valid college ID cards."] },
+  { id: 'pre-2', track_id: 'pre-events', title: 'Charity Match', description: 'Lace up your boots! A high-stakes football match where every single goal supports an amazing cause.', team_size: '11', fee: '₹500', difficulty: 'Medium', image_url: '/event-images/charity_match.png', event_date: 'August 12 - 04:00 PM', venue: 'Football Ground', rules: ["All participants must carry their valid college ID cards."] },
+  { id: 'pre-3', track_id: 'workshops', title: 'Calistro', description: 'Always wanted to design like a pro? Dive into UI/UX aesthetics, digital arts, and creative design in this hands-on workshop.', team_size: '1', fee: '₹250', difficulty: 'Medium', image_url: '/event-images/calistro.png', event_date: 'August 12 - 10:00 AM', venue: 'Seminar Hall A', rules: ["All participants must carry their valid college ID cards."] },
+  { id: 'pre-4', track_id: 'pre-events', title: 'Pickle Ball', description: 'The hype is real! Grab a paddle and hit the courts for some incredibly fast-paced, addictive Pickleball action.', team_size: '2', fee: '₹150', difficulty: 'Medium', image_url: '/event-images/pickle_ball.png', event_date: 'August 12 - 02:00 PM', venue: 'Tennis Court', rules: ["All participants must carry their valid college ID cards."] },
+  // Missing Workshops
+  { id: 'ws-2', track_id: 'workshops', title: 'AIDS', description: 'No boring theory here. Get your hands dirty building actual machine learning models in this AI & Data Science masterclass.', team_size: '1-2', fee: '₹300', difficulty: 'Hard', image_url: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80', event_date: 'August 12 - 02:00 PM', venue: 'AI Super Lab', rules: ["All participants must carry their valid college ID cards."] },
+  { id: 'ws-3', track_id: 'workshops', title: 'Resolution', description: 'Take your editing to the next level. Learn 3D visualization, high-res media processing, and pro digital content creation.', team_size: '1', fee: '₹200', difficulty: 'Medium', image_url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80', event_date: 'August 12 - 11:30 AM', venue: 'Media Studio', rules: ["All participants must carry their valid college ID cards."] },
+  { id: 'ws-4', track_id: 'workshops', title: 'Asymmetric', description: 'Curious about hacking? Learn ethical hacking, cybersecurity basics, and cryptography in this intensive security workshop.', team_size: '1-2', fee: '₹300', difficulty: 'Hard', image_url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80', event_date: 'August 12 - 01:30 PM', venue: 'Cyber Security Lab', rules: ["All participants must carry their valid college ID cards."] },
+  { id: 'ws-5', track_id: 'workshops', title: 'Celestius', description: 'Space nerds, this one is for you! Get hands-on with interactive astronomy, space tech, and satellite engineering.', team_size: '1', fee: '₹250', difficulty: 'Medium', image_url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80', event_date: 'August 12 - 03:30 PM', venue: 'Space Research Centre', rules: ["All participants must carry their valid college ID cards."] },
+];
+
+async function seed() {
+  for (const ev of STATIC_EVENTS) {
+    const { error } = await supabase.from('events').upsert(ev);
+    if (error) {
+      console.error(`Failed to upsert ${ev.id}:`, error.message);
+    } else {
+      console.log(`Upserted ${ev.title} (${ev.id}) successfully.`);
+    }
+  }
+}
+
+seed();

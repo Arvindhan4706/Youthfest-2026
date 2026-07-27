@@ -96,7 +96,7 @@ export default function FooterScene() {
         className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-[var(--neon-cyan)]/10 rounded-full blur-[120px] pointer-events-none" 
       />
 
-      <div className="max-w-7xl mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
+      <div className="container-responsive relative z-10">
         
         {/* TOP CTA */}
         <motion.div 
@@ -107,17 +107,17 @@ export default function FooterScene() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent blur-3xl -z-10" />
           <div className="text-center md:text-left">
-            <h3 className="text-4xl font-[var(--font-heading-main)] font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-[var(--neon-cyan)] to-[var(--neon-violet)] uppercase tracking-wider mb-3 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-              See You at YouthFest 2026!
+            <h3 className="text-2xl sm:text-4xl font-[var(--font-heading-main)] font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-[var(--neon-cyan)] to-[var(--neon-violet)] uppercase tracking-wider mb-3 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+              See You at Yuvenza!
             </h3>
             <p className="text-gray-400 max-w-lg text-sm leading-relaxed">Join thousands of students for an unforgettable celebration of innovation, creativity, culture, and community.</p>
           </div>
           <div className="flex flex-wrap justify-center md:justify-end items-center gap-4">
-            <Link href="/events" className="group flex items-center justify-center px-8 h-[52px] rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold transition-all overflow-hidden relative">
+            <Link href="/events" className="group flex items-center justify-center px-6 min-h-[48px] h-[48px] rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold transition-all overflow-hidden relative text-sm">
               <span className="relative z-10">Explore Events</span>
               <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)]/20 to-[var(--neon-violet)]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>
-            <Link href="/profile" className="flex items-center justify-center px-8 h-[52px] rounded-full bg-white text-black hover:scale-105 font-bold transition-transform shadow-[0_0_30px_rgba(255,255,255,0.4)]">
+            <Link href="/profile" className="flex items-center justify-center px-6 min-h-[48px] h-[48px] rounded-full bg-white text-black hover:scale-105 font-bold transition-transform shadow-[0_0_30px_rgba(255,255,255,0.4)] text-sm">
               Register Now
             </Link>
           </div>
@@ -129,25 +129,25 @@ export default function FooterScene() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-8 mb-20"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-8 mb-20"
         >
           
           {/* Brand Info */}
           <motion.div variants={itemVariants} className="lg:col-span-1 flex flex-col gap-6">
             <div>
               <Link href="/" className="inline-block text-3xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-widest mb-1 hover:text-[var(--neon-cyan)] transition-colors">
-                YouthFest 2026
+                Yuvenza
               </Link>
               <div className="h-1 w-20 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-magenta)] rounded-full mb-4" />
               <p className="text-[var(--neon-cyan)] text-xs font-bold uppercase tracking-widest mb-4">Celebrate Talent • Inspire Innovation • Create Memories</p>
               <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                YouthFest 2026 is the flagship annual festival celebrating innovation, creativity, culture, and collaboration. Bringing together students from across colleges to create unforgettable experiences.
+                Yuvenza is the flagship annual festival celebrating innovation, creativity, culture, and collaboration. Bringing together students from across colleges to create unforgettable experiences.
               </p>
             </div>
             {/* Socials */}
             <div>
               <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Follow Us</h4>
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-3">
                 <a href="#" aria-label="Instagram" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[var(--neon-magenta)] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,0,127,0.3)] transition-all duration-300"><InstagramIcon /></a>
                 <a href="#" aria-label="LinkedIn" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#0077B5] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,119,181,0.3)] transition-all duration-300"><LinkedinIcon /></a>
                 <a href="#" aria-label="Facebook" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1877F2] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(24,119,242,0.3)] transition-all duration-300"><FacebookIcon /></a>
@@ -186,7 +186,7 @@ export default function FooterScene() {
                     <MapPin className="w-5 h-5 text-[var(--neon-cyan)]" />
                   </div>
                   <p className="text-sm text-gray-400 leading-relaxed pt-1">
-                    <strong className="text-white block mb-1">YouthFest Organizing Committee</strong>
+                    <strong className="text-white block mb-1">Yuvenza Organizing Committee</strong>
                     Chennai Institute of Technology<br/>
                     Sarathy Nagar, Kundrathur, Chennai
                   </p>
@@ -195,7 +195,7 @@ export default function FooterScene() {
                   <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[var(--neon-violet)]/20 transition-colors">
                     <Mail className="w-5 h-5 text-[var(--neon-violet)]" />
                   </div>
-                  <a href="mailto:support@youthfest.in" className="text-sm text-gray-400 hover:text-white transition-colors">support@youthfest.in</a>
+                  <a href="mailto:yuvenza@citchennai.net" className="text-sm text-gray-400 hover:text-white transition-colors">yuvenza@citchennai.net</a>
                 </div>
                 <div className="flex items-center gap-4 group">
                   <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[var(--neon-magenta)]/20 transition-colors">
@@ -215,7 +215,7 @@ export default function FooterScene() {
           viewport={{ once: true }}
           className="flex justify-center items-center pt-6 border-t border-white/10"
         >
-          <p className="text-[10px] text-gray-500 uppercase tracking-widest">© 2026 YouthFest. All Rights Reserved.</p>
+          <p className="text-[10px] text-gray-500 uppercase tracking-widest">© 2026 Yuvenza. All Rights Reserved.</p>
         </motion.div>
       </div>
     </footer>

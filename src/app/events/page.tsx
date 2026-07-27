@@ -53,7 +53,7 @@ export default function EventsPage() {
         <EventShowcaseScene />
 
         {/* Why Participate & Event Experience */}
-        <div className="max-w-7xl mx-auto px-4 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="container-responsive py-24 grid grid-cols-1 lg:grid-cols-2 gap-16">
           
           <div>
             <h2 className="text-3xl font-black font-[var(--font-heading-main)] text-white uppercase mb-8">Why Participate?</h2>
@@ -91,7 +91,7 @@ export default function EventsPage() {
                 </div>
                 <div>
                   <h4 className="text-white font-bold mb-1">Experience the energy</h4>
-                  <p className="text-gray-400 text-sm">Immerse yourself in the vibrant, unmatched energy of the YouthFest community.</p>
+                  <p className="text-gray-400 text-sm">Immerse yourself in the vibrant, unmatched energy of the Yuvenza community.</p>
                 </div>
               </li>
             </ul>

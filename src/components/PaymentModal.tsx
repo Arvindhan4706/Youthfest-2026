@@ -71,7 +71,7 @@ export default function PaymentModal() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: orderData.amount,
         currency: orderData.currency,
-        name: "Yuvenza YouthFest",
+        name: "Yuvenza Yuvenza",
         description: `Registration for ${checkoutEvent.title}`,
         order_id: orderData.order_id,
         handler: async function (response: any) {
@@ -141,7 +141,7 @@ export default function PaymentModal() {
  timestamp: new Date().toISOString(),
  recipientEmail: user.email,
  subject: `Registration Confirmed: ${checkoutEvent.title}`,
- body: `Hello ${user.name},\n\nYour registration for ${checkoutEvent.title} is confirmed!\n\nAmount Paid: ${checkoutEvent.fee}\nEvent Category: ${checkoutEvent.category}\n\n[ YOUR QR ENTRY PASS ]\nYour personalized QR Code has been generated.\nTicket ID: ${getTicketId(user.email, checkoutEvent.title)}\n\nYour QR Boarding Pass is available in your Wellness Visitor Portal dashboard. You can also view it securely at the venue by logging in.\n\nPlease show your QR pass at the entrance on the day of the event to check in instantly.\n\nSee you at Youthfest '26!\n- The Yuvenza Team`
+ body: `Hello ${user.name},\n\nYour registration for ${checkoutEvent.title} is confirmed!\n\nAmount Paid: ${checkoutEvent.fee}\nEvent Category: ${checkoutEvent.category}\n\n[ YOUR QR ENTRY PASS ]\nYour personalized QR Code has been generated.\nTicket ID: ${getTicketId(user.email, checkoutEvent.title)}\n\nYour QR Boarding Pass is available in your Wellness Visitor Portal dashboard. You can also view it securely at the venue by logging in.\n\nPlease show your QR pass at the entrance on the day of the event to check in instantly.\n\nSee you at Yuvenza '26!\n- The Yuvenza Team`
  });
  // Send the OD via our new API route
  try {

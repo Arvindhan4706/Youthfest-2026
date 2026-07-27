@@ -19,10 +19,10 @@ interface GalleryItem {
 
 const GALLERY_IMAGES: GalleryItem[] = [
   // 2023
-  { id: 1, type: 'image', url: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?auto=format&fit=crop&w=800&q=80', title: 'First Orphanage Visit', year: '2023', desc: 'Our very first YouthFest! We kicked things off with a bang and immediately took it beyond campus for our first orphanage outreach.', rotationClass: '-rotate-3', translateClass: 'translate-y-4' },
+  { id: 1, type: 'image', url: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?auto=format&fit=crop&w=800&q=80', title: 'First Orphanage Visit', year: '2023', desc: 'Our very first Yuvenza! We kicked things off with a bang and immediately took it beyond campus for our first orphanage outreach.', rotationClass: '-rotate-3', translateClass: 'translate-y-4' },
   
   // 2024
-  { id: 2, type: 'image', url: '/memories/yf24.png', title: 'Keerthy Suresh @ YF24', year: '2024', desc: 'The one and only Keerthy Suresh graced our stage! This was the year YouthFest truly became massive.', rotationClass: 'rotate-2', translateClass: '-translate-y-2' },
+  { id: 2, type: 'image', url: '/memories/yf24.png', title: 'Keerthy Suresh @ YF24', year: '2024', desc: 'The one and only Keerthy Suresh graced our stage! This was the year Yuvenza truly became massive.', rotationClass: 'rotate-2', translateClass: '-translate-y-2' },
   { id: 3, type: 'image', url: '/memories/marathon.png', title: 'College Marathon', year: '2024', desc: 'Early mornings, crazy energy, and a campus united. Our first marathon was an absolute blast.', rotationClass: '-rotate-6', translateClass: 'translate-y-6' },
   { id: 4, type: 'image', url: '/memories/cancer_panel.png', title: 'Cancer Awareness Panel', year: '2024', desc: 'An eye-opening panel discussion on Cancer Awareness. Some real, heartfelt conversations happened here.', rotationClass: 'rotate-6', translateClass: '-translate-y-4' },
   { id: 5, type: 'image', url: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?auto=format&fit=crop&w=800&q=80', title: 'Christmas Drive', year: '2024', desc: 'Spreading smiles! We paired an important HIV/AIDS awareness session with our huge Christmas donation drive.', rotationClass: '-rotate-2', translateClass: 'translate-y-2' },
@@ -127,7 +127,7 @@ export default function MemoriesScene() {
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-700 via-gray-900 to-black pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[var(--neon-cyan)]/5 rounded-full blur-[120px] pointer-events-none" />
       
-      <div className="max-w-4xl mx-auto px-4 relative z-10 mb-16 flex flex-col items-center text-center gap-6">
+      <div className="container-responsive relative z-10 mb-16 flex flex-col items-center text-center gap-6">
         {/* Header */}
         <div className="flex flex-col items-center">
           <motion.div
@@ -142,11 +142,11 @@ export default function MemoriesScene() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
+            className="text-3xl sm:text-4xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
           >
             The Journey{' '}
             <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">
-              Behind YouthFest
+              Behind Yuvenza
             </span>
           </motion.h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-2xl mb-8">
@@ -163,7 +163,7 @@ export default function MemoriesScene() {
       </div>
 
       {/* Floating Polaroids Container */}
-      <div className="relative z-20 w-full max-w-[1200px] mx-auto px-4 sm:px-8 pb-20">
+      <div className="relative z-20 w-full container-responsive pb-20">
         {/* Flex layout that scatters them */}
         <div className="flex flex-wrap justify-center gap-6 sm:gap-10 md:gap-12 lg:gap-14">
           {GALLERY_IMAGES.map((item, index) => (

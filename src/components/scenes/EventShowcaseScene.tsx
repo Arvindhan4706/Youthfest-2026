@@ -81,7 +81,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
 
   useEffect(() => {
     // Parse "August 12 - 10:00 AM" into a real Date object
-    // Assuming year is 2026 for Youthfest 2026
+    // Assuming year is 2026 for Yuvenza
     let dateStr = event.date;
     if (dateStr.includes('-')) {
       const parts = dateStr.split('-');
@@ -248,12 +248,12 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
       </div>
       <button
         onClick={() => {
-          const ruleContent = `YOUTHFEST 2026 OFFICIAL EVENT RULEBOOK\nEvent: ${event.title}\nVenue: ${event.venue}\nDate & Time: ${event.date}\nTeam Size: ${event.team}\nRegistration Fee: ${event.fee}\n\nRULES:\n${event.rules.map((r, i) => `${i + 1}. ${r}`).join('\n')}\n\n4. All participants must report at the venue 15 minutes before scheduled start time.\n5. Judging criteria includes originality, execution, and adherence to time limits.\n6. For event support or query, contact Event Lead: +91 98765 43210 (Yuvenza Core Team).`;
+          const ruleContent = `YUVENZA 2026 OFFICIAL EVENT RULEBOOK\nEvent: ${event.title}\nVenue: ${event.venue}\nDate & Time: ${event.date}\nTeam Size: ${event.team}\nRegistration Fee: ${event.fee}\n\nRULES:\n${event.rules.map((r, i) => `${i + 1}. ${r}`).join('\n')}\n\n4. All participants must report at the venue 15 minutes before scheduled start time.\n5. Judging criteria includes originality, execution, and adherence to time limits.\n6. For event support or query, contact Event Lead: +91 98765 43210 (Yuvenza Core Team).`;
           const blob = new Blob([ruleContent], { type: 'text/plain;charset=utf-8' });
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `Youthfest2026_${event.title.replace(/\s+/g, '_')}_Rulebook.txt`;
+          a.download = `Yuvenza2026_${event.title.replace(/\s+/g, '_')}_Rulebook.txt`;
           a.click();
           URL.revokeObjectURL(url);
         }}
@@ -283,7 +283,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
     <div className="p-4 rounded-[20px] bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-white/10 flex items-center justify-between">
       <div>
         <div className="text-[10px] uppercase font-bold tracking-widest text-purple-400">Student Event Coordinator</div>
-        <div className="text-xs font-bold text-white">Youthfest Event Desk</div>
+        <div className="text-xs font-bold text-white">Yuvenza Event Desk</div>
       </div>
       <a href="tel:+919876543210" className="text-xs font-mono font-bold text-teal-300 hover:underline">
         +91 98765 43210
@@ -419,7 +419,7 @@ export default function EventShowcaseScene() {
  <div
  className="absolute top-0 left-0 w-full h-[1px] transition-colors duration-500"
  />
- <div className="relative z-10 max-w-7xl mx-auto px-4">
+ <div className="relative z-10 container-responsive">
         {/* Header */}
         <div className="text-center mb-10">
           <motion.div
@@ -434,11 +434,11 @@ export default function EventShowcaseScene() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
+            className="text-3xl sm:text-4xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
           >
             Explore{' '}
             <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">
-              YouthFest 2026
+              Yuvenza
             </span>
           </motion.h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
@@ -446,7 +446,7 @@ export default function EventShowcaseScene() {
           </p>
         </div>
  {/* Track tabs */}
- <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">
+ <div className="tab-strip justify-start sm:justify-center mb-8 px-1">
  {TRACKS.map((t, idx) => {
  const isActive = idx === activeTrack;
  return (
@@ -480,7 +480,7 @@ export default function EventShowcaseScene() {
  <motion.div 
  initial={{ opacity: 0, y: 10 }}
  animate={{ opacity: 1, y: 0 }}
- className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white/[0.02] border border-white/10 rounded-[20px] p-4 mb-10 "
+ className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-white/[0.02] border border-white/10 rounded-[20px] p-3 sm:p-4 mb-10"
  >
  <div className="relative w-full md:w-96">
  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -489,7 +489,7 @@ export default function EventShowcaseScene() {
  placeholder="Search events..."
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="w-full bg-black/40 border border-white/10 rounded-[20px] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-[var(--neon-cyan)]/50 focus:ring-1 focus:ring-[var(--neon-cyan)]/50 transition-all"
+ className="w-full bg-black/40 border border-white/10 rounded-[20px] py-3 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-[var(--neon-cyan)]/50 focus:ring-1 focus:ring-[var(--neon-cyan)]/50 transition-all min-h-[48px]"
  />
  </div>
  <div className="flex gap-3 w-full md:w-auto">
@@ -497,7 +497,7 @@ export default function EventShowcaseScene() {
       <select 
         value={teamSizeFilter}
         onChange={(e) => setTeamSizeFilter(e.target.value)}
-        className="w-full md:w-48 bg-black/40 border border-white/10 rounded-[20px] py-2.5 px-4 text-sm text-gray-300 appearance-none focus:outline-none focus:border-[var(--neon-violet)]/50 transition-all cursor-pointer"
+         className="w-full sm:w-48 bg-black/40 border border-white/10 rounded-[20px] py-3 px-4 text-sm text-gray-300 appearance-none focus:outline-none focus:border-[var(--neon-violet)]/50 transition-all cursor-pointer min-h-[48px]"
       >
         {uniqueTeamSizes.map(size => (
           <option key={size} value={size}>{size === 'All' ? 'All Team Sizes' : size}</option>
@@ -534,7 +534,7 @@ export default function EventShowcaseScene() {
  animate={{ opacity: 1, y: 0 }}
  exit={{ opacity: 0, y: -20 }}
  transition={{ duration: 0.4 }}
- className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+ className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
  >
  {filteredEvents.map((event) => (
  <EventCard 

@@ -274,7 +274,7 @@ export default function AdminPortal() {
  const link = document.createElement('a');
  const url = URL.createObjectURL(blob);
  link.setAttribute('href', url);
- link.setAttribute('download', `youthfest_registrations_${new Date().toISOString().split('T')[0]}.csv`);
+ link.setAttribute('download', `yuvenza_registrations_${new Date().toISOString().split('T')[0]}.csv`);
  link.style.visibility = 'hidden';
  document.body.appendChild(link);
  link.click();
@@ -382,7 +382,7 @@ export default function AdminPortal() {
  </motion.div>
  </div>
  ) : (
- <div className="max-w-7xl mx-auto relative z-10 pt-8 w-full">
+ <div className="container-responsive relative z-10 pt-8 w-full">
  {/* Header */}
  <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
  <div>
@@ -765,20 +765,20 @@ export default function AdminPortal() {
  <tr>
  <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Event</th>
  <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Track</th>
- <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Difficulty</th>
+
  <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs text-right">Actions</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-white/5">
  {isLoading ? (
  <tr>
- <td colSpan={4} className="px-6 py-12 text-center text-gray-400">
+ <td colSpan={3} className="px-6 py-12 text-center text-gray-400">
  <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-[var(--neon-magenta)]" />
  </td>
  </tr>
  ) : events.length === 0 ? (
  <tr>
- <td colSpan={4} className="px-6 py-12 text-center text-gray-400">No events found.</td>
+ <td colSpan={3} className="px-6 py-12 text-center text-gray-400">No events found.</td>
  </tr>
  ) : (
  events.map(event => (
@@ -788,11 +788,6 @@ export default function AdminPortal() {
  <div className="text-xs text-gray-500">{event.event_date}</div>
  </td>
  <td className="px-6 py-4 text-gray-300 font-mono text-xs">{event.track_id}</td>
- <td className="px-6 py-4">
- <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full border ${event.difficulty === 'Easy' ? 'border-green-500/30 text-green-400 bg-green-500/10' : event.difficulty === 'Medium' ? 'border-yellow-500/30 text-yellow-400 bg-yellow-500/10' : 'border-red-500/30 text-red-400 bg-red-500/10'}`}>
- {event.difficulty}
- </span>
- </td>
  <td className="px-6 py-4 text-right">
  {['Super Admin', 'Editor'].includes(userRole) ? (
  <>
@@ -821,13 +816,15 @@ export default function AdminPortal() {
  animate={{ opacity: 1, scale: 1 }}
  className="bg-[#030014] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl relative"
  >
- <button onClick={() => setIsEventModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white">
- <X className="w-5 h-5" />
- </button>
- <div className="p-6 md:p-8">
- <h2 className="text-2xl font-[var(--font-heading-main)] font-black text-white mb-6">
+ <div className="flex items-center justify-between p-6 border-b border-white/10 shrink-0">
+ <h2 className="text-2xl font-[var(--font-heading-main)] font-black text-white">
  {editingEvent ? 'Edit Event' : 'Add New Event'}
  </h2>
+ <button onClick={() => setIsEventModalOpen(false)} className="text-gray-400 hover:text-white p-2">
+ <X className="w-6 h-6" />
+ </button>
+ </div>
+ <div className="flex-1 overflow-y-auto p-6 md:p-8 scrollbar-thin">
  <form onSubmit={handleSaveEvent} className="space-y-4">
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div>
@@ -857,14 +854,6 @@ export default function AdminPortal() {
  <div>
  <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Fee</label>
  <input name="fee" defaultValue={editingEvent?.fee} required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="e.g. ₹100" />
- </div>
- <div>
- <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Difficulty</label>
- <select name="difficulty" defaultValue={editingEvent?.difficulty || 'Medium'} className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white">
- <option value="Easy">Easy</option>
- <option value="Medium">Medium</option>
- <option value="Hard">Hard</option>
- </select>
  </div>
  <div>
  <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Date & Time</label>

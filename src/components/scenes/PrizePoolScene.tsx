@@ -68,7 +68,7 @@ export default function PrizePoolScene() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[var(--neon-violet)]/8 rounded-full blur-[130px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[var(--neon-cyan)]/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4">
+      <div className="relative z-10 container-responsive">
 
         {/* Header — same as EventShowcaseScene */}
         <div className="text-center mb-14">
@@ -107,7 +107,7 @@ export default function PrizePoolScene() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: prize.delay, duration: 0.55 }}
-              className={`group relative rounded-[20px] border ${prize.border} ${prize.bg} backdrop-blur-sm overflow-hidden flex flex-col w-full md:w-72 transition-all duration-300`}
+              className={`group relative rounded-[20px] border ${prize.border} ${prize.bg} backdrop-blur-sm overflow-hidden flex flex-col w-full sm:w-72 transition-all duration-300`}
               style={prize.featured ? { boxShadow: `0 0 40px ${prize.glow}` } : undefined}
             >
               {/* Top color bar — same as EventCard difficulty badge */}

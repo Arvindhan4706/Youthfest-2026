@@ -161,7 +161,7 @@ export default function Dashboard() {
       <ToastContainer />
       <Navbar />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 pt-28 pb-16 flex gap-6">
+      <div className="relative z-10 container-responsive pt-28 pb-16 flex gap-6">
 
         {/* ── Sidebar (desktop) ── */}
         <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 gap-2">

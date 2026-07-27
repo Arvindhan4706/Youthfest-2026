@@ -1,7 +1,7 @@
 export default function DashboardLoading() {
   return (
     <div className="min-h-screen bg-[#030014] text-white p-4 sm:p-8 flex items-center justify-center">
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 animate-pulse">
+      <div className="container-responsive w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 animate-pulse">
         
         {/* Left Column - Profile (Col span 4) */}
         <div className="lg:col-span-4 space-y-6">

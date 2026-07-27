@@ -93,7 +93,7 @@ export default function StatsBarScene() {
   ];
  return (
  <section id="about" className="relative section-padding md:section-padding lg:section-padding overflow-hidden" >
- <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+ <div className="relative z-10 container-responsive">
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 items-center">
  <motion.div
  initial={{ opacity: 0, x: -40 }}
@@ -106,7 +106,7 @@ export default function StatsBarScene() {
   <div className="h-[2px] w-12 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)]" />
   <span className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--neon-cyan)]">About Yuvenza</span>
  </div>
- <h2 className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black leading-tight text-white">
+ <h2 className="text-3xl sm:text-4xl lg:text-6xl font-[var(--font-heading-main)] font-black leading-tight text-white">
  THE YOUTH <br />
  <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">POWERED CLUB</span>
  </h2>

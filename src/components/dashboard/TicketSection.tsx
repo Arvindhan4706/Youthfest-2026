@@ -47,7 +47,7 @@ export default function TicketSection() {
       page.drawRectangle({ x: 0, y: 0, width: 600, height: 300, color: rgb(0.02, 0.0, 0.1) });
       
       // Draw Ticket Header
-      page.drawText("YOUTHFEST &apos;26 VITALITY PASS", { x: 30, y: 250, size: 20, font, color: rgb(0.1, 0.9, 0.9) });
+      page.drawText("YUVENZA &apos;26 VITALITY PASS", { x: 30, y: 250, size: 20, font, color: rgb(0.1, 0.9, 0.9) });
       
       // Draw Event Name
       page.drawText(selectedEventTicket, { x: 30, y: 200, size: 24, font, color: rgb(1, 1, 1) });
@@ -168,7 +168,7 @@ export default function TicketSection() {
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500" />
             <div className="flex items-center justify-between w-full mb-3">
               <span className="text-[9px] uppercase font-mono tracking-widest text-teal-400 font-bold">
-                YOUTHFEST &apos;26 VITALITY PASS
+                YUVENZA &apos;26 VITALITY PASS
               </span>
               <span className="text-[8px] uppercase font-bold tracking-widest bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/40">
                 VERIFIED PASS

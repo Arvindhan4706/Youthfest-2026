@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       amount: amountInPaise,
       currency: "INR",
       accept_partial: false,
-      description: "Yuvenza Youthfest 2026 Registration",
+      description: "Yuvenza Yuvenza Registration",
       customer: {
         name: validatedData.name,
         email: validatedData.email,
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       },
       reminder_enable: false,
       reference_id: `rcpt_${Math.random().toString(36).substring(2, 9)}`,
-      callback_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://youthfest-2026.vercel.app'}/payment-success?email=${encodeURIComponent(validatedData.email)}`,
+      callback_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://yuvenza-2026.vercel.app'}/payment-success?email=${encodeURIComponent(validatedData.email)}`,
       callback_method: "get"
     };
     

@@ -25,7 +25,7 @@ function PaymentSuccessContent() {
   const addToast = useStore((state) => state.addToast);
 
   const eventTitle = searchParams.get('eventTitle') || 'Vitality Pass';
-  const email = searchParams.get('email') || user?.email || 'attendee@youthfest.com';
+  const email = searchParams.get('email') || user?.email || 'attendee@yuvenza.com';
   const attendeeName = user?.name || 'Festival Attendee';
 
   useEffect(() => {
@@ -69,7 +69,7 @@ function PaymentSuccessContent() {
           setStatus('success');
           
           // Generate QR code for gate verification
-          const qrData = `${email}|${eventTitleParam || 'Youthfest 2026'}`;
+          const qrData = `${email}|${eventTitleParam || 'Yuvenza'}`;
           QRCode.toDataURL(qrData, { width: 300, margin: 1 })
             .then(url => setQrCodeDataUrl(url))
             .catch(err => console.error('Failed to generate QR code:', err));
@@ -124,7 +124,7 @@ function PaymentSuccessContent() {
       const normalFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
       page.drawRectangle({ x: 0, y: 0, width: 600, height: 300, color: rgb(0.02, 0.0, 0.1) });
-      page.drawText("YOUTHFEST '26 VITALITY PASS", { x: 30, y: 250, size: 20, font, color: rgb(0.1, 0.9, 0.9) });
+      page.drawText("YUVENZA '26 VITALITY PASS", { x: 30, y: 250, size: 20, font, color: rgb(0.1, 0.9, 0.9) });
       page.drawText(eventTitle, { x: 30, y: 200, size: 24, font, color: rgb(1, 1, 1) });
       page.drawText(`Visitor: ${attendeeName}`, { x: 30, y: 150, size: 14, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
       page.drawText(`Email: ${email}`, { x: 30, y: 130, size: 12, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
@@ -148,7 +148,7 @@ function PaymentSuccessContent() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Youthfest_Pass_${eventTitle.replace(/\s+/g, '_')}.pdf`;
+      link.download = `Yuvenza_Pass_${eventTitle.replace(/\s+/g, '_')}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -195,7 +195,7 @@ function PaymentSuccessContent() {
             <div className="w-full bg-gradient-to-b from-purple-900/40 to-[#070024] border border-purple-500/30 rounded-2xl p-5 mb-6 shadow-xl relative flex flex-col items-center text-center overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500" />
               <span className="text-[9px] uppercase font-mono tracking-widest text-teal-400 font-bold mb-3">
-                YOUTHFEST &apos;26 OFFICIAL GATE PASS
+                YUVENZA &apos;26 OFFICIAL GATE PASS
               </span>
 
               <div className="bg-white p-2 rounded-xl mb-3 shadow-[0_0_20px_rgba(168,85,247,0.3)]">

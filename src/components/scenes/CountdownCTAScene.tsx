@@ -60,7 +60,7 @@ export default function CountdownCTAScene() {
  </div>
  {/* Grid */}
  {/* Ambient glows */}
- <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+ <div className="relative z-10 container-responsive text-center">
         {/* Urgency badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

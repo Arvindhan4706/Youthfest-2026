@@ -210,7 +210,7 @@ export default function HeroScene() {
       </motion.div>
 
       {/* Main content */}
-      <div className="relative z-20 max-w-5xl mx-auto text-center flex flex-col items-center mt-8 sm:mt-16 pointer-events-auto">
+      <div className="relative z-20 w-full max-w-5xl mx-auto text-center flex flex-col items-center mt-8 sm:mt-16 pointer-events-auto px-4 sm:px-6 lg:px-8">
         {/* Event Logo */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -220,7 +220,7 @@ export default function HeroScene() {
           >
             {/* Logo Image */}
             <div className="relative flex justify-center items-center h-auto min-h-[40px] px-4 w-full">
-              <Image src="/yuvenzalogo.png" alt="Youthfest Event Logo" width={300} height={112} priority style={{ height: "auto" }} className="w-[85px] sm:w-[108px] md:w-[135px] object-contain" />
+              <Image src="/yuvenzalogo.png" alt="Yuvenza Event Logo" width={300} height={112} priority style={{ height: "auto" }} className="w-[85px] sm:w-[108px] md:w-[135px] object-contain" />
             </div>
           </motion.div>
 
@@ -253,7 +253,7 @@ export default function HeroScene() {
           animate="visible"
           className="relative mb-4 perspective-1000"
         >
-          <h1 id="hero-heading" className="flex justify-center flex-wrap text-[clamp(3.5rem,15vw,8rem)] md:text-8xl lg:text-9xl font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative px-2 text-center uppercase">
+          <h1 id="hero-heading" className="flex justify-center flex-wrap text-[clamp(2.5rem,12vw,8rem)] font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative text-center uppercase w-full">
             {titleText.split('').map((char, index) => {
               if (char === ' ') {
                 return <div key={index} className="w-full basis-full h-0" aria-hidden="true" />;
@@ -272,7 +272,7 @@ export default function HeroScene() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-lg sm:text-2xl md:text-3xl font-[var(--font-heading-main)] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-white to-[var(--neon-magenta)] mb-6 text-center"
+          className="text-base sm:text-xl md:text-3xl font-[var(--font-heading-main)] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-white to-[var(--neon-magenta)] mb-6 text-center w-full"
         >
           Igniting Passion, Creativity & Unity.
         </motion.p>
@@ -305,7 +305,7 @@ export default function HeroScene() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2 }}
-          className="text-base sm:text-lg text-gray-400 font-normal tracking-normal mb-8 max-w-3xl leading-relaxed text-center px-4"
+          className="text-sm sm:text-base md:text-lg text-gray-400 font-normal tracking-normal mb-8 w-full max-w-3xl mx-auto leading-relaxed text-center"
         >
           Yuvenza is the student-driven youth club of Chennai Institute of Technology. <span className="text-white font-medium">What we create, we contribute.</span> Every event and campaign we organize channels real support back to the community around us.
         </motion.p>
@@ -316,23 +316,22 @@ export default function HeroScene() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.2 }}
-          className="flex flex-col md:flex-row items-center justify-center gap-4 mb-12 w-full px-4 md:px-0"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12 w-full"
         >
           <button
             onClick={handleRegisterClick}
             aria-label="Register for the Fest"
-            className="group flex items-center justify-center gap-2 w-full md:w-auto px-8 h-[48px] rounded-[12px] font-bold text-black bg-white hover:bg-gray-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 min-h-[48px] h-[48px] rounded-[12px] font-bold text-black bg-white hover:bg-gray-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)]"
           >
             Register for the Fest <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
           <button
             onClick={() => router.push('/work')}
             aria-label="Our Work"
-            className="group flex items-center justify-center gap-2 w-full md:w-auto px-8 h-[48px] rounded-[12px] font-semibold text-white border border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 min-h-[48px] h-[48px] rounded-[12px] font-semibold text-white border border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
           >
             Our Work
           </button>
-
         </motion.div>
 
 

@@ -38,7 +38,7 @@ export default function SpeakersScene() {
     <section id="testimonials" className="relative section-padding md:section-padding lg:section-padding overflow-hidden" aria-labelledby="testimonials-heading">
       {/* Background */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-purple-900/10 blur-[120px] pointer-events-none" />
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 container-responsive">
         {/* Header */}
         <div className="text-center mb-14">
           <motion.div

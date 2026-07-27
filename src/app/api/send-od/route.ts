@@ -15,10 +15,10 @@ export async function POST(request: Request) {
     }
     // Recipient email from request body
     const recipientEmail = email;
-    const emailSubject = `On Duty (OD) Approval for Yuvenza Youthfest 2026 - ${eventTitle || 'General Registration'}`;
+    const emailSubject = `On Duty (OD) Approval for Yuvenza Yuvenza - ${eventTitle || 'General Registration'}`;
     const emailBody = `
 Dear ${name},
-This email serves as your official On Duty (OD) approval for participating in Yuvenza's Youthfest 2026.
+This email serves as your official On Duty (OD) approval for participating in Yuvenza's Yuvenza.
 Participant Details:
 - Name: ${name}
 - College: ${college || 'N/A'}
@@ -30,7 +30,7 @@ Please find the official OD Letter attached as a PDF to this email. You may pres
 We look forward to seeing you at the biggest youth festival of the year!
 Best regards,
 The Yuvenza Organizing Committee
-Youthfest 2026
+Yuvenza
     `.trim();
     // 1. Generate PDF
     const pdfDoc = await PDFDocument.create();
@@ -40,7 +40,7 @@ Youthfest 2026
     const { width, height } = page.getSize();
     const margin = 50;
     // Header
-    page.drawText('YUVENZA YOUTHFEST 2026', {
+    page.drawText('YUVENZA YUVENZA 2026', {
       x: width / 2 - 120,
       y: height - 80,
       size: 20,
@@ -63,7 +63,7 @@ Youthfest 2026
     const dateText = `Date: ${new Date().toLocaleDateString()}`;
     page.drawText(dateText, { x: width - margin - 100, y: height - 160, size: 12, font: timesRomanFont });
     page.drawText('To Whom It May Concern,', { x: margin, y: height - 190, size: 12, font: timesRomanBold });
-    const paragraph1 = `This is to certify that ${name}, a student of ${department || 'the respective department'} at ${college || 'the respective institution'}, has officially registered to participate in the upcoming Yuvenza Youthfest 2026.`;
+    const paragraph1 = `This is to certify that ${name}, a student of ${department || 'the respective department'} at ${college || 'the respective institution'}, has officially registered to participate in the upcoming Yuvenza Yuvenza.`;
     page.drawText(paragraph1, {
       x: margin,
       y: height - 230,
@@ -93,7 +93,7 @@ Youthfest 2026
     // Signature
     page.drawText('Sincerely,', { x: margin, y: boxY - 60, size: 12, font: timesRomanFont });
     page.drawText('Yuvenza Organizing Committee', { x: margin, y: boxY - 100, size: 12, font: timesRomanBold });
-    page.drawText('Youthfest 2026', { x: margin, y: boxY - 120, size: 12, font: timesRomanFont });
+    page.drawText('Yuvenza', { x: margin, y: boxY - 120, size: 12, font: timesRomanFont });
     // Save PDF
     const pdfBytes = await pdfDoc.save();
     // 2. Send Email (Resend)
@@ -107,7 +107,7 @@ Youthfest 2026
       console.log('=================================================================\n');
     } else {
       await resend?.emails.send({
-        from: 'Yuvenza Youthfest <noreply@yuvenza.com>',
+        from: 'Yuvenza Yuvenza <noreply@yuvenza.com>',
         to: recipientEmail,
         subject: emailSubject,
         text: emailBody,

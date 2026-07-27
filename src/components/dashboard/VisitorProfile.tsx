@@ -293,7 +293,7 @@ export default function VisitorProfile() {
           <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
             <Calendar className="w-4 h-4 text-[var(--neon-magenta)] shrink-0" />
             <div>
-              <p className="text-[10px] text-gray-500 uppercase tracking-wider">YouthFest</p>
+              <p className="text-[10px] text-gray-500 uppercase tracking-wider">Yuvenza</p>
               <p className="text-white text-xs">Aug 12, 2026</p>
             </div>
           </div>

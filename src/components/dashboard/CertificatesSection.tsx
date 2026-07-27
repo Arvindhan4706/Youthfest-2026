@@ -56,7 +56,7 @@ export default function CertificatesSection() {
       });
 
       // Text
-      page.drawText("YOUTHFEST '26", { x: 300, y: 500, size: 36, font, color: rgb(0.1, 0.9, 0.9) });
+      page.drawText("YUVENZA '26", { x: 300, y: 500, size: 36, font, color: rgb(0.1, 0.9, 0.9) });
       page.drawText("CERTIFICATE OF PARTICIPATION", { x: 190, y: 440, size: 28, font, color: rgb(1, 1, 1) });
       
       page.drawText("This is proudly presented to", { x: 310, y: 380, size: 18, font: italicFont, color: rgb(0.7, 0.7, 0.7) });

@@ -161,7 +161,7 @@ export const useStore = create<AppState>()(
     };
   },
   {
-    name: 'youthfest-storage',
+    name: 'yuvenza-storage',
     partialize: (state) => ({ 
       user: state.user,
       isMuted: state.isMuted,

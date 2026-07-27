@@ -59,7 +59,7 @@ export async function POST(request: Request) {
       for (let i = 0; i < targetEmails.length; i += batchSize) {
         const batch = targetEmails.slice(i, i + batchSize);
         await resend?.emails.send({
-          from: 'Yuvenza Youthfest <noreply@yuvenza.com>',
+          from: 'Yuvenza Yuvenza <noreply@yuvenza.com>',
           to: 'noreply@yuvenza.com',
           bcc: batch,
           subject: subject,

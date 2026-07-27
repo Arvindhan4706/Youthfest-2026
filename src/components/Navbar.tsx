@@ -10,11 +10,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Center navigation links ───────────────────────────────────────────────────
 const navLinks = [
-  { href: '/',        label: 'Home',     sectionId: '#hero',  desc: 'Discover YouthFest 2026' },
+  { href: '/',        label: 'Home',     sectionId: '#hero',  desc: 'Discover Yuvenza' },
   { href: '/work',    label: 'Work',     desc: 'Explore our initiatives and achievements' },
   { href: '/events',  label: 'Events',   desc: 'Browse competitions, workshops, and performances' },
   { href: '#',        label: 'Register', action: 'register',  desc: 'Sign up for your favorite events' },
-  { href: '/about',   label: 'About',    desc: 'Learn about YouthFest and our mission' },
+  { href: '/about',   label: 'About',    desc: 'Learn about Yuvenza and our mission' },
 ];
 
 // ── Active section tracker ────────────────────────────────────────────────────
@@ -132,7 +132,7 @@ export default function Navbar() {
       <nav
         role="navigation"
         aria-label="Main navigation"
-        className={`fixed left-1/2 -translate-x-1/2 w-[94%] max-w-7xl z-50 rounded-2xl transition-all duration-500 ${
+        className={`fixed left-1/2 -translate-x-1/2 w-[88%] max-w-6xl z-50 rounded-2xl transition-all duration-500 ${
           hidden ? '-top-32 opacity-0' : 'top-4 opacity-100'
         } ${
           scrolled || mobileOpen
@@ -140,28 +140,28 @@ export default function Navbar() {
             : 'bg-white/[0.02] border border-white/[0.05] backdrop-blur-xl'
         }`}
       >
-        <div className="px-5 h-[64px] md:h-[72px] flex items-center justify-between gap-4">
+        <div className="px-6 h-[64px] md:h-[72px] flex items-center justify-between gap-4">
 
           {/* ── Logo ── */}
           <Link
             href="/"
-            className="group flex items-center gap-2.5 flex-shrink-0"
-            aria-label="YouthFest Home"
+            className="group flex items-center gap-3 flex-shrink-0"
+            aria-label="Yuvenza Home"
           >
             <Image
               src="/eventlogo.png"
-              alt="YouthFest Logo"
-              width={32}
-              height={32}
+              alt="Yuvenza Logo"
+              width={36}
+              height={36}
               priority
-              className="w-8 h-8 object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.4)] group-hover:scale-105 transition-transform duration-300"
+              className="w-9 h-9 object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.5)] group-hover:scale-105 transition-transform duration-300"
             />
             <div className="flex flex-col">
               <span className="text-[7px] uppercase tracking-[0.2em] text-gray-400 font-bold leading-none mb-0.5">
                 Yuvenza Presents
               </span>
               <span className="font-[var(--font-heading-main)] font-extrabold text-lg leading-none tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
-                YOUTHFEST
+                YUVENZA
               </span>
             </div>
             <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-widest bg-white/10 text-white/70 px-2 py-0.5 rounded-full border border-white/10">
@@ -181,7 +181,7 @@ export default function Navbar() {
                   aria-current={active ? 'page' : undefined}
                   title={link.desc}
                   onClick={(e) => handleLinkClick(e, link)}
-                  className={`relative px-4 py-2 rounded-full transition-colors duration-200 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--neon-cyan)] ${
+                  className={`relative px-4 py-2 rounded-full transition-colors duration-200 text-base font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--neon-cyan)] ${
                     active ? 'text-white' : 'text-gray-400 hover:text-white'
                   }`}
                 >
@@ -286,13 +286,13 @@ export default function Navbar() {
               <>
                 <button
                   onClick={() => setAuthOpen(true, 'login')}
-                  className="px-5 py-2 rounded-full text-sm font-semibold border border-white/20 text-white hover:bg-white/10 transition-all duration-300 min-h-[44px] flex items-center"
+                  className="px-5 py-2 rounded-full text-sm font-semibold border border-white/20 text-white hover:bg-white/10 transition-all duration-300 min-h-[38px] flex items-center"
                 >
                   Login
                 </button>
                 <button
                   onClick={() => setAuthOpen(true, 'register')}
-                  className="px-5 py-2 rounded-full text-sm font-semibold bg-[var(--neon-cyan)] text-black hover:opacity-80 transition-all duration-300 min-h-[44px] flex items-center"
+                  className="px-5 py-2 rounded-full text-sm font-semibold bg-[var(--neon-cyan)] text-black hover:opacity-80 transition-all duration-300 min-h-[38px] flex items-center shadow-[0_0_20px_rgba(0,240,255,0.3)]"
                 >
                   Sign Up
                 </button>

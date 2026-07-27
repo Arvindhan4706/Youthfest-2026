@@ -55,7 +55,7 @@ export default function AboutScene() {
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-purple-900/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-cyan-900/10 blur-[100px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-6xl mx-auto space-y-28">
+      <div className="relative z-10 container-responsive space-y-28">
 
         {/* ── INTRO ───────────────────────────────────────── */}
         <div>

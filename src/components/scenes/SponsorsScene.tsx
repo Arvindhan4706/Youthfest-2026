@@ -95,7 +95,7 @@ export default function SponsorsScene() {
  return (
  <section id="sponsors" className="relative section-padding md:section-padding lg:section-padding overflow-hidden" aria-labelledby="sponsors-heading">
  {/* Background grid */}
- <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+ <div className="relative z-10 container-responsive">
  {/* Header */}
  <div className="text-center mb-16 px-4">
  <motion.div
@@ -120,7 +120,7 @@ export default function SponsorsScene() {
  </span>
  </motion.h2>
  <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
- Youthfest 2026 is made possible by the generous support of industry leaders who believe in the power of student innovation.
+ Yuvenza is made possible by the generous support of industry leaders who believe in the power of student innovation.
  </p>
  </div>
  {/* Title Sponsor */}

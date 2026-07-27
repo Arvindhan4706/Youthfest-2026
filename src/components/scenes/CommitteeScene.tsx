@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ShieldCheck, PhoneCall, Mail, MapPin, ExternalLink, MessageSquare, Sparkles, Navigation } from 'lucide-react';
+import { ShieldCheck, PhoneCall, Mail, MapPin, ExternalLink, MessageSquare, Sparkles, Navigation, AtSign } from 'lucide-react';
 import { db, SiteSettings } from '@/lib/database';
 
 interface CommitteeMember {
@@ -18,16 +18,16 @@ interface CommitteeMember {
 const STUDENT_LEADS: CommitteeMember[] = [
   {
     name: 'Arvindhan S.',
-    role: 'Student Festival Chair',
+    role: 'Festival Lead',
     department: 'Computer Science Dept.',
     contact: '+91 98765 43210',
-    whatsapp: 'https://wa.me/919876543210?text=Hi%20Arvindhan,%20I%20have%20a%20query%20regarding%20Youthfest%202026',
+    whatsapp: 'https://wa.me/919876543210?text=Hi%20Arvindhan,%20I%20have%20a%20query%20regarding%20Yuvenza%202026',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
     tag: 'Overall Head',
   },
   {
     name: 'Meera Rajesh',
-    role: 'Cultural Events Head',
+    role: 'Culturals Lead',
     department: 'Media & Arts Dept.',
     contact: '+91 98765 43211',
     whatsapp: 'https://wa.me/919876543211?text=Hi%20Meera,%20I%20have%20a%20query%20regarding%20Cultural%20events',
@@ -36,7 +36,7 @@ const STUDENT_LEADS: CommitteeMember[] = [
   },
   {
     name: 'Rohan Verma',
-    role: 'Tech & Hackathon Coordinator',
+    role: 'Hackathon Lead',
     department: 'Information Technology',
     contact: '+91 98765 43212',
     whatsapp: 'https://wa.me/919876543212?text=Hi%20Rohan,%20I%20have%20a%20query%20regarding%20Hackathon',
@@ -45,7 +45,7 @@ const STUDENT_LEADS: CommitteeMember[] = [
   },
   {
     name: 'Ananya Sharma',
-    role: 'Hospitality & Logistics Lead',
+    role: 'Logistics Lead',
     department: 'Management Studies',
     contact: '+91 98765 43213',
     whatsapp: 'https://wa.me/919876543213?text=Hi%20Ananya,%20I%20have%20a%20query%20regarding%20Accommodation',
@@ -79,7 +79,7 @@ export default function CommitteeScene() {
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[var(--neon-cyan)]/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-[var(--neon-violet)]/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="container-responsive relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <motion.div
@@ -89,7 +89,7 @@ export default function CommitteeScene() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-xs text-[var(--neon-cyan)] font-semibold uppercase tracking-widest mb-6 shadow-[0_0_15px_rgba(0,240,255,0.15)]"
           >
             <ShieldCheck className="w-4 h-4" />
-            Organizing Committee
+            The Squad
           </motion.div>
           
           <motion.h2
@@ -98,14 +98,14 @@ export default function CommitteeScene() {
             viewport={{ once: true }}
             className="text-4xl sm:text-5xl lg:text-6xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-4"
           >
-            FESTIVAL{' '}
+            MEET THE{' '}
             <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
-              COMMITTEE & DESK
+              CREW
             </span>
           </motion.h2>
 
           <p className="text-gray-400 max-w-xl mx-auto text-sm sm:text-base">
-            Get in touch directly with our student leads and organizing desk for assistance.
+            Got questions? Reach out to our student leads directly! We're here to help you out with anything you need.
           </p>
         </div>
 
@@ -177,7 +177,7 @@ export default function CommitteeScene() {
         </div>
 
         {/* Location & Support Mail Dual Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6">
           {/* Campus Location Card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -192,7 +192,7 @@ export default function CommitteeScene() {
             <div className="flex-1 flex flex-col justify-between h-full">
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-teal-400 block mb-1">
-                  VENUE & ADDRESS
+                  WHERE IT'S HAPPENING
                 </span>
                 <h4 className="text-white font-bold text-lg mb-1">{instituteName}</h4>
                 <p className="text-xs text-gray-400 leading-relaxed mb-6">{instituteAddress}</p>
@@ -226,11 +226,11 @@ export default function CommitteeScene() {
             <div className="flex-1 flex flex-col justify-between h-full">
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-purple-400 block mb-1">
-                  OFFICIAL CONTACT MAIL
+                  DROP US A MAIL
                 </span>
-                <h4 className="text-white font-bold text-lg mb-1">Official Support Mail</h4>
+                <h4 className="text-white font-bold text-lg mb-1">Need more info?</h4>
                 <p className="text-xs text-gray-400 leading-relaxed mb-6">
-                  For contingent registration, sponsorships, and festival queries.
+                  For bulk registrations, sponsorships, or if you just want to say hi, shoot us an email.
                 </p>
               </div>
 
@@ -240,6 +240,42 @@ export default function CommitteeScene() {
               >
                 <Mail className="w-3.5 h-3.5" />
                 <span>{contactEmail}</span>
+                <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover/link:opacity-100 group-hover/link:translate-x-0.5 transition-all" />
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Instagram Social Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="p-8 rounded-[20px] bg-white/[0.02] border border-white/10 backdrop-blur-xl hover:border-pink-500/40 transition-all duration-500 hover:-translate-y-1 flex flex-col sm:flex-row items-start gap-6 group md:col-span-2 lg:col-span-1"
+          >
+            <div className="w-14 h-14 rounded-[20px] bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 shrink-0 group-hover:scale-110 group-hover:bg-pink-500/20 transition-all duration-300">
+              <AtSign className="w-7 h-7" />
+            </div>
+
+            <div className="flex-1 flex flex-col justify-between h-full">
+              <div>
+                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-pink-400 block mb-1">
+                  STAY CONNECTED
+                </span>
+                <h4 className="text-white font-bold text-lg mb-1">Follow us on Insta</h4>
+                <p className="text-xs text-gray-400 leading-relaxed mb-6">
+                  Catch all the latest updates, behind-the-scenes action, and hype straight on your feed.
+                </p>
+              </div>
+
+              <a
+                href="https://instagram.com/yuvenza_cit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-mono font-bold text-pink-300 hover:text-white transition-colors group/link"
+              >
+                <AtSign className="w-3.5 h-3.5" />
+                <span>@yuvenza_cit</span>
                 <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover/link:opacity-100 group-hover/link:translate-x-0.5 transition-all" />
               </a>
             </div>

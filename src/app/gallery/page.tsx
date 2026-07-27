@@ -18,8 +18,8 @@ interface GalleryItem {
 }
 
 const GALLERY: GalleryItem[] = [
-  { id: 1, url: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?auto=format&fit=crop&w=800&q=80', title: 'First Orphanage Visit', year: '2023', desc: 'Our very first YouthFest! We kicked things off with an orphanage outreach beyond campus.' },
-  { id: 2, url: '/memories/yf24.png', title: 'Keerthy Suresh @ YF24', year: '2024', desc: 'The one and only Keerthy Suresh graced our stage — the year YouthFest truly became massive.' },
+  { id: 1, url: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?auto=format&fit=crop&w=800&q=80', title: 'First Orphanage Visit', year: '2023', desc: 'Our very first Yuvenza! We kicked things off with an orphanage outreach beyond campus.' },
+  { id: 2, url: '/memories/yf24.png', title: 'Keerthy Suresh @ YF24', year: '2024', desc: 'The one and only Keerthy Suresh graced our stage — the year Yuvenza truly became massive.' },
   { id: 3, url: '/memories/marathon.png', title: 'College Marathon', year: '2024', desc: 'Early mornings, crazy energy, and a campus united. Our first marathon was an absolute blast.' },
   { id: 4, url: '/memories/cancer_panel.png', title: 'Cancer Awareness Panel', year: '2024', desc: 'An eye-opening panel discussion with real, heartfelt conversations.' },
   { id: 5, url: '/memories/republic25.png', title: 'Republic Day with SP', year: '2025', desc: 'A proud moment — the Superintendent of Police joined us for Republic Day flag hoisting.' },
@@ -55,7 +55,7 @@ export default function GalleryPage() {
             style={{ backgroundImage: 'linear-gradient(rgba(0,240,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.2) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[var(--neon-violet)]/10 rounded-full blur-[100px]" />
 
-          <div className="relative z-10 max-w-4xl mx-auto">
+          <div className="relative z-10 container-responsive">
             <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}
               className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-[var(--neon-cyan)] text-xs font-bold uppercase tracking-[0.3em] mb-8">
               <Images className="w-3.5 h-3.5" /> Our Gallery
@@ -74,7 +74,7 @@ export default function GalleryPage() {
 
         {/* ── FILTER TABS ── */}
         <section className="px-4 py-8 sticky top-20 z-40 bg-black/80 backdrop-blur-xl border-b border-white/5">
-          <div className="max-w-6xl mx-auto flex items-center justify-center gap-2 flex-wrap">
+          <div className="container-responsive flex items-center justify-center gap-2 flex-wrap">
             {years.map(y => (
               <button key={y} onClick={() => setActiveYear(y)}
                 className={`px-5 h-10 rounded-[12px] text-sm font-bold transition-all duration-300 ${activeYear === y
@@ -88,7 +88,7 @@ export default function GalleryPage() {
 
         {/* ── GRID ── */}
         <section className="section-padding px-4">
-          <div className="max-w-6xl mx-auto">
+          <div className="container-responsive">
             <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <AnimatePresence>
                 {filtered.map((item, i) => (

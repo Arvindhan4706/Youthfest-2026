@@ -23,14 +23,14 @@ export async function POST(req: Request) {
     const pdfBuffer = Buffer.from(base64Data, 'base64');
 
     const mailOptions = {
-      from: 'Yuvenza Youthfest <noreply@yuvenza.com>',
+      from: 'Yuvenza Yuvenza <noreply@yuvenza.com>',
       to: email,
-      subject: `Your Youthfest '26 Vitality Pass: ${event}`,
+      subject: `Your Yuvenza '26 Vitality Pass: ${event}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background-color: #030014; color: #fff; padding: 40px; border-radius: 16px;">
           <h2 style="color: #00f0ff; text-transform: uppercase; margin-bottom: 20px;">Hey ${name || 'Participant'},</h2>
           <p style="font-size: 16px; line-height: 1.6; color: #ddd;">
-            You're officially locked in for <strong>${event}</strong> at Youthfest 2026!
+            You're officially locked in for <strong>${event}</strong> at Yuvenza!
           </p>
           <p style="font-size: 16px; line-height: 1.6; color: #ddd;">
             Attached to this email is your digital Vitality Pass. Please keep it handy and present the QR code at the entrance.

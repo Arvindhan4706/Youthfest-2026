@@ -114,63 +114,110 @@ body {
 }
 
 @layer components {
+  /* ── Fluid container — never use fixed widths ── */
   .container-custom {
     width: 100%;
     margin: 0 auto;
     padding-inline: 16px;
   }
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .container-custom {
-      padding-inline: 20px;
-    }
+  .container-responsive {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-inline: clamp(16px, 4vw, 24px);
+  }
+  @media (min-width: 768px) {
+    .container-custom  { padding-inline: 20px; }
+    .container-responsive { padding-inline: 20px; }
   }
   @media (min-width: 1024px) {
-    .container-custom {
-      max-width: 1280px;
-      padding-inline: 24px;
-    }
+    .container-custom  { max-width: 1280px; padding-inline: 24px; }
+    .container-responsive { padding-inline: 24px; }
   }
-  
+
+  /* ── Section vertical rhythm ── */
   .section-padding {
     padding-top: 64px;
     padding-bottom: 64px;
   }
-  @media (min-width: 768px) and (max-width: 1023px) {
+  @media (min-width: 768px) {
     .section-padding { padding-top: 80px; padding-bottom: 80px; }
   }
   @media (min-width: 1024px) {
     .section-padding { padding-top: 120px; padding-bottom: 120px; }
   }
 
+  /* ── Buttons — always 48px tall, 12px radius ── */
   .btn-base {
+    min-height: 48px;
     height: 48px;
     border-radius: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 100%;
+    padding-inline: 20px;
+    font-weight: 600;
+    white-space: nowrap;
   }
-  @media (min-width: 1024px) {
-    .btn-base {
-      width: auto;
-    }
+  @media (min-width: 768px) {
+    .btn-base { width: auto; }
   }
 
+  /* ── Inputs — always 48px tall, 12px radius ── */
   .input-base {
+    min-height: 48px;
     height: 48px;
     border-radius: 12px;
     padding-inline: 16px;
-    margin-bottom: 16px;
+    width: 100%;
   }
-  
-  .card-base {
-    border-radius: 20px;
+
+  /* ── Cards ── */
+  .card-base  { border-radius: 20px; }
+  .modal-base { border-radius: 24px; }
+
+  /* ── Responsive grid helpers ── */
+  .grid-responsive-events {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
-  
-  .modal-base {
-    border-radius: 24px;
+  @media (min-width: 480px) {
+    .grid-responsive-events { grid-template-columns: repeat(2, 1fr); }
   }
+  @media (min-width: 1024px) {
+    .grid-responsive-events { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  }
+  @media (min-width: 1280px) {
+    .grid-responsive-events { grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  }
+
+  .grid-responsive-3 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 480px) {
+    .grid-responsive-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .grid-responsive-3 { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  }
+
+  /* ── Horizontal scroll tab strip ── */
+  .tab-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .tab-strip::-webkit-scrollbar { display: none; }
+  .tab-strip > * { flex-shrink: 0; }
 }
+
 
 /* Responsive Section Spacing */
 .section-padding {

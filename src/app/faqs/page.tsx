@@ -7,7 +7,7 @@ export default function FAQsPage() {
   return (
     <main className="min-h-screen bg-black text-white relative">
       <Navbar />
-      <div className="max-w-4xl mx-auto px-4 pt-32 pb-24 text-center">
+      <div className="container-responsive pt-32 pb-24 text-center">
         <h1 className="text-4xl md:text-5xl font-black font-[var(--font-heading-main)] text-[var(--neon-cyan)] uppercase tracking-wider mb-6">
           FAQs
         </h1>
