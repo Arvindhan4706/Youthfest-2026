@@ -60,9 +60,10 @@ export async function POST(request: Request) {
         const batch = targetEmails.slice(i, i + batchSize);
         await resend?.emails.send({
           from: 'Yuvenza Youthfest <noreply@yuvenza.com>',
+          to: 'noreply@yuvenza.com',
           bcc: batch,
           subject: subject,
-          text: message,
+          html: message.replace(/\n/g, '<br/>'),
         });
       }
     }
