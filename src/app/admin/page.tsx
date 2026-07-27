@@ -292,7 +292,7 @@ export default function AdminPortal() {
  description: (formData.get('description') as string).trim(),
  team_size: (formData.get('team_size') as string).trim(),
  fee: (formData.get('fee') as string).trim(),
- difficulty: formData.get('difficulty') as 'Easy' | 'Medium' | 'Hard',
+ difficulty: (formData.get('difficulty') as 'Easy' | 'Medium' | 'Hard') || 'Easy',
  image_url: (formData.get('image_url') as string).trim(),
  event_date: (formData.get('event_date') as string).trim(),
  venue: (formData.get('venue') as string).trim(),
