@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { db, SiteSettings } from '@/lib/database';
 import { Mail, Phone, MapPin, ChevronRight, Send } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 function InstagramIcon() {
   return (
@@ -67,7 +67,7 @@ export default function FooterScene() {
     { label: 'Contact', href: '#contact' },
   ];
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -75,7 +75,7 @@ export default function FooterScene() {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
   };
