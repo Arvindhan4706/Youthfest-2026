@@ -22,7 +22,7 @@ async function generateSample() {
   const { width, height } = page.getSize();
   const margin = 50;
 
-  // Load Yuvenza Logo
+  // Load Yuvenza Logo (Watermark)
   const logoPath = path.join(process.cwd(), 'public', 'yuvenzalogo.png');
   let logoImage;
   if (fs.existsSync(logoPath)) {
@@ -30,7 +30,15 @@ async function generateSample() {
     logoImage = await pdfDoc.embedPng(logoBytes);
   }
 
-  // Watermark
+  // Load Event Logo (Thumbnail Top Right)
+  const eventLogoPath = path.join(process.cwd(), 'public', 'eventlogo.png');
+  let eventLogoImage;
+  if (fs.existsSync(eventLogoPath)) {
+    const eventLogoBytes = fs.readFileSync(eventLogoPath);
+    eventLogoImage = await pdfDoc.embedPng(eventLogoBytes);
+  }
+
+  // Watermark (yuvenzalogo)
   if (logoImage) {
     const watermarkDims = logoImage.scale(0.8);
     page.drawImage(logoImage, {
@@ -42,10 +50,10 @@ async function generateSample() {
     });
   }
 
-  // Header Logo (Top Right)
-  if (logoImage) {
-    const headerLogoDims = logoImage.scale(0.2); // Smaller scale for top right
-    page.drawImage(logoImage, {
+  // Header Logo / Thumbnail (eventlogo) Top Right
+  if (eventLogoImage) {
+    const headerLogoDims = eventLogoImage.scale(0.2); // Scale as needed
+    page.drawImage(eventLogoImage, {
       x: width - margin - headerLogoDims.width,
       y: height - margin - headerLogoDims.height + 10,
       width: headerLogoDims.width,
@@ -53,9 +61,9 @@ async function generateSample() {
     });
   }
 
-  // Header
-  page.drawText('YUVENZA \'26', { x: margin, y: height - 80, size: 28, font: timesRomanBold, color: rgb(0.31, 0.27, 0.90) });
-  page.drawText('OFFICIAL VITALITY PASS', { x: margin, y: height - 110, size: 16, font: timesRomanBold });
+  // Header (Changed color to BLACK)
+  page.drawText('YUVENZA \'26', { x: margin, y: height - 80, size: 28, font: timesRomanBold, color: rgb(0, 0, 0) });
+  page.drawText('OFFICIAL VITALITY PASS', { x: margin, y: height - 110, size: 16, font: timesRomanBold, color: rgb(0, 0, 0) });
 
   page.drawLine({
     start: { x: margin, y: height - 125 },
@@ -65,10 +73,10 @@ async function generateSample() {
   });
 
   // Event Details
-  page.drawText(`Event: ${event}`, { x: margin, y: height - 160, size: 18, font: timesRomanBold });
-  page.drawText(`Participant: ${name}`, { x: margin, y: height - 190, size: 14, font: timesRomanFont });
-  page.drawText(`Date: ${date}`, { x: margin, y: height - 215, size: 14, font: timesRomanFont });
-  page.drawText(`Venue: ${venue}`, { x: margin, y: height - 240, size: 14, font: timesRomanFont });
+  page.drawText(`Event: ${event}`, { x: margin, y: height - 160, size: 18, font: timesRomanBold, color: rgb(0, 0, 0) });
+  page.drawText(`Participant: ${name}`, { x: margin, y: height - 190, size: 14, font: timesRomanFont, color: rgb(0, 0, 0) });
+  page.drawText(`Date: ${date}`, { x: margin, y: height - 215, size: 14, font: timesRomanFont, color: rgb(0, 0, 0) });
+  page.drawText(`Venue: ${venue}`, { x: margin, y: height - 240, size: 14, font: timesRomanFont, color: rgb(0, 0, 0) });
 
   // Embed QR Code
   const qrImageBytes = Buffer.from(base64Data, 'base64');
@@ -89,7 +97,7 @@ async function generateSample() {
     height: qrDims.height,
   });
   
-  page.drawText('Scan for Entry', { x: qrX + qrDims.width / 2 - 40, y: qrY - 25, size: 12, font: timesRomanBold });
+  page.drawText('Scan for Entry', { x: qrX + qrDims.width / 2 - 40, y: qrY - 25, size: 12, font: timesRomanBold, color: rgb(0, 0, 0) });
 
   page.drawLine({
     start: { x: margin, y: height - 320 },
@@ -104,7 +112,7 @@ async function generateSample() {
 
   const pdfBytes = await pdfDoc.save();
   
-  const outputPath = 'd:\\Class 12\\Youthfest 2026\\sample_ticket.pdf';
+  const outputPath = 'd:\\Class 12\\Youthfest 2026\\sample_ticket_v2.pdf';
   fs.writeFileSync(outputPath, pdfBytes);
   console.log(`Saved sample to ${outputPath}`);
 }
