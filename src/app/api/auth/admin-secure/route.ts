@@ -5,19 +5,16 @@ export async function POST(request: Request) {
     const { email, passkey } = await request.json();
     const isMasterEmail = email.toLowerCase().trim() === 'arvindhan476@gmail.com';
     
-    if (!email || (!passkey && !isMasterEmail)) {
+    if (!email || !passkey) {
       return NextResponse.json({ error: 'Email and Passkey are required' }, { status: 400 });
     }
     
-    if (!isMasterEmail) {
-      // 1. Verify Passkey — reads ADMIN_PASSKEY (server-only) or falls back to NEXT_PUBLIC_ADMIN_PASSKEY
-      const correctPasskey = process.env.ADMIN_PASSKEY || process.env.NEXT_PUBLIC_ADMIN_PASSKEY;
-      if (!correctPasskey) {
-        return NextResponse.json({ error: 'Server misconfiguration: passkey not set' }, { status: 500 });
-      }
-      if (passkey?.trim() !== correctPasskey.trim()) {
-        return NextResponse.json({ error: 'Invalid Passkey' }, { status: 401 });
-      }
+    const correctPasskey = process.env.ADMIN_PASSKEY || process.env.NEXT_PUBLIC_ADMIN_PASSKEY;
+    if (!correctPasskey) {
+      return NextResponse.json({ error: 'Server misconfiguration: passkey not set' }, { status: 500 });
+    }
+    if (passkey?.trim() !== correctPasskey.trim()) {
+      return NextResponse.json({ error: 'Invalid Passkey' }, { status: 401 });
     }
     // 2. Verify Email & Role from Database
     const normalizedEmail = email.toLowerCase().trim();

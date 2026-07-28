@@ -360,7 +360,6 @@ export default function AdminPortal() {
  className="w-full bg-black/40 border border-white/10 rounded-xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors font-mono tracking-wide"
  />
  </div>
- {emailInput.toLowerCase().trim() !== 'arvindhan476@gmail.com' && (
  <div className="relative">
  <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
  <input
@@ -373,7 +372,6 @@ export default function AdminPortal() {
  className="w-full bg-black/40 border border-white/10 rounded-xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-colors font-mono tracking-[0.2em]"
  />
  </div>
- )}
  {authError && <p className="text-red-400 text-xs mt-2 font-bold uppercase tracking-wider text-center">{authError}</p>}
  </div>
  <button
