@@ -107,7 +107,7 @@ Yuvenza
       console.log('=================================================================\n');
     } else {
       await resend?.emails.send({
-        from: 'Yuvenza Yuvenza <noreply@yuvenza.com>',
+        from: 'Yuvenza Yuvenza <yuvenza@citchennai.net>',
         to: recipientEmail,
         subject: emailSubject,
         text: emailBody,

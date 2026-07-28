@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     }
 
     const mailOptions = {
-      from: 'Yuvenza Yuvenza <noreply@yuvenza.com>',
+      from: 'Yuvenza Yuvenza <yuvenza@citchennai.net>',
       to: email,
       subject: `Registration Confirmed: ${eventTitle}`,
       html: `

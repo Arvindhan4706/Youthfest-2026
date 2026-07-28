@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     const pdfBuffer = Buffer.from(base64Data, 'base64');
 
     const mailOptions = {
-      from: 'Yuvenza Yuvenza <noreply@yuvenza.com>',
+      from: 'Yuvenza Yuvenza <yuvenza@citchennai.net>',
       to: email,
       subject: `Your Yuvenza '26 Vitality Pass: ${event}`,
       html: `
