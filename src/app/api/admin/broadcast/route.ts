@@ -1,11 +1,6 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
 import { db } from '@/lib/database';
-
-const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const isEmailMockMode = !RESEND_API_KEY;
-
-const resend = !isEmailMockMode ? new Resend(RESEND_API_KEY) : null;
+import { getMailer, getFromEmail } from '@/lib/mailer';
 
 export async function POST(request: Request) {
   try {
@@ -46,26 +41,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'No recipients found for this audience' }, { status: 400 });
     }
 
-    if (isEmailMockMode) {
-      console.log('\n=================================================================');
-      console.log('📧 MOCK BROADCAST DISPATCHED (No SMTP credentials)');
-      console.log(`To: ${targetEmails.length} recipients`);
-      console.log(`Subject: ${subject}`);
-      console.log(`Body:\n${message}`);
-      console.log('=================================================================\n');
-    } else {
-      // Send in batches to avoid SMTP limits (e.g., 50 at a time in BCC)
-      const batchSize = 50;
-      for (let i = 0; i < targetEmails.length; i += batchSize) {
-        const batch = targetEmails.slice(i, i + batchSize);
-        await resend?.emails.send({
-          from: 'Yuvenza Yuvenza <yuvenza@citchennai.net>',
-          to: 'yuvenza@citchennai.net',
-          bcc: batch,
-          subject: subject,
-          html: message.replace(/\n/g, '<br/>'),
-        });
-      }
+    const mailer = getMailer();
+    
+    // Send in batches to avoid SMTP limits (e.g., 50 at a time in BCC)
+    const batchSize = 50;
+    for (let i = 0; i < targetEmails.length; i += batchSize) {
+      const batch = targetEmails.slice(i, i + batchSize);
+      await mailer.sendMail({
+        from: getFromEmail(),
+        to: process.env.SMTP_USER, // Set 'To' to the sender email itself
+        bcc: batch,
+        subject: subject,
+        html: message.replace(/\n/g, '<br/>'),
+      });
     }
 
     // Log the broadcast

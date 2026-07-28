@@ -1,62 +1,64 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { getMailer, getFromEmail } from '@/lib/mailer';
 
-const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const isEmailMockMode = !RESEND_API_KEY;
-const resend = !isEmailMockMode ? new Resend(RESEND_API_KEY) : null;
-
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const { email, name, event, ticketDataUrl } = await req.json();
+    const body = await request.json();
+    const { name, email, event, venue, date, qrDataUrl } = body;
 
-    if (!email || !event || !ticketDataUrl) {
+    if (!name || !email || !event || !qrDataUrl) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    if (isEmailMockMode) {
-      console.warn("RESEND_API_KEY is not configured. Email will be mocked.");
-      return NextResponse.json({ success: true, mocked: true });
+    // Ensure qrDataUrl is a valid base64 string
+    const base64Data = qrDataUrl.split(';base64,').pop();
+    if (!base64Data) {
+      throw new Error("Invalid QR code data");
     }
 
-    // Convert data URL to buffer
-    const base64Data = ticketDataUrl.split(',')[1];
     const pdfBuffer = Buffer.from(base64Data, 'base64');
 
     const mailOptions = {
-      from: 'Yuvenza Yuvenza <yuvenza@citchennai.net>',
+      from: getFromEmail(),
       to: email,
       subject: `Your Yuvenza '26 Vitality Pass: ${event}`,
       html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background-color: #030014; color: #fff; padding: 40px; border-radius: 16px;">
-          <h2 style="color: #00f0ff; text-transform: uppercase; margin-bottom: 20px;">Hey ${name || 'Participant'},</h2>
-          <p style="font-size: 16px; line-height: 1.6; color: #ddd;">
-            You're officially locked in for <strong>${event}</strong> at Yuvenza!
-          </p>
-          <p style="font-size: 16px; line-height: 1.6; color: #ddd;">
-            Attached to this email is your digital Vitality Pass. Please keep it handy and present the QR code at the entrance.
-          </p>
-          <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-            <p style="font-size: 12px; color: #888;">
-              See you in the chaos.<br/>
-              The Yuvenza Team
-            </p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="color: #4F46E5;">Yuvenza '26</h1>
+            <h2>Vitality Pass</h2>
           </div>
+          
+          <p>Hi <strong>${name}</strong>,</p>
+          <p>Your registration for <strong>${event}</strong> is confirmed! Attached is your official Vitality Pass (QR Code).</p>
+          
+          <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 5px 0;"><strong>Event:</strong> ${event}</p>
+            <p style="margin: 5px 0;"><strong>Date:</strong> ${date || 'August 12, 2026'}</p>
+            <p style="margin: 5px 0;"><strong>Venue:</strong> ${venue || 'Yuvenza Main Campus'}</p>
+          </div>
+          
+          <p><strong>IMPORTANT:</strong> Please present the attached QR code at the registration desk for seamless entry.</p>
+          
+          <p>See you there!</p>
+          <p>The Yuvenza Organizing Committee</p>
         </div>
       `,
       attachments: [
         {
-          filename: `Yuvenza_Pass_${event.replace(/\s+/g, '_')}.pdf`,
+          filename: `Yuvenza_Pass_${event.replace(/\s+/g, '_')}.png`,
           content: pdfBuffer,
-        },
-      ],
+          contentType: 'image/png'
+        }
+      ]
     };
 
-    await resend?.emails.send(mailOptions);
-    console.log('Ticket email sent to:', email);
+    const mailer = getMailer();
+    await mailer.sendMail(mailOptions);
 
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Email Error:', error);
-    return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
+    return NextResponse.json({ success: true, message: 'Ticket email sent successfully.' });
+  } catch (error: any) {
+    console.error('Error sending ticket:', error);
+    return NextResponse.json({ error: error.message || 'Failed to send ticket' }, { status: 500 });
   }
 }
