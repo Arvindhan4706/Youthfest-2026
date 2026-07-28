@@ -61,8 +61,9 @@ export default function TicketSection() {
       // Generate QR Code locally to avoid proxy SSL and CORS issues
       const qrData = user.email + '|' + selectedEventTicket;
       
+      let localQrDataUrl = '';
       try {
-        const localQrDataUrl = await QRCode.toDataURL(qrData, { width: 300, margin: 1 });
+        localQrDataUrl = await QRCode.toDataURL(qrData, { width: 300, margin: 1 });
         // The data URL is base64 encoded, e.g., data:image/png;base64,...
         const base64Data = localQrDataUrl.split(',')[1];
         const qrImageBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
@@ -97,7 +98,7 @@ export default function TicketSection() {
             email: user.email,
             name: user.name,
             event: selectedEventTicket,
-            ticketDataUrl: base64Pdf
+            qrDataUrl: localQrDataUrl
           })
         });
         

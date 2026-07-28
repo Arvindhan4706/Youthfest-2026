@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { useStore } from '../lib/useStore';
 import { useRouter } from 'next/navigation';
 import { getTicketId } from '../lib/utils';
+import QRCode from 'qrcode';
 
 export default function PaymentModal() {
  const modalRef = useRef<HTMLDivElement>(null);
@@ -158,9 +159,38 @@ export default function PaymentModal() {
  eventTitle: checkoutEvent.title,
  })
  });
- addToast('OD Letter dispatched to your Email & Phone!');
+ addToast('OD Letter dispatched to your Email!');
  } catch (err) {
  console.error('Failed to send OD:', err);
+ }
+
+ // Send the Ticket PDF via our new API route
+ try {
+   const qrData = JSON.stringify({
+     email: user.email,
+     name: user.name || 'Attendee',
+     event: checkoutEvent.title,
+     regId: getTicketId(user.email, checkoutEvent.title),
+     qrId: crypto.randomUUID(),
+     time: Date.now()
+   });
+   const qrDataUrl = await QRCode.toDataURL(qrData, { width: 300, margin: 1 });
+   
+   await fetch('/api/send-ticket', {
+     method: 'POST',
+     headers: { 'Content-Type': 'application/json' },
+     body: JSON.stringify({
+       name: user.name,
+       email: user.email,
+       event: checkoutEvent.title,
+       venue: 'Chennai Institute Of Technology',
+       date: 'August 12, 2026',
+       qrDataUrl: qrDataUrl
+     })
+   });
+   addToast('Ticket PDF dispatched to your Email!');
+ } catch (err) {
+   console.error('Failed to send ticket:', err);
  }
  }
  addToast('Payment Successful! Registration complete.');

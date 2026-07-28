@@ -18,28 +18,14 @@ export async function POST(request: Request) {
       throw new Error("Invalid QR code data");
     }
 
-    // Generate PDF Ticket (Landscape: 850x400)
+    // Generate PDF Ticket
     const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([850, 400]);
+    const page = pdfDoc.addPage([595.28, 841.89]); // A4 size
     const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
     const timesRomanBold = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
-    const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-    const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
     const { width, height } = page.getSize();
-    const splitX = 630;
-
-    // Colors
-    const neonMagenta = rgb(0.9, 0.1, 0.6);
-    const neonCyan = rgb(0.1, 0.8, 1.0);
-    const white = rgb(1, 1, 1);
-    const lightGray = rgb(0.7, 0.7, 0.7);
-
-    // Background
-    page.drawRectangle({
-      x: 0, y: 0, width, height,
-      color: rgb(0.02, 0.02, 0.02), // Very dark background
-    });
+    const margin = 50;
 
     // Load Logos
     const yuvenzaLogoPath = path.join(process.cwd(), 'public', 'yuvenzalogo.png');
@@ -50,96 +36,66 @@ export async function POST(request: Request) {
     
     try {
       if (fs.existsSync(yuvenzaLogoPath)) {
-        yuvenzaLogoImage = await pdfDoc.embedPng(fs.readFileSync(yuvenzaLogoPath));
+        const yuvenzaLogoBytes = fs.readFileSync(yuvenzaLogoPath);
+        yuvenzaLogoImage = await pdfDoc.embedPng(yuvenzaLogoBytes);
       }
       if (fs.existsSync(eventLogoPath)) {
-        eventLogoImage = await pdfDoc.embedPng(fs.readFileSync(eventLogoPath));
+        const eventLogoBytes = fs.readFileSync(eventLogoPath);
+        eventLogoImage = await pdfDoc.embedPng(eventLogoBytes);
       }
     } catch (e) {
       console.warn("Failed to load logo images", e);
     }
 
-    // --- SPINE (Left Edge) ---
-    page.drawText('BE PART SOMETHING EXTRAORDINARY', { 
-      x: 25, y: height - 120, size: 10, font: helvetica, color: lightGray, rotate: degrees(90) 
-    });
-    
-    // Pink X marks
-    page.drawText('X', { x: 20, y: height - 40, size: 16, font: helveticaBold, color: neonMagenta });
-    page.drawText('X', { x: 20, y: 30, size: 16, font: helveticaBold, color: neonMagenta });
-
-    // Thin separator line
-    page.drawLine({ start: { x: 45, y: 30 }, end: { x: 45, y: height - 30 }, thickness: 1, color: rgb(0.2, 0.2, 0.2) });
-
-    // --- MAIN BODY ---
-
-    // Top Left Header
-    const headerX = 70;
-    if (yuvenzaLogoImage) {
-      const yDims = yuvenzaLogoImage.scale(1.0);
-      const scaleFactor = 40 / yDims.height;
-      page.drawImage(yuvenzaLogoImage, {
-        x: headerX, y: height - 60,
-        width: yDims.width * scaleFactor, height: yDims.height * scaleFactor,
+    // Watermark (eventlogo in center)
+    if (eventLogoImage) {
+      const wDims = eventLogoImage.scale(1.0);
+      // Scale to fit nicely in center if too big
+      const scaleFactor = Math.min(300 / wDims.width, 300 / wDims.height);
+      const scaledWidth = wDims.width * scaleFactor;
+      const scaledHeight = wDims.height * scaleFactor;
+      
+      page.drawImage(eventLogoImage, {
+        x: width / 2 - scaledWidth / 2,
+        y: height / 2 - scaledHeight / 2,
+        width: scaledWidth,
+        height: scaledHeight,
+        opacity: 0.15, // Watermark effect
       });
     }
 
-    page.drawText('YUVENZA PRESENTS', { x: headerX + 50, y: height - 40, size: 12, font: helveticaBold, color: neonMagenta });
-    page.drawText(event.toUpperCase(), { x: headerX + 50, y: height - 58, size: 12, font: helveticaBold, color: white });
+    // Header - Left
+    page.drawText('YUVENZA \'26', { x: margin, y: height - 80, size: 28, font: timesRomanBold, color: rgb(0, 0, 0) }); // Black text
+    page.drawText('OFFICIAL VITALITY PASS', { x: margin, y: height - 110, size: 16, font: timesRomanBold, color: rgb(0, 0, 0) });
 
-    // Center Huge Text
-    page.drawText('\'26', { x: headerX, y: height - 130, size: 50, font: helveticaBold, color: neonMagenta });
-    
-    let fontSize = 90;
-    let textWidth = helveticaBold.widthOfTextAtSize('YOUTHFEST', fontSize);
-    while (textWidth > splitX - headerX - 40 && fontSize > 30) {
-      fontSize -= 2;
-      textWidth = helveticaBold.widthOfTextAtSize('YOUTHFEST', fontSize);
+    // Header - Right (yuvenzalogo)
+    if (yuvenzaLogoImage) {
+      const yDims = yuvenzaLogoImage.scale(1.0);
+      // Scale down to fit in header (e.g. max height 60)
+      const scaleFactor = 60 / yDims.height;
+      const scaledWidth = yDims.width * scaleFactor;
+      const scaledHeight = yDims.height * scaleFactor;
+      
+      page.drawImage(yuvenzaLogoImage, {
+        x: width - margin - scaledWidth,
+        y: height - 50 - scaledHeight,
+        width: scaledWidth,
+        height: scaledHeight,
+      });
     }
-    page.drawText('YOUTHFEST', { x: headerX, y: height - 210, size: fontSize, font: helveticaBold, color: neonCyan });
 
-    // Tagline Box
-    page.drawRectangle({
-      x: headerX, y: height - 260, width: 220, height: 25,
-      borderColor: neonCyan, borderWidth: 1
-    });
-    page.drawText('UNITE. CREATE. INSPIRE.', { x: headerX + 15, y: height - 253, size: 12, font: helveticaBold, color: white });
-
-    // Bottom Columns
-    const botY = 70;
-    page.drawText('DATE', { x: headerX, y: botY, size: 10, font: helvetica, color: lightGray });
-    page.drawText((date || '10TH OCTOBER 2026').toUpperCase(), { x: headerX, y: botY - 15, size: 12, font: helveticaBold, color: neonMagenta });
-
-    page.drawText('TIME', { x: headerX + 130, y: botY, size: 10, font: helvetica, color: lightGray });
-    page.drawText('9:30 PM - 5:00 AM', { x: headerX + 130, y: botY - 15, size: 12, font: helveticaBold, color: neonMagenta });
-
-    page.drawText('VENUE', { x: headerX + 270, y: botY, size: 10, font: helvetica, color: lightGray });
-    page.drawText('CHENNAI INSTITUTE OF TECHNOLOGY', { x: headerX + 270, y: botY - 15, size: 12, font: helveticaBold, color: neonCyan });
-
-    // Website Footer
-    page.drawText('W W W . Y O U T H F E S T 2 6 . C O M', { x: headerX, y: 20, size: 9, font: helvetica, color: lightGray });
-
-
-    // --- TEAR-OFF LINE & NOTCHES ---
     page.drawLine({
-      start: { x: splitX, y: 0 },
-      end: { x: splitX, y: height },
-      thickness: 2,
-      color: lightGray,
-      dashArray: [6, 6],
+      start: { x: margin, y: height - 125 },
+      end: { x: width - margin, y: height - 125 },
+      thickness: 1,
+      color: rgb(0.8, 0.8, 0.8),
     });
 
-    // Ticket Notch (Top & Bottom)
-    page.drawCircle({ x: splitX, y: height, size: 15, color: white });
-    page.drawCircle({ x: splitX, y: 0, size: 15, color: white });
-
-
-    // --- TEAR-OFF STUB ---
-    const stubX = splitX + 40;
-    
-    // VIP PASS
-    page.drawText('VIP PASS', { x: stubX + 15, y: height - 70, size: 30, font: helveticaBold, color: neonMagenta });
-    page.drawText('-   ALL ACCESS   -', { x: stubX + 22, y: height - 100, size: 12, font: helveticaBold, color: white });
+    // Event Details
+    page.drawText(`Event: ${event}`, { x: margin, y: height - 160, size: 18, font: timesRomanBold });
+    page.drawText(`Participant: ${name}`, { x: margin, y: height - 190, size: 14, font: timesRomanFont });
+    page.drawText(`Date: ${date || 'August 12, 2026'}`, { x: margin, y: height - 215, size: 14, font: timesRomanFont });
+    page.drawText(`Venue: Chennai Institute Of Technology`, { x: margin, y: height - 240, size: 14, font: timesRomanFont });
 
     // Embed QR Code
     const qrImageBytes = Buffer.from(base64Data, 'base64');
@@ -150,33 +106,34 @@ export async function POST(request: Request) {
       qrImage = await pdfDoc.embedJpg(qrImageBytes);
     }
     
-    const qrDims = qrImage.scale(0.65);
+    const qrDims = qrImage.scale(0.8);
+    const qrX = width - margin - qrDims.width - 20;
     const qrY = height - 260;
     
-    // White box for QR code to ensure it's scannable on dark background
     page.drawRectangle({
-      x: stubX - 5, y: qrY - 5, width: qrDims.width + 10, height: qrDims.height + 10,
-      color: white,
+      x: qrX - 10, y: qrY - 10, width: qrDims.width + 20, height: qrDims.height + 20,
+      borderColor: rgb(0, 0, 0), borderWidth: 1,
     });
     
     page.drawImage(qrImage, {
-      x: stubX, y: qrY, width: qrDims.width, height: qrDims.height,
+      x: qrX,
+      y: qrY,
+      width: qrDims.width,
+      height: qrDims.height,
+    });
+    
+    page.drawText('Scan for Entry', { x: qrX + qrDims.width / 2 - 40, y: qrY - 25, size: 12, font: timesRomanBold });
+
+    page.drawLine({
+      start: { x: margin, y: height - 320 },
+      end: { x: width - margin, y: height - 320 },
+      thickness: 1,
+      color: rgb(0.8, 0.8, 0.8),
     });
 
-    // Admit One Box
-    page.drawRectangle({
-      x: stubX, y: 50, width: 140, height: 50,
-      borderColor: neonMagenta, borderWidth: 2
-    });
-    page.drawText('ADMIT ONE', { x: stubX + 40, y: 80, size: 10, font: helvetica, color: white });
-    
-    let nameSize = 14;
-    let nameWidth = helveticaBold.widthOfTextAtSize(name.toUpperCase(), nameSize);
-    while(nameWidth > 130 && nameSize > 8) {
-      nameSize -= 1;
-      nameWidth = helveticaBold.widthOfTextAtSize(name.toUpperCase(), nameSize);
-    }
-    page.drawText(name.toUpperCase(), { x: stubX + 70 - nameWidth/2, y: 62, size: nameSize, font: helveticaBold, color: neonCyan });
+    // Footer
+    page.drawText('Please present this digital pass at the registration desk for seamless entry.', { x: margin, y: height - 350, size: 12, font: timesRomanFont, color: rgb(0.4, 0.4, 0.4) });
+    page.drawText('Valid only for the registered participant.', { x: margin, y: height - 370, size: 12, font: timesRomanFont, color: rgb(0.4, 0.4, 0.4) });
 
     const pdfBytes = await pdfDoc.save();
 
