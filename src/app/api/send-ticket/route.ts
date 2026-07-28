@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getMailer, getFromEmail } from '@/lib/mailer';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export async function POST(request: Request) {
   try {
@@ -26,7 +28,38 @@ export async function POST(request: Request) {
     const { width, height } = page.getSize();
     const margin = 50;
 
-    // Header
+    // Load Yuvenza Logo
+    const logoPath = path.join(process.cwd(), 'public', 'yuvenzalogo.png');
+    let logoImage;
+    if (fs.existsSync(logoPath)) {
+      const logoBytes = fs.readFileSync(logoPath);
+      logoImage = await pdfDoc.embedPng(logoBytes);
+    }
+
+    // Watermark
+    if (logoImage) {
+      const watermarkDims = logoImage.scale(0.8);
+      page.drawImage(logoImage, {
+        x: width / 2 - watermarkDims.width / 2,
+        y: height / 2 - watermarkDims.height / 2,
+        width: watermarkDims.width,
+        height: watermarkDims.height,
+        opacity: 0.1, // Watermark opacity
+      });
+    }
+
+    // Header Logo (Top Right)
+    if (logoImage) {
+      const headerLogoDims = logoImage.scale(0.2); // Smaller scale for top right
+      page.drawImage(logoImage, {
+        x: width - margin - headerLogoDims.width,
+        y: height - margin - headerLogoDims.height,
+        width: headerLogoDims.width,
+        height: headerLogoDims.height,
+      });
+    }
+
+    // Header Text
     page.drawText('YUVENZA \'26', { x: margin, y: height - 80, size: 28, font: timesRomanBold, color: rgb(0.31, 0.27, 0.90) });
     page.drawText('OFFICIAL VITALITY PASS', { x: margin, y: height - 110, size: 16, font: timesRomanBold });
 
@@ -41,7 +74,7 @@ export async function POST(request: Request) {
     page.drawText(`Event: ${event}`, { x: margin, y: height - 160, size: 18, font: timesRomanBold });
     page.drawText(`Participant: ${name}`, { x: margin, y: height - 190, size: 14, font: timesRomanFont });
     page.drawText(`Date: ${date || 'August 12, 2026'}`, { x: margin, y: height - 215, size: 14, font: timesRomanFont });
-    page.drawText(`Venue: ${venue || 'Yuvenza Main Campus'}`, { x: margin, y: height - 240, size: 14, font: timesRomanFont });
+    page.drawText(`Venue: Chennai Institute Of Technology`, { x: margin, y: height - 240, size: 14, font: timesRomanFont });
 
     // Embed QR Code
     const qrImageBytes = Buffer.from(base64Data, 'base64');
@@ -101,7 +134,7 @@ export async function POST(request: Request) {
           <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
             <p style="margin: 5px 0;"><strong>Event:</strong> ${event}</p>
             <p style="margin: 5px 0;"><strong>Date:</strong> ${date || 'August 12, 2026'}</p>
-            <p style="margin: 5px 0;"><strong>Venue:</strong> ${venue || 'Yuvenza Main Campus'}</p>
+            <p style="margin: 5px 0;"><strong>Venue:</strong> Chennai Institute Of Technology</p>
           </div>
           
           <p><strong>IMPORTANT:</strong> Please download and present the attached PDF pass at the registration desk for seamless entry.</p>
