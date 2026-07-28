@@ -10,7 +10,7 @@ const resend = !isEmailMockMode ? new Resend(RESEND_API_KEY) : null;
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { subject, message, audience, adminPasskey } = body;
+    const { subject, message, audience, adminPasskey, adminEmail } = body;
 
     if (!subject || !message || !audience || !adminPasskey) {
       return NextResponse.json({ success: false, message: 'Missing required fields' }, { status: 400 });
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
     }
 
     // Log the broadcast
-    await db.logAdminAction('System', 'Sent Broadcast Email', { 
+    await db.logAdminAction(adminEmail || 'System', 'Sent Broadcast Email', { 
       audience, 
       count: targetEmails.length,
       subject 

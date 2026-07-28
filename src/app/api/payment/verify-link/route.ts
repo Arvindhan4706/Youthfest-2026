@@ -65,6 +65,21 @@ export async function POST(req: Request) {
             console.error("Failed to register for event, might already be registered:", e);
           }
         }
+        
+        // Update payment log to successful
+        const { createClient } = require('@supabase/supabase-js');
+        const supabaseAdmin = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.SUPABASE_SERVICE_ROLE_KEY!
+        );
+
+        await supabaseAdmin
+          .from('payments')
+          .update({ 
+            status: 'successful',
+            razorpay_payment_id: razorpay_payment_id
+          })
+          .eq('razorpay_order_id', razorpay_payment_link_id);
       }
 
       return NextResponse.json(

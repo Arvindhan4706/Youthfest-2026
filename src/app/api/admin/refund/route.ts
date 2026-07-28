@@ -5,7 +5,7 @@ import { db } from '@/lib/database';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { payment_id, razorpay_payment_id, amount, adminPasskey } = body;
+    const { payment_id, razorpay_payment_id, amount, adminPasskey, adminEmail } = body;
 
     if (!payment_id || !razorpay_payment_id || !amount || !adminPasskey) {
       return NextResponse.json({ success: false, message: 'Missing required fields' }, { status: 400 });
@@ -33,6 +33,11 @@ export async function POST(request: Request) {
     if (refund.id) {
       // Update DB to refunded
       await db.updatePaymentRefunded(payment_id);
+      
+      if (adminEmail) {
+        await db.logAdminAction(adminEmail, 'Refunded Payment', { payment_id, amount });
+      }
+      
       return NextResponse.json({ success: true, refund });
     } else {
       throw new Error('Refund failed at Razorpay');

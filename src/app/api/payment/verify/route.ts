@@ -49,6 +49,15 @@ export async function POST(req: Request) {
             }
           }
         }
+        
+        // Update payment log to successful
+        await supabaseAdmin
+          .from('payments')
+          .update({ 
+            status: 'successful',
+            razorpay_payment_id: razorpay_payment_id
+          })
+          .eq('razorpay_order_id', razorpay_order_id);
       }
       return NextResponse.json(
         { success: true, message: 'Payment successfully verified', isAuthentic: true },

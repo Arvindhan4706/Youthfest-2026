@@ -7,6 +7,7 @@ export interface ToastMessage {
   badge?: string;
 }
 export interface UserProfile {
+  id?: string;
   email: string;
   name: string;
   phone: string;

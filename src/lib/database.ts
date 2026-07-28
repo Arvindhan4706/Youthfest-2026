@@ -141,6 +141,18 @@ export const db = {
     return data || [];
   },
   /**
+   * Fetch payments for a specific visitor
+   */
+  async getPaymentsByVisitorId(visitorId: string): Promise<Payment[]> {
+    const { data, error } = await supabase
+      .from('payments')
+      .select('*')
+      .eq('visitor_id', visitorId)
+      .order('created_at', { ascending: false });
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+  /**
    * Mark a payment as refunded
    */
   async updatePaymentRefunded(id: string): Promise<void> {

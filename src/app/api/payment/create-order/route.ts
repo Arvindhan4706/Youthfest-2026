@@ -38,6 +38,23 @@ export async function POST(req: Request) {
 
     const order = await razorpay.orders.create(options);
 
+    if (email && eventTitle) {
+      const visitor = await db.getVisitorByEmail(email);
+      if (visitor) {
+        try {
+          await db.logPayment({
+            visitor_id: visitor.id,
+            event_id: eventTitle,
+            razorpay_order_id: order.id,
+            amount: parseInt(amount),
+            status: 'pending'
+          });
+        } catch (err) {
+          console.error('Failed to log payment:', err);
+        }
+      }
+    }
+
     return NextResponse.json({ 
       order_id: order.id,
       amount: order.amount,

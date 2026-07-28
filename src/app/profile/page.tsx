@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStore } from '../../lib/useStore';
+import { db, Payment } from '../../lib/database';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   User, Ticket, CreditCard, Award, Bell, Settings,
-  LogOut, CalendarCheck, ChevronRight, Menu, X
+  LogOut, CalendarCheck, ChevronRight, Menu, X, Search
 } from 'lucide-react';
 import ToastContainer from '../../components/ToastContainer';
 import VisitorProfile from '../../components/dashboard/VisitorProfile';
@@ -42,8 +43,34 @@ function ComingSoon({ label, description }: { label: string; description?: strin
 
 function PaymentHistory() {
   const user = useStore(s => s.user);
-  const events = user?.registeredEvents ?? [];
-  if (events.length === 0) {
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [paymentSearchTerm, setPaymentSearchTerm] = useState('');
+  const [paymentFilterStatus, setPaymentFilterStatus] = useState('all');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user?.id) {
+      db.getPaymentsByVisitorId(user.id).then(data => {
+        setPayments(data);
+        setLoading(false);
+      }).catch(err => {
+        console.error('Failed to fetch payments', err);
+        setLoading(false);
+      });
+    } else {
+      setLoading(false);
+    }
+  }, [user?.id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <p className="text-gray-400 text-sm animate-pulse">Loading payments...</p>
+      </div>
+    );
+  }
+
+  if (payments.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4 rounded-3xl border border-dashed border-white/10 bg-white/[0.01]">
         <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-gray-500">
@@ -57,16 +84,63 @@ function PaymentHistory() {
     );
   }
   return (
-    <div className="flex flex-col gap-3">
-      {events.map((eventId: string, i: number) => (
-        <div key={i} className="flex items-center justify-between p-4 rounded-2xl border border-white/10 bg-white/[0.03]">
-          <div>
-            <p className="text-white font-semibold text-sm">{eventId}</p>
-            <p className="text-gray-500 text-xs mt-1">August 12, 2026</p>
-          </div>
-          <span className="text-[var(--neon-cyan)] font-bold text-sm">Paid</span>
+    <div className="flex flex-col gap-4">
+      {/* Filters */}
+      <div className="flex flex-col md:flex-row gap-3 w-full">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <input 
+            type="text" 
+            placeholder="Search by Event ID..."
+            value={paymentSearchTerm}
+            onChange={e => setPaymentSearchTerm(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:border-[var(--neon-cyan)] outline-none"
+          />
         </div>
-      ))}
+        <select
+          value={paymentFilterStatus}
+          onChange={e => setPaymentFilterStatus(e.target.value)}
+          className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-cyan)] outline-none cursor-pointer appearance-none md:w-48"
+        >
+          <option value="all" className="bg-[#0f172a]">All Status</option>
+          <option value="successful" className="bg-[#0f172a]">Successful</option>
+          <option value="pending" className="bg-[#0f172a]">Pending</option>
+          <option value="refunded" className="bg-[#0f172a]">Refunded</option>
+        </select>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        {payments
+          .filter(p => {
+            const term = paymentSearchTerm.toLowerCase();
+            const matchesSearch = p.event_id.toLowerCase().includes(term);
+            const matchesStatus = paymentFilterStatus === 'all' || p.status.toLowerCase() === paymentFilterStatus;
+            return matchesSearch && matchesStatus;
+          })
+          .map((payment) => (
+          <div key={payment.id} className="flex items-center justify-between p-4 rounded-2xl border border-white/10 bg-white/[0.03]">
+            <div>
+              <p className="text-white font-semibold text-sm">{payment.event_id}</p>
+              <p className="text-gray-500 text-xs mt-1">{new Date(payment.created_at).toLocaleDateString()}</p>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className={`font-bold text-sm ${payment.status === 'successful' ? 'text-[var(--neon-cyan)]' : payment.status === 'refunded' ? 'text-gray-400' : 'text-orange-400'}`}>
+                ₹{payment.amount} - {payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
+              </span>
+            </div>
+          </div>
+        ))}
+        {payments.filter(p => {
+            const term = paymentSearchTerm.toLowerCase();
+            const matchesSearch = p.event_id.toLowerCase().includes(term);
+            const matchesStatus = paymentFilterStatus === 'all' || p.status.toLowerCase() === paymentFilterStatus;
+            return matchesSearch && matchesStatus;
+          }).length === 0 && (
+          <div className="text-center py-8 text-gray-500 text-sm">
+            No payments match your filters.
+          </div>
+        )}
+      </div>
     </div>
   );
 }

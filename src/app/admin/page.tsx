@@ -28,13 +28,16 @@ export default function AdminPortal() {
  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
  const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
  // Logs State
- const [adminLogs, setAdminLogs] = useState<any[]>([]);
+ const [adminLogs, setAdminLogs] = useState<{ id: string; admin_email: string; action: string; created_at: string }[]>([]);
+ const [logSearchTerm, setLogSearchTerm] = useState('');
  // Users State
  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
  const [newUserEmail, setNewUserEmail] = useState('');
  const [newUserRole, setNewUserRole] = useState<Role>('Viewer');
  // Payments State
  const [payments, setPayments] = useState<Payment[]>([]);
+ const [paymentSearchTerm, setPaymentSearchTerm] = useState('');
+ const [paymentFilterStatus, setPaymentFilterStatus] = useState('all');
  const [isRefunding, setIsRefunding] = useState<string | null>(null);
  const [broadcastAudience, setBroadcastAudience] = useState<'all' | 'paid'>('all');
  const [broadcastSubject, setBroadcastSubject] = useState('');
@@ -101,7 +104,8 @@ export default function AdminPortal() {
  payment_id: paymentId,
  razorpay_payment_id: razorpayPaymentId,
  amount,
- adminPasskey: passkeyInput // The logged-in admin's passkey
+ adminPasskey: passkeyInput,
+ adminEmail: loggedInEmail
  })
  });
  const data = await res.json();
@@ -535,10 +539,25 @@ export default function AdminPortal() {
  </form>
  </div>
  ) : activeTab === 'logs' ? (
- <div className="glass rounded-3xl border border-white/10 p-8 max-w-4xl">
- <h2 className="text-2xl font-[var(--font-heading-main)] font-black mb-6 text-red-400">Security Audit Logs</h2>
- <div className="overflow-x-auto">
- <table className="w-full text-left text-sm">
+  <div className="glass rounded-3xl border border-white/10 p-8 max-w-4xl">
+  <h2 className="text-2xl font-[var(--font-heading-main)] font-black mb-6 text-red-400">Security Audit Logs</h2>
+  
+  {/* Logs Filter */}
+  <div className="flex flex-col md:flex-row gap-4 mb-6">
+    <div className="relative flex-1">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+      <input 
+        type="text" 
+        placeholder="Search Logs by Admin Email or Action..."
+        value={logSearchTerm}
+        onChange={e => setLogSearchTerm(e.target.value)}
+        className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:border-[var(--neon-cyan)] outline-none"
+      />
+    </div>
+  </div>
+
+  <div className="overflow-x-auto">
+  <table className="w-full text-left text-sm">
  <thead>
  <tr className="border-b border-white/10 text-gray-400 font-mono text-xs uppercase">
  <th className="py-4 font-bold">Admin Email</th>
@@ -547,19 +566,25 @@ export default function AdminPortal() {
  </tr>
  </thead>
  <tbody>
- {adminLogs.map((log: any) => (
- <tr key={log.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
- <td className="py-4 font-mono text-[var(--neon-cyan)]">{log.admin_email}</td>
- <td className="py-4 font-bold">{log.action}</td>
- <td className="py-4 text-gray-400 text-xs">{new Date(log.created_at).toLocaleString()}</td>
- </tr>
- ))}
- {adminLogs.length === 0 && (
- <tr>
- <td colSpan={3} className="py-8 text-center text-gray-500 font-mono">No logs found</td>
- </tr>
- )}
- </tbody>
+  {adminLogs.filter(log => {
+    const term = logSearchTerm.toLowerCase();
+    return log.admin_email.toLowerCase().includes(term) || log.action.toLowerCase().includes(term);
+  }).map((log) => (
+  <tr key={log.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+  <td className="py-4 font-mono text-[var(--neon-cyan)]">{log.admin_email}</td>
+  <td className="py-4 font-bold">{log.action}</td>
+  <td className="py-4 text-gray-400 text-xs">{new Date(log.created_at).toLocaleString()}</td>
+  </tr>
+  ))}
+  {adminLogs.filter(log => {
+    const term = logSearchTerm.toLowerCase();
+    return log.admin_email.toLowerCase().includes(term) || log.action.toLowerCase().includes(term);
+  }).length === 0 && (
+  <tr>
+  <td colSpan={3} className="py-8 text-center text-gray-500 font-mono">No logs found</td>
+  </tr>
+  )}
+  </tbody>
  </table>
  </div>
  </div>
@@ -639,24 +664,61 @@ export default function AdminPortal() {
  </h2>
  <button onClick={fetchPayments} className="text-xs font-bold text-gray-400 hover:text-white uppercase">Refresh</button>
  </div>
+ {/* Filters */}
+ <div className="flex flex-col md:flex-row gap-4 mb-6">
+  <div className="relative flex-1">
+  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+  <input 
+  type="text" 
+  placeholder="Search Payment by Name, Event, Email, or Phone..."
+  value={paymentSearchTerm}
+  onChange={e => setPaymentSearchTerm(e.target.value)}
+  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:border-[var(--neon-cyan)] outline-none"
+  />
+  </div>
+  <select
+    value={paymentFilterStatus}
+    onChange={e => setPaymentFilterStatus(e.target.value)}
+    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-cyan)] outline-none cursor-pointer appearance-none md:w-48"
+  >
+    <option value="all" className="bg-[#0f172a]">All Status</option>
+    <option value="successful" className="bg-[#0f172a]">Successful</option>
+    <option value="pending" className="bg-[#0f172a]">Pending</option>
+    <option value="refunded" className="bg-[#0f172a]">Refunded</option>
+  </select>
+  </div>
  <div className="overflow-x-auto">
  <table className="w-full text-left text-sm text-gray-300">
- <thead className="bg-white/5 text-gray-400 uppercase text-xs font-semibold">
- <tr>
- <th className="px-6 py-4">Visitor</th>
- <th className="px-6 py-4">Event</th>
- <th className="px-6 py-4">Amount</th>
- <th className="px-6 py-4">Status</th>
- <th className="px-6 py-4 text-right">Actions</th>
- </tr>
- </thead>
+  <thead className="bg-white/5 text-gray-400 uppercase text-xs font-semibold">
+  <tr>
+  <th className="px-6 py-4">Visitor Name</th>
+  <th className="px-6 py-4">Contact No.</th>
+  <th className="px-6 py-4">Event</th>
+  <th className="px-6 py-4">Amount</th>
+  <th className="px-6 py-4">Status</th>
+  <th className="px-6 py-4 text-right">Actions</th>
+  </tr>
+  </thead>
  <tbody className="divide-y divide-white/5">
  {payments.length === 0 ? (
- <tr><td colSpan={5} className="px-6 py-8 text-center">No payments found.</td></tr>
+ <tr><td colSpan={6} className="px-6 py-8 text-center">No payments found.</td></tr>
  ) : (
- payments.map((p) => (
- <tr key={p.id}>
- <td className="px-6 py-4">{p.visitor_id}</td>
+  payments.filter(p => {
+    const term = paymentSearchTerm.toLowerCase();
+    const v = visitors.find(vis => vis.id === p.visitor_id);
+    const name = (v?.name || '').toLowerCase();
+    const phone = (v?.phone || '').toLowerCase();
+    const event = (p.event_id || '').toLowerCase();
+    const email = (v?.email || '').toLowerCase();
+    const matchesSearch = name.includes(term) || phone.includes(term) || event.includes(term) || email.includes(term);
+    const matchesStatus = paymentFilterStatus === 'all' || p.status.toLowerCase() === paymentFilterStatus;
+    return matchesSearch && matchesStatus;
+  }).map((p) => {
+    const v = visitors.find(vis => vis.id === p.visitor_id);
+    return (
+  <tr key={p.id}>
+  <td className="px-6 py-4 font-semibold text-white">{v?.name || p.visitor_id.substring(0, 8)}</td>
+  <td className="px-6 py-4 text-gray-300 font-mono text-xs">{v?.phone || '-'}</td>
  <td className="px-6 py-4">{p.event_id}</td>
  <td className="px-6 py-4">₹{p.amount}</td>
  <td className="px-6 py-4">
@@ -670,7 +732,8 @@ export default function AdminPortal() {
  )}
  </td>
  </tr>
- ))
+ );
+ })
  )}
  </tbody>
  </table>
