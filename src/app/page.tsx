@@ -28,10 +28,6 @@ export default function Home() {
           <StatsBarScene />
         </LazyScene>
 
-        <LazyScene placeholderHeight={600}>
-          <PrizePoolScene />
-        </LazyScene>
-
         {/* MemoriesScene has video — load late */}
         <LazyScene placeholderHeight={600} rootMargin="200px">
           <MemoriesScene />
@@ -43,6 +39,10 @@ export default function Home() {
 
         <LazyScene placeholderHeight={600}>
           <CommitteeScene />
+        </LazyScene>
+
+        <LazyScene placeholderHeight={600}>
+          <PrizePoolScene />
         </LazyScene>
 
         <LazyScene placeholderHeight={400}>
