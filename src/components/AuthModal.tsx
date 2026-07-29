@@ -173,91 +173,76 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  };
  if (!shouldRender) return null;
  return (
- <div ref={overlayRef} onClick={onClose} className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 opacity-0 p-4">
- <div ref={modalRef} onClick={(e) => e.stopPropagation()} className="relative w-full max-w-xl max-h-[90dvh] flex flex-col overflow-hidden bg-black border border-[var(--neon-cyan)]/30 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.1)] opacity-0">
- <button type="button" onClick={onClose} className="absolute top-4 right-4 z-50 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/10 cursor-pointer">
+ <div ref={overlayRef} onClick={onClose} className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm opacity-0 p-4">
+ <div ref={modalRef} onClick={(e) => e.stopPropagation()} className="relative w-full max-w-md max-h-[90dvh] flex flex-col overflow-y-auto bg-black/90 backdrop-blur-2xl border border-[var(--neon-cyan)]/40 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.15)] hover:shadow-[0_0_80px_rgba(0,240,255,0.25)] transition-shadow duration-700 opacity-0 p-6 sm:p-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+ <button type="button" onClick={onClose} className="absolute top-3 right-3 sm:top-4 sm:right-4 z-50 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-white hover:rotate-90 transition-all duration-300 rounded-lg hover:bg-white/10 cursor-pointer">
  <X className="w-5 h-5 pointer-events-none" />
  </button>
- <h2 className="text-3xl font-[var(--font-heading-main)] font-black text-white mb-6 text-center mt-2">
+ <h2 className="text-2xl sm:text-3xl font-[var(--font-heading-main)] font-black text-white mb-6 text-center mt-8 sm:mt-2 tracking-wide animate-in fade-in zoom-in duration-500">
  {activeTab === 'register' ? 'JOIN THE FESTIVAL' : 'VISITOR LOGIN'}
  </h2>
- {/* Tab Switcher */}
- <div className="flex p-1 bg-white/5 rounded-xl mb-6">
- <button
- type="button"
- onClick={() => { setActiveTab('register'); setStep(1); setError(''); }}
- className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
- activeTab === 'register' ? 'bg-[var(--neon-cyan)] text-black shadow-[0_0_15px_rgba(0,240,255,0.3)]' : 'text-gray-400 hover:text-white hover:bg-white/5'
- }`}
- >
- Sign In
- </button>
- <button
- type="button"
- onClick={() => { setActiveTab('login'); setError(''); }}
- className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
- activeTab === 'login' ? 'bg-[var(--neon-cyan)] text-black shadow-[0_0_15px_rgba(0,240,255,0.3)]' : 'text-gray-400 hover:text-white hover:bg-white/5'
- }`}
- >
- Log In
- </button>
- </div>
+
  {/* Progress Bar (Only for Register) */}
  {activeTab === 'register' && (
- <div className="mb-8">
+ <div className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
  <div className="flex justify-between items-center relative">
- <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-white/10 rounded-full" />
- <div className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-[var(--neon-cyan)] rounded-full transition-all duration-300" style={{ width: `${((step - 1) / 3) * 100}%` }} />
+ <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+  <div className="h-full bg-gradient-to-r from-[var(--neon-cyan)] to-[#0088ff] rounded-full transition-all duration-500 ease-out" style={{ width: `${((step - 1) / 3) * 100}%` }} />
+ </div>
  {[1, 2, 3, 4].map(num => (
- <div key={num} className={`w-8 h-8 rounded-full flex items-center justify-center relative z-10 transition-colors duration-300 ${step >= num ? 'bg-[var(--neon-cyan)] text-[#000000]' : 'bg-black border-2 border-white/20 text-gray-500'}`}>
- {step > num ? <CheckCircle2 className="w-4 h-4" /> : <span className="text-xs font-bold">{num}</span>}
+ <div key={num} className={`w-8 h-8 rounded-full flex items-center justify-center relative z-10 transition-all duration-500 ${step >= num ? 'bg-gradient-to-r from-[var(--neon-cyan)] to-[#0088ff] text-[#000000] scale-110 shadow-[0_0_10px_rgba(0,240,255,0.4)]' : 'bg-black border-2 border-white/20 text-gray-500'}`}>
+ {step > num ? <CheckCircle2 className="w-4 h-4 animate-in zoom-in duration-300" /> : <span className="text-xs font-bold">{num}</span>}
  </div>
  ))}
  </div>
- <div className="flex justify-between mt-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">
- <span className={step >= 1 ? 'text-[var(--neon-cyan)]' : ''}>Contact</span>
- <span className={step >= 2 ? 'text-[var(--neon-cyan)]' : ''}>Personal</span>
- <span className={step >= 3 ? 'text-[var(--neon-cyan)]' : ''}>Academic</span>
- <span className={step >= 4 ? 'text-[var(--neon-cyan)]' : ''}>Confirm</span>
+ <div className="flex justify-between mt-3 text-[9px] font-bold uppercase tracking-widest text-gray-500">
+ <span className={`transition-colors duration-300 ${step >= 1 ? 'text-[var(--neon-cyan)]' : ''}`}>Contact</span>
+ <span className={`transition-colors duration-300 ${step >= 2 ? 'text-[var(--neon-cyan)]' : ''}`}>Personal</span>
+ <span className={`transition-colors duration-300 ${step >= 3 ? 'text-[var(--neon-cyan)]' : ''}`}>Academic</span>
+ <span className={`transition-colors duration-300 ${step >= 4 ? 'text-[var(--neon-cyan)]' : ''}`}>Confirm</span>
  </div>
  </div>
  )}
  {error && (
- <div className="mb-6 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-semibold text-center">
+ <div className="mb-6 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-semibold text-center animate-in shake duration-300">
  {error}
  </div>
  )}
  <form onSubmit={handleSubmit} className="space-y-6">
  {/* LOGIN VIEW */}
  {activeTab === 'login' && (
- <div className="space-y-4">
+ <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
  <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Email Address *</label>
+ <label className="text-[10px] text-[var(--neon-cyan)] font-bold uppercase tracking-wider block mb-1.5 transition-colors">Email Address *</label>
  <div className="relative group">
- <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
- <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 transition-all duration-300" />
+ <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] group-focus-within:scale-110 transition-all duration-300" />
+ <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300" />
  </div>
  </div>
  <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Phone Number *</label>
+ <label className="text-[10px] text-[var(--neon-cyan)] font-bold uppercase tracking-wider block mb-1.5 transition-colors">Phone Number *</label>
  <div className="relative group">
- <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
- <input type="tel" required value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 7339524706" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 transition-all duration-300" />
+ <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] group-focus-within:scale-110 transition-all duration-300" />
+ <input type="tel" required value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 7339524706" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300" />
  </div>
  </div>
- <button type="submit" disabled={isLoading} className="w-full min-h-[44px] py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all flex items-center justify-center gap-2">
+ <button type="submit" disabled={isLoading} className="w-full min-h-[44px] py-3.5 mt-2 bg-gradient-to-r from-[var(--neon-cyan)] to-[#0088ff] text-black font-bold rounded-full hover:scale-[1.02] active:scale-95 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 flex items-center justify-center gap-2">
  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Access Portal'}
  </button>
   
-  <div className="relative flex items-center py-2">
+  <div className="relative flex items-center py-2 opacity-70">
     <div className="flex-grow border-t border-white/10"></div>
     <span className="flex-shrink-0 mx-4 text-gray-500 text-xs font-semibold uppercase tracking-wider">or</span>
     <div className="flex-grow border-t border-white/10"></div>
   </div>
 
-  <button type="button" onClick={handleGoogleLogin} disabled={isLoading} className="w-full min-h-[44px] py-3.5 bg-white/5 border border-white/10 text-white font-semibold rounded-full hover:bg-white/10 transition-all flex items-center justify-center gap-3">
+  <button type="button" onClick={handleGoogleLogin} disabled={isLoading} className="w-full min-h-[44px] py-3.5 bg-white/5 border border-white/10 text-white font-semibold rounded-full hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-3">
     <GoogleIcon /> Continue with Google
   </button>
+  
+  <p className="text-center text-gray-500 text-xs pt-4">
+    Don't have an account? <button type="button" onClick={() => { setActiveTab('register'); setStep(1); setError(''); }} className="text-[var(--neon-cyan)] hover:underline font-bold transition-colors">Register here</button>
+  </p>
  </div>
  )}
  {/* REGISTER MULTI-STEP VIEW */}
@@ -265,62 +250,62 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  <>
  {/* Step 1: Contact */}
  {step === 1 && (
- <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+ <div className="space-y-4 animate-in fade-in slide-in-from-right-8 duration-500">
  <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Email Address *</label>
+ <label className="text-[10px] text-[var(--neon-cyan)] font-bold uppercase tracking-wider block mb-1.5">Email Address *</label>
  <div className="relative group">
- <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
- <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 transition-all" />
+ <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] group-focus-within:scale-110 transition-all duration-300" />
+ <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300" />
  </div>
  </div>
  <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Phone Number *</label>
+ <label className="text-[10px] text-[var(--neon-cyan)] font-bold uppercase tracking-wider block mb-1.5">Phone Number *</label>
  <div className="relative group">
- <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
- <input type="tel" required value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 9876543210" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 transition-all" />
+ <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] group-focus-within:scale-110 transition-all duration-300" />
+ <input type="tel" required value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 9876543210" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300" />
  </div>
  </div>
   </div>
  )}
   
   {step === 1 && (
-    <>
-      <div className="relative flex items-center py-2">
+    <div className="animate-in fade-in slide-in-from-right-8 duration-500 delay-100 fill-mode-both">
+      <div className="relative flex items-center py-2 mt-4 opacity-70">
         <div className="flex-grow border-t border-white/10"></div>
         <span className="flex-shrink-0 mx-4 text-gray-500 text-xs font-semibold uppercase tracking-wider">or</span>
         <div className="flex-grow border-t border-white/10"></div>
       </div>
 
-      <button type="button" onClick={handleGoogleLogin} disabled={isLoading} className="w-full py-3.5 bg-white/5 border border-white/10 text-white font-semibold rounded-full hover:bg-white/10 transition-all flex items-center justify-center gap-3">
+      <button type="button" onClick={handleGoogleLogin} disabled={isLoading} className="w-full py-3.5 mt-4 bg-white/5 border border-white/10 text-white font-semibold rounded-full hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-3">
         <GoogleIcon /> Sign up with Google
       </button>
-    </>
+    </div>
   )}
 
  {/* Step 2: Personal */}
  {step === 2 && (
- <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+ <div className="space-y-4 animate-in fade-in slide-in-from-right-8 duration-500">
  <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Full Name *</label>
+ <label className="text-[10px] text-[var(--neon-cyan)] font-bold uppercase tracking-wider block mb-1.5">Full Name *</label>
  <div className="relative group">
- <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
- <input type="text" required value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 transition-all" />
+ <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] group-focus-within:scale-110 transition-all duration-300" />
+ <input type="text" required value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300" />
  </div>
  </div>
  <div className="grid grid-cols-2 gap-4">
  <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Gender *</label>
- <select value={gender} onChange={e => setGender(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-cyan)] transition-colors">
- <option value="Male">Male</option>
- <option value="Female">Female</option>
- <option value="Other">Other</option>
+ <label className="text-[10px] text-[var(--neon-cyan)] font-bold uppercase tracking-wider block mb-1.5">Gender *</label>
+ <select value={gender} onChange={e => setGender(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300 cursor-pointer">
+ <option value="Male" className="bg-black">Male</option>
+ <option value="Female" className="bg-black">Female</option>
+ <option value="Other" className="bg-black">Other</option>
  </select>
  </div>
  <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">City *</label>
+ <label className="text-[10px] text-[var(--neon-cyan)] font-bold uppercase tracking-wider block mb-1.5">City *</label>
  <div className="relative group">
- <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
- <input type="text" required value={city} onChange={e => setCity(e.target.value)} placeholder="Mumbai..." className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-all" />
+ <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] group-focus-within:scale-110 transition-all duration-300" />
+ <input type="text" required value={city} onChange={e => setCity(e.target.value)} placeholder="Mumbai..." className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300" />
  </div>
  </div>
  </div>
@@ -328,30 +313,30 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  )}
  {/* Step 3: Academic */}
  {step === 3 && (
- <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+ <div className="space-y-4 animate-in fade-in slide-in-from-right-8 duration-500">
  <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">College Name *</label>
+ <label className="text-[10px] text-[var(--neon-cyan)] font-bold uppercase tracking-wider block mb-1.5">College Name *</label>
  <div className="relative group">
- <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
- <input type="text" required value={college} onChange={e => setCollege(e.target.value)} placeholder="XYZ College" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-all" />
+ <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] group-focus-within:scale-110 transition-all duration-300" />
+ <input type="text" required value={college} onChange={e => setCollege(e.target.value)} placeholder="XYZ College" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300" />
  </div>
  </div>
  <div className="grid grid-cols-2 gap-4">
  <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Department *</label>
+ <label className="text-[10px] text-[var(--neon-cyan)] font-bold uppercase tracking-wider block mb-1.5">Department *</label>
  <div className="relative group">
- <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] transition-colors" />
- <input type="text" required value={department} onChange={e => setDepartment(e.target.value)} placeholder="CSE" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] transition-all" />
+ <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-[var(--neon-cyan)] group-focus-within:scale-110 transition-all duration-300" />
+ <input type="text" required value={department} onChange={e => setDepartment(e.target.value)} placeholder="CSE" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300" />
  </div>
  </div>
  <div>
- <label className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1.5">Year *</label>
- <select value={year} onChange={e => setYear(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-cyan)] transition-colors">
- <option value="1">1st Year</option>
- <option value="2">2nd Year</option>
- <option value="3">3rd Year</option>
- <option value="4">4th Year</option>
- <option value="PG">PG</option>
+ <label className="text-[10px] text-[var(--neon-cyan)] font-bold uppercase tracking-wider block mb-1.5">Year *</label>
+ <select value={year} onChange={e => setYear(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300 cursor-pointer">
+ <option value="1" className="bg-black">1st Year</option>
+ <option value="2" className="bg-black">2nd Year</option>
+ <option value="3" className="bg-black">3rd Year</option>
+ <option value="4" className="bg-black">4th Year</option>
+ <option value="PG" className="bg-black">PG</option>
  </select>
  </div>
  </div>
@@ -359,38 +344,47 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  )}
  {/* Step 4: Confirm */}
  {step === 4 && (
- <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
- <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-sm text-gray-300">
- <h3 className="text-[var(--neon-cyan)] font-bold mb-4 uppercase tracking-widest text-xs">Review Details</h3>
- <div className="grid grid-cols-2 gap-y-3">
- <div><span className="text-gray-500 text-xs">Name:</span><br/>{name}</div>
- <div><span className="text-gray-500 text-xs">Email:</span><br/>{email}</div>
- <div><span className="text-gray-500 text-xs">College:</span><br/>{college}</div>
- <div><span className="text-gray-500 text-xs">Dept:</span><br/>{department}</div>
+ <div className="space-y-4 animate-in fade-in slide-in-from-right-8 duration-500">
+ <div className="bg-white/5 border border-[var(--neon-cyan)]/30 rounded-2xl p-6 text-sm text-gray-300 relative overflow-hidden group hover:border-[var(--neon-cyan)]/60 transition-colors duration-300">
+ <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-cyan)]/10 to-[#0088ff]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+ <h3 className="text-[var(--neon-cyan)] font-bold mb-4 uppercase tracking-widest text-xs relative z-10 flex items-center gap-2">
+  <CheckCircle2 className="w-4 h-4 text-[#0088ff]" /> Review Details
+ </h3>
+ <div className="grid grid-cols-2 gap-y-4 relative z-10">
+ <div><span className="text-gray-500 text-[10px] uppercase font-bold tracking-wider">Name</span><br/><span className="font-medium text-white">{name}</span></div>
+ <div><span className="text-gray-500 text-[10px] uppercase font-bold tracking-wider">Email</span><br/><span className="font-medium text-white truncate block pr-2">{email}</span></div>
+ <div><span className="text-gray-500 text-[10px] uppercase font-bold tracking-wider">College</span><br/><span className="font-medium text-white">{college}</span></div>
+ <div><span className="text-gray-500 text-[10px] uppercase font-bold tracking-wider">Dept</span><br/><span className="font-medium text-white">{department}</span></div>
  </div>
  </div>
- <p className="text-xs text-gray-500 text-center px-4">
+ <p className="text-xs text-gray-400 text-center px-4 animate-pulse">
  By confirming, you agree to our terms. An automated OD email will be dispatched to your inbox.
  </p>
  </div>
  )}
  {/* Navigation Buttons */}
-  <div className="flex gap-4 pt-4">
+  <div className="flex gap-4 pt-6">
   {step > 1 && (
-  <button type="button" onClick={prevStep} className="flex-1 py-3.5 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-full transition-colors flex justify-center items-center gap-2">
+  <button type="button" onClick={prevStep} className="flex-1 py-3.5 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-full transition-all duration-300 flex justify-center items-center gap-2 hover:-translate-x-1 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
   <ChevronLeft className="w-4 h-4" /> Back
   </button>
   )}
   {step < 4 ? (
-  <button type="button" onClick={nextStep} className="flex-[2] py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors flex justify-center items-center gap-2">
-  Next Step <ChevronRight className="w-4 h-4" />
+  <button type="button" onClick={nextStep} className="flex-[2] py-3.5 bg-gradient-to-r from-[var(--neon-cyan)] to-[#0088ff] text-black font-bold rounded-full hover:scale-[1.02] active:scale-95 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 flex justify-center items-center gap-2 group">
+  Next Step <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
   </button>
   ) : (
-  <button type="submit" disabled={isLoading} className="flex-[2] py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 flex justify-center items-center gap-2 disabled:opacity-50">
+  <button type="submit" disabled={isLoading} className="flex-[2] py-3.5 bg-gradient-to-r from-[var(--neon-cyan)] to-[#0088ff] text-black font-bold rounded-full hover:scale-[1.02] active:scale-95 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 flex justify-center items-center gap-2 disabled:opacity-50 disabled:hover:scale-100">
   {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirm Registration'}
   </button>
   )}
   </div>
+
+  {step === 1 && (
+    <p className="text-center text-gray-500 text-xs pt-4">
+      Already have an account? <button type="button" onClick={() => { setActiveTab('login'); setError(''); }} className="text-[var(--neon-cyan)] hover:underline font-bold transition-colors">Log in</button>
+    </p>
+  )}
  </>
  )}
  </form>

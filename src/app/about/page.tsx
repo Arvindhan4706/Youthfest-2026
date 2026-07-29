@@ -174,9 +174,9 @@ export default function AboutPage() {
                </motion.div>
              </div>
 
-            <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-0 mt-10">
+             <div className="flex flex-col md:flex-row justify-center items-stretch gap-6 md:gap-8 mt-10">
                <motion.div custom={2} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                 className="relative rounded-[20px] border border-[var(--neon-cyan)]/30 bg-[#050015] p-8 overflow-hidden max-w-lg z-10 md:-mr-6 md:mt-12 rotate-[-2deg] hover:rotate-0 transition-transform duration-300 shadow-[0_0_30px_rgba(0,240,255,0.1)]">
+                 className="relative rounded-[20px] border border-[var(--neon-cyan)]/30 bg-[#050015] p-8 overflow-hidden w-full max-w-lg z-10 rotate-[-1deg] hover:rotate-0 transition-transform duration-300 shadow-[0_0_30px_rgba(0,240,255,0.1)]">
                  <div className="absolute top-0 right-0 w-40 h-40 bg-[var(--neon-cyan)]/10 rounded-full blur-3xl" />
                  <div className="flex items-center gap-3 mb-5 relative z-10">
                    <div className="w-10 h-10 rounded-[12px] bg-[var(--neon-cyan)]/10 flex items-center justify-center text-[var(--neon-cyan)]"><Eye className="w-5 h-5" /></div>
@@ -186,7 +186,7 @@ export default function AboutPage() {
                  <div className="mt-6 h-px bg-gradient-to-r from-[var(--neon-cyan)]/40 to-transparent" />
                </motion.div>
                <motion.div custom={3} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                 className="relative rounded-[20px] border border-[var(--neon-magenta)]/30 bg-[#100015] p-8 overflow-hidden max-w-lg z-20 md:-ml-6 md:-mt-12 rotate-[2deg] hover:rotate-0 transition-transform duration-300 shadow-[0_0_30px_rgba(255,0,255,0.1)]">
+                 className="relative rounded-[20px] border border-[var(--neon-magenta)]/30 bg-[#100015] p-8 overflow-hidden w-full max-w-lg z-20 rotate-[1deg] hover:rotate-0 transition-transform duration-300 shadow-[0_0_30px_rgba(255,0,255,0.1)]">
                  <div className="absolute top-0 right-0 w-40 h-40 bg-[var(--neon-magenta)]/10 rounded-full blur-3xl" />
                  <div className="flex items-center gap-3 mb-5 relative z-10">
                    <div className="w-10 h-10 rounded-[12px] bg-[var(--neon-magenta)]/10 flex items-center justify-center text-[var(--neon-magenta)]"><Target className="w-5 h-5" /></div>

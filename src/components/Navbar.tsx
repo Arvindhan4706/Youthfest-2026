@@ -143,31 +143,31 @@ export default function Navbar() {
         <div className="px-6 h-[64px] md:h-[72px] flex items-center justify-between gap-4">
 
           {/* ── Logo ── */}
-          <Link
-            href="/"
-            className="group flex items-center gap-3 flex-shrink-0"
-            aria-label="Yuvenza Home"
-          >
-            <Image
-              src="/eventlogo.png"
-              alt="Yuvenza Logo"
-              width={36}
-              height={36}
-              priority
-              className="w-9 h-9 object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.5)] group-hover:scale-105 transition-transform duration-300"
-            />
-            <div className="flex flex-col">
-              <span className="text-[7px] uppercase tracking-[0.2em] text-gray-400 font-bold leading-none mb-0.5">
-                Yuvenza Presents
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <Link href="/admin" aria-label="Admin Portal" className="group" title="Admin Portal">
+              <Image
+                src="/eventlogo.png"
+                alt="Yuvenza Logo"
+                width={36}
+                height={36}
+                priority
+                className="w-9 h-9 object-contain drop-shadow-[0_0_15px_rgba(0,240,255,0.5)] group-hover:scale-105 transition-transform duration-300"
+              />
+            </Link>
+            <Link href="/" aria-label="Yuvenza Home" className="group flex items-center gap-3">
+              <div className="flex flex-col">
+                <span className="text-[7px] uppercase tracking-[0.2em] text-gray-400 font-bold leading-none mb-0.5">
+                  Yuvenza Presents
+                </span>
+                <span className="font-[var(--font-heading-main)] font-extrabold text-lg leading-none tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
+                  YOUTHFEST
+                </span>
+              </div>
+              <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-widest bg-white/10 text-white/70 px-2 py-0.5 rounded-full border border-white/10">
+                2026
               </span>
-              <span className="font-[var(--font-heading-main)] font-extrabold text-lg leading-none tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
-                YUVENZA
-              </span>
-            </div>
-            <span className="hidden sm:inline-block text-[9px] uppercase font-bold tracking-widest bg-white/10 text-white/70 px-2 py-0.5 rounded-full border border-white/10">
-              2026
-            </span>
-          </Link>
+            </Link>
+          </div>
 
           {/* ── Desktop Center Nav ── */}
           <div className="hidden md:flex items-center gap-6 flex-1 justify-center" role="menubar">
@@ -194,15 +194,6 @@ export default function Navbar() {
 
           {/* ── Desktop Right Side ── */}
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
-
-            {/* Admin Portal (subtle) */}
-            <Link
-              href="/admin"
-              className="p-2 rounded-xl text-white/20 hover:bg-white/5 hover:text-[var(--neon-cyan)] transition-all duration-300"
-              title="Admin Portal"
-            >
-              <ShieldCheck className="w-4 h-4" />
-            </Link>
 
             {user ? (
               <>
