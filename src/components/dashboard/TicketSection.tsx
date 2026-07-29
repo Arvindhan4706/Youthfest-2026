@@ -16,14 +16,7 @@ export default function TicketSection() {
 
   React.useEffect(() => {
     if (selectedEventTicket && user) {
-      const qrData = JSON.stringify({
-        email: user.email,
-        name: user.name || 'Attendee',
-        event: selectedEventTicket,
-        regId: getTicketId(user.email, selectedEventTicket),
-        qrId: crypto.randomUUID(),
-        time: Date.now()
-      });
+      const qrData = `${user.email}|${selectedEventTicket}`;
       QRCode.toDataURL(qrData, { width: 300, margin: 1 })
         .then(url => setQrCodeDataUrl(url))
         .catch(err => console.error('Failed to generate local QR code', err));

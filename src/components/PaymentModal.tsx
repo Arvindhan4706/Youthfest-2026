@@ -166,14 +166,7 @@ export default function PaymentModal() {
 
  // Send the Ticket PDF via our new API route
  try {
-   const qrData = JSON.stringify({
-     email: user.email,
-     name: user.name || 'Attendee',
-     event: checkoutEvent.title,
-     regId: getTicketId(user.email, checkoutEvent.title),
-     qrId: crypto.randomUUID(),
-     time: Date.now()
-   });
+   const qrData = `${user.email}|${checkoutEvent.title}`;
    const qrDataUrl = await QRCode.toDataURL(qrData, { width: 300, margin: 1 });
    
    await fetch('/api/send-ticket', {
