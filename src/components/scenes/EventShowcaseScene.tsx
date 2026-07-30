@@ -208,7 +208,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
   </div>
  </div>
  {/* Scrollable Content */}
- <div className="flex-grow overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+ <div className="flex-grow overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent" data-lenis-prevent="true">
  <p className="text-gray-300 text-sm leading-relaxed mb-8">{event.desc}</p>
  <div className="grid grid-cols-2 gap-4 mb-8">
  <div className="p-4 rounded-[20px] bg-white/[0.02] border border-white/5">
@@ -379,8 +379,8 @@ export default function EventShowcaseScene() {
       const staticTrackEvents = STATIC_EVENTS.filter(e => e.track_id === t.id);
       
       const eventsMap = new Map<string, EventItem>();
-      staticTrackEvents.forEach(e => eventsMap.set(e.title.toLowerCase(), e));
-      trackDbEvents.forEach(e => eventsMap.set(e.title.toLowerCase(), e));
+      staticTrackEvents.forEach(e => eventsMap.set(e.id, e));
+      trackDbEvents.forEach(e => eventsMap.set(e.id, e));
 
       return {
         ...t,

@@ -311,7 +311,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 bg-[#030014]/97 backdrop-blur-2xl md:hidden flex flex-col pt-28 px-6 pb-8 overflow-y-auto"
+            className="fixed inset-0 z-40 bg-[#030014]/97 backdrop-blur-2xl md:hidden flex flex-col pt-28 px-6 pb-8 overflow-y-auto" data-lenis-prevent="true"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile Navigation Menu"

@@ -26,76 +26,7 @@ export default function CertificatesSection() {
   const registeredEvents = user.registeredEvents || [];
 
   const handleDownloadCertificate = async (eventName: string) => {
-    setIsGenerating(eventName);
-    addToast('Generating your certificate...');
-    
-    try {
-      const pdfDoc = await PDFDocument.create();
-      // Landscape A4 roughly
-      const page = pdfDoc.addPage([842, 595]);
-      
-      const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-      const normalFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-      const italicFont = await pdfDoc.embedFont(StandardFonts.HelveticaOblique);
-
-      // Background
-      page.drawRectangle({ x: 0, y: 0, width: 842, height: 595, color: rgb(0.01, 0.0, 0.05) });
-      
-      // Border
-      page.drawRectangle({
-        x: 20, y: 20, width: 802, height: 555,
-        borderColor: rgb(0.1, 0.8, 0.8),
-        borderWidth: 2,
-        color: undefined
-      });
-      page.drawRectangle({
-        x: 25, y: 25, width: 792, height: 545,
-        borderColor: rgb(0.5, 0.2, 0.8),
-        borderWidth: 1,
-        color: undefined
-      });
-
-      // Text
-      page.drawText("YUVENZA '26", { x: 300, y: 500, size: 36, font, color: rgb(0.1, 0.9, 0.9) });
-      page.drawText("CERTIFICATE OF PARTICIPATION", { x: 190, y: 440, size: 28, font, color: rgb(1, 1, 1) });
-      
-      page.drawText("This is proudly presented to", { x: 310, y: 380, size: 18, font: italicFont, color: rgb(0.7, 0.7, 0.7) });
-      
-      const nameWidth = font.widthOfTextAtSize(user.name, 36);
-      page.drawText(user.name, { x: (842 - nameWidth) / 2, y: 320, size: 36, font, color: rgb(0.9, 0.8, 0.2) });
-      
-      page.drawText("For successfully participating and completing the event", { x: 230, y: 260, size: 16, font: normalFont, color: rgb(0.7, 0.7, 0.7) });
-      
-      const eventWidth = font.widthOfTextAtSize(eventName, 28);
-      page.drawText(eventName, { x: (842 - eventWidth) / 2, y: 210, size: 28, font, color: rgb(0.8, 0.4, 0.9) });
-
-      page.drawText("Date: August 12, 2026", { x: 340, y: 150, size: 16, font: normalFont, color: rgb(0.9, 0.9, 0.9) });
-      
-      // Signatures
-      page.drawText("__________________", { x: 150, y: 80, size: 14, font: normalFont, color: rgb(1, 1, 1) });
-      page.drawText("Event Coordinator", { x: 155, y: 60, size: 12, font: normalFont, color: rgb(0.6, 0.6, 0.6) });
-
-      page.drawText("__________________", { x: 550, y: 80, size: 14, font: normalFont, color: rgb(1, 1, 1) });
-      page.drawText("Principal", { x: 590, y: 60, size: 12, font: normalFont, color: rgb(0.6, 0.6, 0.6) });
-
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Certificate_${eventName.replace(/\s+/g, '_')}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
-      addToast('Certificate downloaded successfully!');
-    } catch (err) {
-      console.error(err);
-      addToast('Failed to generate certificate.');
-    } finally {
-      setIsGenerating(null);
-    }
+    addToast('Certificates will be issued on August 13, 2026.');
   };
 
   if (isLoading) {

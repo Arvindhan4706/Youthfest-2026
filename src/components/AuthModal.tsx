@@ -174,7 +174,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  if (!shouldRender) return null;
  return (
  <div ref={overlayRef} onClick={onClose} className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm opacity-0 p-4">
- <div ref={modalRef} onClick={(e) => e.stopPropagation()} className="relative w-full max-w-md max-h-[90dvh] flex flex-col overflow-y-auto bg-black/90 backdrop-blur-2xl border border-[var(--neon-cyan)]/40 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.15)] hover:shadow-[0_0_80px_rgba(0,240,255,0.25)] transition-shadow duration-700 opacity-0 p-6 sm:p-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+ <div ref={modalRef} onClick={(e) => e.stopPropagation()} data-lenis-prevent="true" className="relative w-full max-w-md max-h-[90dvh] flex flex-col overflow-y-auto bg-black/90 backdrop-blur-2xl border border-[var(--neon-cyan)]/40 rounded-3xl shadow-[0_0_50px_rgba(0,240,255,0.15)] hover:shadow-[0_0_80px_rgba(0,240,255,0.25)] transition-shadow duration-700 opacity-0 p-6 sm:p-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
  <button type="button" onClick={onClose} className="absolute top-3 right-3 sm:top-4 sm:right-4 z-50 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-white hover:rotate-90 transition-all duration-300 rounded-lg hover:bg-white/10 cursor-pointer">
  <X className="w-5 h-5 pointer-events-none" />
  </button>

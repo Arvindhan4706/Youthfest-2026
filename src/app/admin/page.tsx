@@ -871,11 +871,12 @@ export default function AdminPortal() {
  </div>
  </div>
  {isEventModalOpen && (
- <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4">
+ <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4" onClick={() => setIsEventModalOpen(false)}>
  <motion.div 
  initial={{ opacity: 0, scale: 0.95 }}
  animate={{ opacity: 1, scale: 1 }}
  className="bg-[#030014] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl relative"
+ onClick={(e) => e.stopPropagation()}
  >
  <div className="flex items-center justify-between p-6 border-b border-white/10 shrink-0">
  <h2 className="text-2xl font-[var(--font-heading-main)] font-black text-white">
@@ -885,7 +886,7 @@ export default function AdminPortal() {
  <X className="w-6 h-6" />
  </button>
  </div>
- <div className="flex-1 overflow-y-auto p-6 md:p-8 scrollbar-thin">
+ <div className="flex-1 overflow-y-auto p-6 md:p-8 scrollbar-thin" data-lenis-prevent="true">
  <form onSubmit={handleSaveEvent} className="space-y-4">
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div>

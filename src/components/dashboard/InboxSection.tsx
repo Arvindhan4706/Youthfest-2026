@@ -18,7 +18,7 @@ export default function InboxSection() {
             <span>Registration Inbox</span>
           </h2>
           
-          <div className="flex flex-col gap-3 max-h-[350px] overflow-y-auto pr-1">
+          <div className="flex flex-col gap-3 max-h-[350px] overflow-y-auto pr-1" data-lenis-prevent="true">
             {messages.length === 0 ? (
               <p className="text-xs text-gray-500 py-10 text-center leading-relaxed">
                 Your inbox is empty.<br />
@@ -78,7 +78,7 @@ export default function InboxSection() {
                   <span className="text-[9px] text-gray-500 block mt-1 font-mono">To: {mail.recipientEmail}</span>
                 </div>
                 
-                <div className="max-h-[220px] overflow-y-auto pr-1">
+                <div className="max-h-[220px] overflow-y-auto pr-1" data-lenis-prevent="true">
                   <pre className="text-[10px] text-gray-300 font-mono whitespace-pre-wrap leading-relaxed select-text">
                     {mail.body}
                   </pre>

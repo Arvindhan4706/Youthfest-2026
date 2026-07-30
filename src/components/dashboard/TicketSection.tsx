@@ -7,12 +7,14 @@ import { useStore } from '../../lib/useStore';
 import { getTicketId } from '../../lib/utils';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import QRCode from 'qrcode';
+import { db } from '../../lib/database';
 
 export default function TicketSection() {
   const user = useStore((state) => state.user);
   const addToast = useStore((state) => state.addToast);
   const [selectedEventTicket, setSelectedEventTicket] = useState<string | null>(null);
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
+  const [eventFee, setEventFee] = useState<string>('₹250');
 
   React.useEffect(() => {
     if (selectedEventTicket && user) {
@@ -20,6 +22,15 @@ export default function TicketSection() {
       QRCode.toDataURL(qrData, { width: 300, margin: 1 })
         .then(url => setQrCodeDataUrl(url))
         .catch(err => console.error('Failed to generate local QR code', err));
+        
+      const fetchFee = async () => {
+        try {
+          const events = await db.getAllEvents();
+          const evt = events.find(e => e.title === selectedEventTicket);
+          if (evt) setEventFee(evt.fee);
+        } catch (e) {}
+      };
+      fetchFee();
     }
   }, [selectedEventTicket, user]);
 
@@ -120,7 +131,7 @@ export default function TicketSection() {
             <span>My Registrations</span>
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent" data-lenis-prevent="true">
             {user.registeredEvents.length === 0 ? (
               <p className="text-xs text-gray-500 py-6 text-center leading-relaxed col-span-full">
                 You haven't registered for any events yet. <br />
@@ -155,13 +166,16 @@ export default function TicketSection() {
           id="ticket-pass"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full flex flex-col md:flex-row shadow-2xl relative rounded-3xl overflow-hidden font-sans border border-gray-800"
+          className="w-full flex flex-col md:flex-row shadow-[0_0_50px_rgba(255,255,255,0.05)] relative rounded-3xl overflow-hidden font-sans border border-white/10 group backdrop-blur-xl"
         >
+          {/* Holographic sweep effect */}
+          <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[1.5s] ease-in-out pointer-events-none z-50 mix-blend-overlay" />
+          
           {/* Left Main Section (70%) */}
-          <div className="md:w-[70%] bg-[#080808] relative p-6 sm:p-10 flex flex-col justify-between overflow-hidden">
+          <div className="md:w-[70%] bg-[#080808]/90 relative p-6 sm:p-10 flex flex-col justify-between overflow-hidden">
             {/* Background elements */}
-            <div className="absolute top-0 right-10 w-96 h-96 bg-purple-600/10 blur-[120px] rounded-full pointer-events-none" />
-            <div className="absolute bottom-0 left-10 w-96 h-96 bg-cyan-600/10 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute top-0 right-10 w-96 h-96 bg-purple-600/20 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute bottom-0 left-10 w-96 h-96 bg-cyan-600/20 blur-[120px] rounded-full pointer-events-none" />
             
             {/* Left vertical text */}
             <div className="hidden sm:flex absolute left-2 top-0 bottom-0 items-center justify-center w-8">
@@ -174,10 +188,13 @@ export default function TicketSection() {
 
             <div className="sm:pl-10 relative z-10 h-full flex flex-col justify-between">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row justify-between items-start w-full gap-4 sm:gap-0">
-                <div>
-                  <p className="text-[10px] sm:text-xs text-purple-400 tracking-[0.2em] uppercase font-bold mb-1">YUVENZA PRESENTS</p>
-                  <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-widest uppercase">THE FLAGSHIP EVENT OF THE YEAR</p>
+              <div className="flex flex-col sm:flex-row justify-between items-start w-full gap-4 sm:gap-0 relative z-20">
+                <div className="flex items-center gap-4">
+                  <Image src="/yuvenzalogo.png" alt="Yuvenza Logo" width={60} height={60} className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]" />
+                  <div>
+                    <p className="text-[10px] sm:text-xs text-purple-400 tracking-[0.2em] uppercase font-bold mb-1">YUVENZA PRESENTS</p>
+                    <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-widest uppercase">YOUTHFEST 2026</p>
+                  </div>
                 </div>
                 <div className="sm:text-right">
                   <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-widest uppercase">ONE CAMPUS.</p>
@@ -206,11 +223,11 @@ export default function TicketSection() {
               </div>
 
               {/* Footer Info */}
-              <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-6 sm:gap-12 border-t border-gray-800 pt-6">
+              <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-6 sm:gap-12 border-t border-gray-800 pt-6 relative z-20">
                 <div className="flex items-center gap-3">
                   <Calendar className="w-7 h-7 text-pink-500" />
                   <div>
-                    <p className="text-sm font-bold text-white">10th OCTOBER</p>
+                    <p className="text-sm font-bold text-white">12th AUGUST</p>
                     <p className="text-sm text-pink-500 font-semibold">2026</p>
                   </div>
                 </div>
@@ -220,20 +237,20 @@ export default function TicketSection() {
                   </div>
                   <div>
                     <p className="text-sm font-bold text-white">9:30 PM</p>
-                    <p className="text-sm text-purple-500 font-semibold">- 5:00 AM</p>
+                    <p className="text-sm text-purple-500 font-semibold">- 3:00 AM</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-7 border-[2.5px] border-cyan-400 rounded-full rounded-b-none" />
                   <div>
-                    <p className="text-sm font-bold text-white uppercase">College Campus</p>
+                    <p className="text-sm font-bold text-white uppercase">Chennai Institute Of Technology</p>
                     <p className="text-sm text-cyan-400 font-semibold uppercase">Chennai, Tamil Nadu</p>
                   </div>
                 </div>
               </div>
               
-              <div className="w-full text-center mt-10">
-                <p className="text-[10px] text-gray-500 tracking-[0.5em]">WWW.YOUTHFEST26.COM</p>
+              <div className="w-full text-center mt-10 relative z-20">
+                <p className="text-[10px] text-gray-400 tracking-[0.5em]">YOUTHFEST-2026.VERCEL.APP</p>
               </div>
             </div>
           </div>
@@ -247,21 +264,13 @@ export default function TicketSection() {
           </div>
 
           {/* Right Stub Section (30%) */}
-          <div className="md:w-[30%] bg-[#0e0e0e] relative p-8 flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-dashed border-gray-800 md:border-none z-10">
+          <div className="md:w-[30%] bg-[#0e0e0e]/90 backdrop-blur-md relative p-8 flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-dashed border-gray-800 md:border-none z-10 transition-transform duration-500 md:group-hover:translate-x-2">
             {/* Background texture for stub */}
             <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #333 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
 
-            <div className="relative z-10 flex flex-col items-center w-full">
-              {/* Custom SVG crown */}
-              <svg className="w-10 h-10 text-white mb-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M4 19h16v2H4v-2zm16-4L15.5 5 12 11 8.5 5 4 15h16z" />
-              </svg>
-              <h3 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-cyan-400 mb-2">
-                VIP PASS
-              </h3>
-              <p className="text-xs text-white tracking-[0.2em] font-bold mb-8">★ ALL ACCESS ★</p>
+            <div className="relative z-10 flex flex-col items-center w-full mt-4">
 
-              <div className="bg-white p-3 rounded-lg mb-8 shadow-[0_0_30px_rgba(255,255,255,0.15)]">
+              <div className="bg-white p-3 rounded-lg mb-8 shadow-[0_0_30px_rgba(0,255,255,0.4)] transition-all duration-500 hover:shadow-[0_0_50px_rgba(236,72,153,0.6)]">
                 {qrCodeDataUrl ? (
                   <Image 
                     src={qrCodeDataUrl}
@@ -279,13 +288,13 @@ export default function TicketSection() {
                 <p className="text-xs text-white tracking-[0.3em] font-bold mb-1">ADMIT ONE</p>
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-2xl text-pink-500">★</span>
-                  <span className="text-4xl font-black text-cyan-400">₹250</span>
+                  <span className="text-3xl font-black text-cyan-400">{eventFee}</span>
                   <span className="text-2xl text-pink-500">★</span>
                 </div>
               </div>
 
-              <p className="text-[11px] text-gray-400 tracking-[0.3em] font-mono">
-                NO : {getTicketId(user.email, selectedEventTicket).substring(0, 10).toUpperCase()}
+              <p className="text-[11px] text-gray-400 tracking-[0.2em] font-mono text-center">
+                NO : {getTicketId(user.email, selectedEventTicket).toUpperCase()}
               </p>
 
               <div className="flex flex-col gap-3 mt-8 w-full">
