@@ -172,7 +172,15 @@ export default function AdminPortal() {
  setIsSavingSettings(true);
  // Convert any string values (from typing) back to integers before saving
  const sanitizedSettings = { ...siteSettings };
- const stringKeys = ['id', 'updated_at', 'contact_institute', 'contact_address', 'contact_email', 'contact_phone', 'contact_whatsapp'];
+ const stringKeys = ['id', 'updated_at'];
+ 
+ // Remove deleted schema fields to prevent backend errors
+ delete sanitizedSettings.contact_institute;
+ delete sanitizedSettings.contact_address;
+ delete sanitizedSettings.contact_email;
+ delete sanitizedSettings.contact_phone;
+ delete sanitizedSettings.contact_whatsapp;
+
  Object.keys(sanitizedSettings).forEach(key => {
  if (typeof sanitizedSettings[key] === 'string' && !stringKeys.includes(key)) {
  sanitizedSettings[key] = parseInt(sanitizedSettings[key]) || 0;
@@ -498,29 +506,6 @@ export default function AdminPortal() {
  value={siteSettings[field.key] ?? ''}
  onChange={(e) => setSiteSettings({ ...siteSettings, [field.key]: e.target.value })}
  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-violet)] outline-none"
- required
- />
- </div>
- ))}
- 
- <div className="md:col-span-2 mt-4 mb-2">
- <h3 className="text-xl font-[var(--font-heading-main)] font-black text-[var(--neon-cyan)] border-b border-white/10 pb-2">Event Coordinators (Contact Info)</h3>
- </div>
- 
- {[
- { key: 'contact_institute', label: 'Institute Name', type: 'text' },
- { key: 'contact_address', label: 'Address', type: 'text' },
- { key: 'contact_email', label: 'Support Email', type: 'email' },
- { key: 'contact_phone', label: 'Phone Number', type: 'text' },
- { key: 'contact_whatsapp', label: 'WhatsApp Number', type: 'text' }
- ].map(field => (
- <div key={field.key} className={field.key === 'contact_address' ? 'md:col-span-2' : ''}>
- <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{field.label}</label>
- <input
- type={field.type}
- value={siteSettings[field.key] ?? ''}
- onChange={(e) => setSiteSettings({ ...siteSettings, [field.key]: e.target.value })}
- className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-cyan)] outline-none"
  required
  />
  </div>
