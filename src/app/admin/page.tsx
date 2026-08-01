@@ -936,3 +936,4 @@ export default function AdminPortal() {
  </main>
  );
 }
+

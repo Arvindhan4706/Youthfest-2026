@@ -34,3 +34,4 @@ function processDir(dir) {
 
 processDir(path.join(__dirname, 'src'));
 console.log('Done!');
+

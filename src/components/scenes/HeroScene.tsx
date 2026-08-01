@@ -8,7 +8,7 @@ import { useStore } from '../../lib/useStore';
 import { db } from '../../lib/database';
 import { useRouter } from 'next/navigation';
 
-// Target date: August 12, 2026
+// Target date: August 21, 2026
 const TARGET_DATE = new Date('2026-08-12T10:00:00+05:30').getTime();
 
 function useCountdown() {
@@ -356,3 +356,4 @@ export default function HeroScene() {
     </section>
   );
 }
+

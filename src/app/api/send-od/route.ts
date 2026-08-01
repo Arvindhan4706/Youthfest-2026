@@ -24,7 +24,7 @@ Participant Details:
 - College: ${college || 'N/A'}
 - Department: ${department || 'N/A'}
 - Event Registered: ${eventTitle || 'General Fest Entry'}
-- Date of Event: August 12, 2026
+- Date of Event: August 21, 2026
 - Venue: Yuvenza Main Campus
 
 Please find the official OD Letter attached as a PDF to this email. You may present this to your respective department coordinators or HOD to claim your attendance.
@@ -84,7 +84,7 @@ Yuvenza '26
       lineHeight: 18,
     });
 
-    const paragraph2 = `The student is scheduled to attend the "${eventTitle || 'General Fest Entry'}" event on August 12, 2026 at the Yuvenza Main Campus. We kindly request you to grant them On Duty (OD) permission / attendance exemption for the aforementioned date to enable their participation in this national-level technical and cultural symposium.`;
+    const paragraph2 = `The student is scheduled to attend the "${eventTitle || 'General Fest Entry'}" event on August 21, 2026 at the Yuvenza Main Campus. We kindly request you to grant them On Duty (OD) permission / attendance exemption for the aforementioned date to enable their participation in this national-level technical and cultural symposium.`;
     page.drawText(paragraph2, {
       x: margin,
       y: height - 290,
@@ -138,3 +138,4 @@ Yuvenza '26
     return NextResponse.json({ error: error.message || 'Failed to send OD' }, { status: 500 });
   }
 }
+

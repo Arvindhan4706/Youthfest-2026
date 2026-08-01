@@ -171,7 +171,7 @@ function MyRegistrations() {
             </div>
             <div>
               <p className="text-white font-semibold text-sm">{eventId}</p>
-              <p className="text-gray-500 text-xs mt-0.5">August 12, 2026</p>
+              <p className="text-gray-500 text-xs mt-0.5">August 21, 2026</p>
             </div>
           </div>
           <span className="text-xs px-3 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 font-semibold">Registered</span>
@@ -365,3 +365,4 @@ export default function Dashboard() {
     </main>
   );
 }
+

@@ -13,3 +13,4 @@ async function checkEvents() {
 }
 
 checkEvents();
+

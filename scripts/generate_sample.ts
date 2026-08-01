@@ -6,7 +6,7 @@ import * as path from 'path';
 async function generateSample() {
   const name = "Arvindhan";
   const event = "Hackathon 2026";
-  const date = "August 12, 2026";
+  const date = "August 21, 2026";
 
   // Generate QR
   const qrDataUrl = await QRCode.toDataURL("sample-qr-code-data");
@@ -125,3 +125,4 @@ async function generateSample() {
 }
 
 generateSample();
+

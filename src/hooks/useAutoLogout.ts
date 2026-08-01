@@ -77,3 +77,4 @@ export function useAutoLogout() {
     };
   }, [user, setUser, addToast]);
 }
+

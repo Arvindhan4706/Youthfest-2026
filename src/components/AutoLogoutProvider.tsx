@@ -5,3 +5,4 @@ export default function AutoLogoutProvider() {
   useAutoLogout();
   return null;
 }
+

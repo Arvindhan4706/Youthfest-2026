@@ -566,3 +566,4 @@ export const db = {
     if (error) throw new Error(error.message);
   }
 };
+

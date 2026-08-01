@@ -59,3 +59,4 @@ export default function GlobalClientProviders({ children }: { children: React.Re
     </div>
   );
 }
+

@@ -94,7 +94,7 @@ export async function POST(request: Request) {
     // Event Details
     page.drawText(`Event: ${event}`, { x: margin, y: height - 160, size: 18, font: timesRomanBold });
     page.drawText(`Participant: ${name}`, { x: margin, y: height - 190, size: 14, font: timesRomanFont });
-    page.drawText(`Date: ${date || 'August 12, 2026'}`, { x: margin, y: height - 215, size: 14, font: timesRomanFont });
+    page.drawText(`Date: ${date || 'August 21, 2026'}`, { x: margin, y: height - 215, size: 14, font: timesRomanFont });
     page.drawText(`Venue: Chennai Institute Of Technology`, { x: margin, y: height - 240, size: 14, font: timesRomanFont });
 
     // Embed QR Code
@@ -153,7 +153,7 @@ export async function POST(request: Request) {
           
           <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
             <p style="margin: 5px 0;"><strong>Event:</strong> ${event}</p>
-            <p style="margin: 5px 0;"><strong>Date:</strong> ${date || 'August 12, 2026'}</p>
+            <p style="margin: 5px 0;"><strong>Date:</strong> ${date || 'August 21, 2026'}</p>
             <p style="margin: 5px 0;"><strong>Venue:</strong> ${venue || 'Yuvenza Main Campus'}</p>
           </div>
           
@@ -181,3 +181,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message || 'Failed to send ticket' }, { status: 500 });
   }
 }
+

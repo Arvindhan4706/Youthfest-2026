@@ -30,7 +30,7 @@ export const metadata: Metadata = {
  metadataBase: new URL('https://yuvenza2026.com'),
  openGraph: {
  title: "YUVENZA'S YUVENZA 2026 | The Biggest Youth Festival",
- description: "5000+ students. 50+ events. One legendary festival. August 12, 2026.",
+ description: "5000+ students. 50+ events. One legendary festival. August 21, 2026.",
  url: 'https://yuvenza2026.com',
  siteName: 'Yuvenza',
  images: [
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
  twitter: {
  card: 'summary_large_image',
  title: "YUVENZA'S YUVENZA 2026 | The Biggest Youth Festival",
- description: "5000+ students. 50+ events. One legendary festival. August 12, 2026.",
+ description: "5000+ students. 50+ events. One legendary festival. August 21, 2026.",
  images: ['/og-image.jpg'],
  },
 };
@@ -95,3 +95,4 @@ export default function RootLayout({
     </html>
   );
 }
+

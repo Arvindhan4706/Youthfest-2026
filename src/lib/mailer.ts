@@ -15,3 +15,4 @@ export const getMailer = () => {
 export const getFromEmail = () => {
   return `"Yuvenza '26" <${process.env.SMTP_USER}>`;
 };
+

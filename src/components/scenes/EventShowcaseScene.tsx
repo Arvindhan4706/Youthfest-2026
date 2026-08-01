@@ -80,7 +80,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0 });
 
   useEffect(() => {
-    // Parse "August 12 - 10:00 AM" into a real Date object
+    // Parse "August 21 - 10:00 AM" into a real Date object
     // Assuming year is 2026 for Yuvenza
     let dateStr = event.date;
     if (dateStr.includes('-')) {
@@ -315,21 +315,21 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  );
 }const STATIC_EVENTS: EventItem[] = [
   // Main Events
-  { id: 'main-1', track_id: 'main-events', title: 'Squid Game', desc: 'Survive the ultimate challenge. Do you have what it takes?', team: '1', fee: '₹150', difficulty: 'Hard', image: '/event-images/squid_game.png', date: 'August 12 - 10:00 AM', venue: 'Main Arena', rules: defaultRules },
-  { id: 'main-2', track_id: 'main-events', title: 'Case Closed', desc: 'A murder mystery where you act as the detective to find the culprit.', team: '2-4', fee: '₹200', difficulty: 'Medium', image: '/event-images/case_closed.png', date: 'August 12 - 02:00 PM', venue: 'Seminar Hall 1', rules: defaultRules },
-  { id: 'main-3', track_id: 'main-events', title: '7 Keys', desc: 'An escape room style treasure hunt. Find the 7 glowing magical keys.', team: '3-5', fee: '₹250', difficulty: 'Hard', image: '/event-images/seven_keys.png', date: 'August 12 - 01:00 PM', venue: 'Campus Ground', rules: defaultRules },
-  { id: 'main-4', track_id: 'main-events', title: 'Cypher', desc: 'The ultimate 24-hour hackathon. Code your way to victory.', team: '2-4', fee: '₹300', difficulty: 'Hard', image: '/event-images/cypher.png', date: 'August 12 - 09:00 AM', venue: 'Tech Lab 4', rules: defaultRules },
+  { id: 'main-1', track_id: 'main-events', title: 'Squid Game', desc: 'Survive the ultimate challenge. Do you have what it takes?', team: '1', fee: '₹150', difficulty: 'Hard', image: '/event-images/squid_game.png', date: 'August 21 - 10:00 AM', venue: 'Main Arena', rules: defaultRules },
+  { id: 'main-2', track_id: 'main-events', title: 'Case Closed', desc: 'A murder mystery where you act as the detective to find the culprit.', team: '2-4', fee: '₹200', difficulty: 'Medium', image: '/event-images/case_closed.png', date: 'August 21 - 02:00 PM', venue: 'Seminar Hall 1', rules: defaultRules },
+  { id: 'main-3', track_id: 'main-events', title: '7 Keys', desc: 'An escape room style treasure hunt. Find the 7 glowing magical keys.', team: '3-5', fee: '₹250', difficulty: 'Hard', image: '/event-images/seven_keys.png', date: 'August 21 - 01:00 PM', venue: 'Campus Ground', rules: defaultRules },
+  { id: 'main-4', track_id: 'main-events', title: 'Cypher', desc: 'The ultimate 24-hour hackathon. Code your way to victory.', team: '2-4', fee: '₹300', difficulty: 'Hard', image: '/event-images/cypher.png', date: 'August 21 - 09:00 AM', venue: 'Tech Lab 4', rules: defaultRules },
   // Pre Events
-  { id: 'pre-1', track_id: 'pre-events', title: 'Mock Parliament', desc: 'Debate on national issues in this intense mock parliament.', team: '1', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 10:00 AM', venue: 'Auditorium', rules: defaultRules },
-  { id: 'pre-2', track_id: 'pre-events', title: 'Charity Match', desc: 'A football match for a good cause. Show your sportsmanship!', team: '11', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 04:00 PM', venue: 'Football Ground', rules: defaultRules },
-  { id: 'pre-3', track_id: 'pre-events', title: 'Chess', desc: 'Intense chess tournament. Outsmart your opponents.', team: '1', fee: '₹100', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 09:00 AM', venue: 'Indoor Stadium', rules: defaultRules },
-  { id: 'pre-4', track_id: 'pre-events', title: 'Pickle Ball', desc: 'Fast-paced pickleball action. Grab your paddles!', team: '2', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 02:00 PM', venue: 'Tennis Court', rules: defaultRules },
+  { id: 'pre-1', track_id: 'pre-events', title: 'Mock Parliament', desc: 'Debate on national issues in this intense mock parliament.', team: '1', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 10:00 AM', venue: 'Auditorium', rules: defaultRules },
+  { id: 'pre-2', track_id: 'pre-events', title: 'Charity Match', desc: 'A football match for a good cause. Show your sportsmanship!', team: '11', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 04:00 PM', venue: 'Football Ground', rules: defaultRules },
+  { id: 'pre-3', track_id: 'pre-events', title: 'Chess', desc: 'Intense chess tournament. Outsmart your opponents.', team: '1', fee: '₹100', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 09:00 AM', venue: 'Indoor Stadium', rules: defaultRules },
+  { id: 'pre-4', track_id: 'pre-events', title: 'Pickle Ball', desc: 'Fast-paced pickleball action. Grab your paddles!', team: '2', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 02:00 PM', venue: 'Tennis Court', rules: defaultRules },
   // Workshops
-  { id: 'ws-1', track_id: 'workshops', title: 'Calistro', desc: 'Hands-on workshop on Calistro creative design, UI/UX aesthetics & digital arts.', team: '1', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1517048676732-d68078c60243?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 10:00 AM', venue: 'Seminar Hall A', rules: defaultRules },
-  { id: 'ws-2', track_id: 'workshops', title: 'AIDS', desc: 'Artificial Intelligence & Data Science hands-on masterclass on machine learning models.', team: '1-2', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 02:00 PM', venue: 'AI Super Lab', rules: defaultRules },
-  { id: 'ws-3', track_id: 'workshops', title: 'Resolution', desc: 'Mastering high-resolution media processing, 3D visualization, and digital content creation.', team: '1', fee: '₹200', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 11:30 AM', venue: 'Media Studio', rules: defaultRules },
-  { id: 'ws-4', track_id: 'workshops', title: 'Asymmetric', desc: 'Advanced cybersecurity, asymmetric cryptography, and ethical hacking intensive workshop.', team: '1-2', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 01:30 PM', venue: 'Cyber Security Lab', rules: defaultRules },
-  { id: 'ws-5', track_id: 'workshops', title: 'Celestius', desc: 'Interactive astronomy, space technology, and satellite systems engineering workshop.', team: '1', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80', date: 'August 12 - 03:30 PM', venue: 'Space Research Centre', rules: defaultRules },
+  { id: 'ws-1', track_id: 'workshops', title: 'Calistro', desc: 'Hands-on workshop on Calistro creative design, UI/UX aesthetics & digital arts.', team: '1', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1517048676732-d68078c60243?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 10:00 AM', venue: 'Seminar Hall A', rules: defaultRules },
+  { id: 'ws-2', track_id: 'workshops', title: 'AIDS', desc: 'Artificial Intelligence & Data Science hands-on masterclass on machine learning models.', team: '1-2', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 02:00 PM', venue: 'AI Super Lab', rules: defaultRules },
+  { id: 'ws-3', track_id: 'workshops', title: 'Resolution', desc: 'Mastering high-resolution media processing, 3D visualization, and digital content creation.', team: '1', fee: '₹200', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 11:30 AM', venue: 'Media Studio', rules: defaultRules },
+  { id: 'ws-4', track_id: 'workshops', title: 'Asymmetric', desc: 'Advanced cybersecurity, asymmetric cryptography, and ethical hacking intensive workshop.', team: '1-2', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 01:30 PM', venue: 'Cyber Security Lab', rules: defaultRules },
+  { id: 'ws-5', track_id: 'workshops', title: 'Celestius', desc: 'Interactive astronomy, space technology, and satellite systems engineering workshop.', team: '1', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 03:30 PM', venue: 'Space Research Centre', rules: defaultRules },
 ];
 
 export default function EventShowcaseScene() {
@@ -575,3 +575,4 @@ export default function EventShowcaseScene() {
  </section>
  );
 }
+

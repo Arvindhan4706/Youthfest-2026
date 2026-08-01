@@ -30,3 +30,4 @@ export function getTicketId(email: string, eventTitle: string): string {
 
   return `Y26-${prefix}-${cleanHash}`;
 }
+

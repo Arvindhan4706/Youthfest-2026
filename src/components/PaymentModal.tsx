@@ -177,7 +177,7 @@ export default function PaymentModal() {
        email: user.email,
        event: checkoutEvent.title,
        venue: 'Chennai Institute Of Technology',
-       date: 'August 12, 2026',
+       date: 'August 21, 2026',
        qrDataUrl: qrDataUrl
      })
    });
@@ -241,3 +241,4 @@ export default function PaymentModal() {
  </div>
  );
 }
+

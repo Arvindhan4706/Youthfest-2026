@@ -26,3 +26,4 @@ export function useDevice() {
 
   return { isMobile, isLowPerformance, dpr, isInitialized };
 }
+
