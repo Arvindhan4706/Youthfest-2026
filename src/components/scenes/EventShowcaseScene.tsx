@@ -320,7 +320,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
   { id: 'main-3', track_id: 'main-events', title: '7 Keys', desc: 'An escape room style treasure hunt. Find the 7 glowing magical keys.', team: '3-5', fee: '₹250', difficulty: 'Hard', image: '/event-images/seven_keys.png', date: 'August 21 - 01:00 PM', venue: 'Campus Ground', rules: defaultRules },
   { id: 'main-4', track_id: 'main-events', title: 'Cypher', desc: 'The ultimate 24-hour hackathon. Code your way to victory.', team: '2-4', fee: '₹300', difficulty: 'Hard', image: '/event-images/cypher.png', date: 'August 21 - 09:00 AM', venue: 'Tech Lab 4', rules: defaultRules },
   // Pre Events
-  { id: 'pre-1', track_id: 'pre-events', title: 'Mock Parliament', desc: 'Debate on national issues in this intense mock parliament.', team: '1', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 10:00 AM', venue: 'Auditorium', rules: defaultRules },
+  { id: 'pre-1', track_id: 'main-events', title: 'Mock Parliament', desc: 'Debate on national issues in this intense mock parliament.', team: '1', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 10:00 AM', venue: 'Auditorium', rules: defaultRules },
   { id: 'pre-2', track_id: 'pre-events', title: 'Charity Match', desc: 'A football match for a good cause. Show your sportsmanship!', team: '11', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 04:00 PM', venue: 'Football Ground', rules: defaultRules },
   { id: 'pre-3', track_id: 'pre-events', title: 'Chess', desc: 'Intense chess tournament. Outsmart your opponents.', team: '1', fee: '₹100', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 09:00 AM', venue: 'Indoor Stadium', rules: defaultRules },
   { id: 'pre-4', track_id: 'pre-events', title: 'Pickle Ball', desc: 'Fast-paced pickleball action. Grab your paddles!', team: '2', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 02:00 PM', venue: 'Tennis Court', rules: defaultRules },
@@ -374,17 +374,14 @@ export default function EventShowcaseScene() {
   }, []);
 
   const TRACKS = useMemo(() => {
-    return TRACKS_TEMPLATE.map(t => {
-      const trackDbEvents = dbEvents.filter(e => e.track_id === t.id);
-      const staticTrackEvents = STATIC_EVENTS.filter(e => e.track_id === t.id);
-      
-      const eventsMap = new Map<string, EventItem>();
-      staticTrackEvents.forEach(e => eventsMap.set(e.id, e));
-      trackDbEvents.forEach(e => eventsMap.set(e.id, e));
+    const eventsMap = new Map<string, EventItem>();
+    STATIC_EVENTS.forEach(e => eventsMap.set(e.id, e));
+    dbEvents.forEach(e => eventsMap.set(e.id, e));
 
+    return TRACKS_TEMPLATE.map(t => {
       return {
         ...t,
-        events: Array.from(eventsMap.values())
+        events: Array.from(eventsMap.values()).filter(e => e.track_id === t.id)
       };
     });
   }, [dbEvents]);
