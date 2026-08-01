@@ -9,7 +9,7 @@ import { db } from '../../lib/database';
 import { useRouter } from 'next/navigation';
 
 // Target date: August 21, 2026
-const TARGET_DATE = new Date('2026-08-12T10:00:00+05:30').getTime();
+const TARGET_DATE = new Date('2026-08-21T10:00:00+05:30').getTime();
 
 function useCountdown() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -292,7 +292,7 @@ export default function HeroScene() {
           />
           <Calendar className="relative z-10 w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
           <span className="relative z-10 text-sm sm:text-base font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300">
-            Aug 12 · CIT Campus, Chennai
+            Aug 21 · CIT Campus, Chennai
           </span>
           <div className="relative z-10 flex items-center justify-center w-2 h-2 ml-2">
             <span className="absolute w-full h-full rounded-full bg-blue-500 opacity-70 animate-ping" />

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Ticket, AlertTriangle } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
 import { useRouter } from 'next/navigation';
-const TARGET_DATE = new Date('2026-08-12T10:00:00+05:30').getTime();
+const TARGET_DATE = new Date('2026-08-21T10:00:00+05:30').getTime();
 function useCountdown() {
  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
  useEffect(() => {

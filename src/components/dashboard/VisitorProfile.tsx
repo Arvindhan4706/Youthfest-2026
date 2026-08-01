@@ -294,7 +294,7 @@ export default function VisitorProfile() {
             <Calendar className="w-4 h-4 text-[var(--neon-magenta)] shrink-0" />
             <div>
               <p className="text-[10px] text-gray-500 uppercase tracking-wider">Yuvenza</p>
-              <p className="text-white text-xs">Aug 12, 2026</p>
+              <p className="text-white text-xs">Aug 21, 2026</p>
             </div>
           </div>
         </div>
