@@ -132,9 +132,9 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  <div
  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
  />
- {/* Image */}
- <div className="relative h-44 sm:h-48 w-full overflow-hidden">
- <Image src={event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'} alt={event.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
+  {/* Image */}
+  <div className="relative aspect-[4/5] w-full overflow-hidden bg-black/20">
+  <Image src={event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'} alt={event.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw" className="object-contain transition-transform duration-700 group-hover:scale-110" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#010008] via-black/20 to-transparent" />
  </div>
  {/* Content */}
@@ -193,9 +193,9 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  transition={{ type: 'spring', damping: 25, stiffness: 200 }}
  className="relative w-full max-w-lg h-full bg-[#030014] border-l border-white/10 shadow-2xl flex flex-col z-10 overflow-hidden"
  >
- {/* Header Image */}
- <div className="relative h-64 w-full shrink-0">
- <Image src={event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'} alt={event.title} fill sizes="(max-width: 1024px) 100vw, 500px" className="object-cover" />
+  {/* Header Image */}
+  <div className="relative aspect-[4/5] max-h-[50vh] w-full shrink-0 bg-[#010008]">
+  <Image src={event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'} alt={event.title} fill sizes="(max-width: 1024px) 100vw, 500px" className="object-contain" />
  <div className="absolute inset-0 bg-gradient-to-t from-[#030014] via-[#030014]/50 to-transparent" />
  <button 
  onClick={onClose}
