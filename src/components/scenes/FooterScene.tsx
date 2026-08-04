@@ -108,7 +108,7 @@ export default function FooterScene() {
           <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent blur-3xl -z-10" />
           <div className="text-center md:text-left">
             <h3 className="text-2xl sm:text-4xl font-[var(--font-heading-main)] font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-[var(--neon-cyan)] to-[var(--neon-violet)] uppercase tracking-wider mb-3 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-              See You at Yuvenza!
+              See You at Youthfest!
             </h3>
             <p className="text-gray-400 max-w-lg text-sm leading-relaxed">Join thousands of students for an unforgettable celebration of innovation, creativity, culture, and community.</p>
           </div>

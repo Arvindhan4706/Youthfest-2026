@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import { ArrowRight, Calendar, ChevronDown } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
-import { db } from '../../lib/database';
 import { useRouter } from 'next/navigation';
 
 // Target date: August 21, 2026
@@ -13,7 +12,6 @@ const TARGET_DATE = new Date('2026-08-21T10:00:00+05:30').getTime();
 
 function useCountdown() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
   useEffect(() => {
     const tick = () => {
       const now = Date.now();
@@ -29,88 +27,31 @@ function useCountdown() {
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
-
   return timeLeft;
 }
 
-function useCountUp(target: number, duration: number = 2000, startOnMount: boolean = false) {
-  const [count, setCount] = useState(0);
-  const [started, setStarted] = useState(startOnMount);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setStarted(true);
-      },
-      { threshold: 0.3 }
-    );
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!started) return;
-    let start = 0;
-    const increment = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [started, target, duration]);
-
-  return { count, ref };
-}
-
-function CountdownUnit({ value, label }: { value: number; label: string }) {
-  return (
-    <div className="flex flex-col items-center">
-      <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-[20px] bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-        <span className="relative text-xl sm:text-3xl font-[var(--font-heading-main)] font-bold text-white tabular-nums">
-          {String(value).padStart(2, '0')}
-        </span>
-      </div>
-      <span className="mt-2 text-[10px] uppercase tracking-[0.2em] text-gray-500 font-semibold">{label}</span>
-    </div>
-  );
-}
-
-function StatBadge({
-  value,
-  suffix,
-  label,
-  icon,
-  delay,
-}: {
-  value: number;
-  suffix: string;
-  label: string;
-  icon: React.ReactNode;
-  delay: number;
+// Floating geometric shape component
+function FloatingShape({ className, delay = 0, duration = 12, color }: {
+  className: string; delay?: number; duration?: number; color: string;
 }) {
-  const { count, ref } = useCountUp(value, 2000);
-
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay }}
-      className="flex flex-col items-center gap-1 p-4 rounded-[20px] glass hover:bg-white/[0.06] transition-all duration-300 group cursor-default min-w-[120px]"
-    >
-      <div className="text-[var(--neon-cyan)] mb-1 group-hover:scale-110 transition-transform">{icon}</div>
-      <span className="text-2xl sm:text-3xl font-[var(--font-heading-main)] font-black text-white tabular-nums">
-        {count.toLocaleString()}{suffix}
-      </span>
-      <span className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold">{label}</span>
-    </motion.div>
+      className={`absolute pointer-events-none ${className}`}
+      animate={{
+        y: [0, -30, -10, -40, 0],
+        x: [0, 15, -10, 5, 0],
+        rotate: [0, 45, -30, 20, 0],
+        scale: [1, 1.05, 0.95, 1.02, 1],
+      }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "easeInOut",
+        times: [0, 0.25, 0.5, 0.75, 1],
+      }}
+      style={{ color }}
+    />
   );
 }
 
@@ -122,6 +63,29 @@ export default function HeroScene() {
   const setAuthOpen = useStore((state) => state.setAuthOpen);
   const router = useRouter();
   const countdown = useCountdown();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Mouse-tracking for dynamic lighting
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+  const springX = useSpring(mouseX, { stiffness: 40, damping: 20 });
+  const springY = useSpring(mouseY, { stiffness: 40, damping: 20 });
+
+  // Dynamic light orb position
+  const lightX = useTransform(springX, [0, 1], ['10%', '90%']);
+  const lightY = useTransform(springY, [0, 1], ['10%', '90%']);
+  const lightColor = useTransform(springX, [0, 0.5, 1], [
+    'rgba(56,189,248,0.15)',
+    'rgba(129,140,248,0.12)',
+    'rgba(167,139,250,0.15)',
+  ]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    const rect = sectionRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    mouseX.set((e.clientX - rect.left) / rect.width);
+    mouseY.set((e.clientY - rect.top) / rect.height);
+  }, [mouseX, mouseY]);
 
   const handleRegisterClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -132,25 +96,41 @@ export default function HeroScene() {
     }
   };
 
-  const titleText = "YOUTHFEST 2026";
-  const titleVariants = {
+  // Character-by-character reveal variants
+  const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1, 
-      transition: { staggerChildren: 0.08, delayChildren: 0.2 }
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08, delayChildren: 0.6 }
     }
   };
-  
-  const letterVariants: any = {
-    hidden: { opacity: 0, y: 40, rotateX: -90 },
-    visible: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.8, ease: "backOut" } }
+  const charVariants = {
+    hidden: {
+      opacity: 0,
+      y: 60,
+      clipPath: 'inset(100% 0 0 0)',
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      clipPath: 'inset(0% 0 0 0)',
+      transition: {
+        type: 'spring' as const,
+        damping: 14,
+        stiffness: 90,
+      }
+    }
   };
+
+  const titleWords = ["YOUTHFEST", "2026"];
 
   return (
     <section
       id="hero"
-      className="relative min-h-[100vh] md:min-h-0 md:h-auto lg:min-h-[90vh] xl:min-h-[100vh] w-full flex flex-col items-center justify-center overflow-x-hidden px-4 section-padding"
-      style={{ background: 'radial-gradient(ellipse at 50% 0%, #0a0030 0%, #011213 50%, #010008 100%)' }}
+      ref={sectionRef}
+      onMouseMove={handleMouseMove}
+      className="relative min-h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: 'radial-gradient(ellipse at 50% 0%, #080025 0%, #020c14 55%, #010008 100%)' }}
       aria-labelledby="hero-heading"
     >
       {/* WebGL Particle Universe */}
@@ -158,202 +138,239 @@ export default function HeroScene() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 3, delay: 1.0 }}
-        className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
+        className="absolute inset-0 z-0 pointer-events-none"
       >
         <ParticleUniverse />
       </motion.div>
-      
-      {/* Ambient background elements */}
+
+      {/* Dynamic mouse-tracking light orb */}
+      <motion.div
+        className="absolute z-0 pointer-events-none rounded-full blur-[160px]"
+        style={{
+          width: 600,
+          height: 600,
+          left: lightX,
+          top: lightY,
+          x: '-50%',
+          y: '-50%',
+          background: lightColor,
+        }}
+      />
+
+      {/* Static ambient glows */}
+      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-[var(--neon-cyan)]/[0.06] blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[var(--neon-violet)]/[0.07] blur-[180px] pointer-events-none" />
+
+      {/* Floating geometric shapes */}
+      <motion.div
+        className="absolute top-[15%] left-[8%] w-16 h-16 md:w-20 md:h-20 border border-[var(--neon-cyan)]/20 rounded-lg pointer-events-none"
+        animate={{ y: [0, -25, 0], rotate: [0, 45, 0], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute top-[30%] right-[10%] w-10 h-10 md:w-14 md:h-14 rounded-full border border-[var(--neon-magenta)]/20 pointer-events-none"
+        animate={{ y: [0, -35, 0], x: [0, 10, 0], opacity: [0.2, 0.5, 0.2] }}
+        transition={{ duration: 8, delay: 1.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-[25%] left-[12%] w-6 h-6 md:w-8 md:h-8 bg-[var(--neon-violet)]/20 rotate-45 pointer-events-none"
+        animate={{ y: [0, -20, 0], rotate: [45, 90, 45], opacity: [0.3, 0.7, 0.3] }}
+        transition={{ duration: 7, delay: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute top-[20%] right-[18%] w-3 h-3 rounded-full bg-[var(--neon-cyan)]/40 pointer-events-none"
+        animate={{ scale: [1, 1.5, 1], opacity: [0.4, 1, 0.4] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-[30%] right-[6%] w-5 h-5 border-2 border-[var(--neon-gold)]/20 pointer-events-none"
+        animate={{ y: [0, -18, 0], rotate: [0, -60, 0], opacity: [0.2, 0.5, 0.2] }}
+        transition={{ duration: 9, delay: 2, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Scrolling background marquee text */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 2, delay: 1.5 }}
-        className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
+        transition={{ duration: 2, delay: 2 }}
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none"
       >
-        {/* Infinite scrolling background text - 3 Lines */}
-        <div className="absolute top-0 left-0 w-full flex flex-col overflow-hidden pointer-events-none select-none z-0 h-full sm:h-[120%] justify-between sm:justify-start section-padding sm:py-0 sm:pt-20 opacity-5 sm:opacity-10 space-y-0 sm:space-y-8 translate-y-0 sm:-translate-y-10">
-          {/* Line 1 - Scrolling Right (Left to Right) */}
-          <div
-            style={{ animationDuration: '40s' }}
-            className="animate-marquee-reverse flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
-          >
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
+        <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-start pt-12 gap-6 pb-8 opacity-[0.10]">
+          <div style={{ animationDuration: '40s' }} className="animate-marquee-reverse flex whitespace-nowrap text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter">
+            <span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span>
           </div>
-          {/* Line 2 - Scrolling Left (Right to Left) */}
-          <div
-            style={{ animationDuration: '45s' }}
-            className="animate-marquee flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
-          >
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
-            <span className="pr-16 text-transparent" style={{ WebkitTextStroke: '2px white' }}>YOUTHFEST 2026</span>
+          <div style={{ animationDuration: '50s', WebkitTextStroke: '1px white' }} className="animate-marquee flex whitespace-nowrap text-[10vw] font-[var(--font-heading-main)] font-black text-transparent tracking-tighter">
+            <span className="pr-16">YUVENZA · CIT</span><span className="pr-16">YUVENZA · CIT</span><span className="pr-16">YUVENZA · CIT</span><span className="pr-16">YUVENZA · CIT</span>
           </div>
-          {/* Line 3 - Scrolling Right (Left to Right) */}
-          <div
-            style={{ animationDuration: '35s' }}
-            className="animate-marquee-reverse flex whitespace-nowrap text-[12vw] sm:text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter"
-          >
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
-            <span className="pr-16">YOUTHFEST 2026</span>
+          <div style={{ animationDuration: '35s' }} className="animate-marquee-reverse flex whitespace-nowrap text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter">
+            <span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span>
           </div>
         </div>
-
       </motion.div>
 
       {/* Main content */}
-      <div className="relative z-20 w-full max-w-5xl mx-auto text-center flex flex-col items-center mt-8 sm:mt-16 pointer-events-auto px-4 sm:px-6 lg:px-8">
-        {/* Event Logo */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.8 }}
-            className="mb-8 w-full flex items-center justify-center relative pointer-events-none"
-          >
-            {/* Logo Image */}
-            <div className="relative flex justify-center items-center h-auto min-h-[40px] px-4 w-full">
-              <Image src="/yuvenzalogo.png" alt="Yuvenza Event Logo" width={300} height={112} priority style={{ height: "auto" }} className="w-[85px] sm:w-[108px] md:w-[135px] object-contain" />
-            </div>
-          </motion.div>
+      <div className="relative z-20 w-full max-w-5xl mx-auto text-center flex flex-col items-center px-5 sm:px-8 pt-24 pb-32 sm:pt-28 sm:pb-36 pointer-events-auto">
 
-        {/* Tags */}
+        {/* Logo */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.5 }}
-          className="mb-6 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 w-full max-w-2xl"
+          initial={{ opacity: 0, scale: 0.7, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          className="mb-8 sm:mb-10"
         >
-          <div className="hidden sm:block h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/40" />
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-gray-300 whitespace-nowrap">
+          <Image
+            src="/yuvenzalogo.png"
+            alt="Yuvenza Event Logo"
+            width={300}
+            height={112}
+            priority
+            className="w-[140px] sm:w-[180px] md:w-[240px] object-contain mx-auto"
+          />
+        </motion.div>
+
+        {/* Tagline pill */}
+        <motion.div
+          initial={{ opacity: 0, y: -20, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+          className="mb-8 sm:mb-10 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 w-full max-w-2xl"
+        >
+          <div className="hidden sm:block h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/30" />
+          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.25em] text-gray-400 whitespace-nowrap">
             The Youth Club · Chennai Institute of Technology
           </span>
-          <span className="hidden sm:inline-block text-white/40 font-black text-lg leading-none mt-[-2px]">•</span>
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">
+          <span className="hidden sm:inline text-white/30">·</span>
+          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.25em] text-gray-500 whitespace-nowrap">
             Est. 2023
           </span>
-          <div className="hidden sm:block h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/40" />
-        </motion.div>
-        <motion.div
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { 
-              opacity: 1, 
-              transition: { staggerChildren: 0.05, delayChildren: 0.2 }
-            }
-          }}
-          initial="hidden"
-          animate="visible"
-          className="relative mb-4 perspective-1000"
-        >
-          <h1 id="hero-heading" className="flex justify-center flex-wrap text-[clamp(2.5rem,12vw,8rem)] font-[var(--font-heading-main)] font-bold tracking-tight text-white leading-none z-10 relative text-center uppercase w-full">
-            {titleText.split('').map((char, index) => {
-              if (char === ' ') {
-                return <div key={index} className="w-full basis-full h-0" aria-hidden="true" />;
-              }
-              return (
-                <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
-                  {char}
-                </motion.span>
-              );
-            })}
-          </h1>
+          <div className="hidden sm:block h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/30" />
         </motion.div>
 
-        {/* Subtitle */}
+        {/* Main heading — word-by-word clip-path reveal */}
+        <div className="mb-4 sm:mb-6 overflow-visible perspective-1000">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center"
+          >
+            {titleWords.map((word, wi) => (
+              <div key={wi} className="flex overflow-hidden" style={{ paddingBottom: '0.1em', marginBottom: wi === 0 ? '-0.05em' : 0 }}>
+                {word.split('').map((char, ci) => (
+                  <motion.span
+                    key={ci}
+                    variants={charVariants}
+                    className="inline-block font-[var(--font-heading-main)] font-black tracking-tight text-white leading-none uppercase"
+                    style={{
+                      fontSize: 'clamp(3rem, 16vw, 9.5rem)',
+                      display: 'inline-block',
+                      willChange: 'transform, opacity',
+                    }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Gradient subtitle */}
         <motion.p
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-base sm:text-xl md:text-3xl font-[var(--font-heading-main)] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-white to-[var(--neon-magenta)] mb-6 text-center w-full"
+          transition={{ duration: 1, delay: 1.6, ease: "easeOut" }}
+          className="text-base sm:text-xl md:text-2xl font-[var(--font-heading-main)] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-white/80 to-[var(--neon-magenta)] mb-8 sm:mb-10 tracking-tight"
         >
-          Igniting Passion, Creativity & Unity.
+          Igniting Passion, Creativity &amp; Unity.
         </motion.p>
 
         {/* Date badge */}
         <motion.a
           href="#schedule"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.0 }}
-          className="group relative inline-flex items-center gap-3 px-8 py-3 rounded-full overflow-hidden backdrop-blur-md bg-white/5 border border-white/10 mb-8 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-white/20"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 1.9 }}
+          whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.08)' }}
+          className="group relative inline-flex items-center gap-3 px-7 py-3 rounded-full backdrop-blur-md bg-white/[0.04] border border-white/[0.10] mb-10 cursor-pointer transition-colors duration-300 overflow-hidden"
         >
-          <motion.div 
-            variants={{ hover: { x: ["-100%", "200%"] } }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-            className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12"
+          {/* Shimmer sweep on hover */}
+          <motion.div
+            className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 pointer-events-none"
+            initial={{ left: '-50%' }}
+            whileHover={{ left: '150%', transition: { duration: 0.6, ease: 'linear' } }}
           />
-          <Calendar className="relative z-10 w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
-          <span className="relative z-10 text-sm sm:text-base font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300">
+          <Calendar className="relative z-10 w-4 h-4 text-[var(--neon-cyan)]" />
+          <span className="relative z-10 text-xs sm:text-sm font-bold uppercase tracking-[0.12em] text-white/90">
             Aug 21 · CIT Campus, Chennai
           </span>
-          <div className="relative z-10 flex items-center justify-center w-2 h-2 ml-2">
-            <span className="absolute w-full h-full rounded-full bg-blue-500 opacity-70 animate-ping" />
-            <span className="relative w-1.5 h-1.5 rounded-full bg-blue-500" />
+          <div className="relative z-10 flex items-center justify-center w-2 h-2 ml-1">
+            <span className="absolute w-full h-full rounded-full bg-[var(--neon-cyan)] opacity-70 animate-ping" />
+            <span className="relative w-1.5 h-1.5 rounded-full bg-[var(--neon-cyan)]" />
           </div>
         </motion.a>
 
-        {/* Hero Description */}
+        {/* Description */}
         <motion.p
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="text-sm sm:text-base md:text-lg text-gray-400 font-normal tracking-normal mb-8 w-full max-w-3xl mx-auto leading-relaxed text-center"
+          transition={{ duration: 0.9, delay: 2.0, ease: "easeOut" }}
+          className="text-sm sm:text-base text-gray-400 font-normal tracking-wide mb-10 sm:mb-12 w-full max-w-2xl mx-auto leading-[1.85] text-center"
         >
-          Yuvenza is the student-driven youth club of Chennai Institute of Technology. <span className="text-white font-medium">What we create, we contribute.</span> Every event and campaign we organize channels real support back to the community around us.
+          Yuvenza is the student-driven youth club of Chennai Institute of Technology.{' '}
+          <span className="text-white font-semibold">What we create, we contribute.</span> Every event and campaign we organize channels real support back to the community around us.
         </motion.p>
 
-
-        {/* Buttons */}
+        {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12 w-full"
+          transition={{ duration: 0.9, delay: 2.2 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
         >
-          <button
-            onClick={handleRegisterClick}
-            aria-label="Register for the Fest"
-            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 min-h-[48px] h-[48px] rounded-[12px] font-bold text-black bg-white hover:bg-gray-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)]"
-          >
-            Register for the Fest <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
-          <button
+          {!user && (
+            <motion.button
+              onClick={handleRegisterClick}
+              aria-label="Register for the Fest"
+              whileHover={{ scale: 1.04, y: -3 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              className="relative group flex items-center justify-center gap-2 w-full sm:w-auto px-9 min-h-[52px] h-[52px] rounded-[14px] font-bold text-base text-black bg-white overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.25)] animate-glow-pulse-btn"
+            >
+              {/* Shimmer on button */}
+              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-black/10 to-transparent" />
+              <span className="relative z-10">Register for the Fest</span>
+              <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+            </motion.button>
+          )}
+
+          <motion.button
             onClick={() => router.push('/work')}
             aria-label="Our Work"
-            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 min-h-[48px] h-[48px] rounded-[12px] font-semibold text-white border border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+            whileHover={{ scale: 1.03, y: -2 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            className="group flex items-center justify-center gap-2 w-full sm:w-auto px-9 min-h-[52px] h-[52px] rounded-[14px] font-semibold text-base text-white border border-white/20 hover:bg-white/[0.06] hover:border-white/30 backdrop-blur-sm transition-all duration-300"
           >
             Our Work
-          </button>
+          </motion.button>
         </motion.div>
-
-
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div 
+      {/* Scroll indicator — a shrinking vertical line */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 6.0, duration: 1 }}
+        transition={{ delay: 4.5, duration: 1.2 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-10"
       >
-        <span className="text-[10px] tracking-widest text-gray-500 uppercase font-mono">Scroll to explore</span>
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <ChevronDown className="w-5 h-5 text-[var(--neon-cyan)]" />
-        </motion.div>
+          animate={{ height: [28, 16, 28] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-[1px] bg-gradient-to-b from-white/50 to-transparent rounded-full"
+        />
+        <span className="text-[9px] tracking-[0.25em] text-gray-600 uppercase font-mono">Scroll</span>
       </motion.div>
-
     </section>
   );
 }
-
