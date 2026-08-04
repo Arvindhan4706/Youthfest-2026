@@ -22,56 +22,13 @@ export async function POST(request: Request) {
     const body = await request.json();
     // Validate the incoming data
     const validatedData = registerSchema.parse(body);
-    // Registration Fee Amount (e.g., Rs 500 = 50000 paise)
-    const amountInPaise = 50000;
-    // Create a dynamic Razorpay Payment Link
-    const options = {
-      amount: amountInPaise,
-      currency: "INR",
-      accept_partial: false,
-      description: "Yuvenza Yuvenza Registration",
-      customer: {
-        name: validatedData.name,
-        email: validatedData.email,
-        contact: validatedData.phone
-      },
-      notify: {
-        sms: false,
-        email: false
-      },
-      reminder_enable: false,
-      reference_id: `rcpt_${Math.random().toString(36).substring(2, 9)}`,
-      callback_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://yuvenza-2026.vercel.app'}/payment-success?email=${encodeURIComponent(validatedData.email)}`,
-      callback_method: "get"
-    };
     
-    // @ts-ignore - razorpay node SDK might be slightly outdated with typings, but the method exists
-    const paymentLink = await razorpay.paymentLink.create(options);
-
-    // Call the database logic only if link creation succeeds
+    // Call the database logic directly
     const newVisitor = await db.register(validatedData);
-
-    try {
-      await db.logPayment({
-        visitor_id: newVisitor.id,
-        event_id: 'general-entry',
-        razorpay_order_id: paymentLink.id,
-        amount: amountInPaise / 100,
-        status: 'pending'
-      });
-    } catch (err) {
-      console.error('Failed to log payment ledger during registration:', err);
-    }
 
     return NextResponse.json({ 
       success: true, 
-      visitor: newVisitor,
-      paymentLinkUrl: paymentLink.short_url,
-      order: {
-        id: paymentLink.id,
-        amount: paymentLink.amount,
-        currency: paymentLink.currency
-      }
+      visitor: newVisitor
     });
   } catch (error: any) {
     console.error("REGISTER ROUTE ERROR:", error);
@@ -79,7 +36,7 @@ export async function POST(request: Request) {
       const firstError = error.errors?.[0]?.message || 'Validation failed';
       return NextResponse.json({ success: false, message: firstError }, { status: 400 });
     }
-    const errorMsg = error?.error?.description || error?.message || 'Failed to create Razorpay order';
+    const errorMsg = error?.message || 'Failed to register';
     return NextResponse.json({ success: false, message: errorMsg }, { status: 400 });
   }
 }

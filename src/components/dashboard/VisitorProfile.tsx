@@ -78,26 +78,7 @@ export default function VisitorProfile() {
     }
   };
 
-  const handleRetryPayment = async () => {
-    setIsRetryingPayment(true);
-    try {
-      const res = await fetch('/api/payment/retry-entry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user.email, name: user.name, phone: user.phone })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Failed to generate payment link');
-      
-      if (data.paymentLinkUrl) {
-        window.location.href = data.paymentLinkUrl;
-      }
-    } catch (err: any) {
-      addToast(err.message || 'Payment retry failed');
-    } finally {
-      setIsRetryingPayment(false);
-    }
-  };
+ // Retry logic removed
 
   const handleRequestOD = async () => {
     setIsRequestingOD(true);
@@ -159,21 +140,7 @@ export default function VisitorProfile() {
         </div>
       </div>
 
-      {user.payment_status === 'pending' && (
-        <div className="p-5 rounded-2xl bg-red-500/10 border border-red-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <h3 className="text-red-400 font-bold text-sm">General Registration Pending</h3>
-            <p className="text-red-400/80 text-xs mt-1">Your general entry fee (₹500) has not been paid yet. You must complete this payment to attend the fest.</p>
-          </div>
-          <button 
-            onClick={handleRetryPayment}
-            disabled={isRetryingPayment}
-            className="px-6 py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-sm transition-colors whitespace-nowrap"
-          >
-            {isRetryingPayment ? 'Loading...' : 'Complete Payment'}
-          </button>
-        </div>
-      )}
+
 
       {user.payment_status === 'paid' && (
         <div className="p-5 rounded-2xl bg-[var(--neon-cyan)]/10 border border-[var(--neon-cyan)]/20 flex flex-col sm:flex-row items-center justify-between gap-4">

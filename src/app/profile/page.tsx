@@ -162,21 +162,40 @@ function MyRegistrations() {
     );
   }
   return (
-    <div className="flex flex-col gap-3">
-      {events.map((eventId: string, i: number) => (
-        <div key={i} className="flex items-center justify-between p-4 rounded-2xl border border-white/10 bg-white/[0.03]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[var(--neon-cyan)]/10 flex items-center justify-center text-[var(--neon-cyan)]">
-              <CalendarCheck className="w-5 h-5" />
+    <div className="relative pl-6 sm:pl-8">
+      {/* Glowing vertical timeline line */}
+      <div className="absolute top-0 bottom-0 left-2 sm:left-4 w-[2px] bg-gradient-to-b from-[var(--neon-cyan)] via-[var(--neon-violet)] to-transparent opacity-50" />
+      
+      <div className="flex flex-col gap-8 py-4">
+        {events.map((eventId: string, i: number) => (
+          <motion.div 
+            key={i} 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="relative"
+          >
+            {/* Timeline node */}
+            <div className="absolute -left-10 sm:-left-12 top-4 w-4 h-4 rounded-full bg-black border-2 border-[var(--neon-cyan)] shadow-[0_0_10px_var(--neon-cyan)] flex items-center justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-[var(--neon-cyan)]" />
             </div>
-            <div>
-              <p className="text-white font-semibold text-sm">{eventId}</p>
-              <p className="text-gray-500 text-xs mt-0.5">August 21, 2026</p>
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border border-white/10 bg-gradient-to-r from-white/[0.05] to-transparent shadow-lg group hover:border-white/20 transition-all">
+              <div className="flex flex-col mb-4 sm:mb-0">
+                <span className="text-[10px] text-[var(--neon-cyan)] font-mono uppercase tracking-widest mb-1">Aug 21, 2026</span>
+                <p className="text-white font-black text-xl mb-1">{eventId}</p>
+                <p className="text-gray-400 text-xs">Chennai Institute Of Technology</p>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] px-3 py-1.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/20 font-bold uppercase tracking-widest shadow-[0_0_10px_rgba(34,197,94,0.1)]">
+                  Registered
+                </span>
+              </div>
             </div>
-          </div>
-          <span className="text-xs px-3 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 font-semibold">Registered</span>
-        </div>
-      ))}
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }

@@ -241,14 +241,16 @@ export default function AdminPortal() {
  };
  const fetchData = async () => {
  try {
- const [vData, aCount, eData] = await Promise.all([
+ const [vData, aCount, eData, pData] = await Promise.all([
  db.getAllVisitors(),
  db.getAttendanceCount(),
- db.getAllEvents()
+ db.getAllEvents(),
+ db.getAllPayments()
  ]);
  setVisitors(vData);
  setAttendanceCount(aCount);
  setEvents(eData);
+ setPayments(pData);
  } catch (err) {
  console.error('Failed to fetch data:', err);
  } finally {
@@ -335,6 +337,35 @@ export default function AdminPortal() {
  alert('Error deleting event: ' + error.message);
  }
  };
+ 
+ const handleSendBroadcast = async (e: React.FormEvent) => {
+ e.preventDefault();
+ if (!confirm(`Are you sure you want to send this broadcast to ${broadcastAudience === 'all' ? 'All Registered Users' : 'Users with Successful Payments'}?`)) return;
+ setIsBroadcasting(true);
+ try {
+ const res = await fetch('/api/admin/broadcast', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ subject: broadcastSubject,
+ message: broadcastMessage,
+ audience: broadcastAudience,
+ adminPasskey: passkeyInput,
+ adminEmail: loggedInEmail
+ })
+ });
+ const data = await res.json();
+ if (!res.ok) throw new Error(data.message || 'Failed to send broadcast');
+ alert(`Broadcast sent successfully to ${data.count} recipients!`);
+ setBroadcastSubject('');
+ setBroadcastMessage('');
+ } catch (err: any) {
+ alert(err.message || 'Failed to send broadcast');
+ } finally {
+ setIsBroadcasting(false);
+ }
+ };
+
  return (
  <main className="min-h-screen bg-black text-white p-6 relative overflow-hidden flex flex-col">
  <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[var(--neon-cyan)]/5 rounded-full blur-[120px] pointer-events-none" />
@@ -416,21 +447,44 @@ export default function AdminPortal() {
  </div>
  </div>
  {/* Dashboard UI Metrics */}
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
- <div className="p-4 rounded-2xl glass border border-white/10 flex flex-col justify-between">
- <div className="flex justify-between items-center text-gray-400 mb-2">
- <span className="text-xs font-bold uppercase tracking-wider">Total Users</span>
- <Users className="w-4 h-4 text-[var(--neon-cyan)]" />
- </div>
- <p className="text-3xl font-black font-[var(--font-heading-main)]">{isLoading ? '-' : visitors.length}</p>
- </div>
- <div className="p-4 rounded-2xl glass border border-white/10 flex flex-col justify-between">
- <div className="flex justify-between items-center text-gray-400 mb-2">
- <span className="text-xs font-bold uppercase tracking-wider">QR Check-ins</span>
- <ShieldCheck className="w-4 h-4 text-[var(--neon-violet)]" />
- </div>
- <p className="text-3xl font-black font-[var(--font-heading-main)] text-[var(--neon-violet)]">{isLoading ? '-' : attendanceCount}</p>
- </div>
+ <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+   <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-[var(--neon-cyan)]/50 transition-colors">
+     <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--neon-cyan)]/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-[var(--neon-cyan)]/20 transition-colors" />
+     <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
+       <span className="text-[10px] font-bold uppercase tracking-widest">Total Users</span>
+       <Users className="w-5 h-5 text-[var(--neon-cyan)]" />
+     </div>
+     <p className="text-4xl font-black font-[var(--font-heading-main)] text-white relative z-10">{isLoading ? '-' : visitors.length}</p>
+   </div>
+
+   <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-[var(--neon-violet)]/50 transition-colors">
+     <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--neon-violet)]/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-[var(--neon-violet)]/20 transition-colors" />
+     <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
+       <span className="text-[10px] font-bold uppercase tracking-widest">Active Check-ins</span>
+       <ShieldCheck className="w-5 h-5 text-[var(--neon-violet)]" />
+     </div>
+     <p className="text-4xl font-black font-[var(--font-heading-main)] text-[var(--neon-violet)] relative z-10">{isLoading ? '-' : attendanceCount}</p>
+   </div>
+
+   <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-[var(--neon-magenta)]/50 transition-colors">
+     <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--neon-magenta)]/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-[var(--neon-magenta)]/20 transition-colors" />
+     <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
+       <span className="text-[10px] font-bold uppercase tracking-widest">Gross Revenue</span>
+       <CreditCard className="w-5 h-5 text-[var(--neon-magenta)]" />
+     </div>
+     <p className="text-4xl font-black font-[var(--font-heading-main)] text-[var(--neon-magenta)] relative z-10">
+       {isLoading ? '-' : `₹${payments.filter(p => p.status === 'successful').reduce((acc, p) => acc + p.amount, 0)}`}
+     </p>
+   </div>
+
+   <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-green-500/50 transition-colors">
+     <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-green-500/20 transition-colors" />
+     <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
+       <span className="text-[10px] font-bold uppercase tracking-widest">Active Events</span>
+       <Calendar className="w-5 h-5 text-green-400" />
+     </div>
+     <p className="text-4xl font-black font-[var(--font-heading-main)] text-green-400 relative z-10">{isLoading ? '-' : events.length}</p>
+   </div>
  </div>
  {/* Tabs */}
  <div className="flex gap-4 mb-8 border-b border-white/10 pb-4 overflow-x-auto">
@@ -472,6 +526,14 @@ export default function AdminPortal() {
  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'payments' ? 'bg-white/10 text-white border border-white/30' : 'text-gray-400 hover:text-white'}`}
  >
  <CreditCard className="w-4 h-4" /> Payments
+ </button>
+ )}
+ {(userRole === 'Super Admin' || userRole === 'Editor') && (
+ <button 
+ onClick={() => setActiveTab('broadcast')}
+ className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'broadcast' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/30' : 'text-gray-400 hover:text-white'}`}
+ >
+ <Send className="w-4 h-4" /> Broadcast
  </button>
  )}
  {['Super Admin', 'Editor', 'Viewer'].includes(userRole) && (
@@ -930,10 +992,62 @@ export default function AdminPortal() {
  </div>
  )}
  </>
- ) : null}
- </div>
- )}
+ ) : activeTab === 'broadcast' ? (
+    <div className="glass rounded-3xl border border-white/10 p-8 max-w-4xl">
+      <h2 className="text-2xl font-[var(--font-heading-main)] font-black mb-6 text-blue-400 flex items-center gap-3">
+        <Send className="w-6 h-6" /> Broadcast Center
+      </h2>
+      <form onSubmit={handleSendBroadcast} className="space-y-6">
+        <div>
+          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Select Audience</label>
+          <select 
+            value={broadcastAudience} 
+            onChange={(e) => setBroadcastAudience(e.target.value as 'all' | 'paid')}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-blue-500 outline-none cursor-pointer"
+          >
+            <option value="all" className="bg-[#0f172a]">All Registered Users</option>
+            <option value="paid" className="bg-[#0f172a]">Users with Successful Payments (Vitality Pass)</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Email Subject</label>
+          <input 
+            type="text" 
+            required
+            value={broadcastSubject}
+            onChange={(e) => setBroadcastSubject(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-blue-500 outline-none"
+            placeholder="e.g. Important Update: Yuvenza '26 Schedule"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Email Message (HTML allowed)</label>
+          <textarea 
+            required
+            rows={6}
+            value={broadcastMessage}
+            onChange={(e) => setBroadcastMessage(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-blue-500 outline-none resize-y"
+            placeholder="Write your message here. Line breaks will be converted to <br/> tags automatically."
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={isBroadcasting}
+          className="w-full md:w-auto px-8 py-4 bg-blue-500 text-white font-bold rounded-full hover:bg-blue-600 transition-colors uppercase tracking-wider text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+        >
+          {isBroadcasting ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <Send className="w-5 h-5" />
+          )}
+          {isBroadcasting ? 'Sending...' : 'Send Broadcast'}
+        </button>
+      </form>
+    </div>
+   ) : null}
+   </div>
+   )}
  </main>
  );
 }
-

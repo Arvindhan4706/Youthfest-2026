@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import ToastContainer from './ToastContainer';
+import LoadingScreen from './LoadingScreen';
 import dynamic from 'next/dynamic';
 import { useKonamiCode } from '../hooks/useKonamiCode';
 import { useStore } from '../lib/useStore';
@@ -55,6 +56,7 @@ export default function GlobalClientProviders({ children }: { children: React.Re
       <ToastContainer />
       {hasMounted && <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />}
       {hasMounted && <PaymentModal />}
+      <LoadingScreen />
       {children}
     </div>
   );
