@@ -67,11 +67,11 @@ export default function AboutPage() {
             </motion.p>
 
             <div className="overflow-hidden mb-6">
-              {['CREATE &', 'CONTRIBUTE'].map((word, wi) => (
+              {['WHAT WE CREATE', 'WE CONTRIBUTE'].map((word, wi) => (
                 <motion.h1 key={word}
                   initial={{ y: 120, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.9, delay: 0.3 + wi * 0.15, ease: [0.16, 1, 0.3, 1] }}
-                  className="block text-[clamp(3rem,12vw,8rem)] font-[var(--font-heading-main)] font-black leading-none uppercase tracking-tight">
+                  className="block text-[clamp(2.5rem,10vw,6rem)] font-[var(--font-heading-main)] font-black leading-none uppercase tracking-tight">
                   {wi === 0
                     ? <span className="text-white">{word}</span>
                     : <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">{word}</span>}
