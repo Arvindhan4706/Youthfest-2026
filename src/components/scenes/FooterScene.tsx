@@ -181,28 +181,67 @@ export default function FooterScene() {
                 Contact Us
               </h4>
               <div className="flex flex-col gap-5">
+                
+                {/* Pravin Raj */}
                 <div className="flex items-start gap-4 group">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[var(--neon-cyan)]/20 transition-colors">
-                    <MapPin className="w-5 h-5 text-[var(--neon-cyan)]" />
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
+                    <Phone className="w-4 h-4 text-gray-400 group-hover:text-[#25D366] transition-colors" />
                   </div>
-                  <p className="text-sm text-gray-400 leading-relaxed pt-1">
-                    <strong className="text-white block mb-1">Yuvenza Organizing Committee</strong>
-                    Chennai Institute of Technology<br/>
-                    Sarathy Nagar, Kundrathur, Chennai
-                  </p>
-                </div>
-                <div className="flex items-center gap-4 group">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[var(--neon-violet)]/20 transition-colors">
-                    <Mail className="w-5 h-5 text-[var(--neon-violet)]" />
+                  <div className="pt-0.5">
+                    <strong className="text-white block text-sm">Pravin Raj</strong>
+                    <span className="text-[10px] text-[var(--neon-cyan)] uppercase tracking-wider block mb-1">President</span>
+                    <div className="flex items-center gap-3">
+                      <a href="tel:+919566003608" className="text-sm text-gray-400 hover:text-white transition-colors">+91 95660 03608</a>
+                      <a href="https://wa.me/919566003608" target="_blank" rel="noopener noreferrer" className="text-xs text-[#25D366] hover:underline font-semibold">Chat on WhatsApp</a>
+                    </div>
                   </div>
-                  <a href="mailto:yuvenza@citchennai.net" className="text-sm text-gray-400 hover:text-white transition-colors">yuvenza@citchennai.net</a>
                 </div>
-                <div className="flex items-center gap-4 group">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[var(--neon-magenta)]/20 transition-colors">
-                    <Phone className="w-5 h-5 text-[var(--neon-magenta)]" />
+
+                {/* Jesi */}
+                <div className="flex items-start gap-4 group">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
+                    <Phone className="w-4 h-4 text-gray-400 group-hover:text-[#25D366] transition-colors" />
                   </div>
-                  <a href="tel:+917339524706" className="text-sm text-gray-400 hover:text-white transition-colors">+91 73395 24706</a>
+                  <div className="pt-0.5">
+                    <strong className="text-white block text-sm">Jesi</strong>
+                    <span className="text-[10px] text-[var(--neon-violet)] uppercase tracking-wider block mb-1">Culturals / HR</span>
+                    <div className="flex items-center gap-3">
+                      <a href="tel:+919500129400" className="text-sm text-gray-400 hover:text-white transition-colors">+91 95001 29400</a>
+                      <a href="https://wa.me/919500129400" target="_blank" rel="noopener noreferrer" className="text-xs text-[#25D366] hover:underline font-semibold">Chat on WhatsApp</a>
+                    </div>
+                  </div>
                 </div>
+
+                {/* Rohan */}
+                <div className="flex items-start gap-4 group">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
+                    <Phone className="w-4 h-4 text-gray-400 group-hover:text-[#25D366] transition-colors" />
+                  </div>
+                  <div className="pt-0.5">
+                    <strong className="text-white block text-sm">Rohan</strong>
+                    <span className="text-[10px] text-[var(--neon-magenta)] uppercase tracking-wider block mb-1">Technical / Workshop</span>
+                    <div className="flex items-center gap-3">
+                      <a href="tel:+917339175315" className="text-sm text-gray-400 hover:text-white transition-colors">+91 73391 75315</a>
+                      <a href="https://wa.me/917339175315" target="_blank" rel="noopener noreferrer" className="text-xs text-[#25D366] hover:underline font-semibold">Chat on WhatsApp</a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Arvindhan */}
+                <div className="flex items-start gap-4 group">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
+                    <Phone className="w-4 h-4 text-gray-400 group-hover:text-[#25D366] transition-colors" />
+                  </div>
+                  <div className="pt-0.5">
+                    <strong className="text-white block text-sm">Arvindhan</strong>
+                    <span className="text-[10px] text-[var(--neon-cyan)] uppercase tracking-wider block mb-1">Technical Team</span>
+                    <div className="flex items-center gap-3">
+                      <a href="tel:+917339524706" className="text-sm text-gray-400 hover:text-white transition-colors">+91 73395 24706</a>
+                      <a href="https://wa.me/917339524706" target="_blank" rel="noopener noreferrer" className="text-xs text-[#25D366] hover:underline font-semibold">Chat on WhatsApp</a>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </motion.div>
