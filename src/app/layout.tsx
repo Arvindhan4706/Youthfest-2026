@@ -64,12 +64,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://yuvenza2026.com',
   },
- twitter: {
- card: 'summary_large_image',
- title: "YUVENZA'S YUVENZA 2026 | The Biggest Youth Festival",
- description: "5000+ students. 50+ events. One legendary festival. August 21, 2026.",
- images: ['/og-image.jpg'],
- },
 };
 
 import { Viewport } from 'next';
