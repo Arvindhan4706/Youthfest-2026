@@ -30,28 +30,30 @@ function useCountdown() {
   return timeLeft;
 }
 
-// Floating geometric shape component
-function FloatingShape({ className, delay = 0, duration = 12, color }: {
-  className: string; delay?: number; duration?: number; color: string;
-}) {
+// Flip Unit for Countdown
+function FlipUnit({ value, label }: { value: number; label: string }) {
+  const display = String(value).padStart(2, '0');
   return (
-    <motion.div
-      className={`absolute pointer-events-none ${className}`}
-      animate={{
-        y: [0, -30, -10, -40, 0],
-        x: [0, 15, -10, 5, 0],
-        rotate: [0, 45, -30, 20, 0],
-        scale: [1, 1.05, 0.95, 1.02, 1],
-      }}
-      transition={{
-        duration,
-        delay,
-        repeat: Infinity,
-        ease: "easeInOut",
-        times: [0, 0.25, 0.5, 0.75, 1],
-      }}
-      style={{ color }}
-    />
+    <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+      <div
+        className="relative w-12 h-14 sm:w-16 sm:h-20 rounded-xl sm:rounded-2xl overflow-hidden"
+        style={{ perspective: '400px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+      >
+        <div className="absolute inset-x-0 top-0 h-1/2 flex items-end justify-center pb-0 bg-white/[0.02] border-b border-black/30">
+          <span className="font-[var(--font-heading-main)] font-black text-white leading-none" style={{ fontSize: 'clamp(1.25rem, 3vw, 2.25rem)', transform: 'translateY(55%)', letterSpacing: '-0.04em' }}>
+            {display}
+          </span>
+        </div>
+        <div className="absolute inset-x-0 bottom-0 h-1/2 flex items-start justify-center pt-0 bg-white/[0.01]">
+          <span className="font-[var(--font-heading-main)] font-black text-white/80 leading-none" style={{ fontSize: 'clamp(1.25rem, 3vw, 2.25rem)', transform: 'translateY(-45%)', letterSpacing: '-0.04em' }}>
+            {display}
+          </span>
+        </div>
+        <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-black/50 z-10" />
+        <div className="absolute inset-0 rounded-xl sm:rounded-2xl" style={{ boxShadow: 'inset 0 0 20px rgba(56,189,248,0.05)' }} />
+      </div>
+      <span className="text-[8px] sm:text-[10px] uppercase tracking-[0.25em] text-gray-500 font-bold">{label}</span>
+    </div>
   );
 }
 
@@ -161,26 +163,37 @@ export default function HeroScene() {
       <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-[var(--neon-cyan)]/[0.06] blur-[150px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[var(--neon-violet)]/[0.07] blur-[180px] pointer-events-none" />
 
-      {/* Floating geometric shapes */}
+      {/* Floating geometric shapes & Featured Event Card */}
       <motion.div
         className="absolute top-[15%] left-[8%] w-16 h-16 md:w-20 md:h-20 border border-[var(--neon-cyan)]/20 rounded-lg pointer-events-none"
         animate={{ y: [0, -25, 0], rotate: [0, 45, 0], opacity: [0.3, 0.6, 0.3] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
+      
+      {/* Featured Event Floating Card */}
       <motion.div
-        className="absolute top-[30%] right-[10%] w-10 h-10 md:w-14 md:h-14 rounded-full border border-[var(--neon-magenta)]/20 pointer-events-none"
-        animate={{ y: [0, -35, 0], x: [0, 10, 0], opacity: [0.2, 0.5, 0.2] }}
-        transition={{ duration: 8, delay: 1.5, repeat: Infinity, ease: "easeInOut" }}
-      />
+        initial={{ opacity: 0, x: 50, rotate: 10 }}
+        animate={{ opacity: 1, x: 0, rotate: 6, y: [0, -15, 0] }}
+        transition={{ 
+          opacity: { duration: 1, delay: 2.5 },
+          x: { duration: 1, delay: 2.5, type: 'spring' },
+          rotate: { duration: 1, delay: 2.5, type: 'spring' },
+          y: { duration: 8, repeat: Infinity, ease: "easeInOut", delay: 3.5 }
+        }}
+        className="absolute top-[20%] right-[5%] md:right-[15%] w-[200px] sm:w-[240px] rounded-2xl glass-strong p-4 pointer-events-none hidden sm:block z-10"
+      >
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-2 h-2 rounded-full bg-[var(--neon-cyan)] animate-pulse" />
+          <span className="text-[9px] uppercase tracking-wider text-[var(--neon-cyan)] font-bold">Featured Event</span>
+        </div>
+        <h4 className="text-white font-bold text-sm mb-1">Celestius Pro</h4>
+        <p className="text-gray-400 text-xs">The Ultimate AI Hackathon. ₹50,000 Prize Pool.</p>
+      </motion.div>
+
       <motion.div
         className="absolute bottom-[25%] left-[12%] w-6 h-6 md:w-8 md:h-8 bg-[var(--neon-violet)]/20 rotate-45 pointer-events-none"
         animate={{ y: [0, -20, 0], rotate: [45, 90, 45], opacity: [0.3, 0.7, 0.3] }}
         transition={{ duration: 7, delay: 3, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute top-[20%] right-[18%] w-3 h-3 rounded-full bg-[var(--neon-cyan)]/40 pointer-events-none"
-        animate={{ scale: [1, 1.5, 1], opacity: [0.4, 1, 0.4] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute bottom-[30%] right-[6%] w-5 h-5 border-2 border-[var(--neon-gold)]/20 pointer-events-none"
@@ -315,11 +328,27 @@ export default function HeroScene() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 2.0, ease: "easeOut" }}
-          className="text-sm sm:text-base text-gray-400 font-normal tracking-wide mb-10 sm:mb-12 w-full max-w-2xl mx-auto leading-[1.85] text-center"
+          className="text-sm sm:text-base text-gray-400 font-normal tracking-wide mb-8 w-full max-w-2xl mx-auto leading-[1.85] text-center"
         >
           Yuvenza is the student-driven youth club of Chennai Institute of Technology.{' '}
           <span className="text-white font-semibold">What we create, we contribute.</span> Every event and campaign we organize channels real support back to the community around us.
         </motion.p>
+
+        {/* Hero Countdown */}
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 2.2, duration: 0.8, type: 'spring', bounce: 0.4 }}
+          className="flex items-center justify-center gap-2 sm:gap-4 mb-10 sm:mb-12"
+        >
+          <FlipUnit value={countdown.days} label="Days" />
+          <span className="text-xl sm:text-2xl text-white/20 font-thin mt-[-15px]">:</span>
+          <FlipUnit value={countdown.hours} label="Hours" />
+          <span className="text-xl sm:text-2xl text-white/20 font-thin mt-[-15px]">:</span>
+          <FlipUnit value={countdown.minutes} label="Minutes" />
+          <span className="text-xl sm:text-2xl text-white/20 font-thin mt-[-15px]">:</span>
+          <FlipUnit value={countdown.seconds} label="Seconds" />
+        </motion.div>
 
         {/* CTA Buttons */}
         <motion.div

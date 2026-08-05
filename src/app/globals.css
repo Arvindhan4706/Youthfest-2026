@@ -12,10 +12,10 @@
 
  /* ── Intentional per-section spacing rhythm ── */
  --gap-after-hero: 160px;
- --gap-after-about: 120px;
- --gap-after-memories: 100px;
+ --gap-after-about: 128px;
+ --gap-after-memories: 96px;
  --gap-after-sponsors: 160px;
- --gap-section-std: 140px;
+ --gap-section-std: 128px;
 }
  @theme inline {
   --color-background: var(--background);
@@ -77,40 +77,42 @@ body {
 @layer base {
   h1 {
     font-family: var(--font-heading-main, 'Space Grotesk', sans-serif);
-    font-size: clamp(2.5rem, 10vw, 4.5rem);
+    font-size: clamp(3rem, 8vw, 5rem); /* Max 80px */
     line-height: 1.05;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
   }
   h2 {
     font-family: var(--font-heading-main, 'Space Grotesk', sans-serif);
-    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-size: clamp(2rem, 5vw, 3.5rem); /* Max 56px */
     line-height: 1.1;
     letter-spacing: -0.03em;
   }
   h3 {
     font-family: var(--font-heading-sub, 'Inter', sans-serif);
-    font-size: clamp(1.25rem, 3vw, 2.25rem);
+    font-size: clamp(1.25rem, 3vw, 1.75rem); /* Max 28px */
     line-height: 1.25;
     letter-spacing: -0.02em;
   }
   h4 {
     font-family: var(--font-heading-sub, 'Inter', sans-serif);
-    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-size: clamp(1rem, 2vw, 1.25rem); /* Max 20px */
     line-height: 1.35;
     letter-spacing: -0.01em;
   }
   p, .text-body {
     font-size: 16px;
-    line-height: 1.8;
+    line-height: 1.7;
+    max-width: 65ch; /* Avoid very long lines */
   }
   small, .text-small {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.6;
   }
-  @media (min-width: 768px) {
-    p, .text-body { font-size: 17px; }
+  .text-caption {
+    font-size: 14px;
+    line-height: 1.5;
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     p, .text-body { font-size: 18px; }
   }
 }
@@ -155,19 +157,19 @@ body {
     margin-bottom: 160px;
   }
   .gap-after-lg {
-    margin-bottom: 120px;
+    margin-bottom: 128px;
   }
   .gap-after-md {
-    margin-bottom: 100px;
+    margin-bottom: 96px;
   }
   .gap-after-sm {
-    margin-bottom: 80px;
+    margin-bottom: 64px;
   }
   @media (max-width: 768px) {
-    .gap-after-xl { margin-bottom: 80px; }
+    .gap-after-xl { margin-bottom: 96px; }
     .gap-after-lg { margin-bottom: 64px; }
     .gap-after-md { margin-bottom: 48px; }
-    .gap-after-sm { margin-bottom: 40px; }
+    .gap-after-sm { margin-bottom: 32px; }
   }
 
   /* ── Buttons ── */

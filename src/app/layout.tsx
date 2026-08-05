@@ -73,6 +73,7 @@ export const viewport: Viewport = {
 };
 
 import GlobalClientProviders from "../components/GlobalClientProviders";
+import ScrollProgress from "../components/ui/ScrollProgress";
 
 export default function RootLayout({
   children,
@@ -87,6 +88,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen font-sans">
         <AutoLogoutProvider />
+        <ScrollProgress />
         <GlobalClientProviders>
           {children}
         </GlobalClientProviders>

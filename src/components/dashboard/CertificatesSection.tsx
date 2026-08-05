@@ -52,47 +52,16 @@ export default function CertificatesSection() {
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      {registeredEvents.map((eventId: string, i: number) => {
-        const hasAttended = attendedEvents.includes(eventId);
-        return (
-          <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border border-white/10 bg-white/[0.03] gap-4">
-            <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${hasAttended ? 'bg-[var(--neon-cyan)]/10 text-[var(--neon-cyan)]' : 'bg-white/5 text-gray-500'}`}>
-                <Award className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-white font-bold text-base">{eventId}</p>
-                <p className="text-gray-500 text-xs mt-1">
-                  {hasAttended ? 'Event Completed successfully!' : 'Awaiting Event Completion'}
-                </p>
-              </div>
-            </div>
-            
-            <button
-              onClick={() => handleDownloadCertificate(eventId)}
-              disabled={!hasAttended || isGenerating === eventId}
-              className={`px-6 py-2.5 rounded-full font-semibold text-sm flex items-center justify-center gap-2 transition-all ${
-                hasAttended 
-                  ? 'bg-white text-black hover:bg-gray-200 shadow-[0_0_15px_rgba(255,255,255,0.2)]' 
-                  : 'bg-white/5 text-gray-500 border border-white/10 cursor-not-allowed'
-              }`}
-            >
-              {!hasAttended ? (
-                <>
-                  <Clock className="w-4 h-4" /> Locked
-                </>
-              ) : isGenerating === eventId ? (
-                'Generating...'
-              ) : (
-                <>
-                  <Download className="w-4 h-4" /> Download Certificate
-                </>
-              )}
-            </button>
-          </div>
-        );
-      })}
+    <div className="flex flex-col items-center justify-center h-64 gap-4 rounded-3xl border border-dashed border-white/10 bg-white/[0.01]">
+      <div className="w-16 h-16 rounded-2xl bg-[var(--neon-cyan)]/10 flex items-center justify-center text-[var(--neon-cyan)] shadow-[0_0_20px_rgba(0,240,255,0.2)]">
+        <Award className="w-8 h-8" />
+      </div>
+      <div className="text-center max-w-md">
+        <p className="text-white text-lg font-bold mb-2">Coming Soon</p>
+        <p className="text-gray-400 text-sm leading-relaxed">
+          Certificates will be issued only for <strong className="text-white">Workshops</strong> after the event is completed. Please check back here after August 21, 2026 to download your certificate.
+        </p>
+      </div>
     </div>
   );
 }

@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X, LogOut, RefreshCw, CreditCard, Send, Bell } from 'lucide-react';
+import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X, LogOut, RefreshCw, CreditCard, Send, Bell, Mail } from 'lucide-react';
 import { db, Visitor, EventItem, AdminUser, Role, Payment } from '@/lib/database';
 import { supabase } from '@/lib/supabase';
+import QRCode from 'qrcode';
 export default function AdminPortal() {
  const [visitors, setVisitors] = useState<Visitor[]>([]);
  const [attendanceCount, setAttendanceCount] = useState(0);
@@ -137,6 +138,32 @@ export default function AdminPortal() {
  setIsRefunding(null);
  }
  };
+
+  const handleResendTicket = async (payment: Payment, visitorName: string, visitorEmail: string) => {
+    if (!confirm(`Are you sure you want to resend the ticket for ${payment.event_id} to ${visitorEmail}?`)) return;
+    try {
+      const qrData = `${visitorEmail}|${payment.event_id}`;
+      const generatedQrDataUrl = await QRCode.toDataURL(qrData, { width: 300, margin: 1, color: { dark: '#000000', light: '#ffffff' } });
+      
+      const res = await fetch('/api/send-ticket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: visitorName,
+          email: visitorEmail,
+          event: payment.event_id,
+          venue: 'Chennai Institute Of Technology',
+          date: 'August 21, 2026',
+          qrDataUrl: generatedQrDataUrl
+        })
+      });
+      if (!res.ok) throw new Error('Failed to send ticket');
+      alert('Ticket resent successfully!');
+      await db.logAdminAction(loggedInEmail, 'Resent Ticket', { email: visitorEmail, eventId: payment.event_id });
+    } catch (err: any) {
+      alert(err.message || 'Failed to resend ticket');
+    }
+  };
 
   const handleSendNotification = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -796,9 +823,14 @@ export default function AdminPortal() {
  {p.status}
  </span>
  </td>
- <td className="px-6 py-4 text-right">
+ <td className="px-6 py-4 text-right flex items-center justify-end gap-3">
  {p.status === 'successful' && (
- <button onClick={() => handleRefund(p.id, p.razorpay_payment_id, p.amount)} className="text-red-400 hover:underline">Refund</button>
+ <>
+  <button onClick={() => handleResendTicket(p, v?.name || 'Visitor', v?.email || '')} className="text-blue-400 hover:underline flex items-center gap-1 text-xs" title="Resend Ticket Email">
+    <Mail className="w-3 h-3" /> Resend Ticket
+  </button>
+  <button onClick={() => handleRefund(p.id, p.razorpay_payment_id, p.amount)} className="text-red-400 hover:underline text-xs">Refund</button>
+ </>
  )}
  </td>
  </tr>

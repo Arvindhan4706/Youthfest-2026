@@ -187,10 +187,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  <div className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
  <div className="flex justify-between items-center relative">
  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-  <div className="h-full bg-gradient-to-r from-[var(--neon-cyan)] to-[#0088ff] rounded-full transition-all duration-500 ease-out" style={{ width: `${((step - 1) / 3) * 100}%` }} />
+  <div className="h-full bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] rounded-full transition-all duration-500 ease-out" style={{ width: `${((step - 1) / 3) * 100}%` }} />
  </div>
  {[1, 2, 3, 4].map(num => (
- <div key={num} className={`w-8 h-8 rounded-full flex items-center justify-center relative z-10 transition-all duration-500 ${step >= num ? 'bg-gradient-to-r from-[var(--neon-cyan)] to-[#0088ff] text-[#000000] scale-110 shadow-[0_0_10px_rgba(0,240,255,0.4)]' : 'bg-black border-2 border-white/20 text-gray-500'}`}>
+ <div key={num} className={`w-8 h-8 rounded-full flex items-center justify-center relative z-10 transition-all duration-500 ${step >= num ? 'bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-[#000000] scale-110 shadow-[0_0_10px_rgba(0,240,255,0.4)]' : 'bg-black border-2 border-white/20 text-gray-500'}`}>
  {step > num ? <CheckCircle2 className="w-4 h-4 animate-in zoom-in duration-300" /> : <span className="text-xs font-bold">{num}</span>}
  </div>
  ))}
@@ -226,7 +226,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  <input type="tel" required value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 7339524706" className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--neon-cyan)] focus:bg-[var(--neon-cyan)]/5 focus:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300" />
  </div>
  </div>
- <button type="submit" disabled={isLoading} className="w-full min-h-[44px] py-3.5 mt-2 bg-gradient-to-r from-[var(--neon-cyan)] to-[#0088ff] text-black font-bold rounded-full hover:scale-[1.02] active:scale-95 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 flex items-center justify-center gap-2">
+ <button type="submit" disabled={isLoading} className="w-full min-h-[44px] py-3.5 mt-2 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-black font-bold rounded-full hover:scale-[1.02] active:scale-95 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 flex items-center justify-center gap-2">
  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Access Portal'}
  </button>
   
@@ -346,9 +346,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  {step === 4 && (
  <div className="space-y-4 animate-in fade-in slide-in-from-right-8 duration-500">
  <div className="bg-white/5 border border-[var(--neon-cyan)]/30 rounded-2xl p-6 text-sm text-gray-300 relative overflow-hidden group hover:border-[var(--neon-cyan)]/60 transition-colors duration-300">
- <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-cyan)]/10 to-[#0088ff]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+ <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-cyan)]/10 to-[var(--neon-violet)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
  <h3 className="text-[var(--neon-cyan)] font-bold mb-4 uppercase tracking-widest text-xs relative z-10 flex items-center gap-2">
-  <CheckCircle2 className="w-4 h-4 text-[#0088ff]" /> Review Details
+  <CheckCircle2 className="w-4 h-4 text-[var(--neon-violet)]" /> Review Details
  </h3>
  <div className="grid grid-cols-2 gap-y-4 relative z-10">
  <div><span className="text-gray-500 text-[10px] uppercase font-bold tracking-wider">Name</span><br/><span className="font-medium text-white">{name}</span></div>
@@ -370,11 +370,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   </button>
   )}
   {step < 4 ? (
-  <button type="button" onClick={nextStep} className="flex-[2] py-3.5 bg-gradient-to-r from-[var(--neon-cyan)] to-[#0088ff] text-black font-bold rounded-full hover:scale-[1.02] active:scale-95 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 flex justify-center items-center gap-2 group">
+  <button type="button" onClick={nextStep} className="flex-[2] py-3.5 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-black font-bold rounded-full hover:scale-[1.02] active:scale-95 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 flex justify-center items-center gap-2 group">
   Next Step <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
   </button>
   ) : (
-  <button type="submit" disabled={isLoading} className="flex-[2] py-3.5 bg-gradient-to-r from-[var(--neon-cyan)] to-[#0088ff] text-black font-bold rounded-full hover:scale-[1.02] active:scale-95 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 flex justify-center items-center gap-2 disabled:opacity-50 disabled:hover:scale-100">
+  <button type="submit" disabled={isLoading} className="flex-[2] py-3.5 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] text-black font-bold rounded-full hover:scale-[1.02] active:scale-95 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 flex justify-center items-center gap-2 disabled:opacity-50 disabled:hover:scale-100">
   {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirm Registration'}
   </button>
   )}
