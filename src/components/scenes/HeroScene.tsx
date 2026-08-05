@@ -131,8 +131,7 @@ export default function HeroScene() {
       id="hero"
       ref={sectionRef}
       onMouseMove={handleMouseMove}
-      className="relative min-h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: 'radial-gradient(ellipse at 50% 0%, #080025 0%, #020c14 55%, #010008 100%)' }}
+      className="relative min-h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden bg-black"
       aria-labelledby="hero-heading"
     >
       {/* WebGL Particle Universe */}
