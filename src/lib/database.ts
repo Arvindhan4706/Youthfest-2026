@@ -23,6 +23,14 @@ export interface Payment {
   status: 'pending' | 'successful' | 'failed' | 'refunded';
   created_at: string;
 }
+export interface Notification {
+  id: string;
+  visitor_email: string;
+  title: string;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}
 export interface SiteSettings {
   id: string;
   participants: number;
@@ -194,10 +202,11 @@ export const db = {
   /**
    * Update a visitor's profile by email.
    */
-  async updateProfile(email: string, updates: { name?: string; email?: string; college?: string; department?: string; year?: string; gender?: string; city?: string }): Promise<Visitor> {
+  async updateProfile(email: string, updates: { name?: string; email?: string; phone?: string; college?: string; department?: string; year?: string; gender?: string; city?: string }): Promise<Visitor> {
     const emailLower = email.toLowerCase().trim();
     const payload: Partial<Visitor> = {};
     if (updates.name) payload.name = updates.name.trim();
+    if (updates.phone) payload.phone = updates.phone.trim();
     if (updates.college) payload.college = updates.college.trim();
     if (updates.department) payload.department = updates.department.trim();
     if (updates.year) payload.year = updates.year.trim();
@@ -562,6 +571,35 @@ export const db = {
     const { error } = await supabase
       .from('admin_users')
       .delete()
+      .eq('id', id);
+    if (error) throw new Error(error.message);
+  },
+  
+  // ─── Notifications ─────────────────────────────────────────
+  async getNotifications(email: string): Promise<Notification[]> {
+    const { data, error } = await supabase
+      .from('notifications')
+      .select('*')
+      .eq('visitor_email', email.toLowerCase().trim())
+      .order('created_at', { ascending: false });
+    if (error) throw new Error(error.message);
+    return data || [];
+  },
+  
+  async createNotification(email: string, title: string, message: string): Promise<Notification> {
+    const { data, error } = await supabase
+      .from('notifications')
+      .insert({ visitor_email: email.toLowerCase().trim(), title, message })
+      .select()
+      .single();
+    if (error) throw new Error(error.message);
+    return data;
+  },
+  
+  async markNotificationRead(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('notifications')
+      .update({ is_read: true })
       .eq('id', id);
     if (error) throw new Error(error.message);
   }

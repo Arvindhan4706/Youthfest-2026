@@ -1,8 +1,8 @@
 'use client';
-import React, { useState } from 'react';
-import { User, Save, Shield, Phone, Mail, MapPin, BookOpen, Calendar, Users2, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, Save, Shield, Phone, Mail, MapPin, BookOpen, Calendar, Users2, CheckCircle, Bell, X } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
-import { db } from '../../lib/database';
+import { db, Notification } from '../../lib/database';
 
 function Field({
   label, value, onChange, type = 'text', disabled = false, placeholder = '', id
@@ -38,6 +38,7 @@ export default function VisitorProfile() {
 
   const [profileName, setProfileName] = useState(user?.name || '');
   const [profileEmail, setProfileEmail] = useState(user?.email || '');
+  const [profilePhone, setProfilePhone] = useState(user?.phone || '');
   const [profileCollege, setProfileCollege] = useState(user?.college || '');
   const [profileDepartment, setProfileDepartment] = useState(user?.department || '');
   const [profileYear, setProfileYear] = useState(user?.year || '1');
@@ -46,6 +47,40 @@ export default function VisitorProfile() {
   const [isSaving, setIsSaving] = useState(false);
   const [isRetryingPayment, setIsRetryingPayment] = useState(false);
   const [isRequestingOD, setIsRequestingOD] = useState(false);
+  
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    if (user?.email) {
+      fetchNotifications();
+    }
+  }, [user?.email]);
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await fetch(`/api/notifications?email=${encodeURIComponent(user!.email)}`);
+      const data = await res.json();
+      if (data.success) {
+        setNotifications(data.notifications);
+      }
+    } catch (err) {
+      console.error('Failed to fetch notifications', err);
+    }
+  };
+
+  const markAsRead = async (id: string) => {
+    try {
+      setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+      await fetch('/api/notifications', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+    } catch (err) {
+      console.error('Failed to mark read', err);
+    }
+  };
 
   if (!user) return null;
 
@@ -60,16 +95,22 @@ export default function VisitorProfile() {
     e.preventDefault();
     setIsSaving(true);
     try {
-      const updated = await db.updateProfile(user.email, {
-        name: profileName,
-        email: profileEmail,
-        college: profileCollege,
-        department: profileDepartment,
-        year: profileYear,
-        gender: profileGender,
-        city: profileCity,
+      const res = await fetch('/api/auth/update-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: profileEmail,
+          name: profileName,
+          phone: profilePhone,
+          college: profileCollege,
+          department: profileDepartment,
+          city: profileCity
+        })
       });
-      setUser({ ...user, ...updated });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to update profile');
+      
+      setUser({ ...user, ...data.visitor });
       addToast('✅ Profile information updated successfully!');
     } catch (err: unknown) {
       addToast(err instanceof Error ? err.message : '❌ Failed to update profile. Please try again.');
@@ -105,10 +146,58 @@ export default function VisitorProfile() {
     }
   };
 
+  const unreadCount = notifications.filter(n => !n.is_read).length;
+
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 relative">
+      {/* Notification Bell */}
+      <div className="absolute top-0 right-0 z-50">
+        <button 
+          onClick={() => setShowNotifications(!showNotifications)}
+          className="w-12 h-12 rounded-full bg-white/5 border border-white/10 hover:border-white/30 flex items-center justify-center transition-all relative group shadow-lg"
+        >
+          <Bell className={`w-5 h-5 text-gray-400 group-hover:text-white transition-colors ${unreadCount > 0 ? 'animate-pulse text-[var(--neon-magenta)]' : ''}`} />
+          {unreadCount > 0 && (
+            <span className="absolute top-2 right-2 w-3 h-3 bg-[var(--neon-magenta)] rounded-full border-2 border-black" />
+          )}
+        </button>
+        
+        {showNotifications && (
+          <div className="absolute right-0 top-14 w-80 sm:w-96 bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] overflow-hidden animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="p-4 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
+              <h3 className="font-bold text-sm text-white">Notifications</h3>
+              <button onClick={() => setShowNotifications(false)} className="text-gray-500 hover:text-white">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="max-h-96 overflow-y-auto">
+              {notifications.length === 0 ? (
+                <div className="p-8 text-center text-gray-500 text-sm font-mono">No notifications yet</div>
+              ) : (
+                <div className="flex flex-col">
+                  {notifications.map(notif => (
+                    <div 
+                      key={notif.id} 
+                      className={`p-4 border-b border-white/5 cursor-pointer transition-colors ${notif.is_read ? 'opacity-70 hover:bg-white/[0.02]' : 'bg-[var(--neon-cyan)]/5 hover:bg-[var(--neon-cyan)]/10'}`}
+                      onClick={() => { if (!notif.is_read) markAsRead(notif.id); }}
+                    >
+                      <div className="flex justify-between items-start gap-2 mb-1">
+                        <h4 className={`text-sm font-bold ${notif.is_read ? 'text-gray-300' : 'text-[var(--neon-cyan)]'}`}>{notif.title}</h4>
+                        {!notif.is_read && <span className="w-2 h-2 rounded-full bg-[var(--neon-cyan)] shrink-0 mt-1.5" />}
+                      </div>
+                      <p className="text-xs text-gray-300 line-clamp-3 leading-relaxed">{notif.message}</p>
+                      <p className="text-[9px] text-gray-500 mt-2 font-mono uppercase tracking-wider">{new Date(notif.created_at).toLocaleString()}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Profile Header Card */}
-      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 sm:p-8 rounded-3xl border border-white/10 bg-white/[0.02]">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 sm:p-8 rounded-3xl border border-white/10 bg-white/[0.02] pr-16">
         <div className="relative shrink-0">
           <div className="w-20 h-20 rounded-[12px] bg-gradient-to-br from-[var(--neon-cyan)] to-[var(--neon-violet)] flex items-center justify-center text-black font-black text-2xl shadow-[0_0_30px_rgba(0,240,255,0.3)]">
             {initials}
@@ -173,9 +262,9 @@ export default function VisitorProfile() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <Field
               label="Contact Number"
-              value={user.phone || ''}
-              disabled
-              placeholder="Phone (locked)"
+              value={profilePhone}
+              onChange={setProfilePhone}
+              placeholder="e.g. 9876543210"
             />
             <div className="flex flex-col gap-1.5">
               <label htmlFor="gender" className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Gender</label>

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X, LogOut, RefreshCw, CreditCard, Send } from 'lucide-react';
+import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRound, Settings, Calendar, Edit, Trash2, Plus, X, LogOut, RefreshCw, CreditCard, Send, Bell } from 'lucide-react';
 import { db, Visitor, EventItem, AdminUser, Role, Payment } from '@/lib/database';
 import { supabase } from '@/lib/supabase';
 export default function AdminPortal() {
@@ -43,6 +43,11 @@ export default function AdminPortal() {
  const [broadcastSubject, setBroadcastSubject] = useState('');
  const [broadcastMessage, setBroadcastMessage] = useState('');
  const [isBroadcasting, setIsBroadcasting] = useState(false);
+ // Notification State
+ const [notifyEmail, setNotifyEmail] = useState('');
+ const [notifyTitle, setNotifyTitle] = useState('');
+ const [notifyMessage, setNotifyMessage] = useState('');
+ const [isNotifying, setIsNotifying] = useState(false);
 
  useEffect(() => {
  if (activeTab === 'logs' && userRole === 'Super Admin') {
@@ -55,6 +60,18 @@ export default function AdminPortal() {
  fetchPayments();
  }
  }, [activeTab, userRole]);
+
+  const exportCSV = () => {
+    if (activeTab === 'users') {
+      downloadCSV(adminUsers, 'youthfest_admin_users');
+    } else if (activeTab === 'payments') {
+      downloadCSV(payments, 'youthfest_payments');
+    } else if (activeTab === 'visitors') {
+      downloadCSV(visitors, 'youthfest_visitors');
+    } else {
+      alert('CSV Export is only available for Visitors, Admin Users, and Payments tabs.');
+    }
+  };
 
  const downloadCSV = (data: any[], filename: string) => {
    if (!data || !data.length) return alert('No data to export');
@@ -120,6 +137,34 @@ export default function AdminPortal() {
  setIsRefunding(null);
  }
  };
+
+  const handleSendNotification = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!confirm(`Are you sure you want to drop an alert to ${notifyEmail}?`)) return;
+    setIsNotifying(true);
+    try {
+      const res = await fetch('/api/admin/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: notifyEmail,
+          title: notifyTitle,
+          message: notifyMessage,
+          adminPasskey: passkeyInput,
+          adminEmail: loggedInEmail
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to send notification');
+      alert('Notification dropped successfully!');
+      setNotifyTitle('');
+      setNotifyMessage('');
+    } catch (err: any) {
+      alert(err.message || 'Failed to send notification');
+    } finally {
+      setIsNotifying(false);
+    }
+  };
 
  const fetchAdminUsers = async () => {
  try {
@@ -274,26 +319,6 @@ export default function AdminPortal() {
  : true;
  return matchesSearch && matchesTrack;
  });
- const exportCSV = () => {
- const headers = ['Name', 'Email', 'Phone', 'College', 'Department', 'Year', 'Registered Events', 'Created At'];
- const csvContent = [
- headers.join(','),
- ...filteredVisitors.map(v => [
- `"${v.name}"`, `"${v.email}"`, `"${v.phone}"`, `"${v.college || ''}"`, `"${v.department || ''}"`,
- `"${v.year || ''}"`, `"${(v.registered_events || []).join('; ')}"`,
- `"${new Date(v.created_at).toLocaleString()}"`
- ].join(','))
- ].join('\n');
- const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
- const link = document.createElement('a');
- const url = URL.createObjectURL(blob);
- link.setAttribute('href', url);
- link.setAttribute('download', `yuvenza_registrations_${new Date().toISOString().split('T')[0]}.csv`);
- link.style.visibility = 'hidden';
- document.body.appendChild(link);
- link.click();
- document.body.removeChild(link);
- };
  const handleSaveEvent = async (e: React.FormEvent<HTMLFormElement>) => {
  e.preventDefault();
  const formData = new FormData(e.currentTarget);
@@ -1042,6 +1067,59 @@ export default function AdminPortal() {
             <Send className="w-5 h-5" />
           )}
           {isBroadcasting ? 'Sending...' : 'Send Broadcast'}
+        </button>
+      </form>
+
+      <hr className="my-10 border-white/10" />
+
+      <h2 className="text-2xl font-[var(--font-heading-main)] font-black mb-6 text-[var(--neon-magenta)] flex items-center gap-3">
+        <Bell className="w-6 h-6" /> Drop Dashboard Alert
+      </h2>
+      <form onSubmit={handleSendNotification} className="space-y-6">
+        <div>
+          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Participant Email</label>
+          <input 
+            type="email" 
+            required
+            value={notifyEmail}
+            onChange={(e) => setNotifyEmail(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-magenta)] outline-none"
+            placeholder="e.g. participant@example.com"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Alert Title</label>
+          <input 
+            type="text" 
+            required
+            value={notifyTitle}
+            onChange={(e) => setNotifyTitle(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-magenta)] outline-none"
+            placeholder="e.g. Missing ID Proof"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Alert Message</label>
+          <textarea 
+            required
+            rows={4}
+            value={notifyMessage}
+            onChange={(e) => setNotifyMessage(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-magenta)] outline-none resize-none"
+            placeholder="Please upload your college ID proof in the portal..."
+          />
+        </div>
+        <button 
+          type="submit" 
+          disabled={isNotifying}
+          className="w-full md:w-auto px-8 py-4 bg-[var(--neon-magenta)] text-black font-bold rounded-full hover:opacity-90 transition-opacity uppercase tracking-wider text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+        >
+          {isNotifying ? (
+            <Loader2 className="w-5 h-5 animate-spin text-black" />
+          ) : (
+            <Bell className="w-5 h-5 text-black" />
+          )}
+          {isNotifying ? 'Sending...' : 'Drop Dashboard Alert'}
         </button>
       </form>
     </div>
