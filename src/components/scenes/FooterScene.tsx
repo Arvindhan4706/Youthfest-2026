@@ -146,14 +146,16 @@ export default function FooterScene() {
             </div>
             {/* Socials */}
             <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Follow Us</h4>
-              <div className="flex flex-wrap gap-3">
-                <a href="#" aria-label="Instagram" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[var(--neon-magenta)] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,0,127,0.3)] transition-all duration-300"><InstagramIcon /></a>
-                <a href="#" aria-label="LinkedIn" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#0077B5] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,119,181,0.3)] transition-all duration-300"><LinkedinIcon /></a>
-                <a href="#" aria-label="Facebook" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1877F2] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(24,119,242,0.3)] transition-all duration-300"><FacebookIcon /></a>
-                <a href="#" aria-label="YouTube" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#FF0000] hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,0,0,0.3)] transition-all duration-300"><YoutubeIcon /></a>
-                <a href="#" aria-label="Twitter/X" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-black hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,255,255,0.2)] border border-transparent hover:border-white/20 transition-all duration-300"><TwitterXIcon /></a>
-              </div>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Stay Connected</h4>
+              <a 
+                href="https://instagram.com/yuvenza_2026" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F56040] text-white hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(253,29,29,0.3)] transition-all duration-300"
+              >
+                <InstagramIcon />
+                <span className="text-sm font-bold">Follow us on Instagram</span>
+              </a>
             </div>
           </motion.div>
 

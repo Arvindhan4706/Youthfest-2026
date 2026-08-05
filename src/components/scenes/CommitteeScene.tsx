@@ -38,11 +38,11 @@ const STUDENT_LEADS: CommitteeMember[] = [
     color: 'var(--neon-magenta)',
   },
   {
-    name: 'Rohan',
+    name: 'Roshan',
     role: 'Workshop Lead',
     department: 'Technical',
     contact: '+91 7339175315',
-    whatsapp: 'https://wa.me/917339175315?text=Hi%20Rohan,%20I%20have%20a%20query%20regarding%20Workshops',
+    whatsapp: 'https://wa.me/917339175315?text=Hi%20Roshan,%20I%20have%20a%20query%20regarding%20Workshops',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
     tag: 'Technical',
     color: 'var(--neon-violet)',
