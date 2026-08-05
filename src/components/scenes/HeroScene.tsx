@@ -214,7 +214,7 @@ export default function HeroScene() {
           className="mb-8 sm:mb-10"
         >
           <Image
-            src="/yuvenzalogo.png"
+            src="/hero-logo.png"
             alt="Yuvenza Event Logo"
             width={300}
             height={112}
