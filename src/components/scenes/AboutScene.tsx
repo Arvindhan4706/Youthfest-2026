@@ -264,31 +264,7 @@ export default function AboutScene() {
           </motion.div>
         </div>
 
-        {/* MOTTO */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9 }}
-          className="text-center relative rounded-3xl border border-white/[0.07] bg-white/[0.02] p-10 sm:p-14 md:p-20 overflow-hidden"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-cyan)]/[0.04] via-transparent to-[var(--neon-violet)]/[0.04] pointer-events-none" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[1px] bg-gradient-to-r from-transparent via-[var(--neon-cyan)]/30 to-transparent" />
-          <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[var(--neon-cyan)] mb-8">Core Motto</p>
-          <h3
-            className="font-[var(--font-heading-main)] font-black text-white mb-8 uppercase"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 6rem)', letterSpacing: '-0.02em', lineHeight: 1.0 }}
-          >
-            Create &amp;{' '}
-            <span className="bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
-              Contribute
-            </span>
-          </h3>
-          <p className="text-gray-400 max-w-2xl mx-auto leading-[1.85] text-base md:text-lg">
-            Together, we are building a community where passion inspires action, creativity drives innovation, and unity creates lasting impact.
-          </p>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[1px] bg-gradient-to-r from-transparent via-[var(--neon-violet)]/30 to-transparent" />
-        </motion.div>
+
 
       </div>
     </section>
