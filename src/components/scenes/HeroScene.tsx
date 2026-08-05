@@ -170,25 +170,7 @@ export default function HeroScene() {
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
       
-      {/* Featured Event Floating Card */}
-      <motion.div
-        initial={{ opacity: 0, x: 50, rotate: 10 }}
-        animate={{ opacity: 1, x: 0, rotate: 6, y: [0, -15, 0] }}
-        transition={{ 
-          opacity: { duration: 1, delay: 2.5 },
-          x: { duration: 1, delay: 2.5, type: 'spring' },
-          rotate: { duration: 1, delay: 2.5, type: 'spring' },
-          y: { duration: 8, repeat: Infinity, ease: "easeInOut", delay: 3.5 }
-        }}
-        className="absolute top-[20%] right-[5%] md:right-[15%] w-[200px] sm:w-[240px] rounded-2xl glass-strong p-4 pointer-events-none hidden sm:block z-10"
-      >
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-2 h-2 rounded-full bg-[var(--neon-cyan)] animate-pulse" />
-          <span className="text-[9px] uppercase tracking-wider text-[var(--neon-cyan)] font-bold">Featured Event</span>
-        </div>
-        <h4 className="text-white font-bold text-sm mb-1">Celestius Pro</h4>
-        <p className="text-gray-400 text-xs">The Ultimate AI Hackathon. ₹50,000 Prize Pool.</p>
-      </motion.div>
+
 
       <motion.div
         className="absolute bottom-[25%] left-[12%] w-6 h-6 md:w-8 md:h-8 bg-[var(--neon-violet)]/20 rotate-45 pointer-events-none"
