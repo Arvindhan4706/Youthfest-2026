@@ -191,13 +191,13 @@ export default function HeroScene() {
         className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none"
       >
         <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-start pt-12 gap-6 pb-8 opacity-[0.10]">
-          <div style={{ animationDuration: '40s' }} className="animate-marquee-reverse flex whitespace-nowrap text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter">
+          <div style={{ animationDuration: '40s' }} className="animate-marquee-reverse flex w-max whitespace-nowrap text-[10vw] font-[var(--font-heading-main)] font-black text-white">
             <span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span>
           </div>
-          <div style={{ animationDuration: '50s', WebkitTextStroke: '1px white' }} className="animate-marquee flex whitespace-nowrap text-[10vw] font-[var(--font-heading-main)] font-black text-transparent tracking-tighter">
+          <div style={{ animationDuration: '50s', WebkitTextStroke: '1px white' }} className="animate-marquee flex w-max whitespace-nowrap text-[10vw] font-[var(--font-heading-main)] font-black text-transparent">
             <span className="pr-16">YUVENZA · CIT</span><span className="pr-16">YUVENZA · CIT</span><span className="pr-16">YUVENZA · CIT</span><span className="pr-16">YUVENZA · CIT</span>
           </div>
-          <div style={{ animationDuration: '35s' }} className="animate-marquee-reverse flex whitespace-nowrap text-[10vw] font-[var(--font-heading-main)] font-black text-white tracking-tighter">
+          <div style={{ animationDuration: '35s' }} className="animate-marquee-reverse flex w-max whitespace-nowrap text-[10vw] font-[var(--font-heading-main)] font-black text-white">
             <span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span>
           </div>
         </div>
