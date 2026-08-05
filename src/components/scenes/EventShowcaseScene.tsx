@@ -527,26 +527,19 @@ export default function EventShowcaseScene() {
  {filteredEvents.length > 0 ? (
  <motion.div
  key={`${track.id}-grid`}
- initial="hidden"
- animate="show"
- exit="hidden"
- variants={{
-   hidden: { opacity: 0 },
-   show: { opacity: 1, transition: { staggerChildren: 0.1 } }
- }}
+ initial={{ opacity: 0, y: 20 }}
+ animate={{ opacity: 1, y: 0 }}
+ exit={{ opacity: 0, y: -20 }}
+ transition={{ duration: 0.4 }}
  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
  >
  {filteredEvents.map((event) => (
-  <motion.div key={event.id} variants={{
-    hidden: { opacity: 0, y: 30, scale: 0.95 },
-    show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }
-  }}>
-   <EventCard 
-   event={event} 
-   trackColor={track.color} 
-   onClick={() => setSelectedEvent(event)}
-   />
-  </motion.div>
+ <EventCard 
+ key={event.id} 
+ event={event} 
+ trackColor={track.color} 
+ onClick={() => setSelectedEvent(event)}
+ />
  ))}
  </motion.div>
  ) : (
