@@ -35,7 +35,7 @@ export const metadata: Metadata = {
  siteName: 'Yuvenza',
  images: [
  {
- url: '/og-image.jpg',
+ url: '/hero-logo.png',
  width: 1200,
  height: 630,
  alt: 'Yuvenza Official Banner',
@@ -43,6 +43,12 @@ export const metadata: Metadata = {
  ],
  locale: 'en_IN',
  type: "website",
+ },
+ twitter: {
+  card: 'summary_large_image',
+  title: 'YUVENZA 2026 | The Biggest Youth Festival',
+  description: '5000+ students. 50+ events. One legendary festival.',
+  images: ['/hero-logo.png'],
  },
  robots: {
     index: true,

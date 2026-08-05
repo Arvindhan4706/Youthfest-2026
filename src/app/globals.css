@@ -508,3 +508,27 @@ body {
   transform: translateY(-6px) scale(1.01);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
+
+/* Custom WebKit Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: var(--background);
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 5px;
+  border: 2px solid var(--background); /* Creates padding around the thumb */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-violet);
+}
+
+/* Firefox scrollbar support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border) var(--background);
+}

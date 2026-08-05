@@ -614,8 +614,9 @@ export default function AdminPortal() {
  { key: 'total_spots', label: 'Total Spots', type: 'number' }
  ].map(field => (
  <div key={field.key}>
- <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{field.label}</label>
+ <label htmlFor={field.key} className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{field.label}</label>
  <input
+ id={field.key}
  type={field.type}
  value={siteSettings[field.key] ?? ''}
  onChange={(e) => setSiteSettings({ ...siteSettings, [field.key]: e.target.value })}
@@ -625,8 +626,9 @@ export default function AdminPortal() {
  </div>
  ))}
  <div className="md:col-span-2">
- <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Workshops Status</label>
+ <label htmlFor="workshops_status" className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Workshops Status</label>
  <select
+   id="workshops_status"
    value={siteSettings.workshops_status || 'coming_soon'}
    onChange={(e) => setSiteSettings({ ...siteSettings, workshops_status: e.target.value })}
    className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-violet)] outline-none"
