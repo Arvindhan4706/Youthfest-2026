@@ -155,7 +155,7 @@ export default function Navbar() {
               />
             </Link>
             <Link href="/" aria-label="Yuvenza Home" className="group flex items-center gap-3">
-              <span className="font-[var(--font-heading-main)] font-extrabold text-xl leading-none tracking-wider bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-violet)] to-[var(--neon-magenta)] bg-clip-text text-transparent">
+              <span className="font-[var(--font-heading-main)] font-extrabold text-xl leading-none tracking-wider text-white">
                 YUVENZA
               </span>
             </Link>
