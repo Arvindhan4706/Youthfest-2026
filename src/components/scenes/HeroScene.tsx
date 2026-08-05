@@ -223,23 +223,7 @@ export default function HeroScene() {
           />
         </motion.div>
 
-        {/* Tagline pill */}
-        <motion.div
-          initial={{ opacity: 0, y: -20, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-          className="mb-8 sm:mb-10 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 w-full max-w-2xl"
-        >
-          <div className="hidden sm:block h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/30" />
-          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.25em] text-gray-400 whitespace-nowrap">
-            The Youth Club · Chennai Institute of Technology
-          </span>
-          <span className="hidden sm:inline text-white/30">·</span>
-          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.25em] text-gray-500 whitespace-nowrap">
-            Est. 2023
-          </span>
-          <div className="hidden sm:block h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/30" />
-        </motion.div>
+
 
         {/* Main heading — word-by-word clip-path reveal */}
         <div className="mb-4 sm:mb-6 overflow-visible perspective-1000">
