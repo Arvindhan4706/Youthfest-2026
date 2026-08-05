@@ -206,53 +206,25 @@ export default function HeroScene() {
       {/* Main content */}
       <div className="relative z-20 w-full max-w-5xl mx-auto text-center flex flex-col items-center px-5 sm:px-8 pt-24 pb-32 sm:pt-28 sm:pb-36 pointer-events-auto">
 
-        {/* Logo */}
+        {/* Logo (Replacing Text Heading) */}
         <motion.div
           initial={{ opacity: 0, scale: 0.7, filter: 'blur(10px)' }}
           animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="mb-8 sm:mb-10"
+          className="mb-8 sm:mb-12 mt-4"
         >
           <Image
             src="/hero-logo.png"
             alt="Yuvenza Event Logo"
-            width={300}
-            height={112}
+            width={800}
+            height={300}
             priority
-            className="w-[140px] sm:w-[180px] md:w-[240px] object-contain mx-auto"
+            className="w-[280px] sm:w-[400px] md:w-[550px] lg:w-[700px] object-contain mx-auto drop-shadow-2xl"
           />
         </motion.div>
 
 
 
-        {/* Main heading — word-by-word clip-path reveal */}
-        <div className="mb-4 sm:mb-6 overflow-visible perspective-1000">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col items-center"
-          >
-            {titleWords.map((word, wi) => (
-              <div key={wi} className="flex overflow-hidden" style={{ paddingBottom: '0.1em', marginBottom: wi === 0 ? '-0.05em' : 0 }}>
-                {word.split('').map((char, ci) => (
-                  <motion.span
-                    key={ci}
-                    variants={charVariants}
-                    className="inline-block font-[var(--font-heading-main)] font-black tracking-tight text-white leading-none uppercase"
-                    style={{
-                      fontSize: 'clamp(3rem, 16vw, 9.5rem)',
-                      display: 'inline-block',
-                      willChange: 'transform, opacity',
-                    }}
-                  >
-                    {char}
-                  </motion.span>
-                ))}
-              </div>
-            ))}
-          </motion.div>
-        </div>
 
         {/* Gradient subtitle */}
         <motion.p
