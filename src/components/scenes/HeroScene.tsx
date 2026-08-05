@@ -204,14 +204,14 @@ export default function HeroScene() {
       </motion.div>
 
       {/* Main content */}
-      <div className="relative z-20 w-full max-w-5xl mx-auto text-center flex flex-col items-center px-5 sm:px-8 pt-24 pb-32 sm:pt-28 sm:pb-36 pointer-events-auto">
+      <div className="relative z-20 w-full max-w-5xl mx-auto text-center flex flex-col items-center px-5 sm:px-8 pt-16 pb-32 sm:pt-20 sm:pb-36 pointer-events-auto">
 
         {/* Logo (Replacing Text Heading) */}
         <motion.div
           initial={{ opacity: 0, scale: 0.7, filter: 'blur(10px)' }}
           animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="mb-8 sm:mb-12 mt-4"
+          className="mb-2 sm:mb-4"
         >
           <Image
             src="/hero-logo.png"
