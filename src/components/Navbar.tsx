@@ -171,7 +171,7 @@ export default function Navbar() {
 
           {/* ── Desktop Center Nav ── */}
           <div className="hidden md:flex items-center gap-6 flex-1 justify-center" role="menubar">
-            {navLinks.map((link) => {
+            {navLinks.filter(link => !(link.action === 'register' && user)).map((link) => {
               const active = isLinkActive(link);
               return (
                 <Link
@@ -318,7 +318,7 @@ export default function Navbar() {
           >
             {/* Nav links */}
             <nav aria-label="Mobile navigation" className="flex flex-col gap-1">
-              {navLinks.map((link, i) => {
+              {navLinks.filter(link => !(link.action === 'register' && user)).map((link, i) => {
                 const active = isLinkActive(link);
                 return (
                   <motion.div
