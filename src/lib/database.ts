@@ -38,6 +38,7 @@ export interface SiteSettings {
   prize_pool: number;
   colleges: number;
   workshops: number;
+  workshops_status: 'coming_soon' | 'active';
   first_prize: number;
   second_prize: number;
   third_prize: number;
@@ -422,6 +423,7 @@ export const db = {
       prize_pool: 2,
       colleges: 100,
       workshops: 10,
+      workshops_status: 'coming_soon' as const,
       first_prize: 50000,
       second_prize: 25000,
       third_prize: 10000,

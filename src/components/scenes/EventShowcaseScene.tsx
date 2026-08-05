@@ -340,11 +340,18 @@ export default function EventShowcaseScene() {
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
   const [dbEvents, setDbEvents] = useState<EventItem[]>([]);
   const [isFetchingEvents, setIsFetchingEvents] = useState(true);
+  const [siteSettings, setSiteSettings] = useState<any>(null);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchData = async () => {
       try {
-        const events = await db.getAllEvents();
+        const [events, settings] = await Promise.all([
+          db.getAllEvents(),
+          db.getSiteSettings()
+        ]);
+        if (settings) {
+          setSiteSettings(settings);
+        }
         if (events && events.length > 0) {
           const mappedEvents: EventItem[] = events.map(e => ({
             id: e.id,
@@ -370,7 +377,7 @@ export default function EventShowcaseScene() {
         setIsFetchingEvents(false);
       }
     };
-    fetchEvents();
+    fetchData();
   }, []);
 
   const TRACKS = useMemo(() => {
@@ -524,7 +531,21 @@ export default function EventShowcaseScene() {
  </AnimatePresence>
  {/* Event cards grid */}
  <AnimatePresence mode="wait">
- {filteredEvents.length > 0 ? (
+ {track.id === 'workshops' && siteSettings?.workshops_status === 'coming_soon' ? (
+  <motion.div 
+  key="coming-soon"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+  className="section-padding text-center flex flex-col items-center justify-center min-h-[300px]"
+  >
+  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
+  <Sparkles className="w-6 h-6 text-[var(--neon-violet)]" />
+  </div>
+  <h3 className="text-2xl text-white font-bold mb-2">Workshops Coming Soon</h3>
+  <p className="text-gray-400">Our expert-led workshops are currently being finalized. Stay tuned for announcements!</p>
+  </motion.div>
+  ) : filteredEvents.length > 0 ? (
  <motion.div
  key={`${track.id}-grid`}
  initial={{ opacity: 0, y: 20 }}

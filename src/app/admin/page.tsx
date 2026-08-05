@@ -244,7 +244,7 @@ export default function AdminPortal() {
  setIsSavingSettings(true);
  // Convert any string values (from typing) back to integers before saving
  const sanitizedSettings = { ...siteSettings };
- const stringKeys = ['id', 'updated_at'];
+ const stringKeys = ['id', 'updated_at', 'workshops_status'];
  
  // Remove deleted schema fields to prevent backend errors
  delete sanitizedSettings.contact_institute;
@@ -624,6 +624,17 @@ export default function AdminPortal() {
  />
  </div>
  ))}
+ <div className="md:col-span-2">
+ <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Workshops Status</label>
+ <select
+   value={siteSettings.workshops_status || 'coming_soon'}
+   onChange={(e) => setSiteSettings({ ...siteSettings, workshops_status: e.target.value })}
+   className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-violet)] outline-none"
+ >
+   <option value="coming_soon">Coming Soon</option>
+   <option value="active">Active</option>
+ </select>
+ </div>
  <div className="md:col-span-2 pt-4">
  <button
  type="submit"
