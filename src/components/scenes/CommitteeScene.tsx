@@ -108,20 +108,7 @@ function MemberCard({ member, idx }: { member: CommitteeMember; idx: number }) {
 
         {/* Profile */}
         <div className="flex flex-col items-start gap-4 mb-6">
-          <div className="relative">
-            <div
-              className="absolute -inset-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
-              style={{ background: member.color }}
-            />
-            <Image
-              src={member.avatar}
-              alt={member.name}
-              width={64}
-              height={64}
-              className="relative w-16 h-16 rounded-2xl object-cover border border-white/10 group-hover:scale-105 transition-transform duration-300"
-            />
-            <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-[#020a0c] rounded-full" />
-          </div>
+
           <div>
             <h3 className="text-white font-bold text-base leading-tight group-hover:text-[var(--neon-cyan)] transition-colors" style={{ letterSpacing: '-0.01em' }}>
               {member.name}
