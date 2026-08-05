@@ -17,7 +17,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
  title: "Yuvenza | The Youth Club of CIT",
  description:
- "Yuvenza is the official youth club of Chennai Institute of Technology, dedicated to igniting passion, creativity, and unity while transforming every event into an opportunity to create meaningful social impact.",
+ "Yuvenza is the official youth club of Chennai Institute of Technology. What we create, we contribute, transforming every event into an opportunity to create meaningful social impact.",
  keywords: [
  "youth festival 2026",
  "yuvenza",

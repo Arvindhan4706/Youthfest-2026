@@ -21,7 +21,7 @@ const TESTIMONIALS: Testimonial[] = [
   },
   {
     id: 't-2',
-    quote: 'Igniting passion, creativity, and unity is more than our slogan — it\'s the spirit that drives every initiative we undertake.',
+    quote: '"What we create, we contribute" is more than our slogan — it\'s the spirit that drives every initiative we undertake.',
     author: 'Our Volunteers',
     role: '200+ Strong',
     color: '#a78bfa',

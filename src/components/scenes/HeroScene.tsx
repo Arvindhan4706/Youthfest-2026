@@ -282,7 +282,7 @@ export default function HeroScene() {
           transition={{ duration: 1, delay: 1.6, ease: "easeOut" }}
           className="text-base sm:text-xl md:text-2xl font-[var(--font-heading-main)] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[var(--neon-cyan)] via-white/80 to-[var(--neon-magenta)] mb-8 sm:mb-10 tracking-tight"
         >
-          Igniting Passion, Creativity &amp; Unity.
+          WHAT WE CREATE WE CONTRIBUTE
         </motion.p>
 
         {/* Date badge */}
