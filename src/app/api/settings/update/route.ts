@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     }
 
     const stringKeys = [
-      'contact_institute', 'contact_address', 'contact_email', 'contact_phone', 'contact_whatsapp'
+      'contact_institute', 'contact_address', 'contact_email', 'contact_phone', 'contact_whatsapp', 'workshops_status'
     ];
     for (const key of stringKeys) {
       if (key in settings && settings[key] !== undefined) {
