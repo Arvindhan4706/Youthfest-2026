@@ -35,6 +35,44 @@ const defaultRules = [
  "Decisions made by the judges will be final and binding.",
  "Any form of indiscipline or rule violation will lead to immediate disqualification."
 ];
+const pickleballRules = [
+  "Each team member must have their own teammate (must register as a pair).",
+  "The games will be played for 5 points, except for the finals, which will be a best of 3 (first to 2 points), where each game is also played for 5 points.",
+  "ALL GAMES WILL BE PLAYED IN STANDARD PICKLEBALL RULES.",
+  "The teams are expected to be on time to the venue. The games will start from 12 PM and the final game will be held at 3 PM.",
+  "All teams are to abide by the ruling given by referees, which will be final.",
+  "The teams that are given during registration are final; no changes in teams will be made once the registrations are closed.",
+  "THE SERVE: Each team, while serving, must have both of their members behind the baseline.",
+  "THE SERVE: The serve must land diagonally crosscourt, past the kitchen line.",
+  "THE SERVE: The paddle head must stay below the server’s wrist and the serve must be hit with an UNDERHAND MOTION.",
+  "THE SERVE: After the ball is served, the receiving team must let it bounce once before returning it. The serving team must also let the return bounce before hitting it.",
+  "THE SERVE: After these two first bounces, the players can hit the ball in a volley manner.",
+  "THE KITCHEN: Volleying is prohibited within the non-volley zone.",
+  "THE KITCHEN: It is a fault if, when volleying a ball, the player steps on the non-volley zone, or if momentum carries them into it."
+];
+
+const sudokuRules = [
+  "Each participant competes individually; no assistance or external devices are allowed.",
+  "Standard 9x9 Sudoku grid rules apply.",
+  "Participants have 20 minutes to complete the puzzle.",
+  "The first participant to correctly complete the puzzle is declared the winner; the second to finish correctly is the runner-up.",
+  "The organizer's decision on completion and correctness is final."
+];
+
+const chessRules = [
+  "Standard FIDE chess rules apply.",
+  "Each match is played under a 10-minute time limit (rapid format).",
+  "The touch-move rule applies.",
+  "Matches are decided by standard win, draw, or loss scoring.",
+  "The organizer's/arbiter's decision is final."
+];
+
+const footballRules = [
+  "1 player in goal, 6 players on the field.",
+  "Referee's call is final – no arguments.",
+  "Only one substitution allowed per half."
+];
+
 const TRACKS_TEMPLATE: Omit<Track, 'events'>[] = [
  {
  id: 'pre-events',
@@ -319,13 +357,14 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
   { id: 'main-2', track_id: 'main-events', title: 'Case Closed', desc: 'A murder mystery where you act as the detective to find the culprit.', team: '2-4', fee: '₹200', difficulty: 'Medium', image: '/event-images/case_closed.png', date: 'August 21 - 02:00 PM', venue: 'Seminar Hall 1', rules: defaultRules },
   { id: 'main-3', track_id: 'main-events', title: '7 Keys', desc: 'An escape room style treasure hunt. Find the 7 glowing magical keys.', team: '3-5', fee: '₹250', difficulty: 'Hard', image: '/event-images/seven_keys.png', date: 'August 21 - 01:00 PM', venue: 'Campus Ground', rules: defaultRules },
   { id: 'main-4', track_id: 'main-events', title: 'Cypher', desc: 'The ultimate 24-hour hackathon. Code your way to victory.', team: '2-4', fee: '₹300', difficulty: 'Hard', image: '/event-images/cypher.png', date: 'August 21 - 09:00 AM', venue: 'Tech Lab 4', rules: defaultRules },
+  { id: 'main-5', track_id: 'main-events', title: 'Mock Parliament', desc: 'Got strong opinions? Step into the shoes of a parliamentarian and debate the real issues that actually matter.', team: '1', fee: '₹100', difficulty: 'Medium', image: '/event-images/mock_parliament.png', date: 'August 21 - 10:00 AM', venue: 'Auditorium', rules: defaultRules },
   // Pre Events
-  { id: 'pre-1', track_id: 'main-events', title: 'Mock Parliament', desc: 'Debate on national issues in this intense mock parliament.', team: '1', fee: '₹100', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 10:00 AM', venue: 'Auditorium', rules: defaultRules },
-  { id: 'pre-2', track_id: 'pre-events', title: 'Charity Match', desc: 'A football match for a good cause. Show your sportsmanship!', team: '11', fee: '₹500', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 04:00 PM', venue: 'Football Ground', rules: defaultRules },
-  { id: 'pre-3', track_id: 'pre-events', title: 'Chess', desc: 'Intense chess tournament. Outsmart your opponents.', team: '1', fee: '₹100', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 09:00 AM', venue: 'Indoor Stadium', rules: defaultRules },
-  { id: 'pre-4', track_id: 'pre-events', title: 'Pickle Ball', desc: 'Fast-paced pickleball action. Grab your paddles!', team: '2', fee: '₹150', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 02:00 PM', venue: 'Tennis Court', rules: defaultRules },
+  { id: 'pre-1', track_id: 'pre-events', title: 'Sudoku', desc: 'Test your logic in this fast-paced 20-minute Sudoku challenge. Max 50 registrations.', team: '1', fee: 'Free', difficulty: 'Medium', image: '/event-images/sudoku.png', date: 'August 12 - 10:00 AM', venue: 'Classroom Block', rules: sudokuRules },
+  { id: 'pre-2', track_id: 'pre-events', title: 'Charity Match', desc: 'A football match for a good cause. 7-a-side with 3 substitutes. Max 16 teams.', team: '10', fee: '₹200', difficulty: 'Medium', image: '/event-images/football.png', date: 'August 17-19 - 09:00 AM', venue: 'Football Ground', rules: footballRules },
+  { id: 'pre-3', track_id: 'pre-events', title: 'Chess', desc: 'Intense rapid chess tournament (10 mins/game). Max 60 registrations.', team: '1', fee: 'Free', difficulty: 'Hard', image: '/event-images/chess.png', date: 'August 13 - 10:00 AM', venue: 'Indoor Stadium', rules: chessRules },
+  { id: 'pre-4', track_id: 'pre-events', title: 'Pickle Ball', desc: 'Fast-paced pickleball action. Grab your paddles! 32 teams of doubles.', team: '2', fee: '₹50', difficulty: 'Medium', image: '/event-images/pickle_ball.png', date: 'August 18-19 - 12:00 PM', venue: 'Pickleball Court', rules: pickleballRules },
   // Workshops
-  { id: 'ws-1', track_id: 'workshops', title: 'Calistro', desc: 'Hands-on workshop on Calistro creative design, UI/UX aesthetics & digital arts.', team: '1', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1517048676732-d68078c60243?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 10:00 AM', venue: 'Seminar Hall A', rules: defaultRules },
+  { id: 'ws-1', track_id: 'workshops', title: 'Calistro', desc: 'Hands-on workshop on Calistro creative design, UI/UX aesthetics & digital arts.', team: '1', fee: '₹250', difficulty: 'Medium', image: '/event-images/calistro.png', date: 'August 21 - 10:00 AM', venue: 'Seminar Hall A', rules: defaultRules },
   { id: 'ws-2', track_id: 'workshops', title: 'AIDS', desc: 'Artificial Intelligence & Data Science hands-on masterclass on machine learning models.', team: '1-2', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 02:00 PM', venue: 'AI Super Lab', rules: defaultRules },
   { id: 'ws-3', track_id: 'workshops', title: 'Resolution', desc: 'Mastering high-resolution media processing, 3D visualization, and digital content creation.', team: '1', fee: '₹200', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 11:30 AM', venue: 'Media Studio', rules: defaultRules },
   { id: 'ws-4', track_id: 'workshops', title: 'Asymmetric', desc: 'Advanced cybersecurity, asymmetric cryptography, and ethical hacking intensive workshop.', team: '1-2', fee: '₹300', difficulty: 'Hard', image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 01:30 PM', venue: 'Cyber Security Lab', rules: defaultRules },

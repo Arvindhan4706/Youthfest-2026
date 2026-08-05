@@ -51,9 +51,7 @@ export default function GalleryPage() {
         {/* ── HERO ── */}
         <section className="relative pt-36 pb-20 px-4 text-center overflow-hidden"
           style={{ background: 'radial-gradient(ellipse at 50% -10%, #0a0030 0%, #010010 60%, #000000 100%)' }}>
-          <div className="absolute inset-0 opacity-5 pointer-events-none"
-            style={{ backgroundImage: 'linear-gradient(rgba(0,240,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.2) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[var(--neon-violet)]/10 rounded-full blur-[100px]" />
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[var(--neon-magenta)]/10 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="relative z-10 container-responsive">
             <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}

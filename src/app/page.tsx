@@ -8,9 +8,9 @@ const HeroScene = dynamic(() => import('../components/scenes/HeroScene'), { ssr:
 const StatsBarScene = dynamic(() => import('../components/scenes/StatsBarScene'), { ssr: false });
 const PrizePoolScene = dynamic(() => import('../components/scenes/PrizePoolScene'), { ssr: false });
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
-const SpeakersScene = dynamic(() => import('../components/scenes/SpeakersScene'), { ssr: false });
+
 const CommitteeScene = dynamic(() => import('../components/scenes/CommitteeScene'), { ssr: false });
-const SponsorsScene = dynamic(() => import('../components/scenes/SponsorsScene'), { ssr: false });
+
 const CountdownCTAScene = dynamic(() => import('../components/scenes/CountdownCTAScene'), { ssr: false });
 const FooterScene = dynamic(() => import('../components/scenes/FooterScene'), { ssr: false });
 const BackToTop = dynamic(() => import('../components/BackToTop'), { ssr: false });
@@ -32,9 +32,7 @@ export default function Home() {
           <MemoriesScene />
         </LazyScene>
 
-        <LazyScene placeholderHeight={600}>
-          <SpeakersScene />
-        </LazyScene>
+
 
         <LazyScene placeholderHeight={600}>
           <CommitteeScene />
@@ -44,9 +42,7 @@ export default function Home() {
           <PrizePoolScene />
         </LazyScene>
 
-        <LazyScene placeholderHeight={400}>
-          <SponsorsScene />
-        </LazyScene>
+
 
         <LazyScene placeholderHeight={500}>
           <CountdownCTAScene />

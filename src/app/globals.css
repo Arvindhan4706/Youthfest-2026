@@ -469,21 +469,14 @@ body {
 }
 /* Grid background pattern */
 .bg-grid {
- background-image:
- linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
- linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
- background-size: 4rem 4rem;
+  background-image: none !important;
 }
 .bg-grid-dense {
- background-image:
- linear-gradient(to right, rgba(0,240,255,0.04) 1px, transparent 1px),
- linear-gradient(to bottom, rgba(0,240,255,0.04) 1px, transparent 1px);
- background-size: 2rem 2rem;
+  background-image: none !important;
 }
 /* Dot background pattern */
 .bg-dots {
- background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
- background-size: 28px 28px;
+  background-image: none !important;
 }
 /* Hide scrollbar utility */
 .scrollbar-none {
