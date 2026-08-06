@@ -9,6 +9,7 @@ function ProfileForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setUser = useStore(state => state.setUser);
+  const addToast = useStore(state => state.addToast);
   
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -70,11 +71,8 @@ function ProfileForm() {
         });
       } catch (err) {}
 
-      if (data.paymentLinkUrl) {
-        window.location.href = data.paymentLinkUrl;
-      } else {
-        router.push('/');
-      }
+      addToast('Profile completed successfully! Welcome to Yuvenza \'26.');
+      router.push('/');
     } catch (err: any) {
       setError(err.message);
       setIsLoading(false);
