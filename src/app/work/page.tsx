@@ -36,32 +36,7 @@ const WHAT_WE_DO = [
   },
 ];
 
-const PROCESS_STEPS = [
-  {
-    number: '01',
-    title: 'Vision & Planning',
-    desc: 'Every Yuvenza begins months in advance. The core committee comes together to set the theme, goals, and structure for the upcoming edition.',
-    color: 'var(--neon-cyan)',
-  },
-  {
-    number: '02',
-    title: 'Team Formation',
-    desc: 'We recruit and train passionate student volunteers across departments — creative, technical, logistics, outreach, and more.',
-    color: 'var(--neon-violet)',
-  },
-  {
-    number: '03',
-    title: 'Content Creation',
-    desc: 'Our teams craft every event, branding asset, social media campaign, and on-ground experience from scratch.',
-    color: 'var(--neon-magenta)',
-  },
-  {
-    number: '04',
-    title: 'Execution & Impact',
-    desc: 'We bring it all together on the big days — managing thousands of participants with precision, energy, and heart.',
-    color: 'var(--neon-lime)',
-  },
-];
+
 
 const IMPACT_STATS = [
   { value: '3', label: 'Editions Completed', suffix: '' },
@@ -93,7 +68,7 @@ export default function WorkPage() {
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/5 text-xs text-[var(--neon-cyan)] font-semibold uppercase tracking-widest mb-6"
           >
-            Behind the Festival
+            The Making of Yuvenza
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -101,9 +76,9 @@ export default function WorkPage() {
             transition={{ delay: 0.1 }}
             className="text-5xl sm:text-6xl lg:text-7xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider mb-6"
           >
-            The Journey{' '}
+            Crafting The{' '}
             <span className="bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-violet)] bg-clip-text text-transparent">
-              Behind Yuvenza
+              Experience
             </span>
           </motion.h1>
           <motion.p
@@ -123,6 +98,9 @@ export default function WorkPage() {
             From brainstorming ideas and designing experiences to organizing competitions and managing thousands of participants, every aspect of Yuvenza reflects innovation, teamwork, and excellence. Our work is driven by students who transform ideas into reality.
           </motion.p>
         </section>
+
+        {/* ── MEMORIES / GALLERY ── */}
+        <MemoriesScene />
 
         {/* ── WHAT WE DO ── */}
         <section className="relative py-24 bg-[#030010]">
@@ -181,47 +159,6 @@ export default function WorkPage() {
             </div>
           </div>
         </section>
-
-        {/* ── OUR PROCESS ── */}
-        <section className="py-24 bg-[#030010]">
-          <div className="container-responsive">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--neon-lime)]/30 bg-[var(--neon-lime)]/5 text-xs text-[var(--neon-lime)] font-semibold uppercase tracking-widest mb-4">
-                How We Work
-              </div>
-              <h2 className="text-4xl font-[var(--font-heading-main)] font-black text-white uppercase tracking-wider">Our Process</h2>
-            </div>
-            <div className="relative">
-              {/* Vertical line */}
-              <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[var(--neon-cyan)] via-[var(--neon-violet)] to-transparent opacity-20 hidden sm:block" />
-              <div className="space-y-12">
-                {PROCESS_STEPS.map((step, i) => (
-                  <motion.div
-                    key={step.number}
-                    initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className={`relative flex flex-col md:flex-row items-start md:items-center gap-8 ${i % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}
-                  >
-                    <div className={`flex-1 p-8 rounded-3xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20 transition-all duration-300 ${i % 2 !== 0 ? 'md:text-right' : ''}`}>
-                      <div className="text-sm font-mono font-bold mb-2" style={{ color: step.color }}>{step.number}</div>
-                      <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
-                      <p className="text-gray-400 leading-relaxed">{step.desc}</p>
-                    </div>
-                    <div className="flex-shrink-0 w-16 h-16 rounded-full border-2 flex items-center justify-center font-black font-mono text-lg z-10 bg-black" style={{ borderColor: step.color, color: step.color }}>
-                      {step.number}
-                    </div>
-                    <div className="flex-1 hidden md:block" />
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── MEMORIES / GALLERY ── */}
-        <MemoriesScene />
 
         {/* ── CALL TO ACTION ── */}
         <section className="py-24 text-center px-4">

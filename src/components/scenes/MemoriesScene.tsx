@@ -18,17 +18,20 @@ interface GalleryItem {
 }
 
 const GALLERY_IMAGES: GalleryItem[] = [
-  { id: 1, type: 'image', url: '/memories/christmas23_orphanage.jpeg', title: 'Christmas Orphanage Visit', year: '2023', desc: 'Bringing joy to the little ones during our first Christmas drive.', rotationClass: '-rotate-3', translateClass: 'translate-y-4' },
-  { id: 2, type: 'image', url: '/memories/christmas_visit.jpeg', title: 'Christmas Drive', year: '2023', desc: 'Spreading holiday cheer and warmth in the community.', rotationClass: 'rotate-2', translateClass: '-translate-y-2' },
-  { id: 3, type: 'image', url: '/memories/yf23_visit.jpeg', title: 'YouthFest \'23 Visit', year: '2023', desc: 'Connecting with our roots and building the Yuvenza family.', rotationClass: '-rotate-6', translateClass: 'translate-y-6' },
-  { id: 4, type: 'image', url: '/memories/yf24_new.jpeg', title: 'YouthFest \'24', year: '2024', desc: 'A massive celebration of youth, talent, and unstoppable energy.', rotationClass: 'rotate-6', translateClass: '-translate-y-4' },
-  { id: 5, type: 'image', url: '/memories/yf24_orphanage.jpeg', title: 'YF24 Orphanage Visit', year: '2024', desc: 'Giving back to the society, one smile at a time.', rotationClass: '-rotate-2', translateClass: 'translate-y-2' },
-  { id: 6, type: 'image', url: '/memories/marathon_new.jpeg', title: 'College Marathon', year: '2024', desc: 'Early mornings, crazy energy, and a campus united.', rotationClass: 'rotate-3', translateClass: '-translate-y-1' },
-  { id: 7, type: 'image', url: '/memories/panel_discussion.jpeg', title: 'Panel Discussion', year: '2024', desc: 'Engaging conversations, real insights, and eye-opening moments.', rotationClass: '-rotate-12', translateClass: 'translate-y-8' },
-  { id: 8, type: 'image', url: '/memories/republic_day.jpeg', title: 'Republic Day Parade', year: '2024', desc: 'Marching together with pride and immense patriotic spirit.', rotationClass: 'rotate-1', translateClass: '-translate-y-3' },
-  { id: 9, type: 'image', url: '/memories/only_founders.jpeg', title: 'OnlyFounders Hackathon', year: '2024', desc: 'Our first major tech leap where students built startups overnight.', rotationClass: 'rotate-6', translateClass: '-translate-y-6' },
-  { id: 10, type: 'image', url: '/memories/whatsapp1.jpeg', title: 'Team Memories', year: '2025', desc: 'The incredible backbone of YouthFest working behind the scenes.', rotationClass: '-rotate-3', translateClass: 'translate-y-2' },
-  { id: 11, type: 'image', url: '/memories/whatsapp10.jpeg', title: 'Event Highlights', year: '2025', desc: 'Unforgettable moments that defined the year for all of us.', rotationClass: 'rotate-12', translateClass: 'translate-y-5' },
+  { id: 1, type: 'image', url: '/memories/pdf_img_page2_1.jpeg', title: 'Youth Fest \'24', year: '2024', desc: 'Expanding creative footprint with Actress Keerthy Suresh as chief guest.', rotationClass: '-rotate-3', translateClass: 'translate-y-4' },
+  { id: 2, type: 'image', url: '/memories/pdf_img_page3_1.jpeg', title: 'YF\'24 Orphanage Visit', year: '2024', desc: 'Distributing educational kits and everyday necessities to children.', rotationClass: 'rotate-2', translateClass: '-translate-y-2' },
+  { id: 3, type: 'image', url: '/memories/pdf_img_page3_2.jpeg', title: 'Panel Discussion', year: '2024', desc: 'Educational panel designed to break social stigmas and spread awareness.', rotationClass: '-rotate-6', translateClass: 'translate-y-6' },
+  { id: 4, type: 'image', url: '/memories/pdf_img_page4_1.jpeg', title: 'Christmas \'24 Drive', year: '2024', desc: 'Celebrating alongside children, bringing warmth and festive joy.', rotationClass: 'rotate-6', translateClass: '-translate-y-4' },
+  { id: 5, type: 'image', url: '/memories/pdf_img_page4_2.jpeg', title: 'Republic Day \'25', year: '2025', desc: 'Traditional flag hoisting and parade fostering civic pride and teamwork.', rotationClass: '-rotate-2', translateClass: 'translate-y-2' },
+  { id: 6, type: 'image', url: '/memories/pdf_img_page5_1.jpeg', title: 'Souls for Souls', year: '2025', desc: 'Drug-Free Society Marathon mobilizing youth against substance abuse.', rotationClass: 'rotate-3', translateClass: '-translate-y-1' },
+  { id: 7, type: 'image', url: '/memories/pdf_img_page5_2.jpeg', title: 'Alumni Reunion \'25', year: '2025', desc: 'Nostalgic atmosphere for alumni to reconnect with faculty and peers.', rotationClass: '-rotate-12', translateClass: 'translate-y-8' },
+  { id: 8, type: 'image', url: '/memories/pdf_img_page6_3.jpeg', title: 'Youth Fest \'25', year: '2025', desc: 'Massive success witnessing over 3,000 student registrations.', rotationClass: 'rotate-1', translateClass: '-translate-y-3' },
+  { id: 9, type: 'image', url: '/memories/pdf_img_page6_2.jpeg', title: 'Blind School Visit', year: '2025', desc: 'Distributing tailored educational tools to support visual accessibility.', rotationClass: 'rotate-6', translateClass: '-translate-y-6' },
+  { id: 10, type: 'image', url: '/memories/pdf_img_page7_1.jpeg', title: 'Onam Celebration \'25', year: '2025', desc: 'Vibrant display of cultural unity embracing traditions of Kerala.', rotationClass: '-rotate-3', translateClass: 'translate-y-2' },
+  { id: 11, type: 'image', url: '/memories/pdf_img_page8_2.jpeg', title: 'Girls Home Visit', year: '2025', desc: 'Donation drive honoring the festive season with community care.', rotationClass: 'rotate-12', translateClass: 'translate-y-5' },
+  { id: 12, type: 'image', url: '/memories/pdf_img_page8_4.jpeg', title: 'Republic Day \'26', year: '2026', desc: 'Mock Parliament enhancing critical reasoning and public expression.', rotationClass: '-rotate-6', translateClass: 'translate-y-3' },
+  { id: 13, type: 'image', url: '/memories/pdf_img_page9_4.jpeg', title: 'Sports Day \'26', year: '2026', desc: 'Dynamic athletic competitions promoting physical fitness and teamwork.', rotationClass: 'rotate-2', translateClass: '-translate-y-4' },
+  { id: 14, type: 'image', url: '/memories/pdf_img_page9_2.jpeg', title: 'OnlyFounders Hackathon', year: '2026', desc: 'High-impact hackathon fostering inter-collegiate technical innovation.', rotationClass: '-rotate-2', translateClass: 'translate-y-1' },
 ];
 
 // 3D Tilt card component

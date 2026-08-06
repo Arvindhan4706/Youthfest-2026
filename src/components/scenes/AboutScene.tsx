@@ -96,7 +96,7 @@ export default function AboutScene() {
                 <h3 className="text-base font-bold text-white" style={{ letterSpacing: '-0.01em' }}>Introduction</h3>
               </div>
               <p className="text-gray-400 leading-[1.85] text-sm sm:text-base">
-                Yuvenza is the official youth club of Chennai Institute of Technology, established with the vision of empowering students through leadership, creativity, and meaningful community engagement.
+                Yuvenza is the official student-driven youth club of Chennai Institute of Technology (CIT). It is dedicated to harnessing student energy, creativity, and passion to drive constructive social impact. Functioning as an institutional platform for extracurricular engagement and community outreach, Yuvenza mobilizes resources generated through campus-wide cultural and social events to support crucial social causes and civic-welfare initiatives.
               </p>
             </motion.div>
 
@@ -111,10 +111,10 @@ export default function AboutScene() {
                 <div className="w-9 h-9 rounded-xl bg-[var(--neon-violet)]/10 flex items-center justify-center text-[var(--neon-violet)]">
                   <Zap className="w-4 h-4" />
                 </div>
-                <h3 className="text-base font-bold text-white" style={{ letterSpacing: '-0.01em' }}>Our Story</h3>
+                <h3 className="text-base font-bold text-white" style={{ letterSpacing: '-0.01em' }}>Our Objectives</h3>
               </div>
               <p className="text-gray-400 leading-[1.85] text-sm sm:text-base">
-                We believe every student has the potential to inspire change. Through cultural events, awareness campaigns, social initiatives, and collaborative projects, we provide a platform where passion meets purpose.
+                Through well-organized festivals, awareness campaigns, and community-service efforts, the club fosters leadership, social responsibility, and inclusiveness. Yuvenza stands as a vital bridge between academic life and social consciousness, cultivating a deep sense of civic duty, teamwork, and value-based leadership in students.
               </p>
             </motion.div>
           </div>
