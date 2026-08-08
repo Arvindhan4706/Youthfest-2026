@@ -244,7 +244,7 @@ export default function AdminPortal() {
  setIsSavingSettings(true);
  // Convert any string values (from typing) back to integers before saving
  const sanitizedSettings = { ...siteSettings };
- const stringKeys = ['id', 'updated_at', 'workshops_status'];
+ const stringKeys = ['id', 'updated_at', 'workshops_status', 'pre_events_form_link'];
  
  // Remove deleted schema fields to prevent backend errors
  delete sanitizedSettings.contact_institute;
@@ -362,6 +362,7 @@ export default function AdminPortal() {
  image_url: (formData.get('image_url') as string).trim(),
  event_date: (formData.get('event_date') as string).trim(),
  venue: (formData.get('venue') as string).trim(),
+ gform_link: (formData.get('gform_link') as string)?.trim() || undefined,
  rules: rulesStr ? rulesStr.split('\n').map(r => r.trim()).filter(Boolean) : []
  };
  try {
@@ -607,6 +608,7 @@ export default function AdminPortal() {
  { key: 'prize_pool', label: 'Prize Pool in Lakhs (2L+)', type: 'number' },
  { key: 'colleges', label: 'Colleges (100+)', type: 'number' },
  { key: 'workshops', label: 'Workshops (10+)', type: 'number' },
+ { key: 'pre_events_form_link', label: 'Pre-Events GForm Link', type: 'text' },
  { key: 'first_prize', label: '1st Prize Amount (₹)', type: 'number' },
  { key: 'second_prize', label: '2nd Prize Amount (₹)', type: 'number' },
  { key: 'third_prize', label: '3rd Prize Amount (₹)', type: 'number' },
@@ -1045,6 +1047,10 @@ export default function AdminPortal() {
  <div className="md:col-span-2">
  <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Image URL</label>
  <input name="image_url" defaultValue={editingEvent?.image_url} required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" />
+ </div>
+ <div className="md:col-span-2">
+ <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Google Form Link (Pre-Events Only)</label>
+ <input name="gform_link" defaultValue={editingEvent?.gform_link} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://forms.gle/..." />
  </div>
  <div className="md:col-span-2">
  <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Rules (One per line)</label>

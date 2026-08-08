@@ -39,6 +39,7 @@ export interface SiteSettings {
   colleges: number;
   workshops: number;
   workshops_status: 'coming_soon' | 'active';
+  pre_events_form_link?: string;
   first_prize: number;
   second_prize: number;
   third_prize: number;
@@ -70,6 +71,7 @@ export interface EventItem {
   event_date: string;
   venue: string;
   rules: string[];
+  gform_link?: string;
   created_at?: string;
 }
 export type Role = 'Super Admin' | 'Editor' | 'Scanner' | 'Viewer';
@@ -424,6 +426,7 @@ export const db = {
       colleges: 100,
       workshops: 10,
       workshops_status: 'coming_soon' as const,
+      pre_events_form_link: 'YOUR_GOOGLE_FORM_LINK_HERE',
       first_prize: 50000,
       second_prize: 25000,
       third_prize: 10000,

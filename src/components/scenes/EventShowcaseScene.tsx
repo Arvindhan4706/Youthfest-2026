@@ -21,6 +21,7 @@ interface EventItem {
  venue: string;
  rules: string[];
  track_id?: string;
+ gform_link?: string;
 }
 interface Track {
  id: string;
@@ -333,6 +334,11 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  <div className="p-6 border-t border-white/10 bg-[#030014] shrink-0">
         <button
           onClick={() => {
+            if (event.track_id?.trim().toLowerCase() === 'pre-events' || event.id?.toLowerCase().startsWith('pre-')) {
+              const formLink = event.gform_link || 'YOUR_GOOGLE_FORM_LINK_HERE';
+              window.open(formLink, '_blank');
+              return;
+            }
             onClose();
             initiateRegistration({
               id: event.id,
@@ -403,7 +409,8 @@ export default function EventShowcaseScene() {
             date: e.event_date,
             venue: e.venue,
             rules: e.rules,
-            track_id: e.track_id
+            track_id: e.track_id,
+            gform_link: e.gform_link
           }));
           setDbEvents(mappedEvents);
         } else {
