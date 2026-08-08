@@ -189,7 +189,7 @@ export default function HeroScene() {
         transition={{ duration: 2, delay: 2 }}
         className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none"
       >
-        <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-start pt-28 md:pt-12 gap-20 md:gap-6 pb-8 opacity-[0.10]">
+        <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-start pt-20 md:pt-12 gap-20 md:gap-6 pb-8 opacity-[0.10]">
           <div style={{ animationDuration: '40s' }} className="animate-marquee-reverse flex w-max whitespace-nowrap text-[8vw] md:text-[10vw] font-[var(--font-heading-main)] font-black text-white">
             <span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span><span className="pr-16">YOUTHFEST 2026</span>
           </div>
