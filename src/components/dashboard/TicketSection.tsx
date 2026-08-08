@@ -8,6 +8,7 @@ import { getTicketId } from '../../lib/utils';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import QRCode from 'qrcode';
 import { db } from '../../lib/database';
+import { toPng } from 'html-to-image';
 
 export default function TicketSection() {
   const user = useStore((state) => state.user);
@@ -39,45 +40,28 @@ export default function TicketSection() {
   const handleDownloadTicket = async () => {
     if (!selectedEventTicket) return;
     
+    const node = document.getElementById('ticket-pass');
+    if (!node) {
+      addToast('Ticket UI not found.');
+      return;
+    }
+    
     addToast('Generating digital ticket PDF...');
     try {
+      const dataUrl = await toPng(node, { quality: 1.0, pixelRatio: 2 });
       const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage([600, 300]);
+      const base64Data = dataUrl.split(',')[1];
+      const imageBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+      const embeddedImage = await pdfDoc.embedPng(imageBytes);
+      const imgDims = embeddedImage.scale(1);
       
-      const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-      const normalFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-
-      // Draw background
-      page.drawRectangle({ x: 0, y: 0, width: 600, height: 300, color: rgb(0.02, 0.0, 0.1) });
-      
-      // Draw Ticket Header
-      page.drawText("YUVENZA &apos;26 VITALITY PASS", { x: 30, y: 250, size: 20, font, color: rgb(0.1, 0.9, 0.9) });
-      
-      // Draw Event Name
-      page.drawText(selectedEventTicket, { x: 30, y: 200, size: 24, font, color: rgb(1, 1, 1) });
-      
-      // Draw Visitor Details
-      page.drawText(`Visitor: ${user.name}`, { x: 30, y: 150, size: 14, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
-      page.drawText(`Email: ${user.email}`, { x: 30, y: 130, size: 12, font: normalFont, color: rgb(0.8, 0.8, 0.8) });
-      const ticketId = getTicketId(user.email, selectedEventTicket);
-      page.drawText(`Ticket ID: ${ticketId}`, { x: 30, y: 110, size: 12, font: normalFont, color: rgb(0.6, 0.3, 0.9) });
-      
-      // Generate QR Code locally to avoid proxy SSL and CORS issues
-      const qrData = user.email + '|' + selectedEventTicket;
-      
-      let localQrDataUrl = '';
-      try {
-        localQrDataUrl = await QRCode.toDataURL(qrData, { width: 300, margin: 1 });
-        // The data URL is base64 encoded, e.g., data:image/png;base64,...
-        const base64Data = localQrDataUrl.split(',')[1];
-        const qrImageBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
-        
-        const qrImage = await pdfDoc.embedPng(qrImageBytes);
-        page.drawImage(qrImage, { x: 420, y: 75, width: 150, height: 150 });
-        page.drawText("SCAN AT ENTRANCE", { x: 435, y: 55, size: 12, font, color: rgb(1, 1, 1) });
-      } catch (err: unknown) {
-        console.warn('Could not embed QR code in PDF', err);
-      }
+      const page = pdfDoc.addPage([imgDims.width, imgDims.height]);
+      page.drawImage(embeddedImage, {
+        x: 0,
+        y: 0,
+        width: imgDims.width,
+        height: imgDims.height,
+      });
       
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
@@ -92,7 +76,6 @@ export default function TicketSection() {
       
       addToast('Ticket PDF saved to downloads!');
       
-      // Email the ticket in the background
       try {
         const base64Pdf = await pdfDoc.saveAsBase64({ dataUri: true });
         const emailRes = await fetch('/api/send-ticket', {
@@ -102,7 +85,7 @@ export default function TicketSection() {
             email: user.email,
             name: user.name,
             event: selectedEventTicket,
-            qrDataUrl: localQrDataUrl
+            qrDataUrl: qrCodeDataUrl
           })
         });
         

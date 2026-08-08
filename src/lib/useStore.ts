@@ -136,6 +136,7 @@ export const useStore = create<AppState>()(
       set({
         user: {
           ...user,
+          payment_status: 'paid',
           registeredEvents: updatedEvents,
         },
       });
