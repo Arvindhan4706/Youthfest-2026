@@ -6,6 +6,7 @@ import { Users, ArrowLeft, Loader2, Search, Download, ShieldCheck, Lock, KeyRoun
 import { db, Visitor, EventItem, AdminUser, Role, Payment } from '@/lib/database';
 import { supabase } from '@/lib/supabase';
 import QRCode from 'qrcode';
+import { AdminTicketGenerator, AdminTicketGeneratorRef } from '@/components/admin/AdminTicketGenerator';
 export default function AdminPortal() {
  const [visitors, setVisitors] = useState<Visitor[]>([]);
  const [attendanceCount, setAttendanceCount] = useState(0);
@@ -46,9 +47,33 @@ export default function AdminPortal() {
  const [isBroadcasting, setIsBroadcasting] = useState(false);
  // Notification State
  const [notifyEmail, setNotifyEmail] = useState('');
- const [notifyTitle, setNotifyTitle] = useState('');
- const [notifyMessage, setNotifyMessage] = useState('');
- const [isNotifying, setIsNotifying] = useState(false);
+  const [notifyTitle, setNotifyTitle] = useState('');
+  const [notifyMessage, setNotifyMessage] = useState('');
+  const [isNotifying, setIsNotifying] = useState(false);
+  // Ticket Generator State
+  const ticketGenRef = React.useRef<AdminTicketGeneratorRef>(null);
+  const [ticketGenVisitor, setTicketGenVisitor] = useState<Visitor | null>(null);
+  const [ticketGenEvent, setTicketGenEvent] = useState<string | null>(null);
+  const [isGeneratingTicket, setIsGeneratingTicket] = useState(false);
+
+  const handleAdminGenerateTicket = async (visitor: Visitor, eventTitle: string) => {
+    setTicketGenVisitor(visitor);
+    setTicketGenEvent(eventTitle);
+    setIsGeneratingTicket(true);
+    setTimeout(() => {
+      if (ticketGenRef.current) {
+        ticketGenRef.current.generatePdf().then(() => {
+          setIsGeneratingTicket(false);
+          setTicketGenVisitor(null);
+          setTicketGenEvent(null);
+        }).catch(err => {
+          console.error(err);
+          alert('Failed to generate ticket PDF');
+          setIsGeneratingTicket(false);
+        });
+      }
+    }, 100);
+  };
 
  useEffect(() => {
  if (activeTab === 'logs' && userRole === 'Super Admin') {
@@ -915,7 +940,16 @@ export default function AdminPortal() {
  </td>
  <td className="px-6 py-4 text-gray-300">{visitor.department || '-'}</td>
  <td className="px-6 py-4 text-[var(--neon-cyan)] text-xs font-mono font-bold">
- {(visitor.registered_events || []).join(', ') || 'General Entry'}
+ {(visitor.registered_events || []).length > 0 ? (
+   visitor.registered_events.map(eventTitle => (
+     <div key={eventTitle} className="flex items-center gap-2 mb-2">
+       <span>{eventTitle}</span>
+       <button onClick={() => handleAdminGenerateTicket(visitor, eventTitle)} className="text-[10px] text-white bg-white/10 px-2 py-1 rounded hover:bg-[var(--neon-cyan)] hover:text-black transition-colors flex items-center gap-1">
+         <Download className="w-3 h-3" /> Ticket
+       </button>
+     </div>
+   ))
+ ) : 'General Entry'}
  </td>
  </tr>
  ))
@@ -1176,6 +1210,20 @@ export default function AdminPortal() {
     </div>
    ) : null}
    </div>
+   )}
+   
+   {ticketGenVisitor && ticketGenEvent && (
+     <AdminTicketGenerator 
+       ref={ticketGenRef}
+       visitor={ticketGenVisitor}
+       eventTitle={ticketGenEvent}
+       eventFee="VIP"
+     />
+   )}
+   {isGeneratingTicket && (
+     <div className="fixed bottom-4 right-4 bg-white text-black px-6 py-3 rounded-lg font-bold flex items-center gap-2 z-[9999] shadow-2xl">
+       <Loader2 className="w-4 h-4 animate-spin" /> Generating HD Ticket...
+     </div>
    )}
  </main>
  );
