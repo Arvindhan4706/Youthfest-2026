@@ -117,7 +117,7 @@ export const db = {
         gender: data.gender,
         city: data.city,
         registered_events: [],
-        payment_status: 'paid',
+        payment_status: 'pending',
       })
       .select()
       .single();
