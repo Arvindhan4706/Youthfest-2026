@@ -50,7 +50,10 @@ async function syncPayments() {
       }
 
       const currentEvents = visitor.registered_events || [];
-      const eventTitle = "Vitality Pass"; // Default generic name since the user didn't specify
+      let eventTitle = "Vitality Pass";
+      if (payment.description && payment.description.includes('Registration for ')) {
+        eventTitle = payment.description.replace('Registration for ', '').trim();
+      }
       
       let updatedEvents = [...currentEvents];
       if (!updatedEvents.includes(eventTitle)) {

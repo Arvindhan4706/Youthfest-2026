@@ -215,8 +215,14 @@ export default function Dashboard() {
     }
     if (!user) {
       router.push('/');
+    } else if (!user.id && user.email) {
+      db.getByEmail(user.email).then(data => {
+        if (data && data.id) {
+          setUser({ ...user, id: data.id, registeredEvents: data.registered_events, payment_status: data.payment_status });
+        }
+      }).catch(console.error);
     }
-  }, [user, router]);
+  }, [user, router, setUser]);
 
   if (!user) return (
     <main className="min-h-screen bg-black flex items-center justify-center">
