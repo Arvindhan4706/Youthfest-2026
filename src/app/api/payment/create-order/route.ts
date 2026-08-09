@@ -34,6 +34,10 @@ export async function POST(req: Request) {
       amount: amountInPaise,
       currency: 'INR',
       receipt: receipt || `rcpt_${Math.random().toString(36).substring(2, 9)}`,
+      notes: {
+        email: email || '',
+        eventTitle: eventTitle || ''
+      }
     };
 
     const order = await razorpay.orders.create(options);
