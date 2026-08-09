@@ -113,6 +113,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  if (!res.ok) throw new Error(data.message || 'Registration failed');
  const visitor = data.visitor;
  setUser({ 
+ id: visitor.id,
  email: visitor.email, name: visitor.name, phone: visitor.phone, 
  college: visitor.college, department: visitor.department, 
  year: visitor.year, gender: visitor.gender, city: visitor.city,
@@ -156,6 +157,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  }
  const visitor = data.visitor;
  setUser({ 
+ id: visitor.id,
  email: visitor.email, name: visitor.name, phone: visitor.phone, 
  college: visitor.college, department: visitor.department, 
  year: visitor.year, gender: visitor.gender, city: visitor.city,
