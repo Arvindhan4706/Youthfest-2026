@@ -52,7 +52,12 @@ export default function PaymentModal() {
       });
       
       if (!orderResponse.ok) {
-        throw new Error(`Server error`);
+        let errMsg = 'Server error';
+        try {
+          const errData = await orderResponse.json();
+          if (errData.error) errMsg = errData.error;
+        } catch (e) {}
+        throw new Error(errMsg);
       }
       
       const orderData = await orderResponse.json();
@@ -127,7 +132,8 @@ export default function PaymentModal() {
 
     } catch (err: unknown) {
       console.error(err);
-      addToast('Payment initialization failed.');
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      addToast(msg);
       setIsLoading(false);
     }
   };
