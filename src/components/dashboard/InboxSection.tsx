@@ -1,12 +1,34 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MailOpen, Inbox } from 'lucide-react';
 import { useStore } from '../../lib/useStore';
 
 export default function InboxSection() {
+  const user = useStore((state) => state.user);
   const messages = useStore((state) => state.messages);
+  const addMessage = useStore((state) => state.addMessage);
   const [selectedMailId, setSelectedMailId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user?.registeredEvents) {
+      user.registeredEvents.forEach(eventTitle => {
+        const exists = messages.find(m => m.eventTitle === eventTitle);
+        if (!exists) {
+          addMessage({
+            id: `msg-recovered-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            eventId: eventTitle,
+            eventTitle: eventTitle,
+            amountPaid: 'Paid Receipt',
+            timestamp: new Date().toISOString(),
+            recipientEmail: user.email,
+            subject: `Registration Confirmed: ${eventTitle}`,
+            body: `Dear ${user.name},\n\nYour registration receipt for ${eventTitle} has been successfully synchronized and confirmed.\n\nYour spot is confirmed.\n\nYou can download your HD Ticket Pass from the "My Tickets" tab.\n\nSee you at the fest!\n\nBest,\nYuvenza Team`
+          });
+        }
+      });
+    }
+  }, [user, messages, addMessage]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch w-full">
