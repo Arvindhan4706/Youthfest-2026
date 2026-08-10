@@ -109,7 +109,6 @@ export default function InboxSection() {
               
               <div className="border-t border-white/5 pt-4 mt-4 text-[9px] font-mono text-gray-600 flex justify-between items-center">
                 <span>Secure mail digital signature: verified</span>
-                <span>{mail.id}</span>
               </div>
             </motion.div>
           );
