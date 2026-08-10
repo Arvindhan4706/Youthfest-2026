@@ -578,20 +578,48 @@ export default function EventShowcaseScene() {
  {/* Event cards grid */}
  <AnimatePresence mode="wait">
  {track.id === 'workshops' && siteSettings?.workshops_status === 'coming_soon' ? (
-  <motion.div 
-  key="coming-soon"
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  exit={{ opacity: 0 }}
-  className="section-padding text-center flex flex-col items-center justify-center min-h-[300px]"
-  >
-  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
-  <Sparkles className="w-6 h-6 text-[var(--neon-violet)]" />
-  </div>
-  <h3 className="text-2xl text-white font-bold mb-2">Workshops Coming Soon</h3>
-  <p className="text-gray-400">Our expert-led workshops are currently being finalized. Stay tuned for announcements!</p>
-  </motion.div>
-  ) : filteredEvents.length > 0 ? (
+   <motion.div 
+   key="coming-soon"
+   initial={{ opacity: 0 }}
+   animate={{ opacity: 1 }}
+   exit={{ opacity: 0 }}
+   className="section-padding text-center flex flex-col items-center justify-center min-h-[300px]"
+   >
+   <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
+   <Sparkles className="w-6 h-6 text-[var(--neon-violet)]" />
+   </div>
+   <h3 className="text-2xl text-white font-bold mb-2">Workshops Coming Soon</h3>
+   <p className="text-gray-400">Our expert-led workshops are currently being finalized. Stay tuned for announcements!</p>
+   </motion.div>
+   ) : track.id === 'events' && siteSettings?.events_status === 'coming_soon' ? (
+   <motion.div
+   key="events-coming-soon"
+   initial={{ opacity: 0 }}
+   animate={{ opacity: 1 }}
+   exit={{ opacity: 0 }}
+   className="section-padding text-center flex flex-col items-center justify-center min-h-[300px]"
+   >
+   <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
+   <Sparkles className="w-6 h-6 text-[var(--neon-cyan)]" />
+   </div>
+   <h3 className="text-2xl text-white font-bold mb-2">Events Coming Soon</h3>
+   <p className="text-gray-400">Our exciting events lineup is being finalized. Stay tuned for announcements!</p>
+   </motion.div>
+   ) : track.id === 'pre-events' && siteSettings?.pre_events_status === 'coming_soon' ? (
+   <motion.div
+   key="pre-events-coming-soon"
+   initial={{ opacity: 0 }}
+   animate={{ opacity: 1 }}
+   exit={{ opacity: 0 }}
+   className="section-padding text-center flex flex-col items-center justify-center min-h-[300px]"
+   >
+   <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
+   <Sparkles className="w-6 h-6 text-[var(--neon-magenta)]" />
+   </div>
+   <h3 className="text-2xl text-white font-bold mb-2">Pre-Events Coming Soon</h3>
+   <p className="text-gray-400">Our pre-events are currently being planned. Stay tuned for announcements!</p>
+   </motion.div>
+   ) : filteredEvents.length > 0 ? (
  <motion.div
  key={`${track.id}-grid`}
  initial={{ opacity: 0, y: 20 }}

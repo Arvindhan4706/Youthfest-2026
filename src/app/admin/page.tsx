@@ -269,7 +269,7 @@ export default function AdminPortal() {
  setIsSavingSettings(true);
  // Convert any string values (from typing) back to integers before saving
  const sanitizedSettings = { ...siteSettings };
- const stringKeys = ['id', 'updated_at', 'workshops_status', 'pre_events_form_link'];
+ const stringKeys = ['id', 'updated_at', 'workshops_status', 'events_status', 'pre_events_status'];
  
  // Remove deleted schema fields to prevent backend errors
  delete sanitizedSettings.contact_institute;
@@ -633,7 +633,6 @@ export default function AdminPortal() {
  { key: 'prize_pool', label: 'Prize Pool in Lakhs (2L+)', type: 'number' },
  { key: 'colleges', label: 'Colleges (100+)', type: 'number' },
  { key: 'workshops', label: 'Workshops (10+)', type: 'number' },
- { key: 'pre_events_form_link', label: 'Pre-Events GForm Link', type: 'text' },
  { key: 'first_prize', label: '1st Prize Amount (₹)', type: 'number' },
  { key: 'second_prize', label: '2nd Prize Amount (₹)', type: 'number' },
  { key: 'third_prize', label: '3rd Prize Amount (₹)', type: 'number' },
@@ -659,6 +658,30 @@ export default function AdminPortal() {
    value={siteSettings.workshops_status || 'coming_soon'}
    onChange={(e) => setSiteSettings({ ...siteSettings, workshops_status: e.target.value })}
    className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-violet)] outline-none"
+ >
+   <option value="coming_soon">Coming Soon</option>
+   <option value="active">Active</option>
+ </select>
+ </div>
+ <div className="md:col-span-2">
+ <label htmlFor="events_status" className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Events Status</label>
+ <select
+   id="events_status"
+   value={(siteSettings as any).events_status || 'active'}
+   onChange={(e) => setSiteSettings({ ...siteSettings, events_status: e.target.value } as any)}
+   className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-cyan)] outline-none"
+ >
+   <option value="coming_soon">Coming Soon</option>
+   <option value="active">Active</option>
+ </select>
+ </div>
+ <div className="md:col-span-2">
+ <label htmlFor="pre_events_status" className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Pre-Events Status</label>
+ <select
+   id="pre_events_status"
+   value={(siteSettings as any).pre_events_status || 'active'}
+   onChange={(e) => setSiteSettings({ ...siteSettings, pre_events_status: e.target.value } as any)}
+   className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[var(--neon-magenta)] outline-none"
  >
    <option value="coming_soon">Coming Soon</option>
    <option value="active">Active</option>
