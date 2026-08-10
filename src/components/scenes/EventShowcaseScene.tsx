@@ -591,7 +591,7 @@ export default function EventShowcaseScene() {
    <h3 className="text-2xl text-white font-bold mb-2">Workshops Coming Soon</h3>
    <p className="text-gray-400">Our expert-led workshops are currently being finalized. Stay tuned for announcements!</p>
    </motion.div>
-   ) : track.id === 'events' && siteSettings?.events_status === 'coming_soon' ? (
+   ) : track.id === 'main-events' && siteSettings?.events_status === 'coming_soon' ? (
    <motion.div
    key="events-coming-soon"
    initial={{ opacity: 0 }}
