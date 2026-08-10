@@ -335,8 +335,12 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
         <button
           onClick={() => {
             if (event.track_id?.trim().toLowerCase() === 'pre-events' || event.id?.toLowerCase().startsWith('pre-')) {
-              const formLink = event.gform_link || 'YOUR_GOOGLE_FORM_LINK_HERE';
-              window.open(formLink, '_blank');
+              const formLink = event.gform_link?.trim();
+              if (formLink && (formLink.startsWith('http://') || formLink.startsWith('https://'))) {
+                window.open(formLink, '_blank');
+              } else {
+                alert('Registration link for this event has not been configured yet. Please check back later.');
+              }
               return;
             }
             onClose();
