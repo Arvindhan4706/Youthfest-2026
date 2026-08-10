@@ -133,7 +133,7 @@ export default function VisitorProfile() {
           phone: user.phone,
           college: user.college,
           department: user.department,
-          eventTitle: 'General Registration'
+          eventTitle: user.registeredEvents && user.registeredEvents.length > 0 ? user.registeredEvents[0] : 'Events & Workshops'
         })
       });
       const data = await res.json();
@@ -231,7 +231,7 @@ export default function VisitorProfile() {
 
 
 
-      {user.payment_status === 'paid' && (
+      {user.payment_status === 'paid' && user.registeredEvents && user.registeredEvents.length > 0 && (
         <div className="p-5 rounded-2xl bg-[var(--neon-cyan)]/10 border border-[var(--neon-cyan)]/20 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <h3 className="text-[var(--neon-cyan)] font-bold text-sm">Official On Duty (OD) Letter</h3>

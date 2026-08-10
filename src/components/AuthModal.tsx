@@ -120,17 +120,6 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  registeredEvents: visitor.registered_events,
  payment_status: visitor.payment_status 
  });
- // Send OD via our new API route
- try {
- await fetch('/api/send-od', {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({
- name: visitor.name, email: visitor.email, phone: visitor.phone,
- college: visitor.college, department: visitor.department, eventTitle: 'General Fest Entry',
- })
- });
- } catch (err) {}
  
  if (data.paymentLinkUrl) {
   window.location.href = data.paymentLinkUrl;
