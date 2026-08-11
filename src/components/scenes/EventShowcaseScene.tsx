@@ -22,6 +22,7 @@ interface EventItem {
  rules: string[];
  track_id?: string;
  gform_link?: string;
+ housefull?: boolean;
 }
 interface Track {
  id: string;
@@ -178,12 +179,17 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  </div>
  {/* Content */}
  <div className="p-6 flex-grow flex flex-col justify-between relative z-10">
- <div>
- <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[var(--neon-cyan)] transition-colors duration-300">
- {event.title}
- </h3>
- <p className="text-xs text-gray-400 leading-relaxed mb-5 group-hover:text-gray-300 transition-colors duration-300 line-clamp-2">{event.desc}</p>
- </div>
+  <div>
+  <div className="flex items-start justify-between gap-2 mb-2">
+  <h3 className="text-lg font-bold text-white group-hover:text-[var(--neon-cyan)] transition-colors duration-300">
+  {event.title}
+  </h3>
+  {event.housefull && (
+    <span className="px-2 py-0.5 shrink-0 rounded text-[10px] font-bold tracking-wider bg-red-500/20 text-red-400 border border-red-500/30">HOUSEFULL</span>
+  )}
+  </div>
+  <p className="text-xs text-gray-400 leading-relaxed mb-5 group-hover:text-gray-300 transition-colors duration-300 line-clamp-2">{event.desc}</p>
+  </div>
  {/* Stats */}
  <div className="grid grid-cols-2 gap-y-3 gap-x-2 border-t border-white/5 pt-4 mb-5">
  <div className="flex items-center gap-1.5 text-xs text-gray-300">
@@ -333,6 +339,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
  {/* Sticky Footer */}
  <div className="p-6 border-t border-white/10 bg-[#030014] shrink-0">
         <button
+          disabled={event.housefull}
           onClick={() => {
             if (event.track_id?.trim().toLowerCase() === 'pre-events' || event.id?.toLowerCase().startsWith('pre-')) {
               const formLink = event.gform_link?.trim();
@@ -352,10 +359,10 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
               desc: event.desc,
             });
           }}
-          className="w-full py-4 min-h-[44px] rounded-full font-semibold text-base text-black bg-white hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 group/btn"
+          className={`w-full py-4 min-h-[44px] rounded-full font-semibold text-base transition-all duration-300 flex items-center justify-center gap-2 group/btn ${event.housefull ? 'bg-red-500/10 text-red-400 cursor-not-allowed border border-red-500/20' : 'text-black bg-white hover:bg-gray-200'}`}
         >
-          <span>Register Now</span>
-          <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+          <span>{event.housefull ? 'Sold Out' : 'Register Now'}</span>
+          {!event.housefull && <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />}
         </button>
  </div>
  </motion.div>
@@ -414,7 +421,8 @@ export default function EventShowcaseScene() {
             venue: e.venue,
             rules: e.rules,
             track_id: e.track_id,
-            gform_link: e.gform_link
+            gform_link: e.gform_link,
+            housefull: e.housefull
           }));
           setDbEvents(mappedEvents);
         } else {

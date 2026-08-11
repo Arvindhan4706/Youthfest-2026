@@ -73,6 +73,7 @@ export interface EventItem {
   venue: string;
   rules: string[];
   gform_link?: string;
+  housefull?: boolean;
   created_at?: string;
 }
 export type Role = 'Super Admin' | 'Editor' | 'Scanner' | 'Viewer';
