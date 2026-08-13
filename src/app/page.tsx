@@ -6,7 +6,6 @@ import LazyScene from '../components/LazyScene';
 // Dynamic imports of scenes for performance optimization and SSR safety
 const HeroScene = dynamic(() => import('../components/scenes/HeroScene'), { ssr: false });
 const StatsBarScene = dynamic(() => import('../components/scenes/StatsBarScene'), { ssr: false });
-const PrizePoolScene = dynamic(() => import('../components/scenes/PrizePoolScene'), { ssr: false });
 const MemoriesScene = dynamic(() => import('../components/scenes/MemoriesScene'), { ssr: false });
 
 const CommitteeScene = dynamic(() => import('../components/scenes/CommitteeScene'), { ssr: false });
@@ -38,9 +37,6 @@ export default function Home() {
           <CommitteeScene />
         </LazyScene>
 
-        <LazyScene placeholderHeight={600}>
-          <PrizePoolScene />
-        </LazyScene>
 
 
 
