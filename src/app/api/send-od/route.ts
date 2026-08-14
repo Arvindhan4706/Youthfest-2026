@@ -14,27 +14,6 @@ export async function POST(request: Request) {
     // Recipient email from request body
     const recipientEmail = email;
     const emailSubject = `On Duty (OD) Approval for Yuvenza - ${eventTitle || 'General Registration'}`;
-    const emailBody = `
-Dear ${name},
-
-This email serves as your official On Duty (OD) approval for participating in Yuvenza '26.
-
-Participant Details:
-- Name: ${name}
-- College: ${college || 'N/A'}
-- Department: ${department || 'N/A'}
-- Event Registered: ${eventTitle || 'General Fest Entry'}
-- Date of Event: August 21, 2026
-- Venue: Yuvenza Main Campus
-
-Please find the official OD Letter attached as a PDF to this email. You may present this to your respective department coordinators or HOD to claim your attendance.
-
-We look forward to seeing you at the biggest youth festival of the year!
-
-Best regards,
-The Yuvenza Organizing Committee
-Yuvenza '26
-    `.trim();
 
     // 1. Generate PDF
     const pdfDoc = await PDFDocument.create();
@@ -46,16 +25,20 @@ Yuvenza '26
     const margin = 50;
 
     // Header
-    page.drawText('YUVENZA 2026', {
-      x: width / 2 - 120,
+    const title1 = 'YUVENZA 2026';
+    const title1Width = timesRomanBold.widthOfTextAtSize(title1, 20);
+    page.drawText(title1, {
+      x: (width - title1Width) / 2,
       y: height - 80,
       size: 20,
       font: timesRomanBold,
       color: rgb(0.1, 0.1, 0.4),
     });
 
-    page.drawText('OFFICIAL ON DUTY (OD) PERMISSION LETTER', {
-      x: width / 2 - 140,
+    const title2 = 'OFFICIAL ON DUTY (OD) PERMISSION LETTER';
+    const title2Width = timesRomanBold.widthOfTextAtSize(title2, 14);
+    page.drawText(title2, {
+      x: (width - title2Width) / 2,
       y: height - 110,
       size: 14,
       font: timesRomanBold,
@@ -70,7 +53,8 @@ Yuvenza '26
 
     // Content
     const dateText = `Date: ${new Date().toLocaleDateString()}`;
-    page.drawText(dateText, { x: width - margin - 100, y: height - 160, size: 12, font: timesRomanFont });
+    const dateTextWidth = timesRomanFont.widthOfTextAtSize(dateText, 12);
+    page.drawText(dateText, { x: width - margin - dateTextWidth, y: height - 160, size: 12, font: timesRomanFont });
 
     page.drawText('To Whom It May Concern,', { x: margin, y: height - 190, size: 12, font: timesRomanBold });
 
@@ -119,7 +103,36 @@ Yuvenza '26
       from: getFromEmail(),
       to: recipientEmail,
       subject: emailSubject,
-      text: emailBody,
+      html: `
+        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b; line-height: 1.6;">
+          <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #00f0ff; padding-bottom: 20px;">
+            <h1 style="color: #8b5cf6; margin-bottom: 5px; font-size: 28px; font-weight: 900; letter-spacing: 2px;">YUVENZA '26</h1>
+            <h2 style="color: #64748b; margin-top: 0; font-weight: 600; font-size: 16px; letter-spacing: 1px; text-transform: uppercase;">Official OD Approval</h2>
+          </div>
+          
+          <p style="font-size: 16px;">Dear <strong>${name}</strong>,</p>
+          <p style="font-size: 16px;">This email serves as your official <strong>On Duty (OD) approval</strong> for participating in Yuvenza '26.</p>
+          
+          <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin: 30px 0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+            <h3 style="margin-top: 0; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 16px; font-size: 18px;">Participant Details</h3>
+            <table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+              <tr><td style="padding: 8px 0; color: #64748b; width: 130px;">Name:</td><td style="padding: 8px 0; font-weight: 600; color: #0f172a;">${name}</td></tr>
+              <tr><td style="padding: 8px 0; color: #64748b;">Institution:</td><td style="padding: 8px 0; font-weight: 600; color: #0f172a;">${college || 'N/A'}</td></tr>
+              <tr><td style="padding: 8px 0; color: #64748b;">Department:</td><td style="padding: 8px 0; font-weight: 600; color: #0f172a;">${department || 'N/A'}</td></tr>
+              <tr><td style="padding: 8px 0; color: #64748b;">Event:</td><td style="padding: 8px 0; font-weight: 700; color: #8b5cf6;">${eventTitle || 'General Fest Entry'}</td></tr>
+              <tr><td style="padding: 8px 0; color: #64748b;">Date:</td><td style="padding: 8px 0; font-weight: 600; color: #0f172a;">August 21, 2026</td></tr>
+              <tr><td style="padding: 8px 0; color: #64748b;">Venue:</td><td style="padding: 8px 0; font-weight: 600; color: #0f172a;">Yuvenza Main Campus</td></tr>
+            </table>
+          </div>
+          
+          <p style="font-size: 16px;">Please find your official OD Letter attached as a PDF to this email. You may present this to your respective department coordinators or HOD to claim your attendance exemption.</p>
+          
+          <div style="margin-top: 40px; text-align: center; background-color: #f1f5f9; padding: 20px; border-radius: 8px;">
+            <p style="color: #475569; margin: 0; font-size: 15px;">We look forward to seeing you at the biggest youth festival of the year!</p>
+            <p style="margin-top: 15px; margin-bottom: 0; font-weight: bold; color: #0f172a; font-size: 16px;">The Yuvenza Organizing Committee</p>
+          </div>
+        </div>
+      `,
       attachments: [
         {
           filename: `OD_Letter_${name.replace(/\s+/g, '_')}.pdf`,
@@ -138,4 +151,3 @@ Yuvenza '26
     return NextResponse.json({ error: error.message || 'Failed to send OD' }, { status: 500 });
   }
 }
-
