@@ -24,6 +24,7 @@ export interface EventDetails {
   title: string;
   category: string;
   fee: string;
+  team?: string;
   desc?: string;
 }
 export interface EmailMessage {

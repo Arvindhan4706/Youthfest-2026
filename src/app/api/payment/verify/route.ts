@@ -58,6 +58,20 @@ export async function POST(req: Request) {
             razorpay_payment_id: razorpay_payment_id
           })
           .eq('razorpay_order_id', razorpay_order_id);
+
+        const teamMembers = body.teamMembers;
+        if (teamMembers && Array.isArray(teamMembers) && eventTitle) {
+          const validMembers = teamMembers.filter((m: any) => m.name?.trim() || m.email?.trim());
+          if (validMembers.length > 0) {
+            const teamInserts = validMembers.map((m: any) => ({
+              lead_email: emailLower,
+              event_title: eventTitle,
+              member_name: m.name?.trim() || '',
+              member_email: m.email?.trim() || ''
+            }));
+            await supabaseAdmin.from('team_members').insert(teamInserts);
+          }
+        }
       }
       return NextResponse.json(
         { success: true, message: 'Payment successfully verified', isAuthentic: true },

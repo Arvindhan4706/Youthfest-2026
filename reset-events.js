@@ -1,0 +1,53 @@
+require('dotenv').config({ path: '.env.local' });
+const { createClient } = require('@supabase/supabase-js');
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
+const STATIC_EVENTS = [
+  { id: 'main-1', track_id: 'main-events', title: 'Squid Game', description: 'Red light, green light... do you have what it takes? Survive the insane challenges and outlast everyone else to win!', team_size: '1', fee: '₹150', difficulty: 'Hard', image_url: '/event-images/squid_game.png', event_date: 'August 21 - 10:00 AM', venue: 'Main Arena', rules: ["All participants must carry their valid college ID cards.", "Decisions made by the judges will be final and binding.", "Any form of indiscipline or rule violation will lead to immediate disqualification."] },
+  { id: 'main-2', track_id: 'main-events', title: 'Case Closed', description: 'Channel your inner Sherlock! Follow the clues, interrogate the suspects, and piece together the murder mystery.', team_size: '2-4', fee: '₹200', difficulty: 'Medium', image_url: '/event-images/case_closed.png', event_date: 'August 21 - 02:00 PM', venue: 'Seminar Hall 1', rules: ["All participants must carry their valid college ID cards.", "Decisions made by the judges will be final and binding."] },
+  { id: 'main-3', track_id: 'main-events', title: '7 Keys', description: 'Think fast and run faster! Solve the riddles and hunt down the 7 magical keys hidden across campus before time runs out.', team_size: '3-5', fee: '₹250', difficulty: 'Hard', image_url: '/event-images/seven_keys.png', event_date: 'August 21 - 01:00 PM', venue: 'Campus Ground', rules: ["All participants must carry their valid college ID cards.", "Decisions made by the judges will be final and binding."] },
+  { id: 'main-4', track_id: 'main-events', title: 'Cypher', description: '24 hours of caffeine, code, and crazy ideas. Build something epic, flex your dev skills, and take home the grand prize.', team_size: '2-4', fee: '₹300', difficulty: 'Hard', image_url: '/event-images/cypher.png', event_date: 'August 21 - 09:00 AM', venue: 'Tech Lab 4', rules: ["All participants must carry their valid college ID cards.", "Decisions made by the judges will be final and binding."] },
+  { id: 'main-5', track_id: 'main-events', title: 'Mock Parliament', description: 'Got strong opinions? Step into the shoes of a parliamentarian and debate the real issues that actually matter.', team_size: '1', fee: '₹100', difficulty: 'Medium', image_url: '/event-images/mock_parliament.png', event_date: 'August 21 - 10:00 AM', venue: 'Auditorium', rules: ["All participants must carry their valid college ID cards."] },
+  { id: 'pre-2', track_id: 'pre-events', title: 'Football – Charity Match', description: 'Lace up your boots! A high-stakes football match where every single goal supports an amazing cause.', team_size: '10', fee: '₹200 per team', difficulty: 'Medium', image_url: '/event-images/football.png', event_date: '17th, 18th & 19th August 2026', venue: 'Football Ground', rules: ["1 player in goal, 6 players on the field.", "Referee's call is final – no arguments.", "Only one substitution allowed per half.", "All fees collected from teams will be donated to charity."] },
+  { id: 'pre-3', track_id: 'pre-events', title: 'Chess', description: 'Checkmate. No luck involved, just pure strategy. Can you outsmart the best minds on campus?', team_size: '1', fee: 'Free', difficulty: 'Hard', image_url: '/event-images/chess.png', event_date: '13th August 2026', venue: 'Indoor Stadium', rules: ["Standard FIDE chess rules apply.", "Each match is played under a 10-minute time limit (rapid format).", "The touch-move rule applies.", "Matches are decided by standard win, draw, or loss scoring.", "The organizer's/arbiter's decision is final."] },
+  { id: 'pre-4', track_id: 'pre-events', title: 'Pickleball - Charity Match', description: 'The hype is real! Grab a paddle and hit the courts for some incredibly fast-paced, addictive Pickleball action.', team_size: '2', fee: '₹50 per team', difficulty: 'Medium', image_url: '/event-images/pickle_ball.png', event_date: '18th & 19th August 2026', venue: 'Pickleball Court', rules: ["Each team member must have their own teammate (must register as a pair).", "Games will be played to 5 points, except the final, which will be a best of 3 (first to 2 games), with each game also played to 5 points.", "All games will be played under standard pickleball rules.", "Teams are expected to be on time to the venue. Games start at 12:00, and the final game will be held at 3:00.", "All teams must abide by the referee's ruling, which is final.", "Teams registered are final; no changes to team composition will be made once registrations are closed."] },
+  { id: 'pre-5', track_id: 'pre-events', title: 'Sudoku', description: 'Number crunching at its finest. Test your logic and speed in this brain-bending challenge.', team_size: '1', fee: 'Free', difficulty: 'Medium', image_url: '/event-images/sudoku.png', event_date: '12th August 2026', venue: 'Seminar Hall 2', rules: ["Each participant competes individually; no assistance or external devices are allowed.", "Standard 9x9 Sudoku grid rules apply.", "Participants have 20 minutes to complete the puzzle.", "The first participant to correctly complete the puzzle is declared the winner; the second to finish correctly is the runner-up.", "The organizer's decision on completion and correctness is final."] },
+  // Workshops
+  { id: 'ws-1', track_id: 'workshops', title: 'INKSPIRE', description: 'Unleash your creativity in our writing and creative thinking masterclass.', team_size: '1', fee: '₹200', difficulty: 'Medium', image_url: '/event-images/Inkspire.png', event_date: 'August 21 - 02:00 PM', venue: 'Seminar Hall A', rules: ["All participants must carry their valid college ID cards."] },
+  { id: 'ws-2', track_id: 'workshops', title: 'Resolution', description: 'Take your editing to the next level. Learn 3D visualization, high-res media processing, and pro digital content creation.', team_size: '1', fee: '₹200', difficulty: 'Medium', image_url: '/event-images/Resolution.png', event_date: 'August 21 - 11:30 AM', venue: 'Media Studio', rules: ["All participants must carry their valid college ID cards."] },
+  { id: 'ws-3', track_id: 'workshops', title: 'Calisto', description: 'Always wanted to design like a pro? Dive into UI/UX aesthetics, digital arts, and creative design in this hands-on workshop.', team_size: '1', fee: '₹250', difficulty: 'Medium', image_url: '/event-images/Calisto.png', event_date: 'August 21 - 10:00 AM', venue: 'Design Lab', rules: ["All participants must carry their valid college ID cards."] }
+];
+
+async function seed() {
+  console.log('Fetching all existing events...');
+  const { data: existing, error: fetchErr } = await supabase.from('events').select('id');
+  if (fetchErr) {
+    console.error('Fetch err:', fetchErr);
+    return;
+  }
+  const toDelete = existing.map(e => e.id);
+  if (toDelete.length > 0) {
+    console.log('Deleting existing events:', toDelete);
+    const { error: delErr } = await supabase.from('events').delete().in('id', toDelete);
+    if (delErr) {
+      console.error('Delete err:', delErr);
+      return;
+    }
+  }
+
+  console.log('Inserting new events...');
+  for (const ev of STATIC_EVENTS) {
+    const { error } = await supabase.from('events').insert(ev);
+    if (error) {
+      console.error(`Failed to insert ${ev.id}:`, error.message);
+    } else {
+      console.log(`Inserted ${ev.title} (${ev.id}) successfully.`);
+    }
+  }
+}
+
+seed();

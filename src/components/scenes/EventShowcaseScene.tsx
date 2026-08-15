@@ -357,6 +357,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
               category: event.id.split('-')[0],
               fee: event.fee,
               desc: event.desc,
+              team: event.team,
             });
           }}
           className={`w-full py-4 min-h-[44px] rounded-full font-semibold text-base transition-all duration-300 flex items-center justify-center gap-2 group/btn ${event.housefull ? 'bg-red-500/10 text-red-400 cursor-not-allowed border border-red-500/20' : 'text-black bg-white hover:bg-gray-200'}`}

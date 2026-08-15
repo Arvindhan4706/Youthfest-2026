@@ -18,8 +18,10 @@ export default function PaymentModal() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  const [teamMembers, setTeamMembers] = useState<{name: string, email: string}[]>([]);
+  const [maxExtraMembers, setMaxExtraMembers] = useState(0);
 
   // Reset state when modal opens/closes
   useEffect(() => {
@@ -27,7 +29,19 @@ export default function PaymentModal() {
       setStep(1);
       setQrDataUrl(null);
       setIsLoading(false);
+      setTeamMembers([]);
       document.body.style.overflow = 'hidden';
+
+      if (checkoutEvent.team) {
+        let max = 1;
+        const match = checkoutEvent.team.match(/\d+/g);
+        if (match) {
+          max = Math.max(...match.map(Number));
+        }
+        setMaxExtraMembers(Math.max(0, max - 1));
+      } else {
+        setMaxExtraMembers(0);
+      }
     } else {
       document.body.style.overflow = '';
     }
@@ -91,7 +105,8 @@ export default function PaymentModal() {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_signature: response.razorpay_signature,
                 email: user?.email,
-                eventTitle: checkoutEvent.title
+                eventTitle: checkoutEvent.title,
+                teamMembers: teamMembers
               })
             });
             const verifyData = await verifyRes.json();
@@ -195,7 +210,7 @@ export default function PaymentModal() {
     setIsLoading(false);
     
     // Move to Success Step
-    setStep(3);
+    setStep(4);
 
     // Confetti!
     setTimeout(() => {
@@ -242,13 +257,13 @@ export default function PaymentModal() {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex gap-2 items-center">
                   <div className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${step >= 1 ? 'bg-[var(--neon-cyan)] shadow-[0_0_10px_var(--neon-cyan)]' : 'bg-white/20'}`} />
-                  <div className={`h-[2px] w-8 rounded-full transition-colors duration-300 ${step >= 2 ? 'bg-[var(--neon-cyan)]' : 'bg-white/10'}`} />
-                  <div className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${step >= 2 ? 'bg-[var(--neon-cyan)] shadow-[0_0_10px_var(--neon-cyan)]' : 'bg-white/20'}`} />
-                  <div className={`h-[2px] w-8 rounded-full transition-colors duration-300 ${step >= 3 ? 'bg-[var(--neon-cyan)]' : 'bg-white/10'}`} />
-                  <div className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${step >= 3 ? 'bg-[var(--neon-cyan)] shadow-[0_0_10px_var(--neon-cyan)]' : 'bg-white/20'}`} />
+                  <div className={`h-[2px] w-8 rounded-full transition-colors duration-300 ${step >= (maxExtraMembers > 0 ? 2 : 3) ? 'bg-[var(--neon-cyan)]' : 'bg-white/10'}`} />
+                  <div className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${step >= (maxExtraMembers > 0 ? 2 : 3) ? 'bg-[var(--neon-cyan)] shadow-[0_0_10px_var(--neon-cyan)]' : 'bg-white/20'}`} />
+                  <div className={`h-[2px] w-8 rounded-full transition-colors duration-300 ${step >= (maxExtraMembers > 0 ? 3 : 4) ? 'bg-[var(--neon-cyan)]' : 'bg-white/10'}`} />
+                  <div className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${step >= (maxExtraMembers > 0 ? 3 : 4) ? 'bg-[var(--neon-cyan)] shadow-[0_0_10px_var(--neon-cyan)]' : 'bg-white/20'}`} />
                 </div>
                 <span className="text-xs text-gray-500 font-bold uppercase tracking-wider">
-                  {step === 1 ? 'Step 1/3' : step === 2 ? 'Step 2/3' : 'Step 3/3'}
+                  Step {step === 4 ? 3 : step} / 3
                 </span>
               </div>
             </div>
@@ -299,16 +314,16 @@ export default function PaymentModal() {
                     </div>
 
                     <button 
-                      onClick={() => setStep(2)}
+                      onClick={() => setStep(maxExtraMembers > 0 ? 2 : 3)}
                       className="w-full min-h-[48px] bg-white text-black font-bold text-base rounded-xl hover:bg-gray-200 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                     >
-                      Continue to Event Review
+                      {maxExtraMembers > 0 ? 'Continue to Team Details' : 'Continue to Event Review'}
                     </button>
                   </motion.div>
                 )}
 
-                {/* STEP 2: Event Review & Payment */}
-                {step === 2 && (
+                {/* STEP 2: Team Details (Conditional) */}
+                {step === 2 && maxExtraMembers > 0 && (
                   <motion.div
                     key="step2"
                     initial={{ opacity: 0, x: -20 }}
@@ -317,8 +332,66 @@ export default function PaymentModal() {
                     transition={{ duration: 0.2 }}
                   >
                     <div className="flex justify-between items-center mb-2">
+                      <h2 className="text-2xl font-[var(--font-heading-main)] font-black text-white">Team Details</h2>
+                      <button onClick={() => setStep(1)} className="text-[var(--neon-cyan)] text-xs hover:underline font-bold">Back</button>
+                    </div>
+                    <p className="text-gray-400 text-sm mb-6">You can add up to {maxExtraMembers} extra teammates for this event.</p>
+                    
+                    <div className="space-y-4 max-h-[40vh] overflow-y-auto pr-2 mb-6 scrollbar-thin scrollbar-thumb-[var(--neon-cyan)]/50 scrollbar-track-transparent">
+                      {Array.from({ length: maxExtraMembers }).map((_, i) => (
+                        <div key={i} className="bg-white/[0.02] border border-white/5 rounded-2xl p-4">
+                          <h3 className="text-sm font-bold text-[var(--neon-cyan)] mb-3">Teammate {i + 1} (Optional)</h3>
+                          <div className="space-y-3">
+                            <input 
+                              type="text" 
+                              placeholder="Full Name"
+                              value={teamMembers[i]?.name || ''}
+                              onChange={(e) => {
+                                const newMembers = [...teamMembers];
+                                if (!newMembers[i]) newMembers[i] = { name: '', email: '' };
+                                newMembers[i].name = e.target.value;
+                                setTeamMembers(newMembers);
+                              }}
+                              className="w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-[var(--neon-cyan)]/50 focus:ring-1 focus:ring-[var(--neon-cyan)]/50 transition-all"
+                            />
+                            <input 
+                              type="email" 
+                              placeholder="Email Address"
+                              value={teamMembers[i]?.email || ''}
+                              onChange={(e) => {
+                                const newMembers = [...teamMembers];
+                                if (!newMembers[i]) newMembers[i] = { name: '', email: '' };
+                                newMembers[i].email = e.target.value;
+                                setTeamMembers(newMembers);
+                              }}
+                              className="w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-[var(--neon-cyan)]/50 focus:ring-1 focus:ring-[var(--neon-cyan)]/50 transition-all"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button 
+                      onClick={() => setStep(3)}
+                      className="w-full min-h-[48px] bg-white text-black font-bold text-base rounded-xl hover:bg-gray-200 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                    >
+                      Continue to Event Review
+                    </button>
+                  </motion.div>
+                )}
+
+                {/* STEP 3: Event Review & Payment */}
+                {step === 3 && (
+                  <motion.div
+                    key="step3"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="flex justify-between items-center mb-2">
                       <h2 className="text-2xl font-[var(--font-heading-main)] font-black text-white">Event Review</h2>
-                      <button onClick={() => setStep(1)} className="text-[var(--neon-cyan)] text-xs hover:underline font-bold">Edit Details</button>
+                      <button onClick={() => setStep(maxExtraMembers > 0 ? 2 : 1)} className="text-[var(--neon-cyan)] text-xs hover:underline font-bold">Edit Details</button>
                     </div>
                     <p className="text-gray-400 text-sm mb-6">Confirm the event details and complete your secure checkout.</p>
                     
@@ -364,10 +437,10 @@ export default function PaymentModal() {
                   </motion.div>
                 )}
 
-                {/* STEP 3: Success & QR Code */}
-                {step === 3 && (
+                {/* STEP 4: Success & QR Code */}
+                {step === 4 && (
                   <motion.div
-                    key="step3"
+                    key="step4"
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.4, type: 'spring' }}
