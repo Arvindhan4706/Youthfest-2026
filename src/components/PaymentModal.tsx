@@ -21,6 +21,7 @@ export default function PaymentModal() {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [teamMembers, setTeamMembers] = useState<{name: string, email: string}[]>([]);
+  const [minExtraMembers, setMinExtraMembers] = useState(0);
   const [maxExtraMembers, setMaxExtraMembers] = useState(0);
 
   // Reset state when modal opens/closes
@@ -33,13 +34,22 @@ export default function PaymentModal() {
       document.body.style.overflow = 'hidden';
 
       if (checkoutEvent.team) {
+        let min = 1;
         let max = 1;
         const match = checkoutEvent.team.match(/\d+/g);
         if (match) {
-          max = Math.max(...match.map(Number));
+          if (match.length >= 2) {
+            min = Math.min(Number(match[0]), Number(match[1]));
+            max = Math.max(Number(match[0]), Number(match[1]));
+          } else if (match.length === 1) {
+            min = Number(match[0]);
+            max = Number(match[0]);
+          }
         }
+        setMinExtraMembers(Math.max(0, min - 1));
         setMaxExtraMembers(Math.max(0, max - 1));
       } else {
+        setMinExtraMembers(0);
         setMaxExtraMembers(0);
       }
     } else {
@@ -335,12 +345,18 @@ export default function PaymentModal() {
                       <h2 className="text-2xl font-[var(--font-heading-main)] font-black text-white">Team Details</h2>
                       <button onClick={() => setStep(1)} className="text-[var(--neon-cyan)] text-xs hover:underline font-bold">Back</button>
                     </div>
-                    <p className="text-gray-400 text-sm mb-6">You can add up to {maxExtraMembers} extra teammates for this event.</p>
+                    <p className="text-gray-400 text-sm mb-6">
+                      {minExtraMembers === maxExtraMembers 
+                        ? `You must add exactly ${maxExtraMembers} extra teammate${maxExtraMembers > 1 ? 's' : ''} for this event.`
+                        : `You must add at least ${minExtraMembers} and up to ${maxExtraMembers} extra teammates for this event.`}
+                    </p>
                     
                     <div className="space-y-4 max-h-[40vh] overflow-y-auto pr-2 mb-6 scrollbar-thin scrollbar-thumb-[var(--neon-cyan)]/50 scrollbar-track-transparent">
                       {Array.from({ length: maxExtraMembers }).map((_, i) => (
                         <div key={i} className="bg-white/[0.02] border border-white/5 rounded-2xl p-4">
-                          <h3 className="text-sm font-bold text-[var(--neon-cyan)] mb-3">Teammate {i + 1} (Optional)</h3>
+                          <h3 className="text-sm font-bold text-[var(--neon-cyan)] mb-3">
+                            Teammate {i + 1} {i < minExtraMembers ? '(Required)' : '(Optional)'}
+                          </h3>
                           <div className="space-y-3">
                             <input 
                               type="text" 
@@ -372,7 +388,16 @@ export default function PaymentModal() {
                     </div>
 
                     <button 
-                      onClick={() => setStep(3)}
+                      onClick={() => {
+                        if (minExtraMembers > 0) {
+                          const filledCount = teamMembers.filter(m => m && m.name.trim() !== '' && m.email.trim() !== '').length;
+                          if (filledCount < minExtraMembers) {
+                            addToast(`Please provide details for at least ${minExtraMembers} teammate${minExtraMembers > 1 ? 's' : ''}.`);
+                            return;
+                          }
+                        }
+                        setStep(3);
+                      }}
                       className="w-full min-h-[48px] bg-white text-black font-bold text-base rounded-xl hover:bg-gray-200 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                     >
                       Continue to Event Review
