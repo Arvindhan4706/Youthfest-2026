@@ -39,6 +39,7 @@ export async function POST(request: Request) {
     await db.logAdminAction(normalizedEmail, 'Login', { ip: request.headers.get('x-forwarded-for') }).catch(() => {});
     return NextResponse.json({ success: true, email: normalizedEmail, role: adminUser.role }, { status: 200 });
   } catch (error) {
+    console.error('Admin Secure Auth Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
