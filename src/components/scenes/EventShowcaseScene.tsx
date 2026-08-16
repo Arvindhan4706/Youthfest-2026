@@ -24,6 +24,7 @@ interface EventItem {
  gform_link?: string;
  housefull?: boolean;
  contact_number?: string;
+ contact_name?: string;
 }
 interface Track {
  id: string;
@@ -330,7 +331,7 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
     <div className="p-4 rounded-[20px] bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-white/10 flex items-center justify-between">
       <div>
         <div className="text-[10px] uppercase font-bold tracking-widest text-purple-400">Student Event Coordinator</div>
-        <div className="text-xs font-bold text-white">Yuvenza Event Desk</div>
+        <div className="text-xs font-bold text-white">{event.contact_name || 'Yuvenza Event Desk'}</div>
       </div>
       <a href={`tel:${event.contact_number ? event.contact_number.replace(/\\s+/g, '') : '+919876543210'}`} className="text-xs font-mono font-bold text-teal-300 hover:underline">
         {event.contact_number || '+91 98765 43210'}
@@ -424,7 +425,8 @@ export default function EventShowcaseScene() {
             track_id: e.track_id,
             gform_link: e.gform_link,
             housefull: e.housefull,
-            contact_number: e.contact_number
+            contact_number: e.contact_number,
+            contact_name: e.contact_name
           }));
           setDbEvents(mappedEvents);
         } else {

@@ -389,6 +389,7 @@ export default function AdminPortal() {
  venue: (formData.get('venue') as string).trim(),
  gform_link: (formData.get('gform_link') as string)?.trim() || undefined,
  contact_number: (formData.get('contact_number') as string)?.trim() || undefined,
+ contact_name: (formData.get('contact_name') as string)?.trim() || undefined,
  housefull: formData.get('housefull') === 'on',
  rules: rulesStr ? rulesStr.split('\n').map(r => r.trim()).filter(Boolean) : []
  };
@@ -1110,6 +1111,10 @@ export default function AdminPortal() {
  <div className="md:col-span-2">
  <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Google Form Link (Pre-Events Only)</label>
  <input name="gform_link" defaultValue={editingEvent?.gform_link} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://forms.gle/..." />
+ </div>
+ <div className="md:col-span-2">
+ <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Coordinator Name</label>
+ <input name="contact_name" defaultValue={editingEvent?.contact_name} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="e.g. Yuvenza Event Desk" />
  </div>
  <div className="md:col-span-2">
  <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Contact Number</label>
