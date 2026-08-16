@@ -385,9 +385,9 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
   { id: 'pre-4', track_id: 'pre-events', title: 'Pickleball - Charity Match', desc: 'Fast-paced pickleball action. Grab your paddles! 32 teams of doubles.', team: '2', fee: '₹50', difficulty: 'Medium', image: '/event-images/pickle_ball.png', date: '18th & 19th August 2026', venue: 'Pickleball Court', rules: pickleballRules },
   { id: 'pre-5', track_id: 'pre-events', title: 'Sudoku', desc: 'Test your logic in this fast-paced 20-minute Sudoku challenge. Max 50 registrations.', team: '1', fee: 'Free', difficulty: 'Medium', image: '/event-images/sudoku.png', date: '12th August 2026', venue: 'Classroom Block', rules: sudokuRules },
   // Workshops
-  { id: 'ws-1', track_id: 'workshops', title: 'INKSPIRE', desc: 'Unleash your creativity in our writing and creative thinking masterclass.', team: '1', fee: '₹200', difficulty: 'Medium', image: '/event-images/Inkspire.png', date: 'August 21 - 02:00 PM', venue: 'Seminar Hall A', rules: defaultRules },
-  { id: 'ws-2', track_id: 'workshops', title: 'Resolution', desc: 'Take your editing to the next level. Learn 3D visualization, high-res media processing, and pro digital content creation.', team: '1', fee: '₹200', difficulty: 'Medium', image: '/event-images/Resolution.png', date: 'August 21 - 11:30 AM', venue: 'Media Studio', rules: defaultRules },
-  { id: 'ws-3', track_id: 'workshops', title: 'Calisto', desc: 'Always wanted to design like a pro? Dive into UI/UX aesthetics, digital arts, and creative design in this hands-on workshop.', team: '1', fee: '₹250', difficulty: 'Medium', image: '/event-images/Calisto.png', date: 'August 21 - 10:00 AM', venue: 'Design Lab', rules: defaultRules }
+  { id: 'ws-1', track_id: 'workshops', title: '3D Rocket Modelling', desc: 'Space nerds, this one is for you! Get hands-on with interactive 3D rocket modelling and space tech.', team: '1', fee: '₹250', difficulty: 'Medium', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80', date: 'August 21 - 10:30 AM', venue: 'Space Research Centre', rules: defaultRules },
+  { id: 'wr-2', track_id: 'workshops', title: 'Photo Walk', desc: 'Capture the essence of Youthfest through your lens in this immersive photography workshop.', team: '1', fee: '₹200', difficulty: 'Medium', image: '/event-images/Photo Walk.png', date: 'August 21 - 10:30 AM', venue: 'Campus Grounds', rules: defaultRules },
+  { id: 'wr-3', track_id: 'workshops', title: 'INKSPIRE', desc: 'Unleash your creativity in our writing and creative thinking masterclass.', team: '1', fee: '₹200', difficulty: 'Medium', image: '/event-images/Inkspire.png', date: 'August 21 - 10:30 AM', venue: 'Seminar Hall A', rules: defaultRules }
 ];
 
 export default function EventShowcaseScene() {
@@ -418,7 +418,9 @@ export default function EventShowcaseScene() {
             team: e.team_size,
             fee: e.fee,
             difficulty: e.difficulty,
-            image: e.title.toLowerCase().trim() === 'case closed' ? '/event-images/case_closed.png' : e.image_url,
+            image: e.title.toLowerCase().trim() === 'case closed' ? '/event-images/case_closed.png' :
+                   e.title.toLowerCase().trim() === 'photo walk' ? '/event-images/Photo Walk.png' :
+                   e.title.toLowerCase().trim() === 'inkspire' ? '/event-images/Inkspire.png' : e.image_url,
             date: e.event_date,
             venue: e.venue,
             rules: e.rules,
@@ -444,8 +446,14 @@ export default function EventShowcaseScene() {
 
   const TRACKS = useMemo(() => {
     const eventsMap = new Map<string, EventItem>();
-    STATIC_EVENTS.forEach(e => eventsMap.set(e.id, e));
-    dbEvents.forEach(e => eventsMap.set(e.id, e));
+    STATIC_EVENTS.forEach(e => {
+      const key = e.title.toLowerCase().trim();
+      eventsMap.set(key, e);
+    });
+    dbEvents.forEach(e => {
+      const key = e.title.toLowerCase().trim();
+      eventsMap.set(key, e);
+    });
 
     return TRACKS_TEMPLATE.map(t => {
       return {
