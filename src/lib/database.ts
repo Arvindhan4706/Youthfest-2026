@@ -74,6 +74,7 @@ export interface EventItem {
   rules: string[];
   gform_link?: string;
   housefull?: boolean;
+  contact_number?: string;
   created_at?: string;
 }
 export type Role = 'Super Admin' | 'Editor' | 'Scanner' | 'Viewer';

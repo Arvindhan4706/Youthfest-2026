@@ -7,7 +7,7 @@ import { db } from '../../lib/database';
 import {
  Trophy, Users, Layers, BadgeAlert, ArrowRight,
  Code2, Palette, Gamepad2, Globe, Sparkles, BookOpen, Cpu, Search, Filter,
- X, Calendar, MapPin, ScrollText, Timer, Ticket
+ X, Calendar, MapPin, ScrollText, Timer, Ticket, Phone
 } from 'lucide-react';
 interface EventItem {
  id: string;
@@ -23,6 +23,7 @@ interface EventItem {
  track_id?: string;
  gform_link?: string;
  housefull?: boolean;
+ contact_number?: string;
 }
 interface Track {
  id: string;
@@ -211,6 +212,7 @@ function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColo
  </div>
  );
 }
+
 function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; trackColor: string; onClose: () => void }) {
  const initiateRegistration = useStore((state) => state.initiateRegistration);
   const user = useStore((state) => state.user);
@@ -330,8 +332,8 @@ function EventDetailDrawer({ event, trackColor, onClose }: { event: EventItem; t
         <div className="text-[10px] uppercase font-bold tracking-widest text-purple-400">Student Event Coordinator</div>
         <div className="text-xs font-bold text-white">Yuvenza Event Desk</div>
       </div>
-      <a href="tel:+919876543210" className="text-xs font-mono font-bold text-teal-300 hover:underline">
-        +91 98765 43210
+      <a href={`tel:${event.contact_number ? event.contact_number.replace(/\\s+/g, '') : '+919876543210'}`} className="text-xs font-mono font-bold text-teal-300 hover:underline">
+        {event.contact_number || '+91 98765 43210'}
       </a>
     </div>
   </div>
@@ -415,13 +417,14 @@ export default function EventShowcaseScene() {
             team: e.team_size,
             fee: e.fee,
             difficulty: e.difficulty,
-            image: e.image_url,
+            image: e.title.toLowerCase().trim() === 'case closed' ? '/event-images/case_closed.png' : e.image_url,
             date: e.event_date,
             venue: e.venue,
             rules: e.rules,
             track_id: e.track_id,
             gform_link: e.gform_link,
-            housefull: e.housefull
+            housefull: e.housefull,
+            contact_number: e.contact_number
           }));
           setDbEvents(mappedEvents);
         } else {

@@ -388,6 +388,7 @@ export default function AdminPortal() {
  event_date: (formData.get('event_date') as string).trim(),
  venue: (formData.get('venue') as string).trim(),
  gform_link: (formData.get('gform_link') as string)?.trim() || undefined,
+ contact_number: (formData.get('contact_number') as string)?.trim() || undefined,
  housefull: formData.get('housefull') === 'on',
  rules: rulesStr ? rulesStr.split('\n').map(r => r.trim()).filter(Boolean) : []
  };
@@ -1109,6 +1110,10 @@ export default function AdminPortal() {
  <div className="md:col-span-2">
  <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Google Form Link (Pre-Events Only)</label>
  <input name="gform_link" defaultValue={editingEvent?.gform_link} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://forms.gle/..." />
+ </div>
+ <div className="md:col-span-2">
+ <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Contact Number</label>
+ <input name="contact_number" defaultValue={editingEvent?.contact_number} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="+91 98765 43210" />
  </div>
  <div className="md:col-span-2 flex items-center gap-2 mt-2">
  <input type="checkbox" name="housefull" id="housefull" defaultChecked={editingEvent?.housefull} className="w-4 h-4 rounded border-white/10 bg-white/5 accent-[var(--neon-cyan)] cursor-pointer" />

@@ -30,7 +30,7 @@ export default function EventsPage() {
     // Smooth scrolling is already handled globally by GlobalClientProviders
   }, [hasMounted]);
 
-  if (!hasMounted) return null;
+  if (!hasMounted) return <div>Loading...</div>;
 
   return (
     <>
