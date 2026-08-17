@@ -1,5 +1,12 @@
 const Razorpay = require('razorpay');
 const { createClient } = require('@supabase/supabase-js');
+const fs = require('fs');
+const dotenv = require('dotenv');
+
+const envConfig = dotenv.parse(fs.readFileSync('.env.local'));
+for (const k in envConfig) {
+  process.env[k] = envConfig[k];
+}
 
 const razorpay = new Razorpay({
   key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -42,6 +49,32 @@ async function fixPendingPayments() {
               .from('payments')
               .update({ status: 'successful', razorpay_payment_id: successfulPayment.id })
               .eq('id', payment.id);
+            
+            // Also update the visitor record
+            if (payment.visitor_id) {
+              const { data: visitor } = await supabaseAdmin
+                .from('visitors')
+                .select('registered_events')
+                .eq('id', payment.visitor_id)
+                .single();
+                
+              if (visitor) {
+                const currentEvents = visitor.registered_events || [];
+                const eventTitle = payment.event_id || 'Vitality Pass';
+                if (!currentEvents.includes(eventTitle)) {
+                  currentEvents.push(eventTitle);
+                }
+                
+                await supabaseAdmin
+                  .from('visitors')
+                  .update({
+                    payment_status: 'paid',
+                    registered_events: currentEvents
+                  })
+                  .eq('id', payment.visitor_id);
+              }
+            }
+
             console.log(`Fixed order ${orderId} -> successful`);
             fixedCount++;
           }
@@ -53,6 +86,32 @@ async function fixPendingPayments() {
               .from('payments')
               .update({ status: 'successful' })
               .eq('id', payment.id);
+
+            // Also update the visitor record
+            if (payment.visitor_id) {
+              const { data: visitor } = await supabaseAdmin
+                .from('visitors')
+                .select('registered_events')
+                .eq('id', payment.visitor_id)
+                .single();
+                
+              if (visitor) {
+                const currentEvents = visitor.registered_events || [];
+                const eventTitle = payment.event_id || 'Vitality Pass';
+                if (!currentEvents.includes(eventTitle)) {
+                  currentEvents.push(eventTitle);
+                }
+                
+                await supabaseAdmin
+                  .from('visitors')
+                  .update({
+                    payment_status: 'paid',
+                    registered_events: currentEvents
+                  })
+                  .eq('id', payment.visitor_id);
+              }
+            }
+            
             console.log(`Fixed link ${orderId} -> successful`);
             fixedCount++;
         }

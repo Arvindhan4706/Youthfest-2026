@@ -49,11 +49,44 @@ export async function POST(request: Request) {
       const paymentId = event.payload?.payment?.entity?.id;
 
       if (orderId && paymentId) {
-        await supabaseAdmin
+        // Fetch payment to get visitor_id and event_id
+        const { data: payment } = await supabaseAdmin
           .from('payments')
-          .update({ status: 'successful', razorpay_payment_id: paymentId })
-          .eq('razorpay_order_id', orderId);
-        console.log(`Updated payments table for order ${orderId}`);
+          .select('id, visitor_id, event_id')
+          .eq('razorpay_order_id', orderId)
+          .single();
+
+        if (payment) {
+          await supabaseAdmin
+            .from('payments')
+            .update({ status: 'successful', razorpay_payment_id: paymentId })
+            .eq('id', payment.id);
+
+          if (payment.visitor_id) {
+            const { data: visitor } = await supabaseAdmin
+              .from('visitors')
+              .select('registered_events')
+              .eq('id', payment.visitor_id)
+              .single();
+
+            if (visitor) {
+              const currentEvents = visitor.registered_events || [];
+              const eventTitle = payment.event_id || 'Vitality Pass';
+              if (!currentEvents.includes(eventTitle)) {
+                currentEvents.push(eventTitle);
+              }
+
+              await supabaseAdmin
+                .from('visitors')
+                .update({
+                  payment_status: 'paid',
+                  registered_events: currentEvents
+                })
+                .eq('id', payment.visitor_id);
+            }
+          }
+          console.log(`Updated payments and visitors table for order ${orderId}`);
+        }
       }
     }
     return NextResponse.json({ status: 'ok' });
