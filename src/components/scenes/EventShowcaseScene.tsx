@@ -79,13 +79,6 @@ const footballRules = [
 
 const TRACKS_TEMPLATE: Omit<Track, 'events'>[] = [
  {
- id: 'pre-events',
- name: 'Pre-Events',
- icon: <Users className="w-5 h-5" />,
- color: '#00f0ff',
- tagline: 'The Warm Up.',
- },
- {
  id: 'main-events',
  name: 'Main Events',
  icon: <Sparkles className="w-5 h-5" />,
@@ -98,6 +91,13 @@ const TRACKS_TEMPLATE: Omit<Track, 'events'>[] = [
  icon: <BookOpen className="w-5 h-5" />,
  color: '#10b981',
  tagline: 'Learn. Apply. Master.',
+ },
+ {
+ id: 'pre-events',
+ name: 'Pre-Events',
+ icon: <Users className="w-5 h-5" />,
+ color: '#00f0ff',
+ tagline: 'The Warm Up.',
  }
 ];
 function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColor: string; onClick: () => void }) {

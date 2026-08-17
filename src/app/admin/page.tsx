@@ -1005,7 +1005,7 @@ export default function AdminPortal() {
  <tr>
  <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Event</th>
  <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Track</th>
-
+ <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Registrations</th>
  <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs text-right">Actions</th>
  </tr>
  </thead>
@@ -1021,13 +1021,16 @@ export default function AdminPortal() {
  <td colSpan={3} className="px-6 py-12 text-center text-gray-400">No events found.</td>
  </tr>
  ) : (
- events.map(event => (
+ events.map(event => {
+ const regCount = visitors.filter(v => v.registered_events && v.registered_events.includes(event.title)).length;
+ return (
  <tr key={event.id} className="hover:bg-white/[0.02]">
  <td className="px-6 py-4">
  <div className="font-bold text-white">{event.title}</div>
  <div className="text-xs text-gray-500">{event.event_date}</div>
  </td>
  <td className="px-6 py-4 text-gray-300 font-mono text-xs">{event.track_id}</td>
+ <td className="px-6 py-4 text-[var(--neon-cyan)] font-bold">{regCount}</td>
  <td className="px-6 py-4 text-right">
  {['Super Admin', 'Editor'].includes(userRole) ? (
  <>
@@ -1043,7 +1046,8 @@ export default function AdminPortal() {
  )}
  </td>
  </tr>
- ))
+ );
+ })
  )}
  </tbody>
  </table>
