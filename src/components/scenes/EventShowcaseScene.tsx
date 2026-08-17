@@ -420,7 +420,8 @@ export default function EventShowcaseScene() {
             difficulty: e.difficulty,
             image: e.title.toLowerCase().trim() === 'case closed' ? '/event-images/case_closed.png' :
                    e.title.toLowerCase().trim() === 'photo walk' ? '/event-images/Photo Walk.png' :
-                   e.title.toLowerCase().trim() === 'inkspire' ? '/event-images/Inkspire.png' : e.image_url,
+                   e.title.toLowerCase().trim() === 'inkspire' ? '/event-images/Inkspire.png' : 
+                   e.title.toLowerCase().includes('pazhagikalam') ? '/event-images/Crew Cavort.png' : e.image_url,
             date: e.event_date,
             venue: e.venue,
             rules: e.rules,
