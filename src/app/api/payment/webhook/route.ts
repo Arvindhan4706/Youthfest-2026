@@ -31,17 +31,56 @@ export async function POST(req: Request) {
       const payment = event.payload.payment.entity;
       const order_id = payment.order_id;
       const payment_id = payment.id;
+      const { createClient } = require('@supabase/supabase-js');
+      const supabaseAdmin = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
+
+      // ALWAYS update payment status first if order_id is present
+      if (order_id) {
+        await supabaseAdmin
+          .from('payments')
+          .update({ 
+            status: 'successful',
+            razorpay_payment_id: payment_id
+          })
+          .eq('razorpay_order_id', order_id);
+      }
+
       // Depending on if notes were added at order creation or payment link creation
-      const email = payment.notes?.email || payment.email;
-      const eventTitle = payment.notes?.eventTitle || (payment.description && payment.description.includes('Registration for ') ? payment.description.replace('Registration for ', '').trim() : null);
+      let email = payment.notes?.email || payment.email;
+      let rawEventTitle = payment.notes?.eventTitle || (payment.description && payment.description.includes('Registration for ') ? payment.description.replace('Registration for ', '').trim() : null);
+
+      // Normalize common manual entry typos from Razorpay
+      let eventTitle = rawEventTitle;
+      if (eventTitle) {
+        if (eventTitle.toUpperCase() === 'INKSPIRE') eventTitle = 'Inkspire';
+        else if (eventTitle.startsWith('Pazhagikalam')) eventTitle = 'Pazhagikalam';
+      }
+
+      // Fallback: If missing, try to fetch from payments and visitors table
+      if ((!email || !eventTitle) && order_id) {
+        const { data: paymentRecord } = await supabaseAdmin
+          .from('payments')
+          .select('visitor_id, event_id')
+          .eq('razorpay_order_id', order_id)
+          .single();
+        
+        if (paymentRecord) {
+           eventTitle = eventTitle || paymentRecord.event_id;
+           if (!email && paymentRecord.visitor_id) {
+             const { data: visitorRecord } = await supabaseAdmin
+               .from('visitors')
+               .select('email')
+               .eq('id', paymentRecord.visitor_id)
+               .single();
+             if (visitorRecord) email = visitorRecord.email;
+           }
+        }
+      }
 
       if (email && eventTitle) {
-        const { createClient } = require('@supabase/supabase-js');
-        const supabaseAdmin = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.SUPABASE_SERVICE_ROLE_KEY!
-        );
-
         const emailLower = email.toLowerCase().trim();
 
         // Mark visitor as paid
@@ -79,17 +118,6 @@ export async function POST(req: Request) {
               })
             }).catch(err => console.error('Failed to send receipt from webhook:', err));
           }
-        }
-
-        // Update payment status
-        if (order_id) {
-          await supabaseAdmin
-            .from('payments')
-            .update({ 
-              status: 'successful',
-              razorpay_payment_id: payment_id
-            })
-            .eq('razorpay_order_id', order_id);
         }
       }
     }

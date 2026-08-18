@@ -41,8 +41,8 @@ export async function POST(request: Request) {
       
       for (const rp of rpPayments.items) {
         if (rp.status === 'captured') {
-          rzGross += rp.amount / 100;
-          rzFees += (rp.fee || 0) / 100;
+          rzGross += Number(rp.amount) / 100;
+          rzFees += (Number(rp.fee) || 0) / 100;
         }
       }
       
