@@ -50,6 +50,9 @@ export default function AdminPortal() {
   const [notifyTitle, setNotifyTitle] = useState('');
   const [notifyMessage, setNotifyMessage] = useState('');
   const [isNotifying, setIsNotifying] = useState(false);
+  // Razorpay Stats State
+  const [razorpayStats, setRazorpayStats] = useState<{gross: number, net: number} | null>(null);
+  const [isFetchingRazorpay, setIsFetchingRazorpay] = useState(false);
   // Ticket Generator State
   const ticketGenRef = React.useRef<AdminTicketGeneratorRef>(null);
   const [ticketGenVisitor, setTicketGenVisitor] = useState<Visitor | null>(null);
@@ -348,6 +351,27 @@ export default function AdminPortal() {
  setAttendanceCount(aCount);
  setEvents(eData);
  setPayments(pData);
+
+ // Fetch Razorpay Stats
+ if (userRole === 'Super Admin' || userRole === 'Editor' || userRole === '') {
+   setIsFetchingRazorpay(true);
+   try {
+     const rzRes = await fetch('/api/admin/razorpay-stats', {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({ email: emailInput || loggedInEmail, passkey: passkeyInput })
+     });
+     const rzData = await rzRes.json();
+     if (rzRes.ok && rzData.success) {
+       setRazorpayStats({ gross: rzData.gross, net: rzData.net });
+     }
+   } catch (e) {
+     console.error('Failed to fetch razorpay stats', e);
+   } finally {
+     setIsFetchingRazorpay(false);
+   }
+ }
+
  } catch (err) {
  console.error('Failed to fetch data:', err);
  } finally {
@@ -528,45 +552,58 @@ export default function AdminPortal() {
  </div>
  </div>
  {/* Dashboard UI Metrics */}
- <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-   <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-[var(--neon-cyan)]/50 transition-colors">
-     <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--neon-cyan)]/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-[var(--neon-cyan)]/20 transition-colors" />
-     <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
-       <span className="text-[10px] font-bold uppercase tracking-widest">Total Users</span>
-       <Users className="w-5 h-5 text-[var(--neon-cyan)]" />
-     </div>
-     <p className="text-4xl font-black font-[var(--font-heading-main)] text-white relative z-10">{isLoading ? '-' : visitors.length}</p>
-   </div>
+  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+    <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-[var(--neon-cyan)]/50 transition-colors">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--neon-cyan)]/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-[var(--neon-cyan)]/20 transition-colors" />
+      <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
+        <span className="text-[10px] font-bold uppercase tracking-widest">Total Users</span>
+        <Users className="w-5 h-5 text-[var(--neon-cyan)]" />
+      </div>
+      <p className="text-4xl font-black font-[var(--font-heading-main)] text-white relative z-10">{isLoading ? '-' : visitors.length}</p>
+    </div>
 
-   <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-[var(--neon-violet)]/50 transition-colors">
-     <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--neon-violet)]/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-[var(--neon-violet)]/20 transition-colors" />
-     <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
-       <span className="text-[10px] font-bold uppercase tracking-widest">Active Check-ins</span>
-       <ShieldCheck className="w-5 h-5 text-[var(--neon-violet)]" />
-     </div>
-     <p className="text-4xl font-black font-[var(--font-heading-main)] text-[var(--neon-violet)] relative z-10">{isLoading ? '-' : attendanceCount}</p>
-   </div>
+    <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-[var(--neon-violet)]/50 transition-colors">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--neon-violet)]/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-[var(--neon-violet)]/20 transition-colors" />
+      <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
+        <span className="text-[10px] font-bold uppercase tracking-widest">Active Check-ins</span>
+        <ShieldCheck className="w-5 h-5 text-[var(--neon-violet)]" />
+      </div>
+      <p className="text-4xl font-black font-[var(--font-heading-main)] text-[var(--neon-violet)] relative z-10">{isLoading ? '-' : attendanceCount}</p>
+    </div>
 
-   <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-[var(--neon-magenta)]/50 transition-colors">
-     <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--neon-magenta)]/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-[var(--neon-magenta)]/20 transition-colors" />
-     <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
-       <span className="text-[10px] font-bold uppercase tracking-widest">Gross Revenue</span>
-       <CreditCard className="w-5 h-5 text-[var(--neon-magenta)]" />
-     </div>
-     <p className="text-4xl font-black font-[var(--font-heading-main)] text-[var(--neon-magenta)] relative z-10">
-       {isLoading ? '-' : `₹${payments.filter(p => p.status === 'successful').reduce((acc, p) => acc + p.amount, 0)}`}
-     </p>
-   </div>
+    <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-[var(--neon-magenta)]/50 transition-colors">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--neon-magenta)]/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-[var(--neon-magenta)]/20 transition-colors" />
+      <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
+        <span className="text-[10px] font-bold uppercase tracking-widest">Gross Revenue</span>
+        <CreditCard className="w-5 h-5 text-[var(--neon-magenta)]" />
+      </div>
+      <p className="text-4xl font-black font-[var(--font-heading-main)] text-[var(--neon-magenta)] relative z-10">
+        {isLoading ? '-' : `₹${payments.filter(p => p.status === 'successful').reduce((acc, p) => acc + p.amount, 0)}`}
+      </p>
+    </div>
 
-   <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-green-500/50 transition-colors">
-     <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-green-500/20 transition-colors" />
-     <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
-       <span className="text-[10px] font-bold uppercase tracking-widest">Active Events</span>
-       <Calendar className="w-5 h-5 text-green-400" />
-     </div>
-     <p className="text-4xl font-black font-[var(--font-heading-main)] text-green-400 relative z-10">{isLoading ? '-' : events.length}</p>
-   </div>
- </div>
+    {userRole !== 'Viewer' && (
+      <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-yellow-500/50 transition-colors">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-yellow-500/20 transition-colors" />
+        <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
+          <span className="text-[10px] font-bold uppercase tracking-widest">Razorpay Balance</span>
+          <CreditCard className="w-5 h-5 text-yellow-400" />
+        </div>
+        <p className="text-4xl font-black font-[var(--font-heading-main)] text-yellow-400 relative z-10">
+          {isFetchingRazorpay ? <Loader2 className="w-8 h-8 animate-spin" /> : razorpayStats ? `₹${razorpayStats.net}` : '-'}
+        </p>
+      </div>
+    )}
+
+    <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-green-500/50 transition-colors">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-green-500/20 transition-colors" />
+      <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
+        <span className="text-[10px] font-bold uppercase tracking-widest">Active Events</span>
+        <Calendar className="w-5 h-5 text-green-400" />
+      </div>
+      <p className="text-4xl font-black font-[var(--font-heading-main)] text-green-400 relative z-10">{isLoading ? '-' : events.length}</p>
+    </div>
+  </div>
  {/* Tabs */}
  <div className="flex gap-4 mb-8 border-b border-white/10 pb-4 overflow-x-auto">
  {['Super Admin', 'Editor', 'Viewer'].includes(userRole) && (
