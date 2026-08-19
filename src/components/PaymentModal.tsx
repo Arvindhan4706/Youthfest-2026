@@ -186,21 +186,19 @@ export default function PaymentModal() {
         body: `Hello ${user.name},\n\nYour registration for ${checkoutEvent.title} is confirmed!\n\nAmount Paid: ${checkoutEvent.fee}\nEvent Category: ${checkoutEvent.category}\n\n[ YOUR QR ENTRY PASS ]\nYour personalized QR Code has been generated.\nTicket ID: ${getTicketId(user.email, checkoutEvent.title)}\n\nYour QR Boarding Pass is available in your Visitor Portal dashboard. You can also view it securely at the venue by logging in.\n\nPlease show your QR pass at the entrance on the day of the event to check in instantly.\n\nSee you at Youthfest '26!\n- The Yuvenza Team`
       });
 
-      // Send OD mail ONLY for General Entry (₹50)
-      if (checkoutEvent.title.toLowerCase() === 'general entry' || parseInt(checkoutEvent.fee.replace(/\D/g, '')) === 50) {
-        fetch('/api/send-od', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            college: user.college,
-            department: user.department,
-            eventTitle: checkoutEvent.title,
-          })
-        }).catch(console.error);
-      }
+      // Send OD mail for all successful payments
+      fetch('/api/send-od', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          college: user.college,
+          department: user.department,
+          eventTitle: checkoutEvent.title,
+        })
+      }).catch(console.error);
 
       // Send Ticket PDF
       fetch('/api/send-ticket', {
