@@ -5,7 +5,7 @@ import Razorpay from 'razorpay';
 // Define the schema for visitor registration using Zod
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters long"),
-  email: z.string().email("Please provide a valid email address"),
+  email: z.string().email("Please provide a valid email address").refine(email => email.trim().toLowerCase().endsWith('@citchennai.net'), { message: "Only @citchennai.net college emails are allowed" }),
   phone: z.string().regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
   college: z.string().optional(),
   department: z.string().optional(),

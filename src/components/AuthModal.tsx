@@ -68,10 +68,15 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  }, [isOpen, onClose]);
  const nextStep = () => {
  setError('');
- if (step === 1 && (!email || !phone)) return setError('Email and Phone are required.');
- if (step === 2 && (!name || !city)) return setError('Name and City are required.');
- if (step === 3 && (!college || !department)) return setError('College and Department are required.');
- setStep(s => s + 1);
+  if (step === 1) {
+    if (!email || !phone) return setError('Email and Phone are required.');
+    if (!email.trim().toLowerCase().endsWith('@citchennai.net')) {
+      return setError('Only @citchennai.net college emails are allowed for registration.');
+    }
+  }
+  if (step === 2 && (!name || !city)) return setError('Name and City are required.');
+  if (step === 3 && (!college || !department)) return setError('College and Department are required.');
+  setStep(s => s + 1);
  };
  const prevStep = () => {
  setError('');
@@ -86,6 +91,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     provider: 'google',
     options: {
      redirectTo: `${window.location.origin}/auth/callback`,
+     queryParams: {
+       hd: 'citchennai.net'
+     }
     }
    });
    if (error) throw error;
@@ -133,6 +141,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  if (!email || !cleanedPhone) {
  setIsLoading(false);
  throw new Error('Please fill in email and phone to login.');
+ }
+ if (!email.trim().toLowerCase().endsWith('@citchennai.net')) {
+ setIsLoading(false);
+ throw new Error('Only @citchennai.net college emails are allowed.');
  }
  const res = await fetch('/api/auth/login', {
  method: 'POST',
