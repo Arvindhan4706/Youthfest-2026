@@ -9,6 +9,7 @@ import QRCode from 'qrcode';
 import { AdminTicketGenerator, AdminTicketGeneratorRef } from '@/components/admin/AdminTicketGenerator';
 export default function AdminPortal() {
  const [visitors, setVisitors] = useState<Visitor[]>([]);
+ const [totalUsers, setTotalUsers] = useState(0);
  const [attendanceCount, setAttendanceCount] = useState(0);
  const [isLoading, setIsLoading] = useState(true);
  const [searchTerm, setSearchTerm] = useState('');
@@ -341,13 +342,15 @@ export default function AdminPortal() {
  };
  const fetchData = async () => {
  try {
- const [vData, aCount, eData, pData] = await Promise.all([
+ const [vData, vCount, aCount, eData, pData] = await Promise.all([
  db.getAllVisitors(),
+ db.getVisitorCount(),
  db.getAttendanceCount(),
  db.getAllEvents(),
  db.getAllPayments()
  ]);
  setVisitors(vData);
+ setTotalUsers(vCount);
  setAttendanceCount(aCount);
  setEvents(eData);
  setPayments(pData);
@@ -562,7 +565,7 @@ export default function AdminPortal() {
         <span className="text-[10px] font-bold uppercase tracking-widest">Total Users</span>
         <Users className="w-5 h-5 text-[var(--neon-cyan)]" />
       </div>
-      <p className="text-4xl font-black font-[var(--font-heading-main)] text-white relative z-10">{isLoading ? '-' : visitors.length}</p>
+      <p className="text-4xl font-black font-[var(--font-heading-main)] text-white relative z-10">{isLoading ? '-' : totalUsers}</p>
     </div>
 
     <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-[var(--neon-violet)]/50 transition-colors">
