@@ -543,6 +543,9 @@ export default function AdminPortal() {
  <Link href="/scanner" className="flex-1 md:flex-none px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:border-[var(--neon-cyan)]/50 transition-colors font-bold text-sm text-center">
  Launch Scanner
  </Link>
+ <button onClick={() => fetchData()} disabled={isLoading} className="flex-1 md:flex-none px-6 py-3.5 rounded-full bg-[var(--neon-cyan)]/10 text-[var(--neon-cyan)] border border-[var(--neon-cyan)]/30 hover:bg-[var(--neon-cyan)]/20 transition-colors font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+ <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} /> Refresh
+ </button>
  <button onClick={exportCSV} className="flex-1 md:flex-none px-6 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
  <Download className="w-4 h-4" /> Export CSV
  </button>
