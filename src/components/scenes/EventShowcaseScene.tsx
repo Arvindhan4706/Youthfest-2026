@@ -98,6 +98,13 @@ const TRACKS_TEMPLATE: Omit<Track, 'events'>[] = [
  icon: <Users className="w-5 h-5" />,
  color: '#00f0ff',
  tagline: 'The Warm Up.',
+ },
+ {
+ id: 'general-entry',
+ name: 'General Entry',
+ icon: <Ticket className="w-5 h-5" />,
+ color: '#f59e0b',
+ tagline: 'Your Pass to Yuvenza.',
  }
 ];
 function EventCard({ event, trackColor, onClick }: { event: EventItem; trackColor: string; onClick: () => void }) {
