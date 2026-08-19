@@ -68,19 +68,27 @@ export default function ScannerPortal() {
         rawPayload = decodeURIComponent(rawPayload);
       } catch (_) {}
 
-      // Decode Payload: It should be "email|eventTitle" from the QR Code
+      let visitor;
+      let email;
+      let event;
+      const { db } = await import('@/lib/database');
+
       if (!rawPayload.includes('|')) {
-        throw new Error('Invalid QR Signature Format.');
+        // Fallback: If it's a UUID (from broadcasted tickets)
+        const result = await db.verifyTicketById(rawPayload);
+        visitor = result.visitor;
+        event = result.eventTitle;
+        email = visitor.email;
+      } else {
+        // Standard: "email|eventTitle"
+        const parts = rawPayload.split('|');
+        email = parts[0]?.trim();
+        event = parts.slice(1).join('|').trim();
+        if (!email || !event) {
+          throw new Error('Corrupted Ticket Data.');
+        }
+        visitor = await db.verifyTicket(email, event);
       }
-      const parts = rawPayload.split('|');
-      const email = parts[0]?.trim();
-      const event = parts.slice(1).join('|').trim();
-      if (!email || !event) {
-        throw new Error('Corrupted Ticket Data.');
-      }
- // Verify against Supabase DB
- const { db } = await import('@/lib/database');
- const visitor = await db.verifyTicket(email, event);
  // Success!
  setScanState({
  status: 'success',

@@ -404,6 +404,40 @@ export const db = {
     return visitor;
   },
   /**
+   * Verify a ticket by visitor ID (Fallback for broadcasted tickets)
+   */
+  async verifyTicketById(id: string): Promise<{ visitor: Visitor, eventTitle: string }> {
+    const { data: visitor, error } = await supabase
+      .from('visitors')
+      .select('*')
+      .eq('id', id)
+      .single();
+    if (error || !visitor) {
+      throw new Error('Ticket Invalid: Visitor not found.');
+    }
+    const events = visitor.registered_events || [];
+    const eventId = events.includes('Revents') ? 'Revents' : (events[0] || 'General Entry');
+    
+    // Try to mark attendance
+    const { error: attendanceError } = await supabase
+      .from('attendance')
+      .insert({
+        visitor_id: visitor.id,
+        visitor_name: visitor.name || 'Unknown',
+        visitor_email: visitor.email,
+        event_id: eventId,
+      });
+    // If it violates unique constraint, they are already checked in
+    if (attendanceError) {
+      if (attendanceError.code === '23505') { 
+        throw new Error('ALREADY ENTERED: This ticket was already scanned.');
+      } else {
+        throw new Error(`Attendance Error: ${attendanceError.message}`);
+      }
+    }
+    return { visitor, eventTitle: eventId };
+  },
+  /**
    * Get Total Check-ins
    */
   async getAttendanceCount(): Promise<number> {
