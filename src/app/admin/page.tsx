@@ -1018,7 +1018,7 @@ export default function AdminPortal() {
        </button>
      </div>
    ))
- ) : 'General Entry'}
+ ) : 'Revents'}
  </td>
  </tr>
  ))

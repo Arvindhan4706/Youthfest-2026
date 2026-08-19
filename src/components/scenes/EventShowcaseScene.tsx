@@ -101,7 +101,7 @@ const TRACKS_TEMPLATE: Omit<Track, 'events'>[] = [
  },
  {
  id: 'general-entry',
- name: 'General Entry',
+ name: 'Revents',
  icon: <Ticket className="w-5 h-5" />,
  color: '#f59e0b',
  tagline: 'Your Pass to Yuvenza.',
