@@ -29,6 +29,10 @@ export async function POST(request: Request) {
         visitor
       });
     } else {
+      if (!email.trim().toLowerCase().endsWith('@citchennai.net')) {
+        return NextResponse.json({ message: 'Only @citchennai.net college emails are allowed for new registrations.' }, { status: 403 });
+      }
+
       return NextResponse.json({
         status: 'new',
         email,

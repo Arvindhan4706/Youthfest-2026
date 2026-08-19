@@ -91,9 +91,6 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     provider: 'google',
     options: {
      redirectTo: `${window.location.origin}/auth/callback`,
-     queryParams: {
-       hd: 'citchennai.net'
-     }
     }
    });
    if (error) throw error;
@@ -141,10 +138,6 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
  if (!email || !cleanedPhone) {
  setIsLoading(false);
  throw new Error('Please fill in email and phone to login.');
- }
- if (!email.trim().toLowerCase().endsWith('@citchennai.net')) {
- setIsLoading(false);
- throw new Error('Only @citchennai.net college emails are allowed.');
  }
  const res = await fetch('/api/auth/login', {
  method: 'POST',
