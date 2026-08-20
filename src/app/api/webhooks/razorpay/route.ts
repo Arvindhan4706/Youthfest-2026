@@ -65,7 +65,7 @@ export async function POST(request: Request) {
           if (payment.visitor_id) {
             const { data: visitor } = await supabaseAdmin
               .from('visitors')
-              .select('registered_events')
+              .select('registered_events, name, email')
               .eq('id', payment.visitor_id)
               .single();
 
@@ -83,6 +83,24 @@ export async function POST(request: Request) {
                   registered_events: currentEvents
                 })
                 .eq('id', payment.visitor_id);
+                
+              const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+              fetch(`${baseUrl}/api/send-receipt`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  email: visitor.email || '',
+                  name: visitor.name || '',
+                  eventTitle,
+                  amountPaid: 'Paid via Razorpay'
+                })
+              }).catch(err => console.error('Failed to send receipt from webhook:', err));
+
+              fetch(`${baseUrl}/api/admin/resend-ticket`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ visitor_id: payment.visitor_id })
+              }).catch(err => console.error('Failed to send ticket from webhook:', err));
             }
           }
           console.log(`Updated payments and visitors table for order ${orderId}`);

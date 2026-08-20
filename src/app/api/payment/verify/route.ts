@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         if (eventTitle) {
           const { data: visitor } = await supabaseAdmin
             .from('visitors')
-            .select('registered_events')
+            .select('id, registered_events, name, email')
             .eq('email', emailLower)
             .single();
 
@@ -46,6 +46,24 @@ export async function POST(req: Request) {
                 .from('visitors')
                 .update({ registered_events: events })
                 .eq('email', emailLower);
+                
+              const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+              fetch(`${baseUrl}/api/send-receipt`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  email: visitor.email || '',
+                  name: visitor.name || '',
+                  eventTitle,
+                  amountPaid: 'Paid via Razorpay'
+                })
+              }).catch(err => console.error('Failed to send receipt from verify:', err));
+
+              fetch(`${baseUrl}/api/admin/resend-ticket`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ visitor_id: visitor.id })
+              }).catch(err => console.error('Failed to send ticket from verify:', err));
             }
           }
         }
