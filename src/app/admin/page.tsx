@@ -639,16 +639,29 @@ export default function AdminPortal() {
     </div>
 
     {userRole !== 'Viewer' && (
+      <>
+      <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-red-500/50 transition-colors">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-red-500/20 transition-colors" />
+        <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
+          <span className="text-[10px] font-bold uppercase tracking-widest">Gateway Fees</span>
+          <CreditCard className="w-5 h-5 text-red-400" />
+        </div>
+        <p className="text-4xl font-black font-[var(--font-heading-main)] text-red-400 relative z-10">
+          {isFetchingRazorpay ? <Loader2 className="w-8 h-8 animate-spin" /> : razorpayStats ? `₹${razorpayStats.fees}` : '-'}
+        </p>
+      </div>
+
       <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-yellow-500/50 transition-colors">
         <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none group-hover:bg-yellow-500/20 transition-colors" />
         <div className="flex justify-between items-center text-gray-400 mb-4 relative z-10">
-          <span className="text-[10px] font-bold uppercase tracking-widest">Razorpay Balance</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest">Razorpay Net Balance</span>
           <CreditCard className="w-5 h-5 text-yellow-400" />
         </div>
         <p className="text-4xl font-black font-[var(--font-heading-main)] text-yellow-400 relative z-10">
           {isFetchingRazorpay ? <Loader2 className="w-8 h-8 animate-spin" /> : razorpayStats ? `₹${razorpayStats.net}` : '-'}
         </p>
       </div>
+      </>
     )}
 
     <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col justify-between relative overflow-hidden group hover:border-green-500/50 transition-colors">
