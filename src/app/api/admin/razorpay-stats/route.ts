@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       const rpPayments = await razorpay.payments.all({ count: 100, skip: skip });
       
       for (const rp of rpPayments.items) {
-        if (rp.status === 'captured') {
+        if (rp.status === 'captured' || rp.status === 'authorized') {
           rzGross += Number(rp.amount) / 100;
           rzFees += (Number(rp.fee) || 0) / 100;
         }
