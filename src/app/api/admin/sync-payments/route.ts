@@ -38,9 +38,10 @@ export async function POST(request: Request) {
     const { data: pendingPayments, error: fetchError } = await supabaseAdmin
       .from('payments')
       .select('*')
-      .eq('payment_status', 'pending');
+      .eq('status', 'pending');
 
     if (fetchError || !pendingPayments) {
+      console.error("Supabase fetch error:", fetchError);
       return NextResponse.json({ error: 'Failed to fetch pending payments from DB' }, { status: 500 });
     }
 
@@ -68,7 +69,7 @@ export async function POST(request: Request) {
           // Update the payments table
           await supabaseAdmin
             .from('payments')
-            .update({ payment_status: 'success' })
+            .update({ status: 'successful' })
             .eq('id', payment.id);
 
           // Update the visitors table
