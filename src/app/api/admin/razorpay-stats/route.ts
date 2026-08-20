@@ -31,11 +31,11 @@ export async function POST(request: Request) {
     let hasMore = true;
     let skip = 0;
 
-    // To prevent API timeouts on large data, we'll fetch up to a certain limit (e.g. 1000 payments).
+    // To prevent API timeouts on large data, we'll fetch up to a certain limit (e.g. 5000 payments).
     // Razorpay API allows 100 per request.
     let safetyCounter = 0;
 
-    while (hasMore && safetyCounter < 10) {
+    while (hasMore && safetyCounter < 50) {
       safetyCounter++;
       const rpPayments = await razorpay.payments.all({ count: 100, skip: skip });
       
