@@ -61,6 +61,7 @@ export default function AdminPortal() {
   const [ticketGenVisitor, setTicketGenVisitor] = useState<Visitor | null>(null);
   const [ticketGenEvent, setTicketGenEvent] = useState<string | null>(null);
   const [isGeneratingTicket, setIsGeneratingTicket] = useState(false);
+  const [isSyncingPending, setIsSyncingPending] = useState(false);
 
   const handleAdminGenerateTicket = async (visitor: Visitor, eventTitle: string) => {
     setTicketGenVisitor(visitor);
@@ -186,6 +187,26 @@ export default function AdminPortal() {
       await db.logAdminAction(loggedInEmail, 'Resent Full Ticket', { visitorId, visitorName });
     } catch (err: any) {
       alert(err.message || 'Failed to resend ticket and OD emails');
+    }
+  };
+
+  const handleSyncPending = async () => {
+    if (!confirm('Are you sure you want to scan for pending payments and automatically issue missing tickets?')) return;
+    setIsSyncingPending(true);
+    try {
+      const res = await fetch('/api/admin/sync-payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailInput || loggedInEmail, passkey: passkeyInput })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to sync payments');
+      alert(data.message || `Successfully synced payments. Fixed: ${data.fixedCount}`);
+      fetchData(); // Refresh the list
+    } catch (err: any) {
+      alert(err.message || 'Failed to sync pending payments');
+    } finally {
+      setIsSyncingPending(false);
     }
   };
 
@@ -573,6 +594,11 @@ export default function AdminPortal() {
  <button onClick={() => fetchData()} disabled={isLoading} className="flex-1 md:flex-none px-6 py-3.5 rounded-full bg-[var(--neon-cyan)]/10 text-[var(--neon-cyan)] border border-[var(--neon-cyan)]/30 hover:bg-[var(--neon-cyan)]/20 transition-colors font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
  <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} /> Refresh
  </button>
+ {(userRole === 'Super Admin' || userRole === 'Editor' || userRole === '') && (
+   <button onClick={handleSyncPending} disabled={isSyncingPending} className="flex-1 md:flex-none px-6 py-3.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 hover:bg-orange-500/30 transition-colors font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+     <RefreshCw className={`w-4 h-4 ${isSyncingPending ? 'animate-spin' : ''}`} /> Sync Pending
+   </button>
+ )}
  <button onClick={exportCSV} className="flex-1 md:flex-none px-6 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
  <Download className="w-4 h-4" /> Export CSV
  </button>
