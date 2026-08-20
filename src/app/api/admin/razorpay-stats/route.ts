@@ -37,7 +37,8 @@ export async function POST(request: Request) {
 
     while (hasMore && safetyCounter < 50) {
       safetyCounter++;
-      const rpPayments = await razorpay.payments.all({ count: 100, skip: skip });
+      // Limit search to Aug 1, 2026 onwards (Timestamp: 1722470400) to ensure we don't hit pagination limits and miss payments
+      const rpPayments = await razorpay.payments.all({ count: 100, skip: skip, from: 1722470400 });
       
       for (const rp of rpPayments.items) {
         if (rp.status === 'captured' || rp.status === 'authorized') {
