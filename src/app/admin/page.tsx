@@ -54,7 +54,7 @@ export default function AdminPortal() {
   const [notifyMessage, setNotifyMessage] = useState('');
   const [isNotifying, setIsNotifying] = useState(false);
   // Razorpay Stats State
-  const [razorpayStats, setRazorpayStats] = useState<{gross: number, net: number} | null>(null);
+  const [razorpayStats, setRazorpayStats] = useState<{gross: number, net: number, fees?: number} | null>(null);
   const [isFetchingRazorpay, setIsFetchingRazorpay] = useState(false);
   // Ticket Generator State
   const ticketGenRef = React.useRef<AdminTicketGeneratorRef>(null);
@@ -382,7 +382,7 @@ export default function AdminPortal() {
      });
      const rzData = await rzRes.json();
      if (rzRes.ok && rzData.success) {
-       setRazorpayStats({ gross: rzData.gross, net: rzData.net });
+       setRazorpayStats({ gross: rzData.gross, net: rzData.net, fees: rzData.fees });
      }
    } catch (e) {
      console.error('Failed to fetch razorpay stats', e);
