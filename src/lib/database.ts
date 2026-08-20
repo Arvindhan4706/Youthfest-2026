@@ -167,7 +167,13 @@ export const db = {
         hasMore = false;
       }
     }
-    return allData;
+    
+    // Deduplicate by ID to handle pagination drift
+    const uniquePayments = new Map<string, Payment>();
+    for (const p of allData) {
+      uniquePayments.set(p.id, p);
+    }
+    return Array.from(uniquePayments.values());
   },
   /**
    * Fetch payments for a specific visitor
@@ -367,7 +373,13 @@ export const db = {
         
         from += step;
       }
-      return allVisitors;
+      
+      // Deduplicate by ID to handle pagination drift
+      const uniqueVisitors = new Map<string, Visitor>();
+      for (const v of allVisitors) {
+        uniqueVisitors.set(v.id, v);
+      }
+      return Array.from(uniqueVisitors.values());
     } catch (e) {
       console.warn('Failed to fetch visitors, using fallback empty array:', e);
       return [];
