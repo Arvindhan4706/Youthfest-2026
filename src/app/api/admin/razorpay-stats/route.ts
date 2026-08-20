@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import { db } from '@/lib/database';
 
 export async function POST(request: Request) {
