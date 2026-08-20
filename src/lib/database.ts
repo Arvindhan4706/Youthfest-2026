@@ -144,16 +144,30 @@ export const db = {
     }
     return newPayment;
   },
-  /**
-   * Fetch all payments for admin panel
-   */
   async getAllPayments(): Promise<Payment[]> {
-    const { data, error } = await supabase
-      .from('payments')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (error) throw new Error(error.message);
-    return data || [];
+    let allData: Payment[] = [];
+    let hasMore = true;
+    let from = 0;
+    const step = 1000;
+
+    while (hasMore) {
+      const { data, error } = await supabase
+        .from('payments')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .range(from, from + step - 1);
+        
+      if (error) throw new Error(error.message);
+      
+      if (data && data.length > 0) {
+        allData = [...allData, ...data];
+        if (data.length < step) hasMore = false;
+        else from += step;
+      } else {
+        hasMore = false;
+      }
+    }
+    return allData;
   },
   /**
    * Fetch payments for a specific visitor
