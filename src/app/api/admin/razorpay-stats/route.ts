@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import Razorpay from 'razorpay';
+
 import { db } from '@/lib/database';
 
 export async function POST(request: Request) {
@@ -19,41 +19,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized Role' }, { status: 403 });
     }
 
-    // 3. Init Razorpay
-    const razorpay = new Razorpay({
-      key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-      key_secret: process.env.RAZORPAY_KEY_SECRET!,
-    });
+    // We no longer need to initialize Razorpay because we are using the DB as the source of truth.
 
-    // 4. Fetch Payments
+    // 4. Fetch Payments from Database
+    const payments = await db.getAllPayments();
     let rzGross = 0;
-    let rzFees = 0;
-    let hasMore = true;
-    let skip = 0;
-
-    // To prevent API timeouts on large data, we'll fetch up to a certain limit (e.g. 5000 payments).
-    // Razorpay API allows 100 per request.
-    let safetyCounter = 0;
-
-    while (hasMore && safetyCounter < 50) {
-      safetyCounter++;
-      // Limit search to Aug 1, 2026 onwards (Timestamp: 1722470400) to ensure we don't hit pagination limits and miss payments
-      const rpPayments = await razorpay.payments.all({ count: 100, skip: skip, from: 1722470400 });
-      
-      for (const rp of rpPayments.items) {
-        if (rp.status === 'captured' || rp.status === 'authorized') {
-          rzGross += Number(rp.amount) / 100;
-          rzFees += (Number(rp.fee) || 0) / 100;
-        }
-      }
-      
-      if (rpPayments.items.length < 100) {
-        hasMore = false;
-      } else {
-        skip += 100;
+    
+    for (const p of payments) {
+      if (p.status === 'successful') {
+        rzGross += p.amount;
       }
     }
-
+    
+    // Gateway fees are 0 for UPI transactions
+    const rzFees = 0;
     const rzNet = rzGross - rzFees;
 
     return NextResponse.json({ 
