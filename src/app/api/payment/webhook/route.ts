@@ -92,7 +92,7 @@ export async function POST(req: Request) {
         // Add to registered_events
         const { data: visitor } = await supabaseAdmin
           .from('visitors')
-          .select('registered_events, name')
+          .select('id, registered_events, name')
           .eq('email', emailLower)
           .single();
 
@@ -117,6 +117,13 @@ export async function POST(req: Request) {
                 amountPaid: 'Paid via Razorpay'
               })
             }).catch(err => console.error('Failed to send receipt from webhook:', err));
+
+            // Automatically send the OD letter and QR Ticket
+            fetch(`${baseUrl}/api/admin/resend-ticket`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ visitor_id: visitor.id })
+            }).catch(err => console.error('Failed to send ticket from webhook:', err));
           }
         }
       }

@@ -30,6 +30,8 @@ export default function AdminPortal() {
  const [events, setEvents] = useState<EventItem[]>([]);
  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
  const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
+ const [isUploadingImage, setIsUploadingImage] = useState(false);
+ const [uploadedImageUrl, setUploadedImageUrl] = useState('');
  // Logs State
  const [adminLogs, setAdminLogs] = useState<{ id: string; admin_email: string; action: string; created_at: string }[]>([]);
  const [logSearchTerm, setLogSearchTerm] = useState('');
@@ -168,29 +170,22 @@ export default function AdminPortal() {
  }
  };
 
-  const handleResendTicket = async (payment: Payment, visitorName: string, visitorEmail: string) => {
-    if (!confirm(`Are you sure you want to resend the ticket for ${payment.event_id} to ${visitorEmail}?`)) return;
+
+
+  const handleResendFullTicket = async (visitorId: string, visitorName: string) => {
+    if (!confirm(`Are you sure you want to resend the OD letter and QR ticket to ${visitorName}?`)) return;
     try {
-      const qrData = `${visitorEmail}|${payment.event_id}`;
-      const generatedQrDataUrl = await QRCode.toDataURL(qrData, { width: 300, margin: 1, color: { dark: '#000000', light: '#ffffff' } });
-      
-      const res = await fetch('/api/send-ticket', {
+      const res = await fetch('/api/admin/resend-ticket', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: visitorName,
-          email: visitorEmail,
-          event: payment.event_id,
-          venue: 'Chennai Institute Of Technology',
-          date: 'August 21, 2026',
-          qrDataUrl: generatedQrDataUrl
-        })
+        body: JSON.stringify({ visitor_id: visitorId })
       });
-      if (!res.ok) throw new Error('Failed to send ticket');
-      alert('Ticket resent successfully!');
-      await db.logAdminAction(loggedInEmail, 'Resent Ticket', { email: visitorEmail, eventId: payment.event_id });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to send ticket and OD emails');
+      alert('OD and Ticket emails sent successfully!');
+      await db.logAdminAction(loggedInEmail, 'Resent Full Ticket', { visitorId, visitorName });
     } catch (err: any) {
-      alert(err.message || 'Failed to resend ticket');
+      alert(err.message || 'Failed to resend ticket and OD emails');
     }
   };
 
@@ -430,12 +425,41 @@ export default function AdminPortal() {
  }
  setIsEventModalOpen(false);
  setEditingEvent(null);
+ setUploadedImageUrl('');
  fetchData(); // Refresh events
  } catch (error: any) {
  alert('Error saving event: ' + error.message);
  }
  };
- const handleDeleteEvent = async (id: string) => {
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('adminEmail', loggedInEmail);
+      formData.append('adminPasskey', passkeyInput);
+
+      const res = await fetch('/api/admin/upload-image', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to upload image');
+      
+      setUploadedImageUrl(data.url);
+    } catch (err: any) {
+      alert(err.message || 'Image upload failed');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  const handleDeleteEvent = async (id: string) => {
  if (!confirm('Are you sure you want to delete this event?')) return;
  try {
  await db.deleteEvent(id);
@@ -935,7 +959,7 @@ export default function AdminPortal() {
  <td className="px-6 py-4 text-right flex items-center justify-end gap-3">
  {p.status === 'successful' && (
  <>
-  <button onClick={() => handleResendTicket(p, v?.name || 'Visitor', v?.email || '')} className="text-blue-400 hover:underline flex items-center gap-1 text-xs" title="Resend Ticket Email">
+  <button onClick={() => handleResendFullTicket(p.visitor_id, v?.name || 'Visitor')} className="text-blue-400 hover:underline flex items-center gap-1 text-xs" title="Resend OD and Ticket Emails">
     <Mail className="w-3 h-3" /> Resend Ticket
   </button>
   <button onClick={() => handleRefund(p.id, p.razorpay_payment_id, p.amount)} className="text-red-400 hover:underline text-xs">Refund</button>
@@ -983,6 +1007,7 @@ export default function AdminPortal() {
  <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Email / Phone</th>
  <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Dept</th>
  <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs">Events Registered</th>
+ <th className="px-6 py-4 font-bold text-gray-400 uppercase tracking-wider text-xs text-right">Actions</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-white/5">
@@ -1020,6 +1045,13 @@ export default function AdminPortal() {
    ))
  ) : 'Revents'}
  </td>
+ <td className="px-6 py-4 text-right">
+    {['Super Admin', 'Editor'].includes(userRole) && (
+      <button onClick={() => handleResendFullTicket(visitor.id, visitor.name)} className="text-blue-400 hover:underline flex items-center gap-1 justify-end ml-auto text-xs" title="Resend OD and Ticket Emails">
+        <Mail className="w-3 h-3" /> Resend Emails
+      </button>
+    )}
+ </td>
  </tr>
  ))
  )}
@@ -1034,7 +1066,7 @@ export default function AdminPortal() {
  <h2 className="text-2xl font-[var(--font-heading-main)] font-black text-[var(--neon-magenta)]">Event Management</h2>
  {['Super Admin', 'Editor'].includes(userRole) && (
  <button 
- onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }}
+ onClick={() => { setEditingEvent(null); setUploadedImageUrl(''); setIsEventModalOpen(true); }}
  className="px-4 py-2 rounded-xl bg-white text-black font-semibold text-sm hover:bg-gray-200 transition-colors flex items-center gap-2"
  >
  <Plus className="w-4 h-4" /> Add Event
@@ -1077,7 +1109,7 @@ export default function AdminPortal() {
  <td className="px-6 py-4 text-right">
  {['Super Admin', 'Editor'].includes(userRole) ? (
  <>
- <button onClick={() => { setEditingEvent(event); setIsEventModalOpen(true); }} className="text-[var(--neon-cyan)] hover:text-white mr-4 p-2 transition-colors">
+ <button onClick={() => { setEditingEvent(event); setUploadedImageUrl(''); setIsEventModalOpen(true); }} className="text-[var(--neon-cyan)] hover:text-white mr-4 p-2 transition-colors">
  <Edit className="w-4 h-4" />
  </button>
  <button onClick={() => handleDeleteEvent(event.id)} className="text-red-400 hover:text-red-300 p-2 transition-colors">
@@ -1153,7 +1185,11 @@ export default function AdminPortal() {
  </div>
  <div className="md:col-span-2">
  <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Image URL</label>
- <input name="image_url" defaultValue={editingEvent?.image_url} required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" />
+ <input name="image_url" defaultValue={uploadedImageUrl || editingEvent?.image_url} required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white" />
+ <div className="mt-2 flex items-center gap-4">
+   <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 cursor-pointer" />
+   {isUploadingImage && <span className="text-sm text-[var(--neon-cyan)] animate-pulse">Uploading...</span>}
+ </div>
  </div>
  <div className="md:col-span-2">
  <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Google Form Link (Pre-Events Only)</label>
