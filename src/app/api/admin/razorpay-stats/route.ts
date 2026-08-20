@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import Razorpay from 'razorpay';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -22,20 +23,38 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized Role' }, { status: 403 });
     }
 
-    // We no longer need to initialize Razorpay because we are using the DB as the source of truth.
+    // 3. Init Razorpay
+    const razorpay = new Razorpay({
+      key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+      key_secret: process.env.RAZORPAY_KEY_SECRET!,
+    });
 
-    // 4. Fetch Payments from Database
-    const payments = await db.getAllPayments();
+    // 4. Fetch Payments from Razorpay for Exact Balance
     let rzGross = 0;
-    
-    for (const p of payments) {
-      if (p.status === 'successful') {
-        rzGross += p.amount;
+    let rzFees = 0;
+    let hasMore = true;
+    let skip = 0;
+    let safetyCounter = 0;
+
+    // Fetch all-time payments to match Razorpay dashboard
+    while (hasMore && safetyCounter < 100) {
+      safetyCounter++;
+      const rpPayments = await razorpay.payments.all({ count: 100, skip: skip });
+      
+      for (const rp of rpPayments.items) {
+        if (rp.status === 'captured' || rp.status === 'authorized') {
+          rzGross += Number(rp.amount) / 100;
+          rzFees += (Number(rp.fee) || 0) / 100;
+        }
+      }
+      
+      if (rpPayments.items.length < 100) {
+        hasMore = false;
+      } else {
+        skip += 100;
       }
     }
-    
-    // Gateway fees are 0 for UPI transactions
-    const rzFees = 0;
+
     const rzNet = rzGross - rzFees;
 
     return NextResponse.json({ 
